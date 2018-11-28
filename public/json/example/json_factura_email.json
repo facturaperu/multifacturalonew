@@ -1,0 +1,67 @@
+{
+    "version_del_ubl": "v21",
+    "enviar_email": true,
+    "serie_y_numero_correlativo": "F001-#",
+    "fecha_de_emision": "2018-10-09",
+    "hora_de_emision": "10:11:11",
+    "tipo_de_documento":"01",
+    "tipo_de_moneda": "PEN",
+    "fecha_de_vencimiento":"2018-08-30",
+    "numero_de_orden_de_compra": "0045467898",
+    "datos_del_emisor": {
+        "codigo_del_domicilio_fiscal": "0001"
+    },
+    "datos_del_cliente_o_receptor":{
+        "numero_de_documento": "10414711225",
+        "tipo_de_documento": "6",
+        "apellidos_y_nombres_o_razon_social": "EMPRESA XYZ S.A.",
+        "direccion": "Av. 2 de Mayo",
+        "ubigeo": "150101",
+        "email": ".@mail.com"
+    },
+    "totales": {
+        "total_operaciones_gravadas": 400,
+        "sumatoria_igv": 72,
+        "total_de_la_venta": 472
+    },
+    "items":[
+        {
+            "codigo_interno_del_producto": "P0121",
+            "descripcion_detallada":"Inca Kola 250 ml",
+            "codigo_producto_de_sunat": "51121703",
+            "unidad_de_medida": "NIU",
+            "cantidad_de_unidades": 1,
+            "valor_unitario": 100,
+            "codigo_de_tipo_de_precio":"01",
+            "precio_de_venta_unitario_valor_referencial": 118,
+            "afectacion_al_igv": "10",
+            "porcentaje_de_igv": 18,
+            "monto_de_igv": 18,
+            "valor_de_venta_por_item": 100,
+            "total_por_item": 118
+        },
+        {
+            "codigo_interno_del_producto": "P0141",
+            "descripcion_detallada":"Detergente Arial 1 Kg",
+            "codigo_producto_de_sunat": "51121722",
+            "unidad_de_medida": "NIU",
+            "cantidad_de_unidades": 4,
+            "valor_unitario": 100,
+            "codigo_de_tipo_de_precio":"01",
+            "precio_de_venta_unitario_valor_referencial": 118,
+            "afectacion_al_igv": "10",
+            "porcentaje_de_igv": 18,
+            "monto_de_igv": 72,
+            "valor_de_venta_por_item": 400,
+            "total_por_item": 472
+        }
+    ],
+    "informacion_adicional":{
+        "tipo_de_operacion": "0101",
+        "leyendas":[]
+    },
+    "extras":{
+        "forma_de_pago": "Efectivo",
+        "observaciones": "probando",
+    }
+}

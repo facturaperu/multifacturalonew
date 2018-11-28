@@ -1,0 +1,65 @@
+{
+    "version_del_ubl": "v21",
+    "serie_y_numero_correlativo": "F001-43",
+    "fecha_de_emision": "2018-10-17",
+    "hora_de_emision": "18:47:06",
+    "tipo_de_documento":"01",
+    "tipo_de_moneda": "USD",
+    "fecha_de_vencimiento":"2018-10-17",
+    "datos_del_emisor": {
+        "codigo_del_domicilio_fiscal": "0001"
+    },
+    "datos_del_cliente_o_receptor":{
+        "numero_de_documento": "8901074873",
+        "tipo_de_documento": "0",
+        "apellidos_y_nombres_o_razon_social": "SUPERTIENDAS Y DROGUERIAS OLIMPICA S.A.",
+        "direccion": "CALLE 53 Nro 46-192 LOCAL 3-01 C. COMERCIAL PORTAL DEL PRADO",
+        "ubigeo": "150101"
+    },
+	"totales": {
+		"total_operaciones_inafectas": 0.00,
+		"total_operaciones_exoneradas": 0.00,
+		"total_operaciones_gravadas": 33120.00,
+		"sumatoria_igv": 0.00,
+		"total_de_la_venta": 33120.00
+	},    
+    "items":[
+		{
+			"codigo_interno_del_producto": "969700",
+			"descripcion_detallada":"CAMISETA BEBITA MANGA CORTA MODA, ALGODÓN T-6M-12M-18M-24M  DK-292608",
+			"codigo_producto_de_sunat": "53101501",
+			"unidad_de_medida": "NIU",
+			"cantidad_de_unidades": 240,
+			"valor_unitario": 3.9000,
+			"codigo_de_tipo_de_precio":"01",
+			"precio_de_venta_unitario_valor_referencial": 3.90,
+			"afectacion_al_igv": "40",
+			"porcentaje_de_igv": 0,
+			"monto_de_igv": 0.0000,
+			"valor_de_venta_por_item": 936.00,
+			"total_por_item": 936.0000
+		} ,
+		{
+			"codigo_interno_del_producto": "972733",
+			"descripcion_detallada":"CONJUNTO BEBE CAMIN. CON LEGGIN, ALGODÓN T-2T-3T-4T  DKT-290752",
+			"codigo_producto_de_sunat": "53101501",
+			"unidad_de_medida": "NIU",
+			"cantidad_de_unidades": 240,
+			"valor_unitario": 5.9000,
+			"codigo_de_tipo_de_precio":"01",
+			"precio_de_venta_unitario_valor_referencial": 5.90,
+			"afectacion_al_igv": "40",
+			"porcentaje_de_igv": 0,
+			"monto_de_igv": 0.0000,
+			"valor_de_venta_por_item": 1416.00,
+			"total_por_item": 1416.0000
+		}
+	],
+    "informacion_adicional":{
+        "tipo_de_operacion": "0200",
+        "leyendas":[]
+    },
+    "extras":{
+        "forma_de_pago": "Efectivo"
+    }
+}

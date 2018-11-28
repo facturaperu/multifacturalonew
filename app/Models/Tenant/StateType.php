@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models\Tenant;
+
+use Hyn\Tenancy\Traits\UsesTenantConnection;
+use Illuminate\Database\Eloquent\Model;
+
+class StateType extends Model
+{
+    use UsesTenantConnection;
+
+    public $incrementing = false;
+    public $timestamps = false;
+}

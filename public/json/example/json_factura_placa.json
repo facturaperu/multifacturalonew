@@ -1,0 +1,53 @@
+{
+  "version_del_ubl": "v21",
+  "serie_y_numero_correlativo": "F001-#",
+  "fecha_de_emision": "2018-09-29",
+  "hora_de_emision": "16:02:28",
+  "tipo_de_documento": "01",
+  "tipo_de_moneda": "PEN",
+  "fecha_de_vencimiento": "2018-09-29",
+  "datos_del_emisor": {
+    "codigo_del_domicilio_fiscal": "0001"
+  },
+  "datos_del_cliente_o_receptor": {
+    "numero_de_documento": "10417844398",
+    "tipo_de_documento": "6",
+    "apellidos_y_nombres_o_razon_social": "CLIENTE",
+    "direccion": "AAAA",
+    "ubigeo": "150101"
+  },
+  "totales": {
+    "total_operaciones_gravadas": 273.4375,
+    "sumatoria_igv": 49.21875,
+    "total_de_la_venta": 350.0
+  },
+  "items": [
+    {
+      "codigo_interno_del_producto": "GR030002",
+      "descripcion_detallada": "LIMONADA JARRA",
+      "unidad_de_medida": "m2",
+      "cantidad_de_unidades": 1.0,
+      "valor_unitario": 20.0,
+      "codigo_de_tipo_de_precio": "01",
+      "precio_de_venta_unitario_valor_referencial": 20.0,
+      "afectacion_al_igv": "10",
+      "porcentaje_de_igv": 18.0,
+      "monto_de_igv": 2.8125,
+      "valor_de_venta_por_item": 15.625,
+      "total_por_item": 20.0,
+      "datos_adicionales": [
+        {
+          "codigo": "7000",
+          "nombre": "Número de Placa",
+          "valor": "ASD 124"
+        }
+      ]
+    }
+  ],
+  "informacion_adicional": {
+    "tipo_de_operacion": "0101"
+  },
+  "extras": {
+    "formato_pdf": "ticket"
+  }
+}
