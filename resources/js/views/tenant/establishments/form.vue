@@ -121,7 +121,7 @@
                     this.all_provinces = response.data.provinces
                     this.all_districts = response.data.districts
                 })
-            await this.$http.get(`/${this.resource}/record`)
+            await this.$http.get(`/${this.resource}/record/1`)
                 .then(response => {
                     if (response.data !== '') {
                         this.form = response.data.data

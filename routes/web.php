@@ -59,8 +59,10 @@ if ($hostname) {
             //Establishments
             Route::get('establishments/create', 'Tenant\EstablishmentController@create');
             Route::get('establishments/tables', 'Tenant\EstablishmentController@tables');
-            Route::get('establishments/record', 'Tenant\EstablishmentController@record');
+            Route::get('establishments/record/{establishment}', 'Tenant\EstablishmentController@record');
             Route::post('establishments', 'Tenant\EstablishmentController@store');
+            Route::get('establishments/records', 'Tenant\EstablishmentController@records');
+            Route::delete('establishments/{establishment}', 'Tenant\EstablishmentController@destroy');
 
             //Bank Accounts
             Route::get('bank_accounts', 'Tenant\BankAccountController@index')->name('tenant.bank_accounts.index');
