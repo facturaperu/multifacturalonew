@@ -1,9 +1,6 @@
 <template>
-    <div class="card">
-        <div class="card-header bg-info">
-            <h3 class="my-0">Series</h3>
-        </div>
-        <div class="card-body">
+    <el-dialog title="Series" :visible="showDialog" @close="close" @open="getData">
+        <div class="form-body">
             <div class="row">
                 <div class="col-md-12" v-if="records.length > 0">
                     <div class="table-responsive">
@@ -59,14 +56,16 @@
                 </div>
             </div>
         </div>
-    </div>
+    </el-dialog>
+
 </template>
 
 <script>
 
-    import {deletable} from '../../../mixins/deletable'
+    import {deletable} from '../../../../mixins/deletable'
 
     export default {
+        props: ['showDialog', 'establishmentId'],
         mixins: [deletable],
         data() {
             return {
@@ -82,18 +81,21 @@
                 .then(response => {
                     this.document_types = response.data.document_types
                 })
-            await this.getData()
         },
         methods: {
             initForm() {
                 this.records = []
                 this.showAddButton = true
             },
-            getData() {
-                this.$http.get(`/${this.resource}/records/1`)
-                    .then(response => {
-                        this.records = response.data.data
-                    })
+            async getData() {
+                if (this.establishmentId) {
+                    await this.$http.get(`/${this.resource}/records/${this.establishmentId}`)
+                        .then(response => {
+                            if (response.data !== '') {
+                                this.records = response.data.data
+                            }
+                        })
+                }
             },
             clickAddRow() {
                 this.records.push({
@@ -112,7 +114,7 @@
             clickSubmit(index) {
                 let form = {
                     id: this.records[index].id,
-                    establishment_id: 1,
+                    establishment_id: this.establishmentId,
                     document_type_id: this.records[index].document_type_id,
                     number: this.records[index].number,
                 }
@@ -133,6 +135,10 @@
                             console.log(error)
                         }
                     })
+            },
+            close() {
+                this.$emit('update:showDialog', false)
+                this.initForm()
             },
             clickDelete(id) {
                 this.destroy(`/${this.resource}/${id}`).then(() =>

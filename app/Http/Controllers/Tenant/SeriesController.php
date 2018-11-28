@@ -15,16 +15,15 @@ class SeriesController extends Controller
         return view('tenant.series.form');
     }
 
-    public function records()
+    public function records($establishmentId)
     {
-        $records = Series::all();
+        $records = Series::where('establishment_id',$establishmentId)->get();
 
         return new SeriesCollection($records);
     }
 
     public function tables()
     {
-        $establishment = Establishment::first();
         $document_types = Code::byCatalogOnlyCodes('01', ['01', '03', '07', '08']);
 
         return compact('document_types', 'establishment');
