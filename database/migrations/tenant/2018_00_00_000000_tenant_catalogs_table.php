@@ -36,7 +36,7 @@ class TenantCatalogsTable extends Migration
 
         DB::table('catalogs')->insert([
             ['id' => '01', 'description' => 'Código de tipo de documento'],
-            ['id' => '02', 'description' => 'Códigos de tipo de monedas'],
+//            ['id' => '02', 'description' => 'Códigos de tipo de monedas'],
             ['id' => '03', 'description' => 'Códigos de tipo de unidad de medida comercial'],
             ['id' => '04', 'description' => 'Códigos de Países'],
             ['id' => '05', 'description' => 'Códigos de tipos de tributos'],
@@ -99,9 +99,9 @@ class TenantCatalogsTable extends Migration
             ['id' => '01000071', 'catalog_id' => '01', 'code' => '71', 'description' => 'Guia de remisión remitente complementaria', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
             ['id' => '01000072', 'catalog_id' => '01', 'code' => '72', 'description' => 'Guia de remisión transportista complementaria', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 
-            ['id' => '02000PEN', 'catalog_id' => '02', 'code' => 'PEN', 'description' => 'Soles', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '02000USD', 'catalog_id' => '02', 'code' => 'USD', 'description' => 'Dólares Americanos', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '02000EUR', 'catalog_id' => '02', 'code' => 'EUR', 'description' => 'Euros', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '02000PEN', 'catalog_id' => '02', 'code' => 'PEN', 'description' => 'Soles', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '02000USD', 'catalog_id' => '02', 'code' => 'USD', 'description' => 'Dólares Americanos', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '02000EUR', 'catalog_id' => '02', 'code' => 'EUR', 'description' => 'Euros', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 
             ['id' => '030000BX', 'catalog_id' => '03', 'code' => 'BX', 'description' => 'Caja', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
             ['id' => '03000GLL', 'catalog_id' => '03', 'code' => 'GLL', 'description' => 'Galones', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
