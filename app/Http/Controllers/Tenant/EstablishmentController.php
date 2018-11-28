@@ -9,6 +9,7 @@ use App\Models\Tenant\Department;
 use App\Models\Tenant\District;
 use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Province;
+use App\Http\Resources\Tenant\EstablishmentCollection;
 
 class EstablishmentController extends Controller
 {
@@ -27,14 +28,9 @@ class EstablishmentController extends Controller
         return compact('countries', 'departments', 'provinces', 'districts');
     }
 
-    public function record()
+    public function record($id)
     {
-        $establishment = Establishment::first();
-        if ($establishment) {
-            $record = new EstablishmentResource($establishment);
-        } else {
-            $record = null;
-        }
+        $record = new EstablishmentResource(Establishment::findOrFail($id));
 
         return $record;
     }
@@ -48,7 +44,25 @@ class EstablishmentController extends Controller
 
         return [
             'success' => true,
-            'message' => 'Establecimiento actualizado'
+            'message' => ($id)?'Establecimiento actualizado':'Establecimiento registrado'
+        ];
+    }
+
+    public function records()
+    {
+        $records = Establishment::all();
+
+        return new EstablishmentCollection($records);
+    }
+
+    public function destroy($id)
+    {
+        $establishment = Establishment::findOrFail($id);
+        $establishment->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Establecimiento eliminado con éxito'
         ];
     }
 }

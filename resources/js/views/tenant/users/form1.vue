@@ -13,7 +13,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.email}">
                             <label class="control-label">Correo Electrónico</label>
-                            <el-input v-model="form.email" :disabled="form.id"></el-input>
+                            <el-input v-model="form.email" :disabled="form.id!=null"></el-input>
                             <small class="form-control-feedback" v-if="errors.email" v-text="errors.email[0]"></small>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                     <div class="col-md-12">
                         <div class="form-group" :class="{'has-danger': errors.api_token}">
                             <label class="control-label">Api Token</label>
-                            <el-input v-model="form.api_token" :readonly="form.id"></el-input>
+                            <el-input v-model="form.api_token" :readonly="form.id!=null"></el-input>
                             <small class="form-control-feedback" v-if="errors.api_token" v-text="errors.api_token[0]"></small>
                         </div>
                     </div>
