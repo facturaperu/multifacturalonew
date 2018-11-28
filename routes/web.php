@@ -173,6 +173,12 @@ if ($hostname) {
             Route::get('unit_types/record/{code}', 'Tenant\UnitTypeController@record');
             Route::post('unit_types', 'Tenant\UnitTypeController@store');
             Route::delete('unit_types/{code}', 'Tenant\UnitTypeController@destroy');
+
+            //Currency Types
+            Route::get('currency_types/records', 'Tenant\CurrencyTypeController@records');
+            Route::get('currency_types/record/{currency_type}', 'Tenant\CurrencyTypeController@record');
+            Route::post('currency_types', 'Tenant\CurrencyTypeController@store');
+            Route::delete('currency_types/{currency_type}', 'Tenant\CurrencyTypeController@destroy');
         });
     });
 } else {

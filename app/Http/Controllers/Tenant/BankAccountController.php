@@ -8,6 +8,7 @@ use App\Http\Resources\Tenant\BankAccountResource;
 use App\Models\Tenant\Bank;
 use App\Models\Tenant\BankAccount;
 use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\CurrencyType;
 
 class BankAccountController extends Controller
 {
@@ -31,7 +32,7 @@ class BankAccountController extends Controller
     public function tables()
     {
         $banks = Bank::all();
-        $currency_types = Code::byCatalog('02');
+        $currency_types = CurrencyType::where('active',1)->get();
 
         return compact('banks', 'currency_types');
     }

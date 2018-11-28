@@ -42,6 +42,11 @@
             <tenant-establishments-index></tenant-establishments-index>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <tenant-currency-types-index></tenant-currency-types-index>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-lg-6 col-md-12">

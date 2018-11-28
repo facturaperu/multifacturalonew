@@ -4,7 +4,7 @@ namespace App\Http\Resources\Tenant;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BankAccountResource extends JsonResource
+class CurrencyTypeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,10 @@ class BankAccountResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'bank_id' => $this->bank_id,
+            'code' => $this->code,
             'description' => $this->description,
-            'number' => $this->number,
-            'currency_type_id' => (int)$this->currency_type_id
+            'active' => (bool)$this->active,
+            'symbol' => $this->symbol,
         ];
     }
 }
