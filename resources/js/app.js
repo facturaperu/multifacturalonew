@@ -43,7 +43,7 @@ Vue.component('tenant-search-index', require('./views/tenant/search/index.vue'))
 Vue.component('tenant-options-form', require('./views/tenant/options/form.vue'));
 Vue.component('tenant-units-index', require('./views/tenant/units/index.vue'));
 
-//Vue.component('tenant-users-index', require('./views/tenant/users/index.vue'));
+Vue.component('tenant-users-index', require('./views/tenant/users/index.vue'));
 //Vue.component('tenant-charge_discounts-index', require('./views/tenant/charge_discounts/index.vue'));
 
 Vue.component('tenant-calendar', require('./views/tenant/components/calendar.vue'));

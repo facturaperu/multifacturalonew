@@ -19,32 +19,40 @@ class TenantDetailsTable extends Migration
             $table->unsignedInteger('document_id');
             $table->unsignedInteger('item_id');
             $table->string('item_description');
-            $table->string('item_code')->nullable();
-            $table->string('unit_type_code');
-            $table->string('carriage_plate')->nullable();
             $table->integer('quantity');
             $table->decimal('unit_value', 12, 2);
-            $table->string('price_type_code');
-            $table->decimal('unit_price', 12, 2);
-            $table->string('affectation_igv_type_code');
-            $table->decimal('total_igv', 12, 2);
+
+            $table->char('affectation_igv_type_id', 8);
+            $table->decimal('total_base_igv', 12, 2);
             $table->decimal('percentage_igv', 12, 2);
-            $table->string('system_isc_type_code')->nullable();
-            $table->decimal('total_isc', 12, 2);
-            $table->string('charge_type_code')->nullable();
-            $table->decimal('charge_percentage', 12, 2);
-            $table->decimal('total_charge', 12, 2);
-            $table->string('discount_type_code')->nullable();
-            $table->decimal('discount_percentage', 12, 2);
-            $table->decimal('total_discount', 12, 2);
+            $table->decimal('total_igv', 12, 2);
+
+            $table->char('system_isc_type_id', 8)->nullable();
+            $table->decimal('total_base_isc', 12, 2)->default(0);
+            $table->decimal('percentage_isc', 12, 2)->default(0);
+            $table->decimal('total_isc', 12, 2)->default(0);
+
+            $table->decimal('total_base_other_taxes', 12, 2)->default(0);
+            $table->decimal('percentage_other_taxes', 12, 2)->default(0);
+            $table->decimal('total_other_taxes', 12, 2)->default(0);
+            $table->decimal('total_taxes', 12, 2);
+
+            $table->char('price_type_id', 8);
+            $table->decimal('unit_price', 12, 2)->default(0);
+            $table->decimal('unit_value_free', 12, 2)->default(0);
+
             $table->decimal('total_value', 12, 2);
             $table->decimal('total', 12, 2);
-            $table->json('additional')->nullable();
-            $table->string('first_housing_contract_number')->nullable();
-            $table->date('first_housing_credit_date')->nullable();
 
-            $table->foreign('item_id')->references('id')->on('items');
+            $table->json('attributes')->nullable();
+            $table->json('charges')->nullable();
+            $table->json('discounts')->nullable();
+
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('items');
+            $table->foreign('affectation_igv_type_id')->references('id')->on('codes');
+            $table->foreign('system_isc_type_id')->references('id')->on('codes');
+            $table->foreign('price_type_id')->references('id')->on('codes');
         });
     }
 

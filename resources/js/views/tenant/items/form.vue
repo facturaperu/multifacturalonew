@@ -17,8 +17,20 @@
                             <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
                         </div>
                     </div>
-                </div>
-                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.item_code}">
+                            <label class="control-label">Código Sunat</label>
+                            <el-input v-model="form.item_code"></el-input>
+                            <small class="form-control-feedback" v-if="errors.item_code" v-text="errors.item_code[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.item_code_gs1}">
+                            <label class="control-label">Código GSL</label>
+                            <el-input v-model="form.item_code_gs1"></el-input>
+                            <small class="form-control-feedback" v-if="errors.item_code_gs1" v-text="errors.item_code_gs1[0]"></small>
+                        </div>
+                    </div>
                     <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.unit_type_id}">
                             <label class="control-label">Unidad</label>
@@ -26,6 +38,15 @@
                                 <el-option v-for="option in unit_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.unit_type_id" v-text="errors.unit_type_id[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.currency_type_id}">
+                            <label class="control-label">Moneda</label>
+                            <el-select v-model="form.currency_type_id">
+                                <el-option v-for="option in currency_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -47,8 +68,6 @@
 
 <script>
 
-    import {EventBus} from '../../../helpers/bus'
-
     export default {
         props: ['showDialog', 'recordId', 'external'],
         data() {
@@ -58,7 +77,8 @@
                 resource: 'items',
                 errors: {},
                 form: {},
-                unit_types: []
+                unit_types: [],
+                currency_types: []
             }
         },
         created() {
@@ -66,6 +86,7 @@
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.unit_types = response.data.unit_types
+                    this.currency_types = response.data.currency_types
                 })
         },
         methods: {
@@ -75,8 +96,11 @@
                     id: null,
                     item_type_id: '01',
                     internal_id: null,
+                    item_code: null,
+                    item_code_gs1: null,
                     description: null,
                     unit_type_id: null,
+                    currency_type_id: null,
                     unit_price: null,
                 }
             },

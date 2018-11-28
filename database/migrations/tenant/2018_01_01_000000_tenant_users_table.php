@@ -24,14 +24,6 @@ class TenantUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-
-//        DB::table('users')->insert([
-//                'id' => '01',
-//                'name' => 'Facturalo',
-//                'email' => 'pro@facturalo.com',
-//                'password' => bcrypt('123456'),
-//                'api_token' => '1234567890'
-//        ]);
     }
 
     /**

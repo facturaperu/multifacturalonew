@@ -18,6 +18,10 @@ class ItemCollection extends ResourceCollection
             return [
                 'id' => $row->id,
                 'description' => $row->description,
+                'internal_id' => $row->internal_id,
+                'item_code' => $row->item_code,
+                'item_code_gs1' => $row->item_code_gs1,
+                'currency_type_description' => $row->currency_type->description,
                 'unit_price' => $row->unit_price,
                 'created_at' => $row->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $row->updated_at->format('Y-m-d H:i:s'),

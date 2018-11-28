@@ -17,6 +17,7 @@ class TenantVoidedDocumentsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('voided_id');
             $table->unsignedInteger('document_id');
+            $table->string('description');
 
             $table->foreign('voided_id')->references('id')->on('voided')->onDelete('cascade');
             $table->foreign('document_id')->references('id')->on('documents');

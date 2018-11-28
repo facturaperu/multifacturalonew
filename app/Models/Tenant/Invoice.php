@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Tenant\Catalogs\Code;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,19 +10,24 @@ class Invoice extends Model
 {
     use UsesTenantConnection;
 
+    protected $with = ['operation_type'];
     public $timestamps = false;
 
     protected $fillable = [
-        'operation_type_code',
+        'document_id',
+        'operation_type_id',
         'date_of_due',
-        'base_global_discount',
-        'percentage_global_discount',
-        'total_global_discount',
         'total_free',
+        'total_global_discount',
+        'total_discount',
+        'total_charge',
         'total_prepayment',
-        'purchase_order',
-        'detraction',
+        'total_value',
+
+        'charges',
+        'discounts',
         'perception',
+        'detraction',
         'prepayments'
     ];
 
@@ -29,14 +35,24 @@ class Invoice extends Model
         'date_of_due' => 'date',
     ];
 
-    public function getDetractionAttribute($value)
+    public function getChargesAttribute($value)
     {
         return (object) json_decode($value);
     }
 
-    public function setDetractionAttribute($value)
+    public function setChargesAttribute($value)
     {
-        $this->attributes['detraction'] = json_encode($value);
+        $this->attributes['charges'] = json_encode($value);
+    }
+
+    public function getDiscountsAttribute($value)
+    {
+        return (object) json_decode($value);
+    }
+
+    public function setDiscountsAttribute($value)
+    {
+        $this->attributes['discounts'] = json_encode($value);
     }
 
     public function getPerceptionAttribute($value)
@@ -47,6 +63,16 @@ class Invoice extends Model
     public function setPerceptionAttribute($value)
     {
         $this->attributes['perception'] = json_encode($value);
+    }
+
+    public function getDetractionAttribute($value)
+    {
+        return (object) json_decode($value);
+    }
+
+    public function setDetractionAttribute($value)
+    {
+        $this->attributes['detraction'] = json_encode($value);
     }
 
     public function getPrepaymentsAttribute($value)
@@ -62,5 +88,10 @@ class Invoice extends Model
     public function document()
     {
         return $this->hasOne(Document::class);
+    }
+
+    public function operation_type()
+    {
+        return $this->belongsTo(Code::class, 'operation_type_id');
     }
 }

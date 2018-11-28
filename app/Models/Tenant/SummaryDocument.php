@@ -11,6 +11,7 @@ class SummaryDocument extends Model
 
     public $timestamps = false;
 
+    protected $with = ['document'];
     protected $fillable = [
         'summary_id',
         'document_id',

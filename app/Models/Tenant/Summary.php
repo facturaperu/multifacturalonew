@@ -9,18 +9,19 @@ class Summary extends Model
 {
     use UsesTenantConnection;
 
+    protected $with = ['user', 'soap_type', 'state_type', 'process_type'];
     protected $fillable = [
         'user_id',
-        'process_type_id',
         'soap_type_id',
         'state_type_id',
+        'process_type_id',
         'ubl_version',
         'date_of_issue',
         'date_of_reference',
         'identifier',
         'filename',
-        'has_ticket',
         'ticket',
+        'has_ticket',
         'has_cdr',
     ];
 
@@ -34,9 +35,9 @@ class Summary extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function process_type()
+    public function soap_type()
     {
-        return $this->belongsTo(ProcessType::class);
+        return $this->belongsTo(SoapType::class);
     }
 
     public function state_type()
@@ -44,14 +45,9 @@ class Summary extends Model
         return $this->belongsTo(StateType::class);
     }
 
-    public function documents()
+    public function process_type()
     {
-        return $this->hasMany(SummaryDocument::class);
-    }
-
-    public function scopeWhereUser($query)
-    {
-        return $query->where('user_id', cache('selected_user_id'));
+        return $this->belongsTo(ProcessType::class);
     }
 
     public function getDownloadCdrAttribute()

@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Tenant\Catalogs\Code;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,52 +10,107 @@ class Detail extends Model
 {
     use UsesTenantConnection;
 
+    protected $with = ['item', 'unit_type', 'affectation_igv_type', 'system_isc_type', 'price_type'];
     public $timestamps = false;
 
     protected $fillable = [
+        'document_id',
         'item_id',
         'item_description',
         'item_code',
-        'unit_type_code',
-        'carriage_plate',
+        'item_code_gsl',
+        'unit_type_id',
         'quantity',
         'unit_value',
-        'price_type_code',
-        'unit_price',
-        'affectation_igv_type_code',
-        'total_igv',
+
+        'affectation_igv_type_id',
+        'total_base_igv',
         'percentage_igv',
-        'system_isc_type_code',
+        'total_igv',
+
+        'system_isc_type_id',
+        'total_base_isc',
+        'percentage_isc',
         'total_isc',
-        'charge_type_code',
-        'charge_percentage',
-        'total_charge',
-        'discount_type_code',
-        'discount_percentage',
-        'total_discount',
+
+        'total_base_other_taxes',
+        'percentage_other_taxes',
+        'total_other_taxes',
+        'total_taxes',
+
+        'price_type_id',
+        'unit_price',
+        'unit_price_free',
+
         'total_value',
         'total',
-        'additional',
-        'first_housing_contract_number',
-        'first_housing_credit_date'
+
+        'attributes',
+        'charges',
+        'discounts'
     ];
 
     protected $casts = [
         'date_of_document' => 'date',
     ];
 
-    public function getAdditionalAttribute($value)
+    public function getAttributesAttribute($value)
     {
         return (object) json_decode($value);
     }
 
-    public function setAdditionalAttribute($value)
+    public function setAttributesAttribute($value)
     {
-        $this->attributes['additional'] = json_encode($value);
+        $this->attributes['attributes'] = json_encode($value);
+    }
+
+    public function getChargesAttribute($value)
+    {
+        return (object) json_decode($value);
+    }
+
+    public function setChargesAttribute($value)
+    {
+        $this->attributes['charges'] = json_encode($value);
+    }
+
+    public function getDiscountsAttribute($value)
+    {
+        return (object) json_decode($value);
+    }
+
+    public function setDiscountsAttribute($value)
+    {
+        $this->attributes['discounts'] = json_encode($value);
     }
 
     public function document()
     {
         return $this->belongsTo(Document::class);
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(Document::class);
+    }
+
+    public function unit_type()
+    {
+        return $this->belongsTo(Code::class, 'unit_type_id');
+    }
+
+    public function affectation_igv_type()
+    {
+        return $this->belongsTo(Code::class, 'affectation_igv_type_id');
+    }
+
+    public function system_isc_type()
+    {
+        return $this->belongsTo(Code::class, 'system_isc_type');
+    }
+
+    public function price_type()
+    {
+        return $this->belongsTo(Code::class, 'price_type_id');
     }
 }

@@ -10,41 +10,46 @@ class Document extends Model
 {
     use UsesTenantConnection;
 
-    protected $with = ['customer', 'details', 'invoice', 'note'];
+    protected $with = ['user', 'establishment', 'soap_type', 'state_type', 'group', 'document_type', 'series',
+                       'customer', 'currency_type', 'details', 'invoice', 'note'];
 
     protected $fillable = [
         'user_id',
+        'establishment_id',
         'external_id',
         'soap_type_id',
         'state_type_id',
         'ubl_version',
         'group_id',
-        'document_type_code',
+        'document_type_id',
+        'series_id',
+        'number',
         'date_of_issue',
         'time_of_issue',
-        'series',
-        'number',
-        'currency_type_code',
+        'customer_id',
+        'currency_type_id',
+        'total_other_charges',
         'total_exportation',
         'total_taxed',
         'total_unaffected',
         'total_exonerated',
         'total_igv',
+        'total_base_isc',
         'total_isc',
+        'total_base_other_taxes',
         'total_other_taxes',
-        'total_other_charges',
         'total_discount',
-        'total_value',
         'total',
-        'establishment_id',
-        'customer_id',
+
+        'legends',
         'guides',
         'additional_documents',
-        'legends',
         'optional',
+
         'filename',
         'hash',
         'qr',
+
         'has_xml',
         'has_pdf',
         'has_cdr'
@@ -54,9 +59,19 @@ class Document extends Model
         'date_of_issue' => 'date',
     ];
 
+    public function getLegendsAttribute($value)
+    {
+        return (object)json_decode($value);
+    }
+
+    public function setLegendsAttribute($value)
+    {
+        $this->attributes['legends'] = json_encode($value);
+    }
+
     public function getGuidesAttribute($value)
     {
-        return (object) json_decode($value);
+        return (object)json_decode($value);
     }
 
     public function setGuidesAttribute($value)
@@ -66,7 +81,7 @@ class Document extends Model
 
     public function getAdditionalDocumentsAttribute($value)
     {
-        return (object) json_decode($value);
+        return (object)json_decode($value);
     }
 
     public function setAdditionalDocumentsAttribute($value)
@@ -74,19 +89,9 @@ class Document extends Model
         $this->attributes['additional_documents'] = json_encode($value);
     }
 
-    public function getLegendsAttribute($value)
-    {
-        return (object) json_decode($value);
-    }
-
-    public function setLegendsAttribute($value)
-    {
-        $this->attributes['legends'] = json_encode($value);
-    }
-
     public function getOptionalAttribute($value)
     {
-        return (object) json_decode($value);
+        return (object)json_decode($value);
     }
 
     public function setOptionalAttribute($value)
@@ -96,7 +101,7 @@ class Document extends Model
 
     public function getNumberFullAttribute()
     {
-        return $this->series.'-'.$this->number;
+        return $this->series . '-' . $this->number;
     }
 
     public function getNumberToLetterAttribute()
@@ -106,14 +111,14 @@ class Document extends Model
         return $legend->description;
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function establishment()
     {
         return $this->belongsTo(Establishment::class);
-    }
-
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class)->with('identity_document_type');
     }
 
     public function soap_type()
@@ -129,6 +134,26 @@ class Document extends Model
     public function group()
     {
         return $this->belongsTo(Group::class);
+    }
+
+    public function document_type()
+    {
+        return $this->belongsTo(Code::class, 'document_type_id');
+    }
+
+    public function series()
+    {
+        return $this->belongsTo(Series::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function currency_type()
+    {
+        return $this->belongsTo(Code::class, 'currency_type_id');
     }
 
     public function invoice()

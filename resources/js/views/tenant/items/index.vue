@@ -18,12 +18,20 @@
                     <tr slot="heading">
                         <th>#</th>
                         <th>Descripción</th>
+                        <th>Código Interno</th>
+                        <th>Código SUNAT</th>
+                        <th>Código GSL</th>
+                        <th>Moneda</th>
                         <th class="text-right">Precio Unitario</th>
                         <th class="text-right">Acciones</th>
                     <tr>
                     <tr slot-scope="{ index, row }">
                         <td>{{ index }}</td>
                         <td>{{ row.description }}</td>
+                        <td>{{ row.internal_id }}</td>
+                        <td>{{ row.item_code }}</td>
+                        <td>{{ row.item_code_gs1 }}</td>
+                        <td>{{ row.currency_type_description }}</td>
                         <td class="text-right">{{ row.unit_price }}</td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>

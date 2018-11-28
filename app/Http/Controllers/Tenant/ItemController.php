@@ -40,8 +40,9 @@ class ItemController extends Controller
     public function tables()
     {
         $unit_types = Code::byCatalog('03');
+        $currency_types = Code::byCatalog('02');
 
-        return compact('unit_types');
+        return compact('unit_types', 'currency_types');
     }
 
     public function record($id)
