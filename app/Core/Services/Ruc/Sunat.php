@@ -7,7 +7,6 @@ use App\Core\Services\Helpers\Http\ClientInterface;
 use App\Core\Services\Helpers\Http\ContextClient;
 use App\Core\Services\Models\Company;
 
-
 /**
  * Class Ruc.
  */

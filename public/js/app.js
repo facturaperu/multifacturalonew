@@ -121743,6 +121743,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -121770,6 +121781,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       customers: [],
       company: null,
       establishment: null,
+      establishments: [],
       all_series: [],
       series: [],
       currency_symbol: 'S/',
@@ -121787,10 +121799,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       _this.items = response.data.items;
       _this.customers = response.data.customers;
       _this.company = response.data.company;
-      _this.establishment = response.data.establishment;
+      _this.establishments = response.data.establishments; //this.establishment = response.data.establishment
+
       _this.all_series = response.data.series;
       _this.form.soap_type_id = _this.company.soap_type_id;
-      _this.form.establishment_id = _this.establishment.id;
+      _this.form.establishment_id = _.head(_this.establishments).id; // this.establishment.id
 
       _this.changeDocumentType();
     });
@@ -121804,6 +121817,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.form = {
         id: null,
         external_id: '-',
+        establishment_id: null,
         state_type_id: '01',
         soap_type_id: null,
         ubl_version: 'v21',
@@ -121816,7 +121830,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         date_of_due: moment().format('YYYY-MM-DD'),
         currency_type_code: 'PEN',
         customer_id: null,
-        establishment_id: null,
         items: [],
         total_exportation: 0,
         total_taxed: 0,
@@ -121851,6 +121864,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.form.soap_type_id = this.company.soap_type_id;
       this.form.establishment_id = this.establishment.id;
       this.changeDocumentType();
+    },
+    changeEstablishment: function changeEstablishment() {
+      this.series = _.filter(this.all_series, {
+        'establishment_id': this.form.establishment_id
+      });
+      this.form.series_id = _.head(this.series).id;
+    },
+    changeDocumentType: function changeDocumentType() {
+      this.form.series = null;
+
+      var document_type = _.find(this.document_types, {
+        'code': this.form.document_type_code
+      });
+
+      this.series = _.filter(this.all_series, {
+        'document_type_id': document_type.id
+      });
+      this.form.group_id = this.form.document_type_code === '01' ? '01' : '02';
+      this.form.series = this.series.length > 0 ? this.series[0].number : null;
     },
     addItem: function addItem() {},
     clickAddItem: function clickAddItem() {
@@ -121948,19 +121980,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.form.total_igv = _.round(total_igv, 2);
       this.form.total_value = _.round(total_taxed, 2);
       this.form.total = _.round(total, 2);
-    },
-    changeDocumentType: function changeDocumentType() {
-      this.form.series = null;
-
-      var document_type = _.find(this.document_types, {
-        'code': this.form.document_type_code
-      });
-
-      this.series = _.filter(this.all_series, {
-        'document_type_id': document_type.id
-      });
-      this.form.group_id = this.form.document_type_code === '01' ? '01' : '02';
-      this.form.series = this.series.length > 0 ? this.series[0].number : null;
     },
     submit: function submit() {
       var _this2 = this;
@@ -123644,6 +123663,56 @@ var render = function() {
           [
             _c("div", { staticClass: "form-body" }, [
               _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      class: { "has-danger": _vm.errors.establishment_id }
+                    },
+                    [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Establecimiento")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "el-select",
+                        {
+                          on: { change: _vm.changeEstablishment },
+                          model: {
+                            value: _vm.form.establishment_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "establishment_id", $$v)
+                            },
+                            expression: "form.establishment_id"
+                          }
+                        },
+                        _vm._l(_vm.establishments, function(option) {
+                          return _c("el-option", {
+                            key: option.id,
+                            attrs: {
+                              value: option.id,
+                              label: option.description
+                            }
+                          })
+                        })
+                      ),
+                      _vm._v(" "),
+                      _vm.errors.establishment_id
+                        ? _c("small", {
+                            staticClass: "form-control-feedback",
+                            domProps: {
+                              textContent: _vm._s(
+                                _vm.errors.establishment_id[0]
+                              )
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
                 _c("div", { staticClass: "col-md-4 col-lg-3" }, [
                   _c(
                     "div",
@@ -123699,7 +123768,7 @@ var render = function() {
                     "div",
                     {
                       staticClass: "form-group",
-                      class: { "has-danger": _vm.errors.series }
+                      class: { "has-danger": _vm.errors.series_id }
                     },
                     [
                       _c("label", { staticClass: "control-label" }, [
@@ -123710,20 +123779,17 @@ var render = function() {
                         "el-select",
                         {
                           model: {
-                            value: _vm.form.series,
+                            value: _vm.form.series_id,
                             callback: function($$v) {
-                              _vm.$set(_vm.form, "series", $$v)
+                              _vm.$set(_vm.form, "series_id", $$v)
                             },
-                            expression: "form.series"
+                            expression: "form.series_id"
                           }
                         },
                         _vm._l(_vm.series, function(option) {
                           return _c("el-option", {
-                            key: option.number,
-                            attrs: {
-                              value: option.number,
-                              label: option.number
-                            }
+                            key: option.id,
+                            attrs: { value: option.id, label: option.number }
                           })
                         })
                       ),
@@ -123969,33 +124035,7 @@ var render = function() {
                     ],
                     1
                   )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "col-lg-2 col-md-6 d-flex align-items-end pt-2"
-                  },
-                  [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "btn waves-effect waves-light btn-primary",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              _vm.showDialogAddItem = true
-                            }
-                          }
-                        },
-                        [_vm._v("+ Agregar Producto")]
-                      )
-                    ])
-                  ]
-                )
+                ])
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
@@ -124072,6 +124112,34 @@ var render = function() {
                     1
                   )
                 ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "col-lg-2 col-md-6 d-flex align-items-end pt-2"
+                  },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "btn waves-effect waves-light btn-primary",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              _vm.showDialogAddItem = true
+                            }
+                          }
+                        },
+                        [_vm._v("+ Agregar Producto")]
+                      )
+                    ])
+                  ]
+                )
               ]),
               _vm._v(" "),
               _vm.form.items.length > 0

@@ -7,6 +7,15 @@
             <form autocomplete="off" @submit.prevent="submit">
                 <div class="form-body">
                     <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group" :class="{'has-danger': errors.establishment_id}">
+                                <label class="control-label">Establecimiento</label>
+                                <el-select v-model="form.establishment_id" @change="changeEstablishment">
+                                    <el-option v-for="option in establishments" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                </el-select>
+                                <small class="form-control-feedback" v-if="errors.establishment_id" v-text="errors.establishment_id[0]"></small>
+                            </div>
+                        </div>
                         <div class="col-md-4 col-lg-3">
                             <div class="form-group" :class="{'has-danger': errors.document_type_code}">
                                 <label class="control-label">Tipo de comprobante</label>
@@ -17,10 +26,10 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-group" :class="{'has-danger': errors.series}">
+                            <div class="form-group" :class="{'has-danger': errors.series_id}">
                                 <label class="control-label">Serie</label>
-                                <el-select v-model="form.series">
-                                    <el-option v-for="option in series" :key="option.number" :value="option.number" :label="option.number"></el-option>
+                                <el-select v-model="form.series_id">
+                                    <el-option v-for="option in series" :key="option.id" :value="option.id" :label="option.number"></el-option>
                                 </el-select>
                                 <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
                             </div>
@@ -69,11 +78,6 @@
                                 <small class="form-control-feedback" v-if="errors.purchase_order" v-text="errors.purchase_order[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-6 d-flex align-items-end pt-2">
-                            <div class="form-group">
-                                <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Producto</button>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-2 col-md-6">
@@ -90,6 +94,13 @@
                                 <label class="control-label">Observaciones</label>
                                 <el-input v-model="form.optional.observations" type="textarea" autosize></el-input>
                                 <small class="form-control-feedback" v-if="errors.observations" v-text="errors.observations[0]"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2 col-md-6 d-flex align-items-end pt-2">
+                            <div class="form-group">
+                                <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Producto</button>
                             </div>
                         </div>
                     </div>
@@ -195,6 +206,7 @@
                 customers: [],
                 company: null,
                 establishment: null,
+                establishments: [],
                 all_series: [],
                 series: [],
                 currency_symbol: 'S/',
@@ -211,11 +223,14 @@
                     this.items = response.data.items
                     this.customers = response.data.customers
                     this.company = response.data.company
-                    this.establishment = response.data.establishment
+                    this.establishments = response.data.establishments
+                    //this.establishment = response.data.establishment
                     this.all_series = response.data.series
 
                     this.form.soap_type_id = this.company.soap_type_id
-                    this.form.establishment_id = this.establishment.id
+
+                    this.form.establishment_id = _.head(this.establishments).id
+                    // this.establishment.id
 
                     this.changeDocumentType()
                 })
@@ -229,6 +244,7 @@
                 this.form = {
                     id: null,
                     external_id: '-',
+                    establishment_id: null,
                     state_type_id: '01',
                     soap_type_id: null,
                     ubl_version: 'v21',
@@ -241,7 +257,6 @@
                     date_of_due: moment().format('YYYY-MM-DD'),
                     currency_type_code: 'PEN',
                     customer_id: null,
-                    establishment_id: null,
                     items: [],
                     total_exportation: 0,
                     total_taxed: 0,
@@ -276,6 +291,17 @@
                 this.form.soap_type_id = this.company.soap_type_id
                 this.form.establishment_id = this.establishment.id
                 this.changeDocumentType()
+            },
+            changeEstablishment() {
+                this.series = _.filter(this.all_series, {'establishment_id': this.form.establishment_id})
+                this.form.series_id = _.head(this.series).id
+            },
+            changeDocumentType() {
+                this.form.series = null
+                let document_type = _.find(this.document_types, {'code': this.form.document_type_code})
+                this.series = _.filter(this.all_series, {'document_type_id': document_type.id})
+                this.form.group_id = (this.form.document_type_code === '01')?'01':'02'
+                this.form.series = (this.series.length > 0)?this.series[0].number:null
             },
             addItem() {
 
@@ -373,13 +399,7 @@
                 this.form.total = _.round(total, 2)
  
             },
-            changeDocumentType() {
-                this.form.series = null
-                let document_type = _.find(this.document_types, {'code': this.form.document_type_code})
-                this.series = _.filter(this.all_series, {'document_type_id': document_type.id})
-                this.form.group_id = (this.form.document_type_code === '01')?'01':'02'
-                this.form.series = (this.series.length > 0)?this.series[0].number:null
-            },
+
             submit() {
                 
                 this.loading_submit = true

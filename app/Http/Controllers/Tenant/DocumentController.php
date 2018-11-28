@@ -71,10 +71,12 @@ class DocumentController extends Controller
         $items = $this->table('items');
         $company = Company::with(['identity_document_type'])->first();
         $establishment = Establishment::first();
+        $establishments = Establishment::all();
         $series = Series::all();
 
         return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
-                       'currency_types', 'customers', 'items', 'company', 'establishment', 'series', 'affectation_igv_types');
+                       'currency_types', 'customers', 'items', 'company', 'establishment', 'establishments',
+                       'series', 'affectation_igv_types');
     }
 
     public function item_tables()
