@@ -70,20 +70,6 @@ class TenantSystemTable extends Migration
 
             $table->foreign('charge_discount_type_id')->references('id')->on('codes');
         });
-
-        Schema::create('currency_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('code', 3);
-            $table->string('description');
-            $table->string('symbol');
-            $table->boolean('active');
-        });
-
-        DB::table('currency_types')->insert([
-            ['id' => 1, 'code' => 'PEN', 'description' => 'Soles', 'symbol' => 'S/', 'active' => true],
-            ['id' => 2, 'code' => 'USD', 'description' => 'Dólares Americanos', 'symbol' => '$', 'active' => true],
-            ['id' => 3, 'code' => 'EUR', 'description' => 'Euros', 'symbol' => '€', 'active' => false],
-        ]);
     }
 
     /**
@@ -93,7 +79,6 @@ class TenantSystemTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('currency_types');
         Schema::dropIfExists('charge_discounts');
         Schema::dropIfExists('groups');
         Schema::dropIfExists('soap_types');

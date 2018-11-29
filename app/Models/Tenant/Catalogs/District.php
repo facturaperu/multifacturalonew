@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Tenant;
+namespace App\Models\Tenant\Catalogs;
 
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 
-class Province extends Model
+class District extends Model
 {
     use UsesTenantConnection;
 
@@ -18,6 +18,6 @@ class Province extends Model
         if (count($code) > 0) {
             return $code[0]->id;
         }
-        return '1501';
+        return '150101';
     }
 }

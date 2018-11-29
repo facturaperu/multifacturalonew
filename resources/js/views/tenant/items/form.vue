@@ -3,35 +3,14 @@
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.internal_id}">
                             <label class="control-label">Código Interno</label>
                             <el-input v-model="form.internal_id"></el-input>
                             <small class="form-control-feedback" v-if="errors.internal_id" v-text="errors.internal_id[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-8">
-                        <div class="form-group" :class="{'has-danger': errors.description}">
-                            <label class="control-label">Descripción</label>
-                            <el-input v-model="form.description"></el-input>
-                            <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group" :class="{'has-danger': errors.item_code}">
-                            <label class="control-label">Código Sunat</label>
-                            <el-input v-model="form.item_code"></el-input>
-                            <small class="form-control-feedback" v-if="errors.item_code" v-text="errors.item_code[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group" :class="{'has-danger': errors.item_code_gs1}">
-                            <label class="control-label">Código GSL</label>
-                            <el-input v-model="form.item_code_gs1"></el-input>
-                            <small class="form-control-feedback" v-if="errors.item_code_gs1" v-text="errors.item_code_gs1[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.unit_type_id}">
                             <label class="control-label">Unidad</label>
                             <el-select v-model="form.unit_type_id">
@@ -40,7 +19,28 @@
                             <small class="form-control-feedback" v-if="errors.unit_type_id" v-text="errors.unit_type_id[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
+                        <div class="form-group" :class="{'has-danger': errors.description}">
+                            <label class="control-label">Descripción</label>
+                            <el-input v-model="form.description"></el-input>
+                            <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.item_code}">
+                            <label class="control-label">Código Sunat</label>
+                            <el-input v-model="form.item_code"></el-input>
+                            <small class="form-control-feedback" v-if="errors.item_code" v-text="errors.item_code[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.item_code_gs1}">
+                            <label class="control-label">Código GSL</label>
+                            <el-input v-model="form.item_code_gs1"></el-input>
+                            <small class="form-control-feedback" v-if="errors.item_code_gs1" v-text="errors.item_code_gs1[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.currency_type_id}">
                             <label class="control-label">Moneda</label>
                             <el-select v-model="form.currency_type_id">
@@ -49,7 +49,7 @@
                             <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.unit_price}">
                             <label class="control-label">Precio Unitario</label>
                             <el-input v-model="form.unit_price"></el-input>

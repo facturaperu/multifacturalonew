@@ -6,10 +6,10 @@ use App\Core\Services\Dni\Dni;
 use App\Core\Services\Extras\ValidateCpe;
 use App\Core\Services\Ruc\Sunat;
 use App\Http\Controllers\Controller;
-use App\Models\Tenant\Department;
-use App\Models\Tenant\District;
+use App\Models\Tenant\Catalogs\Department;
+use App\Models\Tenant\Catalogs\District;
+use App\Models\Tenant\Catalogs\Province;
 use App\Models\Tenant\Document;
-use App\Models\Tenant\Province;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller

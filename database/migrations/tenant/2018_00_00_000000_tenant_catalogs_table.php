@@ -41,7 +41,7 @@ class TenantCatalogsTable extends Migration
             ['id' => '04', 'description' => 'Códigos de Países'],
             ['id' => '05', 'description' => 'Códigos de tipos de tributos'],
             ['id' => '06', 'description' => 'Códigos de tipos de documentos de identidad'],
-            ['id' => '07', 'description' => 'Códigos de tipo de afectación del IGV'],
+//            ['id' => '07', 'description' => 'Códigos de tipo de afectación del IGV'],
             ['id' => '08', 'description' => 'Códigos de tipos de sistema de cálculo del ISC'],
             ['id' => '09', 'description' => 'Códigos de tipo de nota de crédito electrónica'],
             ['id' => '10', 'description' => 'Códigos de Tipo de nota de débito electrónica'],
@@ -50,7 +50,7 @@ class TenantCatalogsTable extends Migration
             ['id' => '13', 'description' => 'Ubicación geográfica (UBIGEO)'],
             ['id' => '14', 'description' => 'Códigos - Otros conceptos tributarios'],
             ['id' => '15', 'description' => 'Códigos - Elementos adicionales en la Factura Electrónica y/o Boleta de Venta Electrónica'],
-            ['id' => '16', 'description' => 'Códigos – Tipo de precio de venta unitario'],
+//            ['id' => '16', 'description' => 'Códigos – Tipo de precio de venta unitario'],
             ['id' => '17', 'description' => 'Códigos – Tipo de operación'],
             ['id' => '18', 'description' => 'Códigos – Modalidad de traslado'],
             ['id' => '19', 'description' => 'Resumen Diario de boletas de venta y notas electrónicas - Códigos de estado de ítem'],
@@ -377,24 +377,24 @@ class TenantCatalogsTable extends Migration
             ['id' => '0600000D', 'catalog_id' => '06', 'code' => 'D', 'description' => 'Identification Number - IN – Doc Trib PP. JJ', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
             ['id' => '0600000E', 'catalog_id' => '06', 'code' => 'E', 'description' => 'TAM- Tarjeta Andina de Migración', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 
-            ['id' => '07000010', 'catalog_id' => '07', 'code' => '10', 'description' => 'Gravado - Operación Onerosa', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000011', 'catalog_id' => '07', 'code' => '11', 'description' => 'Gravado – Retiro por premio', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000012', 'catalog_id' => '07', 'code' => '12', 'description' => 'Gravado – Retiro por donación', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000013', 'catalog_id' => '07', 'code' => '13', 'description' => 'Gravado – Retiro', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000014', 'catalog_id' => '07', 'code' => '14', 'description' => 'Gravado – Retiro por publicidad', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000015', 'catalog_id' => '07', 'code' => '15', 'description' => 'Gravado – Bonificaciones', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000016', 'catalog_id' => '07', 'code' => '16', 'description' => 'Gravado – Retiro por entrega a trabajadores', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000017', 'catalog_id' => '07', 'code' => '17', 'description' => 'Gravado – IVAP', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000020', 'catalog_id' => '07', 'code' => '20', 'description' => 'Exonerado - Operación Onerosa', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000021', 'catalog_id' => '07', 'code' => '21', 'description' => 'Exonerado – Transferencia Gratuita', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000030', 'catalog_id' => '07', 'code' => '30', 'description' => 'Inafecto - Operación Onerosa', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000031', 'catalog_id' => '07', 'code' => '31', 'description' => 'Inafecto – Retiro por Bonificación', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000032', 'catalog_id' => '07', 'code' => '32', 'description' => 'Inafecto – Retiro', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000033', 'catalog_id' => '07', 'code' => '33', 'description' => 'Inafecto – Retiro por Muestras Médicas', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000034', 'catalog_id' => '07', 'code' => '34', 'description' => 'Inafecto - Retiro por Convenio Colectivo', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000035', 'catalog_id' => '07', 'code' => '35', 'description' => 'Inafecto – Retiro por premio', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000036', 'catalog_id' => '07', 'code' => '36', 'description' => 'Inafecto - Retiro por publicidad', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '07000040', 'catalog_id' => '07', 'code' => '40', 'description' => 'Exportación de bienes o servicios', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000010', 'catalog_id' => '07', 'code' => '10', 'description' => 'Gravado - Operación Onerosa', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000011', 'catalog_id' => '07', 'code' => '11', 'description' => 'Gravado – Retiro por premio', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000012', 'catalog_id' => '07', 'code' => '12', 'description' => 'Gravado – Retiro por donación', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000013', 'catalog_id' => '07', 'code' => '13', 'description' => 'Gravado – Retiro', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000014', 'catalog_id' => '07', 'code' => '14', 'description' => 'Gravado – Retiro por publicidad', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000015', 'catalog_id' => '07', 'code' => '15', 'description' => 'Gravado – Bonificaciones', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000016', 'catalog_id' => '07', 'code' => '16', 'description' => 'Gravado – Retiro por entrega a trabajadores', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000017', 'catalog_id' => '07', 'code' => '17', 'description' => 'Gravado – IVAP', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000020', 'catalog_id' => '07', 'code' => '20', 'description' => 'Exonerado - Operación Onerosa', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000021', 'catalog_id' => '07', 'code' => '21', 'description' => 'Exonerado – Transferencia Gratuita', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000030', 'catalog_id' => '07', 'code' => '30', 'description' => 'Inafecto - Operación Onerosa', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000031', 'catalog_id' => '07', 'code' => '31', 'description' => 'Inafecto – Retiro por Bonificación', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000032', 'catalog_id' => '07', 'code' => '32', 'description' => 'Inafecto – Retiro', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000033', 'catalog_id' => '07', 'code' => '33', 'description' => 'Inafecto – Retiro por Muestras Médicas', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000034', 'catalog_id' => '07', 'code' => '34', 'description' => 'Inafecto - Retiro por Convenio Colectivo', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000035', 'catalog_id' => '07', 'code' => '35', 'description' => 'Inafecto – Retiro por premio', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000036', 'catalog_id' => '07', 'code' => '36', 'description' => 'Inafecto - Retiro por publicidad', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '07000040', 'catalog_id' => '07', 'code' => '40', 'description' => 'Exportación de bienes o servicios', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 
             ['id' => '08000001', 'catalog_id' => '08', 'code' => '01', 'description' => 'Sistema al valor (Apéndice IV, lit. A – T.U.O IGV e ISC)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
             ['id' => '08000002', 'catalog_id' => '08', 'code' => '02', 'description' => 'Aplicación del Monto Fijo (Apéndice IV, lit. B – T.U.O IGV e ISC)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
@@ -487,8 +487,8 @@ class TenantCatalogsTable extends Migration
             ['id' => '15007000', 'catalog_id' => '15', 'code' => '7000', 'description' => 'Primera venta de mercancía identificable entre usuarios de la zona comercial', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
             ['id' => '15007001', 'catalog_id' => '15', 'code' => '7001', 'description' => 'Venta exonerada del IGV-ISC-IPM. Prohibida la venta fuera de la zona comercial de Tacna', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 
-            ['id' => '16000001', 'catalog_id' => '16', 'code' => '01', 'description' => 'Precio unitario (incluye el IGV)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '16000002', 'catalog_id' => '16', 'code' => '02', 'description' => 'Valor referencial unitario en operaciones no onerosas', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '16000001', 'catalog_id' => '16', 'code' => '01', 'description' => 'Precio unitario (incluye el IGV)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '16000002', 'catalog_id' => '16', 'code' => '02', 'description' => 'Valor referencial unitario en operaciones no onerosas', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 
             ['id' => '17000001', 'catalog_id' => '17', 'code' => '01', 'description' => 'Venta Interna', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
             ['id' => '17000002', 'catalog_id' => '17', 'code' => '02', 'description' => 'Exportación de bienes', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
@@ -706,6 +706,59 @@ class TenantCatalogsTable extends Migration
             ['id' => '59000108', 'catalog_id' => '59', 'code' => '108', 'description' => 'Carta de crédito documentario - comercio exterior', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
             ['id' => '59000999', 'catalog_id' => '59', 'code' => '999', 'description' => 'Otros medios de pago', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
         ]);
+
+        Schema::create('currency_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('code', 3);
+            $table->string('description');
+            $table->string('symbol');
+            $table->boolean('active');
+        });
+
+        DB::table('currency_types')->insert([
+            ['id' => 1, 'code' => 'PEN', 'description' => 'Soles', 'symbol' => 'S/', 'active' => true],
+            ['id' => 2, 'code' => 'USD', 'description' => 'Dólares Americanos', 'symbol' => '$', 'active' => true],
+            ['id' => 3, 'code' => 'EUR', 'description' => 'Euros', 'symbol' => '€', 'active' => false],
+        ]);
+
+        Schema::create('price_types', function (Blueprint $table) {
+            $table->char('id', 2)->index();
+            $table->string('description');
+            $table->boolean('active');
+        });
+
+        DB::table('price_types')->insert([
+            ['id' => '01', 'description' => 'Precio unitario (incluye el IGV)', 'active' =>true],
+            ['id' => '02', 'description' => 'Valor referencial unitario en operaciones no onerosas', 'active' =>true],
+        ]);
+
+        Schema::create('affectation_types', function (Blueprint $table) {
+            $table->char('id', 2)->index();
+            $table->string('description');
+            $table->boolean('active');
+            $table->boolean('free');
+        });
+
+        DB::table('affectation_types')->insert([
+            ['id' => '10', 'description' => 'Gravado - Operación Onerosa', 'active' =>true, 'free' => false],
+            ['id' => '11', 'description' => 'Gravado – Retiro por premio', 'active' =>true, 'free' => true],
+            ['id' => '12', 'description' => 'Gravado – Retiro por donación', 'active' =>true, 'free' => true],
+            ['id' => '13', 'description' => 'Gravado – Retiro', 'active' =>true, 'free' => true],
+            ['id' => '14', 'description' => 'Gravado – Retiro por publicidad', 'active' =>true, 'free' => true],
+            ['id' => '15', 'description' => 'Gravado – Bonificaciones', 'active' =>true, 'free' => true],
+            ['id' => '16', 'description' => 'Gravado – Retiro por entrega a trabajadores', 'active' =>true, 'free' => true],
+            ['id' => '17', 'description' => 'Gravado – IVAP', 'active' =>true, 'free' => true],
+            ['id' => '20', 'description' => 'Exonerado - Operación Onerosa', 'active' =>true, 'free' => false],
+            ['id' => '21', 'description' => 'Exonerado – Transferencia Gratuita', 'active' =>true, 'free' => true],
+            ['id' => '30', 'description' => 'Inafecto - Operación Onerosa', 'active' =>true, 'free' => false],
+            ['id' => '31', 'description' => 'Inafecto – Retiro por Bonificación', 'active' =>true, 'free' => true],
+            ['id' => '32', 'description' => 'Inafecto – Retiro', 'active' =>true, 'free' => true],
+            ['id' => '33', 'description' => 'Inafecto – Retiro por Muestras Médicas', 'active' =>true, 'free' => true],
+            ['id' => '34', 'description' => 'Inafecto - Retiro por Convenio Colectivo', 'active' =>true, 'free' => true],
+            ['id' => '35', 'description' => 'Inafecto – Retiro por premio', 'active' =>true, 'free' => true],
+            ['id' => '36', 'description' => 'Inafecto - Retiro por publicidad', 'active' =>true, 'free' => true],
+            ['id' => '40', 'description' => 'Exportación de bienes o servicios', 'active' =>true, 'free' => false],
+        ]);
     }
 
     /**
@@ -715,6 +768,8 @@ class TenantCatalogsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('affectation_types');
+        Schema::dropIfExists('currency_types');
         Schema::dropIfExists('codes');
         Schema::dropIfExists('catalogs');
     }

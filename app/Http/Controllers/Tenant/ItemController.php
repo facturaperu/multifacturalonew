@@ -6,6 +6,7 @@ use App\Http\Requests\Tenant\ItemRequest;
 use App\Http\Resources\Tenant\ItemCollection;
 use App\Http\Resources\Tenant\ItemResource;
 use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Item;
 use Illuminate\Http\Request;
 
@@ -40,7 +41,7 @@ class ItemController extends Controller
     public function tables()
     {
         $unit_types = Code::byCatalog('03');
-        $currency_types = Code::byCatalog('02');
+        $currency_types = CurrencyType::all();
 
         return compact('unit_types', 'currency_types');
     }

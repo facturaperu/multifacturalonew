@@ -7,7 +7,7 @@
             <form autocomplete="off" @submit.prevent="submit">
                 <div class="form-body">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.establishment_id}">
                                 <label class="control-label">Establecimiento</label>
                                 <el-select v-model="form.establishment_id" @change="changeEstablishment">
@@ -16,16 +16,16 @@
                                 <small class="form-control-feedback" v-if="errors.establishment_id" v-text="errors.establishment_id[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-4 col-lg-3">
-                            <div class="form-group" :class="{'has-danger': errors.document_type_code}">
+                        <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.document_type_id}">
                                 <label class="control-label">Tipo de comprobante</label>
-                                <el-select v-model="form.document_type_code" @change="changeDocumentType">
-                                    <el-option v-for="option in document_types" :key="option.code" :value="option.code" :label="option.description"></el-option>
+                                <el-select v-model="form.document_type_id" @change="changeDocumentType">
+                                    <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
-                                <small class="form-control-feedback" v-if="errors.document_type_code" v-text="errors.document_type_code[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.series_id}">
                                 <label class="control-label">Serie</label>
                                 <el-select v-model="form.series_id">
@@ -34,32 +34,30 @@
                                 <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-6">
-                            <div class="form-group" :class="{'has-danger': errors.currency_type_code}">
+                        <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.currency_type_id}">
                                 <label class="control-label">Moneda</label>
-                                <el-select v-model="form.currency_type_code" @change="changeCurrencyType">
-                                    <el-option v-for="option in currency_types" :key="option.code" :value="option.code" :label="option.description"></el-option>
+                                <el-select v-model="form.currency_type_id" @change="changeCurrencyType">
+                                    <el-option v-for="option in currency_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
-                                <small class="form-control-feedback" v-if="errors.currency_type_code" v-text="errors.currency_type_code[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-6">
+                        <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
                                 <label class="control-label">Fecha de emisión</label>
                                 <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
                                 <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-6">
+                        <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.date_of_due}">
                                 <label class="control-label">Fecha de vencimiento</label>
                                 <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
                                 <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-4">
                             <div class="form-group" :class="{'has-danger': errors.customer_id}">
                                 <label class="control-label">
                                     Cliente
@@ -71,16 +69,14 @@
                                 <small class="form-control-feedback" v-if="errors.customer_id" v-text="errors.customer_id[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-6">
+                        <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.purchase_order}">
                                 <label class="control-label">Orden Compra</label>
                                 <el-input v-model="form.purchase_order"></el-input>
                                 <small class="form-control-feedback" v-if="errors.purchase_order" v-text="errors.purchase_order[0]"></small>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-2 col-md-6">
+                        <div class="col-lg-2">
                             <div class="form-group">
                                 <label class="control-label">Formato de PDF</label>
                                 <el-select v-model="form.optional.format_pdf" >
@@ -199,7 +195,7 @@
                 form: {}, 
                 document_types: [],
                 currency_types: [],
-                affectation_igv_types: [],
+//                affectation_igv_types: [],
                 discounts: [],
                 charges: [],
                 items: [],
@@ -218,7 +214,7 @@
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.document_types = response.data.document_types_invoice
-                    this.affectation_igv_types = response.data.affectation_igv_types
+//                    this.affectation_igv_types = response.data.affectation_igv_types
                     this.currency_types = response.data.currency_types
                     this.items = response.data.items
                     this.customers = response.data.customers
@@ -229,10 +225,11 @@
 
                     this.form.soap_type_id = this.company.soap_type_id
 
-                    this.form.establishment_id = _.head(this.establishments).id
-                    // this.establishment.id
-
+                    this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
+                    this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
+                    this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
                     this.changeDocumentType()
+
                 })
             this.$eventHub.$on('reloadDataCustomers', () => {
                 this.reloadDataCustomers()
@@ -249,13 +246,13 @@
                     soap_type_id: null,
                     ubl_version: 'v21',
                     group_id: '01',
-                    document_type_code: '01',
+                    document_type_id: null,
                     series: null,
                     number: '#',
                     date_of_issue: moment().format('YYYY-MM-DD'),
                     time_of_issue: moment().format('HH:mm:ss'),
                     date_of_due: moment().format('YYYY-MM-DD'),
-                    currency_type_code: 'PEN',
+                    currency_type_id: null,
                     customer_id: null,
                     items: [],
                     total_exportation: 0,
@@ -293,15 +290,17 @@
                 this.changeDocumentType()
             },
             changeEstablishment() {
-                this.series = _.filter(this.all_series, {'establishment_id': this.form.establishment_id})
-                this.form.series_id = _.head(this.series).id
+                this.filterSeries()
             },
             changeDocumentType() {
+                this.form.group_id = (this.form.document_type_id === '01000001')?'01':'02'
+                this.filterSeries()
+            },
+            filterSeries() {
                 this.form.series = null
-                let document_type = _.find(this.document_types, {'code': this.form.document_type_code})
-                this.series = _.filter(this.all_series, {'document_type_id': document_type.id})
-                this.form.group_id = (this.form.document_type_code === '01')?'01':'02'
-                this.form.series = (this.series.length > 0)?this.series[0].number:null
+                this.series = _.filter(this.all_series, {'establishment_id': this.form.establishment_id,
+                                                         'document_type_id': this.form.document_type_id})
+                this.form.series_id = (this.series.length > 0)?this.series[0].number:null
             },
             addItem() {
 

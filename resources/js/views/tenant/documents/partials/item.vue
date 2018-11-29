@@ -1,6 +1,6 @@
 <template>
     <el-dialog :title="titleDialog" :visible="showDialog" @close="close">
-        <form autocomplete="off" @submit.prevent="add">
+        <form autocomplete="off" @submit.prevent="clickAddItem">
             <div class="form-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -16,12 +16,12 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.affectation_igv_type_code}">
+                        <div class="form-group" :class="{'has-danger': errors.affectation_igv_type_id}">
                             <label class="control-label">Afectación Igv</label>
-                            <el-select v-model="form.affectation_igv_type_code" filterable>
+                            <el-select v-model="form.affectation_igv_type_id" filterable>
                                 <el-option v-for="option in affectation_igv_types" :key="option.code" :value="option.code" :label="option.description"></el-option>
                             </el-select>
-                            <small class="form-control-feedback" v-if="errors.affectation_igv_type_code" v-text="errors.affectation_igv_type_code[0]"></small>
+                            <small class="form-control-feedback" v-if="errors.affectation_igv_type_id" v-text="errors.affectation_igv_type_id[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -96,13 +96,11 @@
 <script>
 
     import itemForm from '../../items/form.vue'
-    import ElInput from "../../../../../../node_modules/element-ui/packages/input/src/input";
+//    import ElInput from "../../../../../../node_modules/element-ui/packages/input/src/input";
 
     export default {
         props: ['showDialog', 'operationTypeId'],
-        components: {
-            ElInput,
-            itemForm},
+        components: {itemForm},
         data() {
             return {
                 titleDialog: '',//this.$t('items.titles.new'),
@@ -140,7 +138,7 @@
                 this.form = {
 //                    category_id: [1],
                     item_id: null,
-                    affectation_igv_type_code: null,
+                    affectation_igv_type_id: null,
                     quantity: 1,
                     unit_price: 0,
                     // retail_unit_price: 0,
@@ -194,43 +192,108 @@
                 this.form.retail_unit_price = this.item.retail_unit_price
                 this.form.wholesale_unit_price = this.item.wholesale_unit_price
             },
-            add() {
+            clickAddItem() {
+
+//                $table->unsignedInteger('item_id');
+//                $table->string('item_description');
+//                $table->integer('quantity');
+//                $table->decimal('unit_value', 12, 2);
+//
+//                $table->char('affectation_igv_type_id', 8);
+//                $table->decimal('total_base_igv', 12, 2);
+//                $table->decimal('percentage_igv', 12, 2);
+//                $table->decimal('total_igv', 12, 2);
+//
+//                $table->char('system_isc_type_id', 8)->nullable();
+//                $table->decimal('total_base_isc', 12, 2)->default(0);
+//                $table->decimal('percentage_isc', 12, 2)->default(0);
+//                $table->decimal('total_isc', 12, 2)->default(0);
+//
+//                $table->decimal('total_base_other_taxes', 12, 2)->default(0);
+//                $table->decimal('percentage_other_taxes', 12, 2)->default(0);
+//                $table->decimal('total_other_taxes', 12, 2)->default(0);
+//                $table->decimal('total_taxes', 12, 2);
+//
+//                $table->char('price_type_id', 8);
+//                $table->decimal('unit_price', 12, 2)->default(0);
+//                $table->decimal('unit_value_free', 12, 2)->default(0);
+//
+//                $table->decimal('total_value', 12, 2);
+//                $table->decimal('total', 12, 2);
+//
+//                $table->json('attributes')->nullable();
+//                $table->json('charges')->nullable();
+//                $table->json('discounts')->nullable();
+
                 let item_description = this.item.description
 
-                if (this.item.additional_information) {
-                    item_description += '|'+this.item.additional_information
-                }
+//                if (this.item.additional_information) {
+//                    item_description += '|'+this.item.additional_information
+//                }
                 let row = {
                     item_id: this.item.id,
                     item_description: item_description,
-                    unit_type_id: this.item.unit_type_id,
-                    unit_type_description: this.item.unit_type.description,
                     quantity: this.form.quantity,
-                    price_type_id: '16000001',
-                    affectation_igv_type_id: '07000010',
                     unit_value: 0,
-                    unit_price: this.form.unit_price,
-                    unit_igv: 0,
-                    total_exonerated: 0,
-                    total_unaffected: 0,
-                    total_taxed: 0,
+                    affectation_igv_type_id: '07000010',
+                    total_base_igv: 0,
+                    percentage_igv: 0,
                     total_igv: 0,
+                    system_isc_type_id: null,
+                    total_base_isc: 0,
+                    percentage_isc: 0,
+                    total_isc: 0,
+                    total_base_other_taxes: 0,
+                    percentage_other_taxes: 0,
+                    total_other_taxes: 0,
+                    total_taxes: 0,
+                    price_type_id: null,
+                    unit_price: this.form.unit_price,
+                    unit_price_free: 0,
                     total_value: 0,
-                    total: 0
+                    total: 0,
+                    attributes: [],
+                    charges: [],
+                    discounts: [],
                 };
 
-                switch (this.use_price) {
-                    case 2:
-                        row.unit_price =  this.form.retail_unit_price
-                       break;
-                    case 3:
-                        row.unit_price =  this.form.wholesale_unit_price
-                        break;
+                let affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
+                let percentage_igv = 0
+//                let price_type_id = '16000001'
+
+                if (['10'].indexOf(affectation_igv_type.id) > -1) {
+                    percentage_igv = 18
                 }
 
-                let exportation = (this.operationTypeId === '17000002')
+                if (affectation_igv_type.free) {
+                    row.unit_price = 0
+                    row.unit_price_free = this.form.unit_price
+                    row.price_type_id = '02'
+                } else {
+                    row.unit_price = this.form.unit_price
+                    row.unit_price_free = 0
+                    row.price_type_id = '01'
+                }
 
-                let igv_percentage =  (exportation)?0:0.18
+
+//                this.form.affectation_igv_type_id === '') {
+//
+//                }
+
+//                let percentage_igv = 18
+
+//                switch (this.use_price) {
+//                    case 2:
+//                        row.unit_price =  this.form.retail_unit_price
+//                       break;
+//                    case 3:
+//                        row.unit_price =  this.form.wholesale_unit_price
+//                        break;
+//                }
+//
+//                let exportation = (this.operationTypeId === '17000002')
+
+//                let igv_percentage =  (exportation)?0:0.18
                 row.total = _.round(row.unit_price * row.quantity, 2)
                 row.total_igv = _.round(row.total / (1 + igv_percentage) * igv_percentage, 2)
                 let subtotal = _.round(row.total - row.total_igv, 2)

@@ -15,7 +15,10 @@ use App\Http\Requests\Tenant\DocumentVoidedRequest;
 use App\Http\Resources\Tenant\DocumentCollection;
 use App\Http\Resources\Tenant\DocumentResource;
 use App\Mail\Tenant\DocumentEmail;
+use App\Models\Tenant\Catalogs\AffectationType;
 use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\PriceType;
 use App\Models\Tenant\ChargeDiscount;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Customer;
@@ -65,8 +68,8 @@ class DocumentController extends Controller
         $document_types_note = Code::byCatalogOnlyCodes('01', ['07', '08']);
         $note_credit_types = Code::byCatalog('09');
         $note_debit_types = Code::byCatalog('10');
-        $currency_types = Code::byCatalog('02');
-        $affectation_igv_types = Code::byCatalogOnlyCodes('07', ['10', '20']);
+        $currency_types = CurrencyType::all();
+//        $affectation_igv_types = AffectationType::all();
         $customers = $this->table('customers');
         $items = $this->table('items');
         $company = Company::with(['identity_document_type'])->first();
@@ -76,13 +79,14 @@ class DocumentController extends Controller
 
         return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
                        'currency_types', 'customers', 'items', 'company', 'establishment', 'establishments',
-                       'series', 'affectation_igv_types');
+                       'series');
     }
 
     public function item_tables()
     {
         $items = $this->table('items');
-        $affectation_igv_types = Code::byCatalogOnlyCodes('07', ['10', '20']);
+        $affectation_igv_types = AffectationType::all();
+        $price_types = PriceType::all();
         $unit_types = [];//Code::byCatalog('03');
         $categories = [];//Category::cascade();
         $discounts = ChargeDiscount::whereIn('level', ['item', 'both'])
@@ -92,7 +96,7 @@ class DocumentController extends Controller
                                 ->where('type', 'charge')
                                 ->get();
 
-        return compact('items', 'unit_types', 'categories', 'affectation_igv_types', 'discounts', 'charges');
+        return compact('items', 'unit_types', 'categories', 'affectation_igv_types', 'price_types', 'discounts', 'charges');
     }
 
     public function table($table)
