@@ -72,17 +72,16 @@ class TenantSystemTable extends Migration
         });
 
         Schema::create('currency_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('code', 3);
+            $table->char('id', 3)->primary();
             $table->string('description');
             $table->string('symbol');
             $table->boolean('active');
         });
 
         DB::table('currency_types')->insert([
-            ['id' => 1, 'code' => 'PEN', 'description' => 'Soles', 'symbol' => 'S/', 'active' => true],
-            ['id' => 2, 'code' => 'USD', 'description' => 'Dólares Americanos', 'symbol' => '$', 'active' => true],
-            ['id' => 3, 'code' => 'EUR', 'description' => 'Euros', 'symbol' => '€', 'active' => false],
+            ['id' => 'PEN', 'description' => 'Soles', 'symbol' => 'S/', 'active' => true],
+            ['id' => 'USD', 'description' => 'Dólares Americanos', 'symbol' => '$', 'active' => true],
+            ['id' => 'EUR', 'description' => 'Euros', 'symbol' => '€', 'active' => false],
         ]);
     }
 
