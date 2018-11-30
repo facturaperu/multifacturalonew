@@ -27,4 +27,9 @@ class Series extends Model
     {
         return $this->belongsTo(Code::class, 'document_type_id');
     }
+
+    public function setNumberAttribute($value)
+    {
+        $this->attributes['number'] = strtoupper($value);
+    }
 }
