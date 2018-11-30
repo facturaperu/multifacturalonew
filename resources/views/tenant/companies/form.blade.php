@@ -7,20 +7,12 @@
             <tenant-companies-form></tenant-companies-form>
         </div>
         <div class="col-lg-6 col-md-12">
-            <tenant-establishments-form></tenant-establishments-form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6 col-md-12">
             <tenant-certificates-index></tenant-certificates-index>
         </div>
-        <div class="col-lg-6 col-md-12">
-            <tenant-series-form></tenant-series-form>
-        </div>
     </div>
     <div class="row">
         <div class="col-lg-6 col-md-12">
-            <tenant-users-form></tenant-users-form>
+            <tenant-series-form></tenant-series-form>
         </div>
         <div class="col-lg-6 col-md-12">
             <tenant-options-form></tenant-options-form>
