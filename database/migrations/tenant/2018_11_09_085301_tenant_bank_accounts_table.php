@@ -34,9 +34,10 @@ class TenantBankAccountsTable extends Migration
             $table->unsignedInteger('bank_id');
             $table->string('description');
             $table->string('number');
-            $table->char('currency_type_id', 8);
+            $table->char('currency_type_id', 3);
 
             $table->foreign('bank_id')->references('id')->on('banks');
+            $table->foreign('currency_type_id')->references('id')->on('currency_types');
         });
     }
 
