@@ -92,7 +92,6 @@ class TenantSystemTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('currency_types');
         Schema::dropIfExists('charge_discounts');
         Schema::dropIfExists('groups');
         Schema::dropIfExists('soap_types');

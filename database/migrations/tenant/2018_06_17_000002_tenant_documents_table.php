@@ -28,7 +28,7 @@ class TenantDocumentsTable extends Migration
             $table->date('date_of_issue');
             $table->time('time_of_issue');
             $table->unsignedInteger('customer_id');
-            $table->char('currency_type_id', 8);
+            $table->unsignedInteger('currency_type_id');
             $table->decimal('total_other_charges', 12, 2)->default(0);
             $table->decimal('total_exportation', 12, 2)->default(0);
             $table->decimal('total_taxed', 12, 2);
@@ -64,7 +64,7 @@ class TenantDocumentsTable extends Migration
             $table->foreign('document_type_id')->references('id')->on('codes');
             $table->foreign('series_id')->references('id')->on('series');
             $table->foreign('customer_id')->references('id')->on('customers');
-            $table->foreign('currency_type_id')->references('id')->on('codes');
+            $table->foreign('currency_type_id')->references('id')->on('currency_types');
         });
     }
 

@@ -33,7 +33,7 @@ class TenantItemsTable extends Migration
             $table->string('item_code_gs1')->nullable();
 
             $table->char('unit_type_id', 8);
-            $table->char('currency_type_id', 8);
+            $table->unsignedInteger('currency_type_id');
             $table->decimal('unit_price', 12, 2);
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
@@ -41,7 +41,7 @@ class TenantItemsTable extends Migration
 
             $table->foreign('item_type_id')->references('id')->on('item_types');
             $table->foreign('unit_type_id')->references('id')->on('codes');
-            $table->foreign('currency_type_id')->references('id')->on('codes');
+            $table->foreign('currency_type_id')->references('id')->on('currency_types');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('updated_by')->references('id')->on('users');
         });

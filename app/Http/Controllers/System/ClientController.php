@@ -39,7 +39,7 @@ class ClientController extends Controller
 
         DB::connection('system')->beginTransaction();
         try {
-            $uuid = env('PREFIX_DATABASE').$subDom;
+            $uuid = env('PREFIX_DATABASE').'_'.$subDom;
 
             $website = new Website();
             $website->uuid = $uuid;

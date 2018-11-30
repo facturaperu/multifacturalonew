@@ -6,10 +6,10 @@ use App\Http\Requests\Tenant\CustomerRequest;
 use App\Http\Resources\Tenant\CustomerCollection;
 use App\Http\Resources\Tenant\CustomerResource;
 use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\Department;
+use App\Models\Tenant\Catalogs\District;
+use App\Models\Tenant\Catalogs\Province;
 use App\Models\Tenant\Customer;
-use App\Models\Tenant\Department;
-use App\Models\Tenant\District;
-use App\Models\Tenant\Province;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
