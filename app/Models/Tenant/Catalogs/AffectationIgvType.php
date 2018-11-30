@@ -5,7 +5,7 @@ namespace App\Models\Tenant\Catalogs;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 
-class AffectationType extends Model
+class AffectationIgvType extends Model
 {
     use UsesTenantConnection;
 

@@ -15,10 +15,11 @@ use App\Http\Requests\Tenant\DocumentVoidedRequest;
 use App\Http\Resources\Tenant\DocumentCollection;
 use App\Http\Resources\Tenant\DocumentResource;
 use App\Mail\Tenant\DocumentEmail;
-use App\Models\Tenant\Catalogs\AffectationType;
+use App\Models\Tenant\Catalogs\AffectationIgvType;
 use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\PriceType;
+use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\ChargeDiscount;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Customer;
@@ -85,7 +86,8 @@ class DocumentController extends Controller
     public function item_tables()
     {
         $items = $this->table('items');
-        $affectation_igv_types = AffectationType::all();
+        $affectation_igv_types = AffectationIgvType::all();
+        $system_isc_types = SystemIscType::all();
         $price_types = PriceType::all();
         $unit_types = [];//Code::byCatalog('03');
         $categories = [];//Category::cascade();
@@ -96,7 +98,7 @@ class DocumentController extends Controller
                                 ->where('type', 'charge')
                                 ->get();
 
-        return compact('items', 'unit_types', 'categories', 'affectation_igv_types', 'price_types', 'discounts', 'charges');
+        return compact('items', 'unit_types', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types', 'discounts', 'charges');
     }
 
     public function table($table)

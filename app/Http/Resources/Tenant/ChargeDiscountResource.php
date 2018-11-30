@@ -19,7 +19,7 @@ class ChargeDiscountResource extends JsonResource
             'id' => $this->id,
             'charge_discount_type_id' => $this->charge_discount_type_id,
             'type' => $this->type,
-            'base' => $this->base,
+            'base' => (boolean) $this->base,
             'description' => $this->description,
             'percentage' => $this->percentage,
         ];

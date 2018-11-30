@@ -36,6 +36,7 @@ class TenantSystemTable extends Migration
 
         DB::table('process_types')->insert([
             ['id' => 1, 'description' => 'Registrar'],
+            ['id' => 2, 'description' => 'Editar'],
             ['id' => 3, 'description' => 'Anular'],
         ]);
 

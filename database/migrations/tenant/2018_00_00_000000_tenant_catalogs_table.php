@@ -396,9 +396,9 @@ class TenantCatalogsTable extends Migration
 //            ['id' => '07000036', 'catalog_id' => '07', 'code' => '36', 'description' => 'Inafecto - Retiro por publicidad', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 //            ['id' => '07000040', 'catalog_id' => '07', 'code' => '40', 'description' => 'Exportación de bienes o servicios', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 
-            ['id' => '08000001', 'catalog_id' => '08', 'code' => '01', 'description' => 'Sistema al valor (Apéndice IV, lit. A – T.U.O IGV e ISC)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '08000002', 'catalog_id' => '08', 'code' => '02', 'description' => 'Aplicación del Monto Fijo (Apéndice IV, lit. B – T.U.O IGV e ISC)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '08000003', 'catalog_id' => '08', 'code' => '03', 'description' => 'Sistema de Precios de Venta al Público (Apéndice IV, lit. C – T.U.O IGV e ISC)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '08000001', 'catalog_id' => '08', 'code' => '01', 'description' => 'Sistema al valor (Apéndice IV, lit. A – T.U.O IGV e ISC)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '08000002', 'catalog_id' => '08', 'code' => '02', 'description' => 'Aplicación del Monto Fijo (Apéndice IV, lit. B – T.U.O IGV e ISC)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '08000003', 'catalog_id' => '08', 'code' => '03', 'description' => 'Sistema de Precios de Venta al Público (Apéndice IV, lit. C – T.U.O IGV e ISC)', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 
             ['id' => '09000001', 'catalog_id' => '09', 'code' => '01', 'description' => 'Anulación de la operación', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
             ['id' => '09000002', 'catalog_id' => '09', 'code' => '02', 'description' => 'Anulación por error en el RUC', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
@@ -732,14 +732,14 @@ class TenantCatalogsTable extends Migration
             ['id' => '02', 'description' => 'Valor referencial unitario en operaciones no onerosas', 'active' =>true],
         ]);
 
-        Schema::create('affectation_types', function (Blueprint $table) {
+        Schema::create('affectation_igv_types', function (Blueprint $table) {
             $table->char('id', 2)->index();
             $table->string('description');
             $table->boolean('active');
             $table->boolean('free');
         });
 
-        DB::table('affectation_types')->insert([
+        DB::table('affectation_igv_types')->insert([
             ['id' => '10', 'description' => 'Gravado - Operación Onerosa', 'active' =>true, 'free' => false],
             ['id' => '11', 'description' => 'Gravado – Retiro por premio', 'active' =>true, 'free' => true],
             ['id' => '12', 'description' => 'Gravado – Retiro por donación', 'active' =>true, 'free' => true],
@@ -759,6 +759,19 @@ class TenantCatalogsTable extends Migration
             ['id' => '36', 'description' => 'Inafecto - Retiro por publicidad', 'active' =>true, 'free' => true],
             ['id' => '40', 'description' => 'Exportación de bienes o servicios', 'active' =>true, 'free' => false],
         ]);
+
+        Schema::create('system_isc_types', function (Blueprint $table) {
+            $table->char('id', 2)->index();
+            $table->string('description');
+            $table->boolean('active');
+        });
+
+        DB::table('system_isc_types')->insert([
+            ['id' => '01', 'description' => 'Sistema al valor', 'active' =>true],
+            ['id' => '02', 'description' => 'Aplicación del Monto Fijo', 'active' =>true],
+            ['id' => '03', 'description' => 'Sistema de Precios de Venta al Público', 'active' =>true],
+        ]);
+
     }
 
     /**
@@ -768,6 +781,7 @@ class TenantCatalogsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('system_isc_types');
         Schema::dropIfExists('affectation_types');
         Schema::dropIfExists('currency_types');
         Schema::dropIfExists('codes');
