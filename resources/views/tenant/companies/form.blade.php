@@ -34,13 +34,17 @@
             <tenant-establishments-index></tenant-establishments-index>
         </div>
     </div>
-
     <div class="row">
         <div class="col-lg-6 col-md-12">
             <tenant-charge_discounts-index type="charge"></tenant-charge_discounts-index>
         </div>
         <div class="col-lg-6 col-md-12">
             <tenant-charge_discounts-index type="discount"></tenant-charge_discounts-index>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <tenant-banks-index></tenant-banks-index>
         </div>
     </div>
 @endsection

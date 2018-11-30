@@ -173,6 +173,12 @@ if ($hostname) {
             Route::get('unit_types/record/{code}', 'Tenant\UnitTypeController@record');
             Route::post('unit_types', 'Tenant\UnitTypeController@store');
             Route::delete('unit_types/{code}', 'Tenant\UnitTypeController@destroy');
+
+            //Banks
+            Route::get('banks/records', 'Tenant\BankController@records');
+            Route::get('banks/record/{bank}', 'Tenant\BankController@record');
+            Route::post('banks', 'Tenant\BankController@store');
+            Route::delete('banks/{bank}', 'Tenant\BankController@destroy');
         });
     });
 } else {
