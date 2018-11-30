@@ -16,7 +16,7 @@ class CurrencyTypeRequest extends FormRequest
     {
         $id = $this->input('id');
         return [
-            'code' => [
+            'id' => [
                 'required',
             ],
             'description' => [

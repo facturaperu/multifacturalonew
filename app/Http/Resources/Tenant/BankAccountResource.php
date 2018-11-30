@@ -19,7 +19,7 @@ class BankAccountResource extends JsonResource
             'bank_id' => $this->bank_id,
             'description' => $this->description,
             'number' => $this->number,
-            'currency_type_id' => (int)$this->currency_type_id
+            'currency_type_id' => $this->currency_type_id
         ];
     }
 }

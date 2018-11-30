@@ -16,7 +16,7 @@
                     <tbody>
                     <tr v-for="(row, index) in records">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ row.code }}</td>
+                        <td>{{ row.id }}</td>
                         <td>{{ row.description }}</td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>

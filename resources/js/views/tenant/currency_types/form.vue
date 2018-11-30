@@ -4,10 +4,10 @@
             <div class="form-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="form-group" :class="{'has-danger': errors.code}">
+                        <div class="form-group" :class="{'has-danger': errors.id}">
                             <label class="control-label">Código</label>
-                            <el-input v-model="form.code"></el-input>
-                            <small class="form-control-feedback" v-if="errors.code" v-text="errors.code[0]"></small>
+                            <el-input v-model="form.id"></el-input>
+                            <small class="form-control-feedback" v-if="errors.id" v-text="errors.id[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -64,7 +64,6 @@
                 this.errors = {}
                 this.form = {
                     id: null,
-                    code: null,
                     description: null,
                     symbol: null,
                     active: null

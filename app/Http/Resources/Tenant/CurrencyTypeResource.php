@@ -16,7 +16,6 @@ class CurrencyTypeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'code' => $this->code,
             'description' => $this->description,
             'active' => (bool)$this->active,
             'symbol' => $this->symbol,

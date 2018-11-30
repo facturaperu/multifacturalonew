@@ -10,8 +10,10 @@ class CurrencyType extends Model
     use UsesTenantConnection;
 
     public $timestamps = false;
-
+    public $incrementing = false;
+	protected $casts = ['id' => 'string'];
+	
     protected $fillable = [
-        'code', 'description', 'active', 'symbol'
+        'id', 'description', 'active', 'symbol'
     ];
 }
