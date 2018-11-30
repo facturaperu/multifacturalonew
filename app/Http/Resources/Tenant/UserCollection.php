@@ -19,6 +19,7 @@ class UserCollection extends ResourceCollection
                 'id' => $row->id,
                 'email' => $row->email,
                 'name' => $row->name,
+                'api_token' => $row->api_token,
             ];
         });
     }
