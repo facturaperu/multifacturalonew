@@ -367,6 +367,8 @@
                     }
                     row.total_base_isc = 0
                     row.total_isc = _.round(_unit_value_isc * row.quantity, 2)
+                } else {
+
                 }
 
                 row.unit_value = _.round(_unit_value, 2)
