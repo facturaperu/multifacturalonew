@@ -19,6 +19,7 @@ class ServiceController extends Controller
         $service = new Sunat();
         $res = $service->get($number);
         if ($res) {
+            $province_id = Province::idByDescription($res->provincia);
             return [
                 'success' => true,
                 'data' => [
@@ -29,9 +30,9 @@ class ServiceController extends Controller
                     'department' => ($res->departamento)?:'LIMA',
                     'department_id' => Department::idByDescription($res->departamento),
                     'province' => ($res->provincia)?:'LIMA',
-                    'province_id' => Province::idByDescription($res->provincia),
+                    'province_id' => $province_id,
                     'district' => ($res->distrito)?:'LIMA',
-                    'district_id' => District::idByDescription($res->distrito),
+                    'district_id' => District::idByDescription($res->distrito,$province_id),
                 ]
             ];
         } else {
