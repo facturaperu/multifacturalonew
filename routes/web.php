@@ -156,6 +156,7 @@ if ($hostname) {
 
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
             Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
+            Route::get('services/exchange_rate', 'Tenant\Api\ServiceController@exchange_rate');
 
             //BUSQUEDA DE DOCUMENTOS
             // Route::get('busqueda', 'Tenant\SearchController@index')->name('search');
@@ -179,6 +180,10 @@ if ($hostname) {
             Route::get('banks/record/{bank}', 'Tenant\BankController@record');
             Route::post('banks', 'Tenant\BankController@store');
             Route::delete('banks/{bank}', 'Tenant\BankController@destroy');
+
+            //Exchange Rates
+            Route::get('exchange_rates/records', 'Tenant\ExchangeRateController@records');
+            Route::post('exchange_rates', 'Tenant\ExchangeRateController@store');
         });
     });
 } else {

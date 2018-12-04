@@ -96,6 +96,13 @@ class TenantSystemTable extends Migration
 
             $table->foreign('bank_id')->references('id')->on('banks');
         });
+
+        Schema::create('exchange_rates', function (Blueprint $table) {
+            $table->date('date')->primary();
+            $table->decimal('buy', 13, 3);
+            $table->decimal('sell', 13, 3);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -105,6 +112,7 @@ class TenantSystemTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('exchange_rates');
         Schema::dropIfExists('bank_accounts');
         Schema::dropIfExists('banks');
         Schema::dropIfExists('charge_discounts');
