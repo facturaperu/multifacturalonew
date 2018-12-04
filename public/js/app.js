@@ -45497,9 +45497,9 @@ module.exports = Component.exports
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(431)
+var __vue_script__ = __webpack_require__(437)
 /* template */
-var __vue_template__ = __webpack_require__(432)
+var __vue_template__ = __webpack_require__(438)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45542,7 +45542,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(213);
-module.exports = __webpack_require__(438);
+module.exports = __webpack_require__(444);
 
 
 /***/ }),
@@ -45609,13 +45609,14 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('tenant-units-index', __we
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('tenant-users-index', __webpack_require__(405));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('tenant-establishments-index', __webpack_require__(411));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('tenant-charge_discounts-index', __webpack_require__(420));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('tenant-banks-index', __webpack_require__(426));
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('tenant-calendar', __webpack_require__(426));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('tenant-calendar', __webpack_require__(432));
 
 // System
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('system-clients-index', __webpack_require__(429));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('system-clients-index', __webpack_require__(435));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('system-clients-form', __webpack_require__(211));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('system-users-form', __webpack_require__(435));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('system-users-form', __webpack_require__(441));
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
   el: '#main-wrapper'
@@ -116717,6 +116718,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -116729,7 +116760,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             errors: {},
             form: {},
             unit_types: [],
-            currency_types: []
+            currency_types: [],
+            system_isc_types: []
         };
     },
     created: function created() {
@@ -116739,6 +116771,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$http.get('/' + this.resource + '/tables').then(function (response) {
             _this.unit_types = response.data.unit_types;
             _this.currency_types = response.data.currency_types;
+            _this.system_isc_types = response.data.system_isc_types;
         });
     },
 
@@ -116754,7 +116787,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 description: null,
                 unit_type_id: null,
                 currency_type_id: null,
-                unit_price: null
+                unit_price: null,
+                has_isc: null,
+                system_isc_type_id: null,
+                percentage_isc: null
             };
         },
         create: function create() {
@@ -116796,6 +116832,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         close: function close() {
             this.$emit('update:showDialog', false);
             this.initForm();
+        },
+        changeHasIsc: function changeHasIsc() {
+            this.form.system_isc_type_id = null;
+            this.form.percentage_isc = 0;
         }
     }
 });
@@ -116832,270 +116872,417 @@ var render = function() {
         },
         [
           _c("div", { staticClass: "form-body" }, [
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-md-3" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "form-group",
-                    class: { "has-danger": _vm.errors.internal_id }
-                  },
-                  [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Código Interno")
-                    ]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      model: {
-                        value: _vm.form.internal_id,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "internal_id", $$v)
-                        },
-                        expression: "form.internal_id"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.errors.internal_id
-                      ? _c("small", {
-                          staticClass: "form-control-feedback",
-                          domProps: {
-                            textContent: _vm._s(_vm.errors.internal_id[0])
-                          }
-                        })
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-3" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "form-group",
-                    class: { "has-danger": _vm.errors.unit_type_id }
-                  },
-                  [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Unidad")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "el-select",
-                      {
+            _c(
+              "div",
+              { staticClass: "row" },
+              [
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      class: { "has-danger": _vm.errors.internal_id }
+                    },
+                    [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Código Interno")
+                      ]),
+                      _vm._v(" "),
+                      _c("el-input", {
                         model: {
-                          value: _vm.form.unit_type_id,
+                          value: _vm.form.internal_id,
                           callback: function($$v) {
-                            _vm.$set(_vm.form, "unit_type_id", $$v)
+                            _vm.$set(_vm.form, "internal_id", $$v)
                           },
-                          expression: "form.unit_type_id"
+                          expression: "form.internal_id"
                         }
-                      },
-                      _vm._l(_vm.unit_types, function(option) {
-                        return _c("el-option", {
-                          key: option.id,
-                          attrs: { value: option.id, label: option.description }
-                        })
-                      })
-                    ),
-                    _vm._v(" "),
-                    _vm.errors.unit_type_id
-                      ? _c("small", {
-                          staticClass: "form-control-feedback",
-                          domProps: {
-                            textContent: _vm._s(_vm.errors.unit_type_id[0])
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.internal_id
+                        ? _c("small", {
+                            staticClass: "form-control-feedback",
+                            domProps: {
+                              textContent: _vm._s(_vm.errors.internal_id[0])
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      class: { "has-danger": _vm.errors.unit_type_id }
+                    },
+                    [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Unidad")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "el-select",
+                        {
+                          model: {
+                            value: _vm.form.unit_type_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "unit_type_id", $$v)
+                            },
+                            expression: "form.unit_type_id"
                           }
-                        })
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-6" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "form-group",
-                    class: { "has-danger": _vm.errors.description }
-                  },
-                  [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Descripción")
-                    ]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      model: {
-                        value: _vm.form.description,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "description", $$v)
                         },
-                        expression: "form.description"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.errors.description
-                      ? _c("small", {
-                          staticClass: "form-control-feedback",
-                          domProps: {
-                            textContent: _vm._s(_vm.errors.description[0])
-                          }
+                        _vm._l(_vm.unit_types, function(option) {
+                          return _c("el-option", {
+                            key: option.id,
+                            attrs: {
+                              value: option.id,
+                              label: option.description
+                            }
+                          })
                         })
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-3" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "form-group",
-                    class: { "has-danger": _vm.errors.item_code }
-                  },
-                  [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Código Sunat")
-                    ]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      model: {
-                        value: _vm.form.item_code,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "item_code", $$v)
-                        },
-                        expression: "form.item_code"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.errors.item_code
-                      ? _c("small", {
-                          staticClass: "form-control-feedback",
-                          domProps: {
-                            textContent: _vm._s(_vm.errors.item_code[0])
-                          }
-                        })
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-3" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "form-group",
-                    class: { "has-danger": _vm.errors.item_code_gs1 }
-                  },
-                  [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Código GSL")
-                    ]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      model: {
-                        value: _vm.form.item_code_gs1,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "item_code_gs1", $$v)
-                        },
-                        expression: "form.item_code_gs1"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.errors.item_code_gs1
-                      ? _c("small", {
-                          staticClass: "form-control-feedback",
-                          domProps: {
-                            textContent: _vm._s(_vm.errors.item_code_gs1[0])
-                          }
-                        })
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-3" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "form-group",
-                    class: { "has-danger": _vm.errors.currency_type_id }
-                  },
-                  [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Moneda")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "el-select",
-                      {
+                      ),
+                      _vm._v(" "),
+                      _vm.errors.unit_type_id
+                        ? _c("small", {
+                            staticClass: "form-control-feedback",
+                            domProps: {
+                              textContent: _vm._s(_vm.errors.unit_type_id[0])
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      class: { "has-danger": _vm.errors.description }
+                    },
+                    [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Descripción")
+                      ]),
+                      _vm._v(" "),
+                      _c("el-input", {
                         model: {
-                          value: _vm.form.currency_type_id,
+                          value: _vm.form.description,
                           callback: function($$v) {
-                            _vm.$set(_vm.form, "currency_type_id", $$v)
+                            _vm.$set(_vm.form, "description", $$v)
                           },
-                          expression: "form.currency_type_id"
+                          expression: "form.description"
                         }
-                      },
-                      _vm._l(_vm.currency_types, function(option) {
-                        return _c("el-option", {
-                          key: option.id,
-                          attrs: { value: option.id, label: option.description }
-                        })
-                      })
-                    ),
-                    _vm._v(" "),
-                    _vm.errors.currency_type_id
-                      ? _c("small", {
-                          staticClass: "form-control-feedback",
-                          domProps: {
-                            textContent: _vm._s(_vm.errors.currency_type_id[0])
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.description
+                        ? _c("small", {
+                            staticClass: "form-control-feedback",
+                            domProps: {
+                              textContent: _vm._s(_vm.errors.description[0])
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      class: { "has-danger": _vm.errors.item_code }
+                    },
+                    [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Código Sunat")
+                      ]),
+                      _vm._v(" "),
+                      _c("el-input", {
+                        model: {
+                          value: _vm.form.item_code,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "item_code", $$v)
+                          },
+                          expression: "form.item_code"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.item_code
+                        ? _c("small", {
+                            staticClass: "form-control-feedback",
+                            domProps: {
+                              textContent: _vm._s(_vm.errors.item_code[0])
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      class: { "has-danger": _vm.errors.item_code_gs1 }
+                    },
+                    [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Código GSL")
+                      ]),
+                      _vm._v(" "),
+                      _c("el-input", {
+                        model: {
+                          value: _vm.form.item_code_gs1,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "item_code_gs1", $$v)
+                          },
+                          expression: "form.item_code_gs1"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.item_code_gs1
+                        ? _c("small", {
+                            staticClass: "form-control-feedback",
+                            domProps: {
+                              textContent: _vm._s(_vm.errors.item_code_gs1[0])
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      class: { "has-danger": _vm.errors.currency_type_id }
+                    },
+                    [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Moneda")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "el-select",
+                        {
+                          model: {
+                            value: _vm.form.currency_type_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "currency_type_id", $$v)
+                            },
+                            expression: "form.currency_type_id"
                           }
-                        })
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-3" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "form-group",
-                    class: { "has-danger": _vm.errors.unit_price }
-                  },
-                  [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Precio Unitario")
-                    ]),
-                    _vm._v(" "),
-                    _c("el-input", {
-                      model: {
-                        value: _vm.form.unit_price,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "unit_price", $$v)
                         },
-                        expression: "form.unit_price"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.errors.unit_price
-                      ? _c("small", {
-                          staticClass: "form-control-feedback",
-                          domProps: {
-                            textContent: _vm._s(_vm.errors.unit_price[0])
-                          }
+                        _vm._l(_vm.currency_types, function(option) {
+                          return _c("el-option", {
+                            key: option.id,
+                            attrs: {
+                              value: option.id,
+                              label: option.description
+                            }
+                          })
                         })
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ])
-            ])
+                      ),
+                      _vm._v(" "),
+                      _vm.errors.currency_type_id
+                        ? _c("small", {
+                            staticClass: "form-control-feedback",
+                            domProps: {
+                              textContent: _vm._s(
+                                _vm.errors.currency_type_id[0]
+                              )
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      class: { "has-danger": _vm.errors.unit_price }
+                    },
+                    [
+                      _c("label", { staticClass: "control-label" }, [
+                        _vm._v("Precio Unitario")
+                      ]),
+                      _vm._v(" "),
+                      _c("el-input", {
+                        model: {
+                          value: _vm.form.unit_price,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "unit_price", $$v)
+                          },
+                          expression: "form.unit_price"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.unit_price
+                        ? _c("small", {
+                            staticClass: "form-control-feedback",
+                            domProps: {
+                              textContent: _vm._s(_vm.errors.unit_price[0])
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      class: { "has-danger": _vm.errors.has_isc }
+                    },
+                    [
+                      _c("label", { staticClass: "control-label d-block" }, [
+                        _vm._v("¿Tiene ISC?")
+                      ]),
+                      _vm._v(" "),
+                      _c("el-switch", {
+                        attrs: { "active-text": "Si", "inactive-text": "No" },
+                        on: { change: _vm.changeHasIsc },
+                        model: {
+                          value: _vm.form.has_isc,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "has_isc", $$v)
+                          },
+                          expression: "form.has_isc"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has_isc
+                        ? _c("small", {
+                            staticClass: "form-control-feedback",
+                            domProps: {
+                              textContent: _vm._s(_vm.errors.has_isc[0])
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _vm.form.has_isc
+                  ? [
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "form-group",
+                            class: {
+                              "has-danger": _vm.errors.system_isc_type_id
+                            }
+                          },
+                          [
+                            _c("label", { staticClass: "control-label" }, [
+                              _vm._v("Sistema Isc")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "el-select",
+                              {
+                                attrs: { filterable: "" },
+                                model: {
+                                  value: _vm.form.system_isc_type_id,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.form,
+                                      "system_isc_type_id",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "form.system_isc_type_id"
+                                }
+                              },
+                              _vm._l(_vm.system_isc_types, function(option) {
+                                return _c("el-option", {
+                                  key: option.id,
+                                  attrs: {
+                                    value: option.id,
+                                    label: option.description
+                                  }
+                                })
+                              })
+                            ),
+                            _vm._v(" "),
+                            _vm.errors.system_isc_type_id
+                              ? _c("small", {
+                                  staticClass: "form-control-feedback",
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      _vm.errors.system_isc_type_id[0]
+                                    )
+                                  }
+                                })
+                              : _vm._e()
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-3" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "form-group",
+                            class: { "has-danger": _vm.errors.percentage_isc }
+                          },
+                          [
+                            _c("label", { staticClass: "control-label" }, [
+                              _vm._v("Porcentaje Isc")
+                            ]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              model: {
+                                value: _vm.form.percentage_isc,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "percentage_isc", $$v)
+                                },
+                                expression: "form.percentage_isc"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors.percentage_isc
+                              ? _c("small", {
+                                  staticClass: "form-control-feedback",
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      _vm.errors.percentage_isc[0]
+                                    )
+                                  }
+                                })
+                              : _vm._e()
+                          ],
+                          1
+                        )
+                      ])
+                    ]
+                  : _vm._e()
+              ],
+              2
+            )
           ]),
           _vm._v(" "),
           _c(
@@ -121776,15 +121963,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.form.retail_unit_price = this.item.retail_unit_price;
             this.form.wholesale_unit_price = this.item.wholesale_unit_price;
         },
-        changeHasIsc: function changeHasIsc() {
-            // if (this.form.has_isc) {
-            //
-            // } else {
-            this.form.system_isc_type_id = null;
-            this.form.percentage_isc = 0;
-            this.form.suggested_price = 0;
-            // }
-        },
+
+        //            changeHasIsc() {
+        //                this.form.system_isc_type_id = null
+        //                this.form.percentage_isc = 0
+        //                this.form.suggested_price = 0
+        //            },
         clickAddItem: function clickAddItem() {
             var _this2 = this;
 
@@ -121905,7 +122089,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
                 row.total_base_isc = 0;
                 row.total_isc = _.round(_unit_value_isc * row.quantity, 2);
-            }
+            } else {}
 
             row.unit_value = _.round(_unit_value, 2);
             row.total_discount = _.round(_discount_base + _discount_no_base, 2);
@@ -126929,6 +127113,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -127458,6 +127644,8 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(row.name))]),
                   _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(row.api_token))]),
+                  _vm._v(" "),
                   _c("td", { staticClass: "text-right" }, [
                     _c(
                       "button",
@@ -127556,7 +127744,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Email")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Nombre")])
+        _c("th", [_vm._v("Nombre")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Api Token")])
       ])
     ])
   }
@@ -129930,7 +130120,533 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(427)
 /* template */
-var __vue_template__ = __webpack_require__(428)
+var __vue_template__ = __webpack_require__(431)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/tenant/banks/index.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-30442d58", Component.options)
+  } else {
+    hotAPI.reload("data-v-30442d58", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 427 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_vue__ = __webpack_require__(428);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_deletable__ = __webpack_require__(6);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_deletable__["a" /* deletable */]],
+    components: { BanksForm: __WEBPACK_IMPORTED_MODULE_0__form_vue___default.a },
+    data: function data() {
+        return {
+            showDialog: false,
+            resource: 'banks',
+            recordId: null,
+            records: []
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        this.$eventHub.$on('reloadData', function () {
+            _this.getData();
+        });
+        this.getData();
+    },
+
+    methods: {
+        getData: function getData() {
+            var _this2 = this;
+
+            this.$http.get('/' + this.resource + '/records').then(function (response) {
+                _this2.records = response.data.data;
+            });
+        },
+        clickCreate: function clickCreate() {
+            var recordId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+            this.recordId = recordId;
+            this.showDialog = true;
+        },
+        clickDelete: function clickDelete(id) {
+            var _this3 = this;
+
+            this.destroy('/' + this.resource + '/' + id).then(function () {
+                return _this3.$eventHub.$emit('reloadData');
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 428 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(429)
+/* template */
+var __vue_template__ = __webpack_require__(430)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/tenant/banks/form.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ce5f1d9c", Component.options)
+  } else {
+    hotAPI.reload("data-v-ce5f1d9c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 429 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['showDialog', 'recordId'],
+    data: function data() {
+        return {
+            loading_submit: false,
+            titleDialog: null,
+            resource: 'banks',
+            errors: {},
+            form: {}
+        };
+    },
+    created: function created() {
+        this.initForm();
+    },
+
+    methods: {
+        initForm: function initForm() {
+            this.errors = {};
+            this.form = {
+                id: null,
+                description: null
+            };
+        },
+        create: function create() {
+            var _this = this;
+
+            this.titleDialog = this.recordId ? 'Editar Banco' : 'Nuevo Banco';
+            if (this.recordId) {
+                this.$http.get('/' + this.resource + '/record/' + this.recordId).then(function (response) {
+                    _this.form = response.data.data;
+                });
+            }
+        },
+        submit: function submit() {
+            var _this2 = this;
+
+            this.loading_submit = true;
+            this.$http.post('/' + this.resource, this.form).then(function (response) {
+                if (response.data.success) {
+                    _this2.$message.success(response.data.message);
+                    _this2.$eventHub.$emit('reloadData');
+                    _this2.close();
+                } else {
+                    _this2.$message.error(response.data.message);
+                }
+            }).catch(function (error) {
+                if (error.response.status === 422) {
+                    _this2.errors = error.response.data.errors;
+                } else {
+                    console.log(error);
+                }
+            }).then(function () {
+                _this2.loading_submit = false;
+            });
+        },
+        close: function close() {
+            this.$emit('update:showDialog', false);
+            this.initForm();
+        }
+    }
+});
+
+/***/ }),
+/* 430 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "el-dialog",
+    {
+      attrs: { title: _vm.titleDialog, visible: _vm.showDialog },
+      on: { close: _vm.close, open: _vm.create }
+    },
+    [
+      _c(
+        "form",
+        {
+          attrs: { autocomplete: "off" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.submit($event)
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "form-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-md-12" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "form-group",
+                    class: { "has-danger": _vm.errors.description }
+                  },
+                  [
+                    _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Descripción")
+                    ]),
+                    _vm._v(" "),
+                    _c("el-input", {
+                      model: {
+                        value: _vm.form.description,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "description", $$v)
+                        },
+                        expression: "form.description"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.errors.description
+                      ? _c("small", {
+                          staticClass: "form-control-feedback",
+                          domProps: {
+                            textContent: _vm._s(_vm.errors.description[0])
+                          }
+                        })
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-actions text-right mt-4" },
+            [
+              _c(
+                "el-button",
+                {
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.close()
+                    }
+                  }
+                },
+                [_vm._v("Cancelar")]
+              ),
+              _vm._v(" "),
+              _c(
+                "el-button",
+                {
+                  attrs: {
+                    type: "primary",
+                    "native-type": "submit",
+                    loading: _vm.loading_submit
+                  }
+                },
+                [_vm._v("Guardar")]
+              )
+            ],
+            1
+          )
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-ce5f1d9c", module.exports)
+  }
+}
+
+/***/ }),
+/* 431 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "card" },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("div", { staticClass: "table-responsive" }, [
+          _c("table", { staticClass: "table" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.records, function(row, index) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(index + 1))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(row.description))]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "btn waves-effect waves-light btn-xs btn-info",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.clickCreate(row.id)
+                          }
+                        }
+                      },
+                      [_vm._v("Editar")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "btn waves-effect waves-light btn-xs btn-danger",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.clickDelete(row.id)
+                          }
+                        }
+                      },
+                      [_vm._v("Eliminar")]
+                    )
+                  ])
+                ])
+              })
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-custom btn-sm  mt-2 mr-2",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.clickCreate()
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fa fa-plus-circle" }), _vm._v(" Nuevo")]
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("banks-form", {
+        attrs: { showDialog: _vm.showDialog, recordId: _vm.recordId },
+        on: {
+          "update:showDialog": function($event) {
+            _vm.showDialog = $event
+          }
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header bg-info" }, [
+      _c("h3", { staticClass: "my-0" }, [_vm._v("Listado de bancos")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("#")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Descripción")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-right" }, [_vm._v("Acciones")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-30442d58", module.exports)
+  }
+}
+
+/***/ }),
+/* 432 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(433)
+/* template */
+var __vue_template__ = __webpack_require__(434)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -129969,7 +130685,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 427 */
+/* 433 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -130063,7 +130779,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 428 */
+/* 434 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -130185,15 +130901,15 @@ if (false) {
 }
 
 /***/ }),
-/* 429 */
+/* 435 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(430)
+var __vue_script__ = __webpack_require__(436)
 /* template */
-var __vue_template__ = __webpack_require__(434)
+var __vue_template__ = __webpack_require__(440)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -130232,7 +130948,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 430 */
+/* 436 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -130240,7 +130956,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_vue__ = __webpack_require__(211);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_deletable__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_changeable__ = __webpack_require__(433);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_changeable__ = __webpack_require__(439);
 //
 //
 //
@@ -130391,7 +131107,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 431 */
+/* 437 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -130526,7 +131242,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 432 */
+/* 438 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -130789,7 +131505,7 @@ if (false) {
 }
 
 /***/ }),
-/* 433 */
+/* 439 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -130826,7 +131542,7 @@ var changeable = {
 };
 
 /***/ }),
-/* 434 */
+/* 440 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -130986,15 +131702,15 @@ if (false) {
 }
 
 /***/ }),
-/* 435 */
+/* 441 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(436)
+var __vue_script__ = __webpack_require__(442)
 /* template */
-var __vue_template__ = __webpack_require__(437)
+var __vue_template__ = __webpack_require__(443)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -131033,7 +131749,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 436 */
+/* 442 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -131148,7 +131864,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 437 */
+/* 443 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -131362,7 +132078,7 @@ if (false) {
 }
 
 /***/ }),
-/* 438 */
+/* 444 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

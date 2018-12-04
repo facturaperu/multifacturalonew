@@ -12,7 +12,7 @@ class District extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    static function idByDescription($description,$province_id = null)
+    static function idByDescription($description, $province_id = null)
     {
         $code = static::where('description', $description);
         if ($province_id) {

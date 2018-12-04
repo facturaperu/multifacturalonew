@@ -35,6 +35,11 @@ class TenantItemsTable extends Migration
             $table->char('unit_type_id', 8);
             $table->unsignedInteger('currency_type_id');
             $table->decimal('unit_price', 12, 2);
+
+            $table->boolean('has_isc')->default(false);
+            $table->char('system_isc_type_id', 2)->nullable();
+            $table->decimal('percentage_isc', 12, 2)->default(0);
+
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
@@ -42,6 +47,7 @@ class TenantItemsTable extends Migration
             $table->foreign('item_type_id')->references('id')->on('item_types');
             $table->foreign('unit_type_id')->references('id')->on('codes');
             $table->foreign('currency_type_id')->references('id')->on('currency_types');
+            $table->foreign('system_isc_type_id')->references('id')->on('system_isc_types');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('updated_by')->references('id')->on('users');
         });

@@ -7,6 +7,7 @@ use App\Http\Resources\Tenant\ItemCollection;
 use App\Http\Resources\Tenant\ItemResource;
 use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\Item;
 use Illuminate\Http\Request;
 
@@ -42,8 +43,9 @@ class ItemController extends Controller
     {
         $unit_types = Code::byCatalog('03');
         $currency_types = CurrencyType::all();
+        $system_isc_types = SystemIscType::all();
 
-        return compact('unit_types', 'currency_types');
+        return compact('unit_types', 'currency_types', 'system_isc_types');
     }
 
     public function record($id)

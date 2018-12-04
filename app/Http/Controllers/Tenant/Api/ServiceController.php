@@ -32,7 +32,7 @@ class ServiceController extends Controller
                     'province' => ($res->provincia)?:'LIMA',
                     'province_id' => $province_id,
                     'district' => ($res->distrito)?:'LIMA',
-                    'district_id' => District::idByDescription($res->distrito,$province_id),
+                    'district_id' => District::idByDescription($res->distrito, $province_id),
                 ]
             ];
         } else {

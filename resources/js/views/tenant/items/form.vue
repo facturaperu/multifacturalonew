@@ -56,6 +56,36 @@
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.has_isc}">
+                            <label class="control-label d-block">¿Tiene ISC?</label>
+                            <el-switch
+                                    v-model="form.has_isc"
+                                    active-text="Si"
+                                    inactive-text="No"
+                                    @change="changeHasIsc">
+                            </el-switch>
+                            <small class="form-control-feedback" v-if="errors.has_isc" v-text="errors.has_isc[0]"></small>
+                        </div>
+                    </div>
+                    <template v-if="form.has_isc">
+                        <div class="col-md-6">
+                            <div class="form-group" :class="{'has-danger': errors.system_isc_type_id}">
+                                <label class="control-label">Sistema Isc</label>
+                                <el-select v-model="form.system_isc_type_id" filterable>
+                                    <el-option v-for="option in system_isc_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                </el-select>
+                                <small class="form-control-feedback" v-if="errors.system_isc_type_id" v-text="errors.system_isc_type_id[0]"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group" :class="{'has-danger': errors.percentage_isc}">
+                                <label class="control-label">Porcentaje Isc</label>
+                                <el-input v-model="form.percentage_isc"></el-input>
+                                <small class="form-control-feedback" v-if="errors.percentage_isc" v-text="errors.percentage_isc[0]"></small>
+                            </div>
+                        </div>
+                    </template>
                 </div>
             </div>
             <div class="form-actions text-right pt-2">
@@ -78,7 +108,8 @@
                 errors: {},
                 form: {},
                 unit_types: [],
-                currency_types: []
+                currency_types: [],
+                system_isc_types: []
             }
         },
         created() {
@@ -87,6 +118,7 @@
                 .then(response => {
                     this.unit_types = response.data.unit_types
                     this.currency_types = response.data.currency_types
+                    this.system_isc_types = response.data.system_isc_types
                 })
         },
         methods: {
@@ -102,6 +134,9 @@
                     unit_type_id: null,
                     currency_type_id: null,
                     unit_price: null,
+                    has_isc: null,
+                    system_isc_type_id: null,
+                    percentage_isc: null,
                 }
             },
             create() {
@@ -143,6 +178,10 @@
             close() {
                 this.$emit('update:showDialog', false)
                 this.initForm()
+            },
+            changeHasIsc() {
+                this.form.system_isc_type_id = null
+                this.form.percentage_isc = 0
             },
         }
     }

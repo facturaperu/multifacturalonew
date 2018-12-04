@@ -35,7 +35,7 @@ class TenantCatalogsTable extends Migration
         });
 
         DB::table('catalogs')->insert([
-            ['id' => '01', 'description' => 'Código de tipo de documento'],
+//            ['id' => '01', 'description' => 'Código de tipo de documento'],
 //            ['id' => '02', 'description' => 'Códigos de tipo de monedas'],
             ['id' => '03', 'description' => 'Códigos de tipo de unidad de medida comercial'],
             ['id' => '04', 'description' => 'Códigos de Países'],
@@ -74,30 +74,30 @@ class TenantCatalogsTable extends Migration
         ]);
 
         DB::table('codes')->insert([
-            ['id' => '01000001', 'catalog_id' => '01', 'code' => '01', 'description' => 'FACTURA ELECTRÓNICA', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000003', 'catalog_id' => '01', 'code' => '03', 'description' => 'BOLETA DE VENTA ELECTRÓNICA', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000006', 'catalog_id' => '01', 'code' => '06', 'description' => 'Carta de porte aéreo', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000007', 'catalog_id' => '01', 'code' => '07', 'description' => 'NOTA DE CRÉDITO', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000008', 'catalog_id' => '01', 'code' => '08', 'description' => 'NOTA DE DÉBITO', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000009', 'catalog_id' => '01', 'code' => '09', 'description' => 'Guia de remisión remitente', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000012', 'catalog_id' => '01', 'code' => '12', 'description' => 'Ticket de maquina registradora', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000013', 'catalog_id' => '01', 'code' => '13', 'description' => 'Documento emitido por bancos, instituciones financieras, crediticias y de seguros que se encuentren bajo el control de la superintendencia de banca y seguros', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000014', 'catalog_id' => '01', 'code' => '14', 'description' => 'Recibo de servicios públicos', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000015', 'catalog_id' => '01', 'code' => '15', 'description' => 'Boletos emitidos por el servicio de transporte terrestre regular urbano de pasajeros y el ferroviario público de pasajeros prestado en vía férrea local.', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000016', 'catalog_id' => '01', 'code' => '16', 'description' => 'Boleto de viaje emitido por las empresas de transporte público interprovincial de pasajeros', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000018', 'catalog_id' => '01', 'code' => '18', 'description' => 'Documentos emitidos por las afp', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000020', 'catalog_id' => '01', 'code' => '20', 'description' => 'Comprobante de retencion', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000021', 'catalog_id' => '01', 'code' => '21', 'description' => 'Conocimiento de embarque por el servicio de transporte de carga marítima', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000024', 'catalog_id' => '01', 'code' => '24', 'description' => 'Certificado de pago de regalías emitidas por perupetro s.a.', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000031', 'catalog_id' => '01', 'code' => '31', 'description' => 'Guía de remisión transportista', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000037', 'catalog_id' => '01', 'code' => '37', 'description' => 'Documentos que emitan los concesionarios del servicio de revisiones técnicas', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000040', 'catalog_id' => '01', 'code' => '40', 'description' => 'Comprobante de percepción', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000041', 'catalog_id' => '01', 'code' => '41', 'description' => 'Comprobante de percepción – venta interna (físico - formato impreso)', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000043', 'catalog_id' => '01', 'code' => '43', 'description' => 'Boleto de compañias de aviación transporte aéreo no regular', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000045', 'catalog_id' => '01', 'code' => '45', 'description' => 'Documentos emitidos por centros educativos y culturales, universidades, asociaciones y fundaciones.', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000056', 'catalog_id' => '01', 'code' => '56', 'description' => 'Comprobante de pago seae', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000071', 'catalog_id' => '01', 'code' => '71', 'description' => 'Guia de remisión remitente complementaria', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
-            ['id' => '01000072', 'catalog_id' => '01', 'code' => '72', 'description' => 'Guia de remisión transportista complementaria', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000001', 'catalog_id' => '01', 'code' => '01', 'description' => 'FACTURA ELECTRÓNICA', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000003', 'catalog_id' => '01', 'code' => '03', 'description' => 'BOLETA DE VENTA ELECTRÓNICA', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000006', 'catalog_id' => '01', 'code' => '06', 'description' => 'Carta de porte aéreo', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000007', 'catalog_id' => '01', 'code' => '07', 'description' => 'NOTA DE CRÉDITO', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000008', 'catalog_id' => '01', 'code' => '08', 'description' => 'NOTA DE DÉBITO', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000009', 'catalog_id' => '01', 'code' => '09', 'description' => 'Guia de remisión remitente', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000012', 'catalog_id' => '01', 'code' => '12', 'description' => 'Ticket de maquina registradora', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000013', 'catalog_id' => '01', 'code' => '13', 'description' => 'Documento emitido por bancos, instituciones financieras, crediticias y de seguros que se encuentren bajo el control de la superintendencia de banca y seguros', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000014', 'catalog_id' => '01', 'code' => '14', 'description' => 'Recibo de servicios públicos', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000015', 'catalog_id' => '01', 'code' => '15', 'description' => 'Boletos emitidos por el servicio de transporte terrestre regular urbano de pasajeros y el ferroviario público de pasajeros prestado en vía férrea local.', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000016', 'catalog_id' => '01', 'code' => '16', 'description' => 'Boleto de viaje emitido por las empresas de transporte público interprovincial de pasajeros', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000018', 'catalog_id' => '01', 'code' => '18', 'description' => 'Documentos emitidos por las afp', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000020', 'catalog_id' => '01', 'code' => '20', 'description' => 'Comprobante de retencion', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000021', 'catalog_id' => '01', 'code' => '21', 'description' => 'Conocimiento de embarque por el servicio de transporte de carga marítima', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000024', 'catalog_id' => '01', 'code' => '24', 'description' => 'Certificado de pago de regalías emitidas por perupetro s.a.', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000031', 'catalog_id' => '01', 'code' => '31', 'description' => 'Guía de remisión transportista', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000037', 'catalog_id' => '01', 'code' => '37', 'description' => 'Documentos que emitan los concesionarios del servicio de revisiones técnicas', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000040', 'catalog_id' => '01', 'code' => '40', 'description' => 'Comprobante de percepción', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000041', 'catalog_id' => '01', 'code' => '41', 'description' => 'Comprobante de percepción – venta interna (físico - formato impreso)', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000043', 'catalog_id' => '01', 'code' => '43', 'description' => 'Boleto de compañias de aviación transporte aéreo no regular', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000045', 'catalog_id' => '01', 'code' => '45', 'description' => 'Documentos emitidos por centros educativos y culturales, universidades, asociaciones y fundaciones.', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000056', 'catalog_id' => '01', 'code' => '56', 'description' => 'Comprobante de pago seae', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000071', 'catalog_id' => '01', 'code' => '71', 'description' => 'Guia de remisión remitente complementaria', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
+//            ['id' => '01000072', 'catalog_id' => '01', 'code' => '72', 'description' => 'Guia de remisión transportista complementaria', 'active' =>false, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 
 //            ['id' => '02000PEN', 'catalog_id' => '02', 'code' => 'PEN', 'description' => 'Soles', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
 //            ['id' => '02000USD', 'catalog_id' => '02', 'code' => 'USD', 'description' => 'Dólares Americanos', 'active' =>true, 'tribute_code' => null, 'tribute_name' => null, 'rate' => null, 'level' => null, 'type' => null],
@@ -708,17 +708,16 @@ class TenantCatalogsTable extends Migration
         ]);
 
         Schema::create('currency_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('code', 3);
+            $table->char('id', 3)->index();
             $table->string('description');
             $table->string('symbol');
             $table->boolean('active');
         });
 
         DB::table('currency_types')->insert([
-            ['id' => 1, 'code' => 'PEN', 'description' => 'Soles', 'symbol' => 'S/', 'active' => true],
-            ['id' => 2, 'code' => 'USD', 'description' => 'Dólares Americanos', 'symbol' => '$', 'active' => true],
-            ['id' => 3, 'code' => 'EUR', 'description' => 'Euros', 'symbol' => '€', 'active' => false],
+            ['id' => 'PEN', 'description' => 'Soles', 'symbol' => 'S/', 'active' => true],
+            ['id' => 'USD', 'description' => 'Dólares Americanos', 'symbol' => '$', 'active' => true],
+            ['id' => 'EUR', 'description' => 'Euros', 'symbol' => '€', 'active' => false],
         ]);
 
         Schema::create('price_types', function (Blueprint $table) {
@@ -772,6 +771,39 @@ class TenantCatalogsTable extends Migration
             ['id' => '03', 'description' => 'Sistema de Precios de Venta al Público', 'active' =>true],
         ]);
 
+        Schema::create('document_types', function (Blueprint $table) {
+            $table->char('id', 2)->index();
+            $table->string('description');
+            $table->string('short');
+            $table->boolean('active');
+        });
+
+        DB::table('document_types')->insert([
+            ['id' => '01', 'description' => 'FACTURA ELECTRÓNICA', 'short' => 'FT', 'active' =>true],
+            ['id' => '03', 'description' => 'BOLETA DE VENTA ELECTRÓNICA', 'short' => 'BV', 'active' =>true],
+            ['id' => '06', 'description' => 'Carta de porte aéreo', 'short' => '', 'active' =>false],
+            ['id' => '07', 'description' => 'NOTA DE CRÉDITO', 'short' => 'NC', 'active' =>true],
+            ['id' => '08', 'description' => 'NOTA DE DÉBITO', 'short' => 'ND', 'active' =>true],
+            ['id' => '09', 'description' => 'Guia de remisión remitente', 'short' => '', 'active' =>false],
+            ['id' => '12', 'description' => 'Ticket de maquina registradora', 'short' => '', 'active' =>false],
+            ['id' => '13', 'description' => 'Documento emitido por bancos, instituciones financieras, crediticias y de seguros que se encuentren bajo el control de la superintendencia de banca y seguros', 'short' => '', 'active' =>false],
+            ['id' => '14', 'description' => 'Recibo de servicios públicos', 'active' =>false],
+            ['id' => '15', 'description' => 'Boletos emitidos por el servicio de transporte terrestre regular urbano de pasajeros y el ferroviario público de pasajeros prestado en vía férrea local.', 'short' => '', 'active' =>false],
+            ['id' => '16', 'description' => 'Boleto de viaje emitido por las empresas de transporte público interprovincial de pasajeros', 'short' => '', 'active' =>false],
+            ['id' => '18', 'description' => 'Documentos emitidos por las afp', 'short' => '', 'active' =>false],
+            ['id' => '20', 'description' => 'Comprobante de retencion', 'short' => '', 'active' =>false],
+            ['id' => '21', 'description' => 'Conocimiento de embarque por el servicio de transporte de carga marítima', 'short' => '', 'active' =>false],
+            ['id' => '24', 'description' => 'Certificado de pago de regalías emitidas por perupetro s.a.', 'short' => '', 'active' =>false],
+            ['id' => '31', 'description' => 'Guía de remisión transportista', 'short' => '', 'active' =>false],
+            ['id' => '37', 'description' => 'Documentos que emitan los concesionarios del servicio de revisiones técnicas', 'short' => '', 'active' =>false],
+            ['id' => '40', 'description' => 'Comprobante de percepción', 'short' => '', 'active' =>false],
+            ['id' => '41', 'description' => 'Comprobante de percepción – venta interna (físico - formato impreso)', 'short' => '', 'active' =>false],
+            ['id' => '43', 'description' => 'Boleto de compañias de aviación transporte aéreo no regular', 'short' => '', 'active' =>false],
+            ['id' => '45', 'description' => 'Documentos emitidos por centros educativos y culturales, universidades, asociaciones y fundaciones.', 'short' => '', 'active' =>false],
+            ['id' => '56', 'description' => 'Comprobante de pago seae', 'short' => '', 'active' =>false],
+            ['id' => '71', 'description' => 'Guia de remisión remitente complementaria', 'short' => '', 'active' =>false],
+            ['id' => '72', 'description' => 'Guia de remisión transportista complementaria', 'short' => '', 'active' =>false],
+        ]);
     }
 
     /**
@@ -781,6 +813,7 @@ class TenantCatalogsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('document_types');
         Schema::dropIfExists('system_isc_types');
         Schema::dropIfExists('affectation_types');
         Schema::dropIfExists('currency_types');

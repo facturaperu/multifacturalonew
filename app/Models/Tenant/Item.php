@@ -2,6 +2,8 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\SystemIscType;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use App\Models\Tenant\Catalogs\Code;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +22,9 @@ class Item extends Model
         'unit_type_id',
         'currency_type_id',
         'unit_price',
+        'has_isc',
+        'system_isc_type_id',
+        'percentage_isc',
     ];
 
     public function item_type()
@@ -34,6 +39,11 @@ class Item extends Model
 
     public function currency_type()
     {
-        return $this->belongsTo(Code::class, 'currency_type_id');
+        return $this->belongsTo(CurrencyType::class);
+    }
+
+    public function system_isc_type()
+    {
+        return $this->belongsTo(SystemIscType::class);
     }
 }

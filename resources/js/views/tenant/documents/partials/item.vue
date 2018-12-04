@@ -239,15 +239,11 @@
                 this.form.retail_unit_price = this.item.retail_unit_price
                 this.form.wholesale_unit_price = this.item.wholesale_unit_price
             },
-            changeHasIsc() {
-                // if (this.form.has_isc) {
-                //
-                // } else {
-                    this.form.system_isc_type_id = null
-                    this.form.percentage_isc = 0
-                    this.form.suggested_price = 0
-                // }
-            },
+//            changeHasIsc() {
+//                this.form.system_isc_type_id = null
+//                this.form.percentage_isc = 0
+//                this.form.suggested_price = 0
+//            },
             clickAddItem() {
 
 //                $table->unsignedInteger('item_id');
