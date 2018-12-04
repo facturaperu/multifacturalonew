@@ -22,7 +22,7 @@ class TenantRetentionsTable extends Migration
             $table->char('state_type_id', 2);
             $table->string('ubl_version');
             $table->char('document_type_id', 2);
-            $table->integer('series_id');
+            $table->unsignedInteger('series_id');
             $table->integer('number');
             $table->date('date_of_issue');
             $table->unsignedInteger('customer_id');

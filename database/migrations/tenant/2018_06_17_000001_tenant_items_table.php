@@ -33,7 +33,7 @@ class TenantItemsTable extends Migration
             $table->string('item_code_gs1')->nullable();
 
             $table->char('unit_type_id', 8);
-            $table->unsignedInteger('currency_type_id');
+            $table->char('currency_type_id', 3);
             $table->decimal('unit_price', 12, 2);
 
             $table->boolean('has_isc')->default(false);

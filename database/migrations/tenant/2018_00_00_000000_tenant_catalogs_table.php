@@ -787,7 +787,7 @@ class TenantCatalogsTable extends Migration
             ['id' => '09', 'description' => 'Guia de remisión remitente', 'short' => '', 'active' =>false],
             ['id' => '12', 'description' => 'Ticket de maquina registradora', 'short' => '', 'active' =>false],
             ['id' => '13', 'description' => 'Documento emitido por bancos, instituciones financieras, crediticias y de seguros que se encuentren bajo el control de la superintendencia de banca y seguros', 'short' => '', 'active' =>false],
-            ['id' => '14', 'description' => 'Recibo de servicios públicos', 'active' =>false],
+            ['id' => '14', 'description' => 'Recibo de servicios públicos', 'short' => '', 'active' =>false],
             ['id' => '15', 'description' => 'Boletos emitidos por el servicio de transporte terrestre regular urbano de pasajeros y el ferroviario público de pasajeros prestado en vía férrea local.', 'short' => '', 'active' =>false],
             ['id' => '16', 'description' => 'Boleto de viaje emitido por las empresas de transporte público interprovincial de pasajeros', 'short' => '', 'active' =>false],
             ['id' => '18', 'description' => 'Documentos emitidos por las afp', 'short' => '', 'active' =>false],
@@ -804,19 +804,6 @@ class TenantCatalogsTable extends Migration
             ['id' => '71', 'description' => 'Guia de remisión remitente complementaria', 'short' => '', 'active' =>false],
             ['id' => '72', 'description' => 'Guia de remisión transportista complementaria', 'short' => '', 'active' =>false],
         ]);
-
-        Schema::create('currency_types', function (Blueprint $table) {
-            $table->char('id', 3)->primary();
-            $table->string('description');
-            $table->string('symbol');
-            $table->boolean('active');
-        });
-
-        DB::table('currency_types')->insert([
-            ['id' => 'PEN', 'description' => 'Soles', 'symbol' => 'S/', 'active' => true],
-            ['id' => 'USD', 'description' => 'Dólares Americanos', 'symbol' => '$', 'active' => true],
-            ['id' => 'EUR', 'description' => 'Euros', 'symbol' => '€', 'active' => false],
-        ]);
     }
 
     /**
@@ -826,7 +813,6 @@ class TenantCatalogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('currency_types');
         Schema::dropIfExists('document_types');
         Schema::dropIfExists('system_isc_types');
         Schema::dropIfExists('affectation_types');
