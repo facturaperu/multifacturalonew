@@ -16,11 +16,13 @@ export const functions = {
                             this.data = res.data;
                         } else {
                             this.$message.error(res.message)
+                            this.loading_search_exchange_rate = false
                         }
                         resolve()
                     })
                     .catch(error => {
                         console.log(error.response)
+                        this.loading_search_exchange_rate = false
                     })
             })
 
