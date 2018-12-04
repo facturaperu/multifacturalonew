@@ -1,10 +1,30 @@
 export const functions = {
     data() {
         return {
+            loading_search_exchange_rate: false,
             loading_search_customer: false
         }
     },
     methods: {
+        searchExchangeRate() {
+            return new Promise((resolve) => {
+                this.loading_search_exchange_rate = true
+                this.$http.get(`/services/exchange_rate`)
+                    .then(response => {
+                        let res = response.data
+                        if (res.success) {
+                            this.data = res.data;
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                        resolve()
+                    })
+                    .catch(error => {
+                        console.log(error.response)
+                    })
+            })
+
+        },
         searchCustomerByNumber() {
             return new Promise((resolve) => {
                 this.loading_search_customer = true

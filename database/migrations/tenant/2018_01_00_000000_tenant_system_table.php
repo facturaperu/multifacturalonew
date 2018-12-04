@@ -71,6 +71,13 @@ class TenantSystemTable extends Migration
 
             $table->foreign('charge_discount_type_id')->references('id')->on('codes');
         });
+
+        Schema::create('exchange_rates', function (Blueprint $table) {
+            $table->date('date')->primary();
+            $table->decimal('buy', 13, 3);
+            $table->decimal('sell', 13, 3);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -85,5 +92,6 @@ class TenantSystemTable extends Migration
         Schema::dropIfExists('soap_types');
         Schema::dropIfExists('process_types');
         Schema::dropIfExists('state_types');
+        Schema::dropIfExists('exchange_rates');
     }
 }

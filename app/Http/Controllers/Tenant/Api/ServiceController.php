@@ -11,6 +11,7 @@ use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
 use App\Models\Tenant\Document;
 use Illuminate\Http\Request;
+use App\Core\Services\Ruc\ExchangeRate;
 
 class ServiceController extends Controller
 {
@@ -74,5 +75,22 @@ class ServiceController extends Controller
         $res = $consultCdrService->getStatusCdr('01', 'F001', 4);
 
         return $res;
+    }
+
+    public function exchange_rate()
+    {
+        $exchange_rate = new ExchangeRate();
+        $res = $exchange_rate->get();
+        if ($res) {
+            return [
+                'success' => true,
+                'data' => $res
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => $exchange_rate->getError()
+            ];
+        }
     }
 }
