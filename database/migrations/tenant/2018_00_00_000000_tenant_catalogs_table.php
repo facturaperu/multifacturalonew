@@ -804,6 +804,19 @@ class TenantCatalogsTable extends Migration
             ['id' => '71', 'description' => 'Guia de remisión remitente complementaria', 'short' => '', 'active' =>false],
             ['id' => '72', 'description' => 'Guia de remisión transportista complementaria', 'short' => '', 'active' =>false],
         ]);
+
+        Schema::create('currency_types', function (Blueprint $table) {
+            $table->char('id', 3)->primary();
+            $table->string('description');
+            $table->string('symbol');
+            $table->boolean('active');
+        });
+
+        DB::table('currency_types')->insert([
+            ['id' => 'PEN', 'description' => 'Soles', 'symbol' => 'S/', 'active' => true],
+            ['id' => 'USD', 'description' => 'Dólares Americanos', 'symbol' => '$', 'active' => true],
+            ['id' => 'EUR', 'description' => 'Euros', 'symbol' => '€', 'active' => false],
+        ]);
     }
 
     /**
@@ -813,6 +826,7 @@ class TenantCatalogsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('currency_types');
         Schema::dropIfExists('document_types');
         Schema::dropIfExists('system_isc_types');
         Schema::dropIfExists('affectation_types');

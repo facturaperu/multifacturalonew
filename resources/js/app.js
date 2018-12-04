@@ -42,12 +42,17 @@ Vue.component('tenant-summaries-index', require('./views/tenant/summaries/index.
 Vue.component('tenant-search-index', require('./views/tenant/search/index.vue'));
 Vue.component('tenant-options-form', require('./views/tenant/options/form.vue'));
 Vue.component('tenant-units-index', require('./views/tenant/units/index.vue'));
-
 Vue.component('tenant-users-index', require('./views/tenant/users/index.vue'));
 Vue.component('tenant-establishments-index', require('./views/tenant/establishments/index.vue'));
+<<<<<<< HEAD
 Vue.component('tenant-charge_discounts-index', require('./views/tenant/charge_discounts/index.vue'));
 Vue.component('tenant-banks-index', require('./views/tenant/banks/index.vue'));
 Vue.component('tenant-exchange_rates-index', require('./views/tenant/exchange_rates/index.vue'));
+=======
+Vue.component('tenant-currency-types-index', require('./views/tenant/currency_types/index.vue'));
+
+//Vue.component('tenant-charge_discounts-index', require('./views/tenant/charge_discounts/index.vue'));
+>>>>>>> origin/currency_types
 
 Vue.component('tenant-calendar', require('./views/tenant/components/calendar.vue'));
 

@@ -36,6 +36,11 @@
     </div>
     <div class="row">
         <div class="col-lg-6 col-md-12">
+            <tenant-currency-types-index></tenant-currency-types-index>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
             <tenant-charge_discounts-index type="charge"></tenant-charge_discounts-index>
         </div>
         <div class="col-lg-6 col-md-12">

@@ -31,7 +31,7 @@ class BankAccountController extends Controller
     public function tables()
     {
         $banks = Bank::all();
-        $currency_types = CurrencyType::all();
+        $currency_types = CurrencyType::where('active',1)->get();
 
         return compact('banks', 'currency_types');
     }

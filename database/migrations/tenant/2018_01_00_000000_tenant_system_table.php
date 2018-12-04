@@ -103,6 +103,10 @@ class TenantSystemTable extends Migration
             $table->decimal('sell', 13, 3);
             $table->timestamps();
         });
+
+
+
+
     }
 
     /**

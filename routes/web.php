@@ -184,6 +184,13 @@ if ($hostname) {
             //Exchange Rates
             Route::get('exchange_rates/records', 'Tenant\ExchangeRateController@records');
             Route::post('exchange_rates', 'Tenant\ExchangeRateController@store');
+
+            //Currency Types
+            Route::get('currency_types/records', 'Tenant\CurrencyTypeController@records');
+            Route::get('currency_types/record/{currency_type}', 'Tenant\CurrencyTypeController@record');
+            Route::post('currency_types', 'Tenant\CurrencyTypeController@store');
+            Route::delete('currency_types/{currency_type}', 'Tenant\CurrencyTypeController@destroy');
+
         });
     });
 } else {
