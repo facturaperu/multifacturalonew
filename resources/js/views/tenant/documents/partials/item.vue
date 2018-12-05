@@ -311,17 +311,31 @@
                     discounts: [],
                 };
 
-                let affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
+                let _affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
                 let _percentage_igv = 18
+                let _price_type_id = '01'
+                let _unit_price_free = 0
+                let _unit_price = 0
                 let _unit_value = 0
 
-                if (this.item.has_isc) {
-                    if (this.item.system_isc_type_id === '03') {
-                        _unit_value = parseFloat(this.form.unit_price) / (1 + _percentage_igv / 100)
-                    }
-                    if (this.item.system_isc_type_id === '01') {
 
+                if (this.item.has_isc) {
+                    let _percentage_isc = this.item.percentage_isc
+                    let _suggested_price = this.item.suggested_price
+                    _unit_price = parseFloat(this.form.unit_price)
+                    _unit_value = _unit_price / (1 + _percentage_igv / 100)
+
+                    if (this.item.system_isc_type_id === '01') {
+                        _unit_value /= (1 + _percentage_isc / 100)
                     }
+                    if (this.item.system_isc_type_id === '02') {
+                        //_unit_value = _unit_value
+                    }
+                    if (this.item.system_isc_type_id === '03') {
+                        _unit_value -= _suggested_price * _percentage_isc / 100
+                    }
+
+
                     let _unit_value_isc = 0
                     row.percentage_isc = this.form.percentage_isc
                     if (this.form.system_isc_type_id === '01') {
@@ -333,15 +347,16 @@
                     row.total_base_isc = 0
                     row.total_isc = _.round(_unit_value_isc * row.quantity, 2)
                 } else {
-                    if (affectation_igv_type.free) {
-                        row.unit_price = 0
-                        row.unit_price_free = parseFloat(this.form.unit_price)
-                        row.price_type_id = '02'
-                    } else {
-                        row.unit_price = parseFloat(this.form.unit_price)
-                        row.unit_price_free = 0
-                        row.price_type_id = '01'
+                    if (_affectation_igv_type.free) {
+//                        row.unit_price = 0
+                        _unit_price_free = _unit_price
+                        _price_type_id = '02'
                     }
+//                    else {
+//                        row.unit_price = _unit_price
+//                        row.unit_price_free = 0
+//                        row.price_type_id = '01'
+//                    }
 
                     if (['10'].indexOf(affectation_igv_type.id) > -1) {
                         _unit_value = row.unit_price / (1 + _percentage_igv / 100)

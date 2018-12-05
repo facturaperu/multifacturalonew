@@ -56,7 +56,7 @@
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group" :class="{'has-danger': errors.has_isc}">
                             <label class="control-label d-block">¿Tiene ISC?</label>
                             <el-switch
@@ -78,11 +78,18 @@
                                 <small class="form-control-feedback" v-if="errors.system_isc_type_id" v-text="errors.system_isc_type_id[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group" :class="{'has-danger': errors.percentage_isc}">
                                 <label class="control-label">Porcentaje Isc</label>
                                 <el-input v-model="form.percentage_isc"></el-input>
                                 <small class="form-control-feedback" v-if="errors.percentage_isc" v-text="errors.percentage_isc[0]"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group" :class="{'has-danger': errors.suggested_price}">
+                                <label class="control-label">Precio sugerido</label>
+                                <el-input v-model="form.suggested_price"></el-input>
+                                <small class="form-control-feedback" v-if="errors.suggested_price" v-text="errors.suggested_price[0]"></small>
                             </div>
                         </div>
                     </template>
@@ -137,6 +144,7 @@
                     has_isc: null,
                     system_isc_type_id: null,
                     percentage_isc: 0,
+                    suggested_price: 0
                 }
             },
             create() {
@@ -180,8 +188,9 @@
                 this.initForm()
             },
             changeHasIsc() {
-                this.form.system_isc_type_id = null
+                this.form.system_isc_type_id = false
                 this.form.percentage_isc = 0
+                this.form.suggested_price = 0
             },
         }
     }

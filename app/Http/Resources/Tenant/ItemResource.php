@@ -23,9 +23,10 @@ class ItemResource extends JsonResource
             'unit_price' => $this->unit_price,
             'currency_type_id' => $this->currency_type_id,
             'unit_type_id' => $this->unit_type_id,
-            'has_isc' => $this->has_isc,
+            'has_isc' => (boolean) $this->has_isc,
             'system_isc_type_id' => $this->system_isc_type_id,
             'percentage_isc' => $this->percentage_isc,
+            'suggested_price' => $this->suggested_price,
         ];
     }
 }

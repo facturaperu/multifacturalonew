@@ -39,6 +39,7 @@ class TenantItemsTable extends Migration
             $table->boolean('has_isc')->default(false);
             $table->char('system_isc_type_id', 2)->nullable();
             $table->decimal('percentage_isc', 12, 2)->default(0);
+            $table->decimal('suggested_price', 12, 2)->default(0);
 
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();

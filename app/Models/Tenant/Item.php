@@ -25,6 +25,7 @@ class Item extends Model
         'has_isc',
         'system_isc_type_id',
         'percentage_isc',
+        'suggested_price'
     ];
 
     public function item_type()

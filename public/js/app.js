@@ -116752,6 +116752,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -116794,7 +116801,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 unit_price: null,
                 has_isc: null,
                 system_isc_type_id: null,
-                percentage_isc: 0
+                percentage_isc: 0,
+                suggested_price: 0
             };
         },
         create: function create() {
@@ -116838,8 +116846,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.initForm();
         },
         changeHasIsc: function changeHasIsc() {
-            this.form.system_isc_type_id = null;
+            this.form.system_isc_type_id = false;
             this.form.percentage_isc = 0;
+            this.form.suggested_price = 0;
         }
     }
 });
@@ -117151,7 +117160,7 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-md-3" }, [
+                _c("div", { staticClass: "col-md-2" }, [
                   _c(
                     "div",
                     {
@@ -117246,7 +117255,7 @@ var render = function() {
                         )
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-md-3" }, [
+                      _c("div", { staticClass: "col-md-2" }, [
                         _c(
                           "div",
                           {
@@ -117274,6 +117283,43 @@ var render = function() {
                                   domProps: {
                                     textContent: _vm._s(
                                       _vm.errors.percentage_isc[0]
+                                    )
+                                  }
+                                })
+                              : _vm._e()
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-2" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "form-group",
+                            class: { "has-danger": _vm.errors.suggested_price }
+                          },
+                          [
+                            _c("label", { staticClass: "control-label" }, [
+                              _vm._v("Precio sugerido")
+                            ]),
+                            _vm._v(" "),
+                            _c("el-input", {
+                              model: {
+                                value: _vm.form.suggested_price,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "suggested_price", $$v)
+                                },
+                                expression: "form.suggested_price"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors.suggested_price
+                              ? _c("small", {
+                                  staticClass: "form-control-feedback",
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      _vm.errors.suggested_price[0]
                                     )
                                   }
                                 })
@@ -121908,15 +121954,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 discounts: []
             };
 
-            var affectation_igv_type = _.find(this.affectation_igv_types, { 'id': this.form.affectation_igv_type_id });
+            var _affectation_igv_type = _.find(this.affectation_igv_types, { 'id': this.form.affectation_igv_type_id });
             var _percentage_igv = 18;
+            var _price_type_id = '01';
+            var _unit_price_free = 0;
+            var _unit_price = 0;
             var _unit_value = 0;
 
             if (this.item.has_isc) {
-                if (this.item.system_isc_type_id === '03') {
-                    _unit_value = parseFloat(this.form.unit_price) / (1 + _percentage_igv / 100);
+                var _percentage_isc = this.item.percentage_isc;
+                var _suggested_price = this.item.suggested_price;
+                _unit_price = parseFloat(this.form.unit_price);
+                _unit_value = _unit_price / (1 + _percentage_igv / 100);
+
+                if (this.item.system_isc_type_id === '01') {
+                    _unit_value /= 1 + _percentage_isc / 100;
                 }
-                if (this.item.system_isc_type_id === '01') {}
+                if (this.item.system_isc_type_id === '02') {
+                    //_unit_value = _unit_value
+                }
+                if (this.item.system_isc_type_id === '03') {
+                    _unit_value -= _suggested_price * _percentage_isc / 100;
+                }
+
                 var _unit_value_isc = 0;
                 row.percentage_isc = this.form.percentage_isc;
                 if (this.form.system_isc_type_id === '01') {
@@ -121928,15 +121988,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 row.total_base_isc = 0;
                 row.total_isc = _.round(_unit_value_isc * row.quantity, 2);
             } else {
-                if (affectation_igv_type.free) {
-                    row.unit_price = 0;
-                    row.unit_price_free = parseFloat(this.form.unit_price);
-                    row.price_type_id = '02';
-                } else {
-                    row.unit_price = parseFloat(this.form.unit_price);
-                    row.unit_price_free = 0;
-                    row.price_type_id = '01';
+                if (_affectation_igv_type.free) {
+                    //                        row.unit_price = 0
+                    _unit_price_free = _unit_price;
+                    _price_type_id = '02';
                 }
+                //                    else {
+                //                        row.unit_price = _unit_price
+                //                        row.unit_price_free = 0
+                //                        row.price_type_id = '01'
+                //                    }
 
                 if (['10'].indexOf(affectation_igv_type.id) > -1) {
                     _unit_value = row.unit_price / (1 + _percentage_igv / 100);
