@@ -18,6 +18,7 @@ use App\Mail\Tenant\DocumentEmail;
 use App\Models\Tenant\Catalogs\AffectationIgvType;
 use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Catalogs\PriceType;
 use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\ChargeDiscount;
@@ -65,8 +66,8 @@ class DocumentController extends Controller
 
     public function tables()
     {
-        $document_types_invoice = Code::byCatalogOnlyCodes('01', ['01', '03']);
-        $document_types_note = Code::byCatalogOnlyCodes('01', ['07', '08']);
+        $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();
+        $document_types_note = DocumentType::whereIn('id', ['07', '08'])->get();
         $note_credit_types = Code::byCatalog('09');
         $note_debit_types = Code::byCatalog('10');
         $currency_types = CurrencyType::all();
@@ -74,12 +75,12 @@ class DocumentController extends Controller
         $customers = $this->table('customers');
         $items = $this->table('items');
         $company = Company::with(['identity_document_type'])->first();
-        $establishment = Establishment::first();
+//        $establishment = Establishment::first();
         $establishments = Establishment::all();
         $series = Series::all();
 
         return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
-                       'currency_types', 'customers', 'items', 'company', 'establishment', 'establishments',
+                       'currency_types', 'customers', 'items', 'company', 'establishments',
                        'series');
     }
 

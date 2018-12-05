@@ -136,7 +136,7 @@
                     unit_price: null,
                     has_isc: null,
                     system_isc_type_id: null,
-                    percentage_isc: null,
+                    percentage_isc: 0,
                 }
             },
             create() {

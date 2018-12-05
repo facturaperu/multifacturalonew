@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\SeriesRequest;
 use App\Http\Resources\Tenant\SeriesCollection;
-use App\Models\Tenant\Catalogs\Code;
-use App\Models\Tenant\Establishment;
+use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Series;
 
 class SeriesController extends Controller
@@ -17,16 +16,16 @@ class SeriesController extends Controller
 
     public function records($establishmentId)
     {
-        $records = Series::where('establishment_id',$establishmentId)->get();
+        $records = Series::where('establishment_id', $establishmentId)->get();
 
         return new SeriesCollection($records);
     }
 
     public function tables()
     {
-        $document_types = Code::byCatalogOnlyCodes('01', ['01', '03', '07', '08']);
+        $document_types = DocumentType::whereIn('id', ['01', '03', '07', '08'])->get();
 
-        return compact('document_types', 'establishment');
+        return compact('document_types');
     }
 
     public function store(SeriesRequest $request)

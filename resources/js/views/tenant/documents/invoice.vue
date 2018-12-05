@@ -201,7 +201,7 @@
                 items: [],
                 customers: [],
                 company: null,
-                establishment: null,
+//                establishment: null,
                 establishments: [],
                 all_series: [],
                 series: [],

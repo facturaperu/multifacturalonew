@@ -39,43 +39,43 @@
                         </div>
                     </div>
                     <div class="col-md-6"></div>
-                    <div class="col-md-2">
-                        <div class="form-group" :class="{'has-danger': errors.has_isc}">
-                            <label class="control-label d-block">¿Tiene ISC?</label>
-                            <el-switch
-                                    v-model="form.has_isc"
-                                    active-text="Si"
-                                    inactive-text="No"
-                                    @change="changeHasIsc">
-                            </el-switch>
-                            <small class="form-control-feedback" v-if="errors.has_isc" v-text="errors.has_isc[0]"></small>
-                        </div>
-                    </div>
-                    <template v-if="form.has_isc">
-                        <div class="col-md-6">
-                            <div class="form-group" :class="{'has-danger': errors.system_isc_type_id}">
-                                <label class="control-label">Sistema Isc</label>
-                                <el-select v-model="form.system_isc_type_id" filterable>
-                                    <el-option v-for="option in system_isc_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.system_isc_type_id" v-text="errors.system_isc_type_id[0]"></small>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group" :class="{'has-danger': errors.percentage_isc}">
-                                <label class="control-label">Porcentaje Isc</label>
-                                <el-input v-model="form.percentage_isc"></el-input>
-                                <small class="form-control-feedback" v-if="errors.percentage_isc" v-text="errors.percentage_isc[0]"></small>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group" :class="{'has-danger': errors.suggested_price}">
-                                <label class="control-label">Precio sugerido</label>
-                                <el-input v-model="form.suggested_price"></el-input>
-                                <small class="form-control-feedback" v-if="errors.suggested_price" v-text="errors.suggested_price[0]"></small>
-                            </div>
-                        </div>
-                    </template>
+                    <!--<div class="col-md-2">-->
+                        <!--<div class="form-group" :class="{'has-danger': errors.has_isc}">-->
+                            <!--<label class="control-label d-block">¿Tiene ISC?</label>-->
+                            <!--<el-switch-->
+                                    <!--v-model="form.has_isc"-->
+                                    <!--active-text="Si"-->
+                                    <!--inactive-text="No"-->
+                                    <!--@change="changeHasIsc">-->
+                            <!--</el-switch>-->
+                            <!--<small class="form-control-feedback" v-if="errors.has_isc" v-text="errors.has_isc[0]"></small>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<template v-if="form.has_isc">-->
+                        <!--<div class="col-md-6">-->
+                            <!--<div class="form-group" :class="{'has-danger': errors.system_isc_type_id}">-->
+                                <!--<label class="control-label">Sistema Isc</label>-->
+                                <!--<el-select v-model="form.system_isc_type_id" filterable>-->
+                                    <!--<el-option v-for="option in system_isc_types" :key="option.id" :value="option.id" :label="option.description"></el-option>-->
+                                <!--</el-select>-->
+                                <!--<small class="form-control-feedback" v-if="errors.system_isc_type_id" v-text="errors.system_isc_type_id[0]"></small>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-2">-->
+                            <!--<div class="form-group" :class="{'has-danger': errors.percentage_isc}">-->
+                                <!--<label class="control-label">Porcentaje Isc</label>-->
+                                <!--<el-input v-model="form.percentage_isc"></el-input>-->
+                                <!--<small class="form-control-feedback" v-if="errors.percentage_isc" v-text="errors.percentage_isc[0]"></small>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-2">-->
+                            <!--<div class="form-group" :class="{'has-danger': errors.suggested_price}">-->
+                                <!--<label class="control-label">Precio sugerido</label>-->
+                                <!--<el-input v-model="form.suggested_price"></el-input>-->
+                                <!--<small class="form-control-feedback" v-if="errors.suggested_price" v-text="errors.suggested_price[0]"></small>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</template>-->
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6" v-if="discounts.length > 0">
@@ -289,7 +289,7 @@
                     unit_value: 0,
                     affectation_igv_type_id: null,
                     total_base_igv: 0,
-                    percentage_igv: 18,
+                    percentage_igv: 0,
                     total_igv: 0,
                     system_isc_type_id: null,
                     total_base_isc: 0,
@@ -312,29 +312,52 @@
                 };
 
                 let affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
-                //let percentage_igv = 18
-
-                if (affectation_igv_type.free) {
-                    row.unit_price = 0
-                    row.unit_price_free = parseFloat(this.form.unit_price)
-                    row.price_type_id = '02'
-                } else {
-                    row.unit_price = parseFloat(this.form.unit_price)
-                    row.unit_price_free = 0
-                    row.price_type_id = '01'
-                }
-
+                let _percentage_igv = 18
                 let _unit_value = 0
-                let _percentage_igv = row.percentage_igv
 
-                if (['10'].indexOf(affectation_igv_type.id) > -1) {
-                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
+                if (this.item.has_isc) {
+                    if (this.item.system_isc_type_id === '03') {
+                        _unit_value = parseFloat(this.form.unit_price) / (1 + _percentage_igv / 100)
+                    }
+                    if (this.item.system_isc_type_id === '01') {
+
+                    }
+                    let _unit_value_isc = 0
+                    row.percentage_isc = this.form.percentage_isc
+                    if (this.form.system_isc_type_id === '01') {
+                        _unit_value_isc = _.round(_unit_value * row.percentage_isc / 100)
+                    }
+                    if (this.form.system_isc_type_id === '02') {
+                        _unit_value_isc = _.round(this.form.suggested_price * row.percentage_isc / 100)
+                    }
+                    row.total_base_isc = 0
+                    row.total_isc = _.round(_unit_value_isc * row.quantity, 2)
+                } else {
+                    if (affectation_igv_type.free) {
+                        row.unit_price = 0
+                        row.unit_price_free = parseFloat(this.form.unit_price)
+                        row.price_type_id = '02'
+                    } else {
+                        row.unit_price = parseFloat(this.form.unit_price)
+                        row.unit_price_free = 0
+                        row.price_type_id = '01'
+                    }
+
+                    if (['10'].indexOf(affectation_igv_type.id) > -1) {
+                        _unit_value = row.unit_price / (1 + _percentage_igv / 100)
+                    }
+
+                    if (['20'].indexOf(affectation_igv_type.id) > -1) {
+                        _unit_value = row.unit_price
+                        _percentage_igv = 0
+                    }
                 }
 
-                if (['20'].indexOf(affectation_igv_type.id) > -1) {
-                    _unit_value = row.unit_price
-                    _percentage_igv = 0
-                }
+
+//                let _unit_value = 0
+//                let _percentage_igv = row.percentage_igv
+
+
 
                 let _total_value = _.round(_unit_value * row.quantity, 2)
                 let _discount_base = 0
@@ -352,20 +375,20 @@
                     }
                 })
 
-                let _unit_value_isc = 0
-                if (this.form.has_isc) {
-                    row.percentage_isc = this.form.percentage_isc
-                    if (this.form.system_isc_type_id === '01') {
-                        _unit_value_isc = _.round(_unit_value * row.percentage_isc / 100)
-                    }
-                    if (this.form.system_isc_type_id === '02') {
-                        _unit_value_isc = _.round(this.form.suggested_price * row.percentage_isc / 100)
-                    }
-                    row.total_base_isc = 0
-                    row.total_isc = _.round(_unit_value_isc * row.quantity, 2)
-                } else {
-
-                }
+//                let _unit_value_isc = 0
+//                if (this.form.has_isc) {
+//                    row.percentage_isc = this.form.percentage_isc
+//                    if (this.form.system_isc_type_id === '01') {
+//                        _unit_value_isc = _.round(_unit_value * row.percentage_isc / 100)
+//                    }
+//                    if (this.form.system_isc_type_id === '02') {
+//                        _unit_value_isc = _.round(this.form.suggested_price * row.percentage_isc / 100)
+//                    }
+//                    row.total_base_isc = 0
+//                    row.total_isc = _.round(_unit_value_isc * row.quantity, 2)
+//                } else {
+//
+//                }
 
                 row.unit_value = _.round(_unit_value, 2)
                 row.total_discount = _.round(_discount_base + _discount_no_base, 2)

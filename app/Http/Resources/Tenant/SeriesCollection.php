@@ -17,7 +17,6 @@ class SeriesCollection extends ResourceCollection
         return $this->collection->transform(function($row, $key) {
             return [
                 'id' => $row->id,
-                'document_type_code' => $row->document_type_code,
                 'document_type_description' => $row->document_type->description,
                 'number' => $row->number,
             ];

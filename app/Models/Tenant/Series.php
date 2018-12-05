@@ -2,8 +2,8 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Tenant\Catalogs\DocumentType;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
-use App\Models\Tenant\Catalogs\Code;
 use Illuminate\Database\Eloquent\Model;
 
 class Series extends Model
@@ -25,7 +25,7 @@ class Series extends Model
 
     public function document_type()
     {
-        return $this->belongsTo(Code::class, 'document_type_id');
+        return $this->belongsTo(DocumentType::class);
     }
 
     public function setNumberAttribute($value)
