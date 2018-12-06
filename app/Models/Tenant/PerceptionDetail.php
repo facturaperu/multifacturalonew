@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 class PerceptionDetail extends Model
 {
     use UsesTenantConnection;
-
+    
+    public $timestamps = false;
     protected $with = ['document_type', 'currency_type'];
     protected $fillable = [
-        'retention_id',
+        'perception_id',
         'document_type_id',
         'number',
         'date_of_issue',
