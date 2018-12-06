@@ -48,6 +48,8 @@ Vue.component('tenant-charge_discounts-index', require('./views/tenant/charge_di
 Vue.component('tenant-banks-index', require('./views/tenant/banks/index.vue'));
 Vue.component('tenant-exchange_rates-index', require('./views/tenant/exchange_rates/index.vue'));
 Vue.component('tenant-currency-types-index', require('./views/tenant/currency_types/index.vue'));
+Vue.component('tenant-retentions-index', require('./views/tenant/retentions/index.vue'));
+Vue.component('tenant-retentions-form', require('./views/tenant/retentions/form.vue'));
 //Vue.component('tenant-charge_discounts-index', require('./views/tenant/charge_discounts/index.vue'));
 Vue.component('tenant-calendar', require('./views/tenant/components/calendar.vue'));
 

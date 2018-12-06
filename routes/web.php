@@ -191,6 +191,17 @@ if ($hostname) {
             Route::post('currency_types', 'Tenant\CurrencyTypeController@store');
             Route::delete('currency_types/{currency_type}', 'Tenant\CurrencyTypeController@destroy');
 
+            //Retentions
+            Route::get('retentions', 'Tenant\RetentionController@index')->name('tenant.retentions.index');
+            Route::get('retentions/columns', 'Tenant\RetentionController@columns');
+            Route::get('retentions/records', 'Tenant\RetentionController@records');
+            Route::get('retentions/create', 'Tenant\RetentionController@create')->name('tenant.retentions.create');
+            Route::get('retentions/tables', 'Tenant\RetentionController@tables');
+            Route::get('retentions/record/{retention}', 'Tenant\RetentionController@record');
+            Route::post('retentions', 'Tenant\RetentionController@store');
+            Route::delete('retentions/{retention}', 'Tenant\RetentionController@destroy');
+            Route::get('retentions/item/tables', 'Tenant\RetentionController@item_tables');
+
         });
     });
 } else {
