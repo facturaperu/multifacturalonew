@@ -85,12 +85,11 @@
 <script>
 
     export default {
-        props: ['showDialog', 'operationTypeId'],
+        props: ['showDialog'],
         data() {
             return {
                 titleDialog: '',
                 resource: 'retentions',
-                showDialogNewItem: false,
                 errors: {},
                 form: {},
                 currency_types: [],

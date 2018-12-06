@@ -31,7 +31,7 @@ class Perception extends Model
         'observation',
         'system_code_perception_id',
         'percent',
-        'total_retention',
+        'total_perception',
         'total',
 
         'filename',
@@ -92,7 +92,7 @@ class Perception extends Model
 
     public function details()
     {
-        return $this->hasMany(RetentionDetail::class);
+        return $this->hasMany(PerceptionDetail::class);
     }
 
 }
