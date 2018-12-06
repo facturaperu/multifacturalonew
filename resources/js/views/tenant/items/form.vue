@@ -72,7 +72,7 @@
                         <div class="col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.system_isc_type_id}">
                                 <label class="control-label">Sistema Isc</label>
-                                <el-select v-model="form.system_isc_type_id" filterable>
+                                <el-select v-model="form.system_isc_type_id" filterable @change="changeSystemIscType">
                                     <el-option v-for="option in system_isc_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
                                 <small class="form-control-feedback" v-if="errors.system_isc_type_id" v-text="errors.system_isc_type_id[0]"></small>
@@ -188,10 +188,15 @@
                 this.initForm()
             },
             changeHasIsc() {
-                this.form.system_isc_type_id = false
+                this.form.system_isc_type_id = null
                 this.form.percentage_isc = 0
                 this.form.suggested_price = 0
             },
+            changeSystemIscType() {
+                if (this.form.system_isc_type_id !== '03') {
+                    this.form.suggested_price = 0
+                }
+            }
         }
     }
 </script>

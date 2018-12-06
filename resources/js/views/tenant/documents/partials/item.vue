@@ -245,43 +245,7 @@
 //                this.form.suggested_price = 0
 //            },
             clickAddItem() {
-
-//                $table->unsignedInteger('item_id');
-//                $table->string('item_description');
-//                $table->integer('quantity');
-//                $table->decimal('unit_value', 12, 2);
-//
-//                $table->char('affectation_igv_type_id', 8);
-//                $table->decimal('total_base_igv', 12, 2);
-//                $table->decimal('percentage_igv', 12, 2);
-//                $table->decimal('total_igv', 12, 2);
-//
-//                $table->char('system_isc_type_id', 8)->nullable();
-//                $table->decimal('total_base_isc', 12, 2)->default(0);
-//                $table->decimal('percentage_isc', 12, 2)->default(0);
-//                $table->decimal('total_isc', 12, 2)->default(0);
-//
-//                $table->decimal('total_base_other_taxes', 12, 2)->default(0);
-//                $table->decimal('percentage_other_taxes', 12, 2)->default(0);
-//                $table->decimal('total_other_taxes', 12, 2)->default(0);
-//                $table->decimal('total_taxes', 12, 2);
-//
-//                $table->char('price_type_id', 8);
-//                $table->decimal('unit_price', 12, 2)->default(0);
-//                $table->decimal('unit_value_free', 12, 2)->default(0);
-//
-//                $table->decimal('total_value', 12, 2);
-//                $table->decimal('total', 12, 2);
-//
-//                $table->json('attributes')->nullable();
-//                $table->json('charges')->nullable();
-//                $table->json('discounts')->nullable();
-
                 let item_description = this.item.description
-
-//                if (this.item.additional_information) {
-//                    item_description += '|'+this.item.additional_information
-//                }
                 let row = {
                     item_id: this.item.id,
                     item_description: item_description,
@@ -312,12 +276,19 @@
                 };
 
                 let _affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
+                let _quantity = this.form.quantity
                 let _percentage_igv = 18
                 let _price_type_id = '01'
-                let _unit_price_free = 0
+                //let _unit_price_free = 0
                 let _unit_price = 0
                 let _unit_value = 0
-
+                let _unit_value_isc = 0
+                let _total_isc = 0
+                let _total_discount = 0
+                let _discount_base = 0
+                let _discount_no_base = 0
+                let _total_value = 0
+                let _total_igv = 0
 
                 if (this.item.has_isc) {
                     let _percentage_isc = this.item.percentage_isc
@@ -326,57 +297,36 @@
                     _unit_value = _unit_price / (1 + _percentage_igv / 100)
 
                     if (this.item.system_isc_type_id === '01') {
-                        _unit_value /= (1 + _percentage_isc / 100)
+                        _unit_value_isc = _unit_value * (1 + _percentage_isc / 100)
+                        _unit_value = _unit_value /_unit_value_isc
                     }
                     if (this.item.system_isc_type_id === '02') {
                         //_unit_value = _unit_value
                     }
                     if (this.item.system_isc_type_id === '03') {
-                        _unit_value -= _suggested_price * _percentage_isc / 100
+                        _unit_value_isc = _suggested_price * _percentage_isc / 100
+                        _unit_value = _unit_value - _unit_value_isc
                     }
 
+                    _total_isc = _unit_value_isc * _quantity
 
-                    let _unit_value_isc = 0
-                    row.percentage_isc = this.form.percentage_isc
-                    if (this.form.system_isc_type_id === '01') {
-                        _unit_value_isc = _.round(_unit_value * row.percentage_isc / 100)
-                    }
-                    if (this.form.system_isc_type_id === '02') {
-                        _unit_value_isc = _.round(this.form.suggested_price * row.percentage_isc / 100)
-                    }
-                    row.total_base_isc = 0
-                    row.total_isc = _.round(_unit_value_isc * row.quantity, 2)
                 } else {
+                    _unit_price = parseFloat(this.form.unit_price)
                     if (_affectation_igv_type.free) {
-//                        row.unit_price = 0
-                        _unit_price_free = _unit_price
                         _price_type_id = '02'
-                    }
-//                    else {
-//                        row.unit_price = _unit_price
-//                        row.unit_price_free = 0
-//                        row.price_type_id = '01'
-//                    }
+                    } else {
+                        if (['10'].indexOf(_affectation_igv_type.id) > -1) {
+                            _unit_value = _unit_price / (1 + _percentage_igv / 100)
+                        }
 
-                    if (['10'].indexOf(affectation_igv_type.id) > -1) {
-                        _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-                    }
-
-                    if (['20'].indexOf(affectation_igv_type.id) > -1) {
-                        _unit_value = row.unit_price
-                        _percentage_igv = 0
+                        if (['20'].indexOf(_affectation_igv_type.id) > -1) {
+                            _unit_value = _unit_price
+                            _percentage_igv = 0
+                        }
                     }
                 }
 
-
-//                let _unit_value = 0
-//                let _percentage_igv = row.percentage_igv
-
-
-
-                let _total_value = _.round(_unit_value * row.quantity, 2)
-                let _discount_base = 0
-                let _discount_no_base = 0
+                let _total_value_partial = _unit_value * _quantity
 
                 this.form.discounts.forEach((discount) => {
                     let discount_type = _.find(this.discounts, {'id': discount.discount_type_id})
@@ -390,6 +340,9 @@
                     }
                 })
 
+                _total_discount = _discount_base + _discount_no_base
+                _total_value = _total_value_partial - _total_discount
+                _total_igv =  (_total_value_partial - _discount_base + _total_isc) * _percentage_igv / 100
 //                let _unit_value_isc = 0
 //                if (this.form.has_isc) {
 //                    row.percentage_isc = this.form.percentage_isc
