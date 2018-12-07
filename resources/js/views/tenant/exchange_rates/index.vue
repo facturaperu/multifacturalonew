@@ -27,59 +27,60 @@
             <div class="row">
                 <div class="col">
                     <el-button type="primary" @click.prevent="clickGet" :loading="loading_search_exchange_rate">Obtener</el-button>
+                    <el-button type="primary" @click.prevent="clickCreate" >Obtener uno</el-button>
                 </div>
             </div>
         </div>
+        <exchange-rates-form :showDialog.sync="showDialog"></exchange-rates-form>
     </div>
 </template>
 
 <script>
 
+    import ExchangeRatesForm from './form.vue'
     import {functions} from '../../../mixins/functions'
 
     export default {
         mixins: [functions],
+        components: {ExchangeRatesForm},
         data() {
             return {
+                showDialog: false,
                 resource: 'exchange_rates',
                 records: [],
                 data: null,
+                form: {},
             }
         },
         created() {
+            this.initForm()
             this.getData()
+            this.$eventHub.$on('reloadData', () => {
+                this.getData()
+            })
         },
         methods: {
+            initForm() { 
+                this.form = {
+                    cur_date: moment().format('YYYY-MM-DD'),
+                    last_date: null,
+                }
+            },
             getData() {
                 this.$http.get(`/${this.resource}/records`)
                     .then(response => {
                         this.records = response.data.data
+                        if (this.records.length) {
+                            this.form.last_date = this.records[0].date
+                        }
                     })
+            },
+            clickCreate() {
+                this.showDialog = true
             },
             clickGet() {
                 this.searchExchangeRate().then(() => {
-                    if(this.data){
-                        this.$http.post(`/${this.resource}`, this.data)
-                            .then(response => {
-                                if (response.data.success) {
-                                    this.$message.success(response.data.message)
-                                    this.getData()
-                                    this.data = null
-                                } else {
-                                    this.$message.error(response.data.message)
-                                }
-                            })
-                            .catch(error => {
-                                if (error.response.status === 422) {
-                                    this.errors = error.response.data.errors
-                                } else {
-                                    console.log(error)
-                                }
-                            })
-                            .then(() => {
-                                this.loading_search_exchange_rate = false
-                            })
-                    }
+                    this.getData()
                 })
             }
         }

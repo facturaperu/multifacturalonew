@@ -156,7 +156,7 @@ if ($hostname) {
 
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
             Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
-            Route::get('services/exchange_rate', 'Tenant\Api\ServiceController@exchange_rate');
+            Route::post('services/exchange_rate', 'Tenant\Api\ServiceController@exchange_rate');
 
             //BUSQUEDA DE DOCUMENTOS
             // Route::get('busqueda', 'Tenant\SearchController@index')->name('search');
