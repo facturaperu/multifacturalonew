@@ -191,6 +191,28 @@ if ($hostname) {
             Route::post('currency_types', 'Tenant\CurrencyTypeController@store');
             Route::delete('currency_types/{currency_type}', 'Tenant\CurrencyTypeController@destroy');
 
+            //Retentions
+            Route::get('retentions', 'Tenant\RetentionController@index')->name('tenant.retentions.index');
+            Route::get('retentions/columns', 'Tenant\RetentionController@columns');
+            Route::get('retentions/records', 'Tenant\RetentionController@records');
+            Route::get('retentions/create', 'Tenant\RetentionController@create')->name('tenant.retentions.create');
+            Route::get('retentions/tables', 'Tenant\RetentionController@tables');
+            Route::get('retentions/record/{retention}', 'Tenant\RetentionController@record');
+            Route::post('retentions', 'Tenant\RetentionController@store');
+            Route::delete('retentions/{retention}', 'Tenant\RetentionController@destroy');
+            Route::get('retentions/item/tables', 'Tenant\RetentionController@item_tables');
+
+            //Perceptions
+            Route::get('perceptions', 'Tenant\PerceptionController@index')->name('tenant.perceptions.index');
+            Route::get('perceptions/columns', 'Tenant\PerceptionController@columns');
+            Route::get('perceptions/records', 'Tenant\PerceptionController@records');
+            Route::get('perceptions/create', 'Tenant\PerceptionController@create')->name('tenant.perceptions.create');
+            Route::get('perceptions/tables', 'Tenant\PerceptionController@tables');
+            Route::get('perceptions/record/{perception}', 'Tenant\PerceptionController@record');
+            Route::post('perceptions', 'Tenant\PerceptionController@store');
+            Route::delete('perceptions/{perception}', 'Tenant\PerceptionController@destroy');
+            Route::get('perceptions/item/tables', 'Tenant\PerceptionController@item_tables');
+
         });
     });
 } else {

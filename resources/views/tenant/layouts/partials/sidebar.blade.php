@@ -48,13 +48,21 @@
                             <i class="fas fa-building"></i><span>Empresa</span>
                         </a>
                     </li>
-
                     <li class="{{ ($path[0] === 'reports')?'nav-active':'' }}">
                         <a class="nav-link" href="{{route('tenant.reports.index')}}">
                             <i class="fas fa-chart-line"></i><span>Reportes</span>
                         </a>
+                    </li>
+                    <li class="{{ ($path[0] === 'perceptions')?'nav-active':'' }}">
+                        <a class="nav-link" href="{{route('tenant.perceptions.index')}}">
+                            <i class="fas fa-receipt"></i><span>Percepciones</span>
+                        </a>
+                    </li>
+                    <li class="{{ ($path[0] === 'retentions')?'nav-active':'' }}">
+                        <a class="nav-link" href="{{route('tenant.retentions.index')}}">
+                            <i class="fas fa-receipt"></i><span>Retenciones</span>
+                        </a>
                     </li> 
-                    
                 </ul>
             </nav>
         </div>
