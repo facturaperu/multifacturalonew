@@ -12,6 +12,8 @@ use App\Models\Tenant\Catalogs\Province;
 use App\Models\Tenant\Document;
 use Illuminate\Http\Request;
 use App\Core\Services\Ruc\ExchangeRate;
+use Carbon\Carbon;
+use App\Models\Tenant\ExchangeRate as ExchangeRateModel;
 
 class ServiceController extends Controller
 {
@@ -78,19 +80,33 @@ class ServiceController extends Controller
         return $res;
     }
 
-    public function exchange_rate()
+    public function exchange_rate(Request $request)
     {
-        $exchange_rate = new ExchangeRate();
-        $res = $exchange_rate->get();
-        if ($res) {
+        $records = [];
+        if (!$request['last_date']) {
+            $records = ExchangeRateModel::where('date', $request['date'])->get()->keyBy('date')->toArray();
+        }
+        if (empty($records)) {
+            $exchange_rate = new ExchangeRate($request['cur_date'],$request['last_date']);
+            $records = $exchange_rate->get();
+            if ($records) {
+                foreach ($records as $key => $item) {
+                    if (!ExchangeRateModel::where('date',$key)->first() && (Carbon::today()->toDateString() != $key || $item['date'] == $item['date_original'])) {
+                        ExchangeRateModel::create($item);
+                    }
+                }
+            }
+        }
+        if ($records) {
             return [
                 'success' => true,
-                'data' => $res
+                'message' => 'Tipos de cambio obtenidos',
+                'data' => $records
             ];
         } else {
             return [
                 'success' => false,
-                'message' => $exchange_rate->getError()
+                'message' => 'Error'
             ];
         }
     }

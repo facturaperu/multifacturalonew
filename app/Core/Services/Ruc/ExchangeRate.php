@@ -5,7 +5,6 @@ namespace App\Core\Services\Ruc;
 use Goutte\Client;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use App\Models\Tenant\ExchangeRate as ExchangeRateModel;
 
 /**
  * Class Ruc.
@@ -40,22 +39,17 @@ class ExchangeRate
     /**
      * ExchangeRate constructor.
      */
-    public function __construct()
+    public function __construct($curDate, $lastDate)
     {
         $this->client = new Client();
-        $this->lastDate = $this->getLastDateExchangeRateFromDB();
+        $this->curDate = Carbon::parse($curDate);
         $this->crawler = $this->getCrawler();
-        $this->curMonth = Carbon::today('America/Lima')->month;
-        $this->curYear = Carbon::today('America/Lima')->year;
-    }
-
-    private function getLastDateExchangeRateFromDB()
-    {
-        $lastExchangeRate = ExchangeRateModel::orderBy('date','desc')->first();
-        if (!$lastExchangeRate) {
-            return null;
+        $this->curMonth = $this->curDate->month;
+        $this->curYear = $this->curDate->year;
+        $this->lastDate = null;
+        if ($lastDate && $curDate > $lastDate) {
+            $this->lastDate = Carbon::parse($lastDate);
         }
-        return Carbon::parse($lastExchangeRate->date,'America/Lima');
     }
 
     private function getCrawler()
@@ -93,29 +87,44 @@ class ExchangeRate
         ]);
     }
     private function getExchangeRates() {
+        $tempCurDate = Carbon::parse($this->curDate->toDateString());
         $exchangeRates = $this->getExchangeRateFromMonthAndYear();
-        if (empty($exchangeRates) || $this->lastDate && Carbon::today('America/Lima')->month != $this->lastDate->month) {
-            $this->curMonth = Carbon::today('America/Lima')->subMonthNoOverflow()->month;
-            $this->curYear = Carbon::today('America/Lima')->subMonthNoOverflow()->year;
-            $this->changeExchangeRatesMonthAndYear();
+        reset($exchangeRates);
+        if (key($exchangeRates) > $this->curDate->toDateString()) {
+            $exchangeRates = [];
+        }
+        if (empty($exchangeRates) || ($this->lastDate && $this->curDate->month != $this->lastDate->month)) {
+            $tempCurDate->subMonthNoOverflow();
+            $this->curMonth = $tempCurDate->month;
+            $this->curYear = $tempCurDate->year;
             $exchangeRates += $this->getExchangeRateFromMonthAndYear();
         }
-        if ($this->lastDate && Carbon::today('America/Lima')->subMonthNoOverflow()->month != $this->lastDate->month) {
+        $tempCurDate->subMonthNoOverflow();
+        if ($this->lastDate && $tempCurDate->month != $this->lastDate->month) {
             $firstDateToInsert = $this->lastDate->toDateString();
-            $lastDateToInsert = Carbon::today('America/Lima')->subMonthNoOverflow()->toDateString();
+            $lastDateToInsert = $tempCurDate->toDateString();
             $period = CarbonPeriod::create($firstDateToInsert, '1 month', $lastDateToInsert);
             foreach ($period as $date) {
                 $this->curMonth = $date->month;
                 $this->curYear = $date->year;
-                $this->changeExchangeRatesMonthAndYear();
                 $exchangeRates += $this->getExchangeRateFromMonthAndYear();
             }
         }
         ksort($exchangeRates);
+        reset($exchangeRates);
+        if ($this->lastDate && key($exchangeRates) > $this->lastDate->toDateString()) {
+            $tempLastDate = Carbon::parse($this->lastDate->toDateString());
+            $tempLastDate->subMonthNoOverflow();
+            $this->curMonth = $tempLastDate->month;
+            $this->curYear = $tempLastDate->year;
+            $exchangeRates += $this->getExchangeRateFromMonthAndYear();
+            ksort($exchangeRates);
+        }
         return $exchangeRates;
     }
 
     private function getExchangeRateFromMonthAndYear() {
+        $this->changeExchangeRatesMonthAndYear();
         $this->crawler->filter('table')->each(function($node,$i) use (&$result) {
             if ($i == 1) {
                 $node->filter('tr')->each(function ($tr, $j) use (&$result) {
@@ -125,7 +134,7 @@ class ExchangeRate
                         $sell = '';
                         $tr->filter('td')->each(function ($td, $k) use (&$result,&$date,&$buy,&$sell) {
                             if ($k%3==0) {
-                                $date = $this->curYear.'-'.$this->curMonth.'-'.str_pad(trim($td->text()), 2, "0", STR_PAD_LEFT);
+                                $date = $this->curYear.'-'.str_pad(trim($this->curMonth), 2, "0", STR_PAD_LEFT).'-'.str_pad(trim($td->text()), 2, "0", STR_PAD_LEFT);
                             } elseif ($k%3==1) {
                                 $buy = trim($td->text());
                             } else {
@@ -147,22 +156,42 @@ class ExchangeRate
         return $result;
     }
 
+    private function getNearExchangeRate($exchangeRates,$dateString) {
+        $result = [];
+        $date = Carbon::parse($dateString);
+        while (empty($result)) {
+            if (array_key_exists($date->toDateString(),$exchangeRates)) {
+                $result = $exchangeRates[$date->toDateString()];
+                $result['date'] = $this->curDate->toDateString();
+                $result['date_original'] = $date->toDateString();
+            }
+            $date = $date->subDay();
+        }
+        return $result;
+    }
+
     private function getFilterExchangeRates($exchangeRates) {
         $filterExchangeRates = [];
-        end($exchangeRates);
-        $key = key($exchangeRates);
         if (!$this->lastDate) {
-            $filterExchangeRates[$key] = $exchangeRates[$key];
-        }
-        elseif (Carbon::parse($key,'America/Lima')->diffInDays($this->lastDate)) {
-            $firstDateToInsert = $this->lastDate->addDay()->toDateString();
-            $lastDateToInsert = Carbon::parse($key,'America/Lima')->toDateString();
+            $filterExchangeRates[$this->curDate->toDateString()] = $this->getNearExchangeRate($exchangeRates,$this->curDate->toDateString());
+        } else {
+            $completeExchangeRates = [];
+            $firstDateToInsert = $this->lastDate->toDateString();
+            $lastDateToInsert = $this->curDate->toDateString();
             $period = CarbonPeriod::create($firstDateToInsert, $lastDateToInsert);
+            $lastExchangeRate = [];
             foreach ($period as $date) {
                 if (array_key_exists($date->format('Y-m-d'), $exchangeRates)) {
-                    $filterExchangeRates[$date->format('Y-m-d')] = $exchangeRates[$date->format('Y-m-d')];
+                    $lastExchangeRate = $exchangeRates[$date->format('Y-m-d')];
+                    $lastExchangeRate['date_original'] = $date->format('Y-m-d');
                 }
+                if (empty($lastExchangeRate)) {
+                    $lastExchangeRate = $this->getNearExchangeRate($exchangeRates,$this->lastDate->toDateString());
+                }
+                $lastExchangeRate['date'] = $date->format('Y-m-d');
+                $completeExchangeRates[$date->format('Y-m-d')] = $lastExchangeRate;
             }
+            $filterExchangeRates = $completeExchangeRates;
         }
         return $filterExchangeRates;
     }

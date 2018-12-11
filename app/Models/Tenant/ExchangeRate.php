@@ -13,5 +13,6 @@ class ExchangeRate extends Model
         'date',
         'buy',
         'sell',
+        'date_original',
     ];
 }
