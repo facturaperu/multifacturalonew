@@ -66,6 +66,10 @@ class ClientController extends Controller
         }
         catch (Exception $e) {
             DB::connection('system')->rollBack();
+            $hostname = Hostname::where('fqdn',$subDom.'.'.env('APP_URL_BASE'))->first();
+            $website = Website::where('uuid',env('PREFIX_DATABASE').'_'.$subDom)->first();
+            app(HostnameRepository::class)->delete($hostname, true);
+            app(WebsiteRepository::class)->delete($website, true);
             return [
                 'success' => false,
                 'message' => $e->getMessage()
