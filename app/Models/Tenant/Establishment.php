@@ -2,6 +2,9 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Tenant\Catalogs\Department;
+use App\Models\Tenant\Catalogs\District;
+use App\Models\Tenant\Catalogs\Province;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use App\Models\Tenant\Catalogs\Code;
 use Illuminate\Database\Eloquent\Model;

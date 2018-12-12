@@ -17,7 +17,7 @@ class TenantInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('document_id');
-            $table->char('operation_type_id', 8);
+            $table->char('operation_type_id', 4);
             $table->date('date_of_due')->nullable();
             $table->decimal('total_free', 12, 2)->default(0);
             $table->decimal('total_global_discount', 12, 2)->default(0);
@@ -33,7 +33,7 @@ class TenantInvoicesTable extends Migration
             $table->json('prepayments')->nullable();
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
-            $table->foreign('operation_type_id')->references('id')->on('codes');
+            $table->foreign('operation_type_id')->references('id')->on('operation_types');
         });
     }
 

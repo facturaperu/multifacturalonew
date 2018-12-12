@@ -18,7 +18,7 @@ class TenantSummariesTable extends Migration
             $table->unsignedInteger('user_id');
             $table->char('soap_type_id', 2);
             $table->char('state_type_id', 2);
-            $table->unsignedInteger('process_type_id');
+            $table->char('process_type_id', 1);
             $table->string('ubl_version');
             $table->date('date_of_issue');
             $table->date('date_of_reference');

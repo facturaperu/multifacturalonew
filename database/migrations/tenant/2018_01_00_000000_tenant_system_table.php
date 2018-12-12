@@ -29,17 +29,6 @@ class TenantSystemTable extends Migration
             ['id' => '13', 'description' => 'Por anular'],
         ]);
 
-        Schema::create('process_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('description');
-        });
-
-        DB::table('process_types')->insert([
-            ['id' => 1, 'description' => 'Registrar'],
-            ['id' => 2, 'description' => 'Editar'],
-            ['id' => 3, 'description' => 'Anular'],
-        ]);
-
         Schema::create('soap_types', function (Blueprint $table) {
             $table->char('id', 2)->index();
             $table->string('description');
@@ -58,6 +47,16 @@ class TenantSystemTable extends Migration
         DB::table('groups')->insert([
             ['id' => '01', 'description' => 'Facturas'],
             ['id' => '02', 'description' => 'Boletas'],
+        ]);
+
+        Schema::create('item_types', function (Blueprint $table) {
+            $table->char('id', 2)->index();
+            $table->string('description');
+        });
+
+        DB::table('item_types')->insert([
+            ['id' => '01', 'description' => 'Producto'],
+            ['id' => '02', 'description' => 'Servicio']
         ]);
 
         Schema::create('charge_discounts', function (Blueprint $table) {
@@ -92,9 +91,10 @@ class TenantSystemTable extends Migration
             $table->unsignedInteger('bank_id');
             $table->string('description');
             $table->string('number');
-            $table->char('currency_type_id', 8);
+            $table->char('currency_type_id', 2);
 
             $table->foreign('bank_id')->references('id')->on('banks');
+            $table->foreign('currency_type_id')->references('id')->on('currency_types');
         });
 
         Schema::create('exchange_rates', function (Blueprint $table) {
@@ -103,9 +103,6 @@ class TenantSystemTable extends Migration
             $table->decimal('sell', 13, 3);
             $table->timestamps();
         });
-
-
-
 
     }
 
@@ -120,6 +117,7 @@ class TenantSystemTable extends Migration
         Schema::dropIfExists('bank_accounts');
         Schema::dropIfExists('banks');
         Schema::dropIfExists('charge_discounts');
+        Schema::dropIfExists('item_types');
         Schema::dropIfExists('groups');
         Schema::dropIfExists('soap_types');
         Schema::dropIfExists('process_types');

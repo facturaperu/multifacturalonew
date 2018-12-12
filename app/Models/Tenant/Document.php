@@ -3,6 +3,8 @@
 namespace App\Models\Tenant;
 
 use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\DocumentType;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +12,7 @@ class Document extends Model
 {
     use UsesTenantConnection;
 
-    protected $with = ['user', 'establishment', 'soap_type', 'state_type', 'group', 'document_type', 'series',
+    protected $with = ['user', 'establishment', 'soap_type', 'state_type', 'group', 'document_type',
                        'customer', 'currency_type', 'details', 'invoice', 'note'];
 
     protected $fillable = [
@@ -22,7 +24,7 @@ class Document extends Model
         'ubl_version',
         'group_id',
         'document_type_id',
-        'series_id',
+        'series',
         'number',
         'date_of_issue',
         'time_of_issue',
@@ -138,12 +140,7 @@ class Document extends Model
 
     public function document_type()
     {
-        return $this->belongsTo(Code::class, 'document_type_id');
-    }
-
-    public function series()
-    {
-        return $this->belongsTo(Series::class);
+        return $this->belongsTo(DocumentType::class);
     }
 
     public function customer()
@@ -153,7 +150,7 @@ class Document extends Model
 
     public function currency_type()
     {
-        return $this->belongsTo(Code::class, 'currency_type_id');
+        return $this->belongsTo(CurrencyType::class);
     }
 
     public function invoice()

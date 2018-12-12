@@ -2,7 +2,11 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\Country;
+use App\Models\Tenant\Catalogs\Department;
+use App\Models\Tenant\Catalogs\District;
+use App\Models\Tenant\Catalogs\IdentityDocumentType;
+use App\Models\Tenant\Catalogs\Province;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,12 +30,12 @@ class Customer extends Model
 
     public function identity_document_type()
     {
-        return $this->belongsTo(Code::class, 'identity_document_type_id');
+        return $this->belongsTo(IdentityDocumentType::class);
     }
 
     public function country()
     {
-        return $this->belongsTo(Code::class, 'country_id');
+        return $this->belongsTo(Country::class);
     }
 
     public function department()

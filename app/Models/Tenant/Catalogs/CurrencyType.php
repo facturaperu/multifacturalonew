@@ -11,4 +11,10 @@ class CurrencyType extends Model
 
     public $incrementing = false;
     public $timestamps = false;
+
+    protected $fillable = [
+        'id', 'description', 'active', 'symbol'
+    ];
+
+    protected $casts = ['id' => 'string'];
 }

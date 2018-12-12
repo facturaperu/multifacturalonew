@@ -22,8 +22,8 @@ class TenantDocumentsTable extends Migration
             $table->char('state_type_id', 2);
             $table->string('ubl_version');
             $table->char('group_id', 2);
-            $table->char('document_type_id', 8);
-            $table->unsignedInteger('series_id');
+            $table->char('document_type_id', 2);
+            $table->char('series', 4);
             $table->integer('number');
             $table->date('date_of_issue');
             $table->time('time_of_issue');
@@ -61,8 +61,7 @@ class TenantDocumentsTable extends Migration
             $table->foreign('soap_type_id')->references('id')->on('soap_types');
             $table->foreign('state_type_id')->references('id')->on('state_types');
             $table->foreign('group_id')->references('id')->on('groups');
-            $table->foreign('document_type_id')->references('id')->on('codes');
-            $table->foreign('series_id')->references('id')->on('series');
+            $table->foreign('document_type_id')->references('id')->on('document_type');
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->foreign('currency_type_id')->references('id')->on('currency_types');
         });

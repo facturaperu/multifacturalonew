@@ -22,12 +22,12 @@ class TenantDetailsTable extends Migration
             $table->integer('quantity');
             $table->decimal('unit_value', 12, 2);
 
-            $table->char('affectation_igv_type_id', 8);
+            $table->char('affectation_igv_type_id', 2);
             $table->decimal('total_base_igv', 12, 2);
             $table->decimal('percentage_igv', 12, 2);
             $table->decimal('total_igv', 12, 2);
 
-            $table->char('system_isc_type_id', 8)->nullable();
+            $table->char('system_isc_type_id', 2)->nullable();
             $table->decimal('total_base_isc', 12, 2)->default(0);
             $table->decimal('percentage_isc', 12, 2)->default(0);
             $table->decimal('total_isc', 12, 2)->default(0);
@@ -37,7 +37,7 @@ class TenantDetailsTable extends Migration
             $table->decimal('total_other_taxes', 12, 2)->default(0);
             $table->decimal('total_taxes', 12, 2);
 
-            $table->char('price_type_id', 8);
+            $table->char('price_type_id', 2);
             $table->decimal('unit_price', 12, 2)->default(0);
             $table->decimal('unit_value_free', 12, 2)->default(0);
 
@@ -50,9 +50,9 @@ class TenantDetailsTable extends Migration
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->foreign('item_id')->references('id')->on('items');
-            $table->foreign('affectation_igv_type_id')->references('id')->on('codes');
-            $table->foreign('system_isc_type_id')->references('id')->on('codes');
-            $table->foreign('price_type_id')->references('id')->on('codes');
+            $table->foreign('affectation_igv_type_id')->references('id')->on('affectation_igv_types');
+            $table->foreign('system_isc_type_id')->references('id')->on('system_isc_types');
+            $table->foreign('price_type_id')->references('id')->on('price_types');
         });
     }
 

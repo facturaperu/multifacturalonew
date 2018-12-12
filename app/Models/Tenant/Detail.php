@@ -2,7 +2,11 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Tenant\Catalogs\AffectationIgvType;
 use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\PriceType;
+use App\Models\Tenant\Catalogs\SystemIscType;
+use App\Models\Tenant\Catalogs\UnitType;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -96,21 +100,21 @@ class Detail extends Model
 
     public function unit_type()
     {
-        return $this->belongsTo(Code::class, 'unit_type_id');
+        return $this->belongsTo(UnitType::class);
     }
 
     public function affectation_igv_type()
     {
-        return $this->belongsTo(Code::class, 'affectation_igv_type_id');
+        return $this->belongsTo(AffectationIgvType::class);
     }
 
     public function system_isc_type()
     {
-        return $this->belongsTo(Code::class, 'system_isc_type');
+        return $this->belongsTo(SystemIscType::class);
     }
 
     public function price_type()
     {
-        return $this->belongsTo(Code::class, 'price_type_id');
+        return $this->belongsTo(PriceType::class);
     }
 }

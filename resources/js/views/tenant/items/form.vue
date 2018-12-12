@@ -141,7 +141,7 @@
                     unit_type_id: null,
                     currency_type_id: null,
                     unit_price: null,
-                    has_isc: null,
+                    has_isc: false,
                     system_isc_type_id: null,
                     percentage_isc: 0,
                     suggested_price: 0

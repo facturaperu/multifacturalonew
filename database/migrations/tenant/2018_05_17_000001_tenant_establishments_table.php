@@ -16,19 +16,19 @@ class TenantEstablishmentsTable extends Migration
         Schema::create('establishments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
-            $table->char('country_id', 8);
+            $table->char('country_id', 2);
             $table->char('department_id', 2);
             $table->char('province_id', 4);
             $table->char('district_id', 6);
             $table->string('address');
             $table->string('email');
-            $table->string('phone');
+            $table->string('telephone');
             $table->string('code');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
 
-            $table->foreign('country_id')->references('id')->on('codes');
+            $table->foreign('country_id')->references('id')->on('countries');
             $table->foreign('department_id')->references('id')->on('departments');
             $table->foreign('province_id')->references('id')->on('provinces');
             $table->foreign('district_id')->references('id')->on('districts');

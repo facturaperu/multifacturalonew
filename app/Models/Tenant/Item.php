@@ -4,6 +4,7 @@ namespace App\Models\Tenant;
 
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\SystemIscType;
+use App\Models\Tenant\System\ItemType;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use App\Models\Tenant\Catalogs\Code;
 use Illuminate\Database\Eloquent\Model;
