@@ -101,6 +101,7 @@ class TenantSystemTable extends Migration
             $table->date('date')->primary();
             $table->decimal('buy', 13, 3);
             $table->decimal('sell', 13, 3);
+            $table->date('date_original');
             $table->timestamps();
         });
 

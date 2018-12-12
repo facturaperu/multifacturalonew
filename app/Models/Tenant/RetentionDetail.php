@@ -11,6 +11,7 @@ class RetentionDetail extends Model
 {
     use UsesTenantConnection;
 
+    public $timestamps = false;
     protected $with = ['document_type', 'currency_type'];
     protected $fillable = [
         'retention_id',
