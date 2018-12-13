@@ -1,61 +1,169 @@
 {
-    "version_del_ubl": "v21",
-    "serie_y_numero_correlativo": "F001-#",
+    "serie_documento": "F001",
+    "numero_documento": "#",
     "fecha_de_emision": "2018-10-09",
     "hora_de_emision": "10:11:11",
-    "tipo_de_operacion": "0101",
-    "tipo_de_documento":"01",
-    "tipo_de_moneda": "PEN",
+    "codigo_tipo_operacion": "0101",
+    "codigo_tipo_documento":"01",
+    "codigo_tipo_moneda": "PEN",
     "fecha_de_vencimiento":"2018-08-30",
-    "numero_de_orden_de_compra": "0045467898",
+    "numero_orden_de_compra": "0045467898",
     "datos_del_emisor": {
         "codigo_del_domicilio_fiscal": "0000"
     },
     "datos_del_cliente_o_receptor":{
-        "numero_de_documento": "10414711225",
-        "tipo_de_documento": "6",
+        "codigo_tipo_documento_identidad": "6",
+        "numero_documento": "10414711225",
         "apellidos_y_nombres_o_razon_social": "EMPRESA XYZ S.A.",
+        "codigo_pais": "PE",
+        "ubigeo": "150101",
         "direccion": "Av. 2 de Mayo",
-        "ubigeo": "150101"
+        "correo_electronico": "demo@gmail.com",
+        "telefono": "427-1148"
     },
     "totales": {
-        "total_operaciones_gravadas": 400,
-        "sumatoria_igv": 72,
-        "total_de_la_venta": 472
+        "total_otros_cargos": 0.00,
+        "total_exportacion": 0.00,
+        "total_operaciones_gravadas": 90,
+        "total_operaciones_inafectas": 0.00,
+        "total_operaciones_exoneradas": 0.00,
+        "total_operaciones_gratuitas": 0.00,
+        "total_igv": 16.20,
+        "total_base_isc": 0.00,
+        "total_isc": 0.00,
+        "total_base_otros_impuestos": 0.00,
+        "total_otros_impuestos": 0.00,
+        "total_impuestos": 0.00,
+        "total_descuentos": 20.00,
+        "total_cargos": 10.00,
+        "total_anticipos": 0.00,
+        "total_valor": 472,
+        "total_venta": 472
     },
     "items":[
         {
-            "codigo_interno_del_producto": "P0121",
-            "descripcion_detallada":"Inca Kola 250 ml",
-            "codigo_producto_de_sunat": "51121703",
+            "codigo_interno": "P0121",
+            "descripcion":"Inca Kola 250 ml",
+            "codigo_producto_sunat": "51121703",
+            "codigo_producto_gsl": "51121703",
             "unidad_de_medida": "NIU",
-            "cantidad_de_unidades": 1,
+            "cantidad": 1,
             "valor_unitario": 100,
-            "codigo_de_tipo_de_precio":"01",
-            "precio_de_venta_unitario_valor_referencial": 118,
-            "afectacion_al_igv": "10",
-            "porcentaje_de_igv": 18,
-            "monto_de_igv": 18,
-            "valor_de_venta_por_item": 100,
-            "total_por_item": 118
-        },
-        {
-            "codigo_interno_del_producto": "P0141",
-            "descripcion_detallada":"Detergente Arial 1 Kg",
-            "codigo_producto_de_sunat": "51121722",
-            "unidad_de_medida": "NIU",
-            "cantidad_de_unidades": 4,
-            "valor_unitario": 100,
-            "codigo_de_tipo_de_precio":"01",
-            "precio_de_venta_unitario_valor_referencial": 118,
-            "afectacion_al_igv": "10",
-            "porcentaje_de_igv": 18,
-            "monto_de_igv": 72,
-            "valor_de_venta_por_item": 400,
-            "total_por_item": 472
+            "codigo_tipo_precio": "01",
+            "precio_unitario": 118,
+            "codigo_tipo_afectacion_igv": "10",
+            "total_base_igv": 90.00,
+            "porcentaje_igv": 18,
+            "total_igv": 16.20,
+            "codigo_tipo_sistema_isc": null,
+            "total_base_isc": 0,
+            "porcentaje_isc": 0,
+            "total_isc": 0,
+            "total_base_otros_impuestos": 0,
+            "porcentaje_otros_impuestos": 0,
+            "total_otros_impuestos": 0,
+            "total_impuestos": 16.20,
+            "total_valor_item": 80,
+            "total_item": 106.20,
+            "cargos" : [
+                {
+                    "codigo": "47",
+                    "descripcion": "Recargo por extras",
+                    "porcentaje": 0.1,
+                    "monto": 10,
+                    "base": 100
+                }
+            ],
+            "descuentos" : [
+                {
+                    "codigo": "00",
+                    "descripcion": "Descuentos Scotiabank",
+                    "porcentaje": 0.20,
+                    "monto": 20,
+                    "base": 100
+                }
+            ],
+            "datos_adicionales": [
+                {
+                    "codigo": "7000",
+                    "nombre": "Número de Placa",
+                    "valor": "ASD 124",
+                    "fecha_inicio": "2018-12-13",
+                    "fecha_fin": "2018-12-13",
+                    "duracion": 1
+                }
+            ]
         }
     ],
-    "leyendas":[],
+    "cargos" : [
+        {
+            "codigo": "46",
+            "descripcion": "Recargo por servicios",
+            "porcentaje": 0.1,
+            "monto": 10,
+            "base": 100
+        }
+    ],
+    "descuentos" : [
+        {
+            "codigo": "00",
+            "descripcion": "Descuentos por campaña",
+            "porcentaje": 0.10,
+            "monto": 20,
+            "base": 100
+        }
+    ],
+    "guias": [
+        {
+            "numero": "T001-1234567",
+            "tipo_de_documento" : "09"
+        },
+        {
+            "numero": "T001-1234562",
+            "tipo_de_documento" : "09"
+        }
+    ],
+    "anticipos": [
+        {
+            "numero": "F001-10",
+            "codigo_tipo_documento": "01",
+            "monto": 20.00
+        },
+        {
+            "numero": "F001-50",
+            "codigo_tipo_documento": "01",
+            "monto": 20.00
+        }
+    ],
+    "documentos_relacionados": [
+        {
+            "numero": "F001-11",
+            "codigo_tipo_documento": "01"
+        },
+        {
+            "numero": "F001-12",
+            "codigo_tipo_documento": "01",
+        }
+    ],
+    "percepcion": {
+        "codigo": "",
+        "porcentaje": 0.00,
+        "monto": 0.00,
+        "base": 0.00
+    },
+    "detraccion": {
+        "codigo_metodo_pago": "",
+        "cuenta_bancaria": "",
+        "codigo_tipo_detraccion": "",
+        "porcentaje": 0.00,
+        "monto": 0.00
+    },
+    "leyendas":[
+        {
+            "codigo": "",
+            "valor": ""
+        }
+    ],
     "extras":{
         "forma_de_pago": "Efectivo",
         "observaciones": "probando",

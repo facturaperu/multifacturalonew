@@ -45,7 +45,7 @@ class Document extends Model
 
         'legends',
         'guides',
-        'additional_documents',
+        'related_documents',
         'optional',
 
         'filename',

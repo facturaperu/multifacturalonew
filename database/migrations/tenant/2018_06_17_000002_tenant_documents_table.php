@@ -45,7 +45,7 @@ class TenantDocumentsTable extends Migration
 
             $table->json('legends')->nullable();
             $table->json('guides')->nullable();
-            $table->json('additional_documents')->nullable();
+            $table->json('related_documents')->nullable();
             $table->json('optional')->nullable();
 
             $table->string('filename')->nullable();

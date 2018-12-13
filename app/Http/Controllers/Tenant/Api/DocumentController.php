@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\Tenant\Api;
 
-use App\Core\Builder\Documents\InvoiceBuilder;
-use App\Core\Builder\Documents\NoteCreditBuilder;
-use App\Core\Builder\Documents\NoteDebitBuilder;
 use App\Core\Builder\XmlBuilder;
+use App\CoreBuilder\Documents\NoteCreditBuilder;
+use App\CoreBuilder\Documents\NoteDebitBuilder;
+use App\CoreBuilder\Xml\Builder\InvoiceBuilder;
 use App\Http\Controllers\Controller;
 use App\Mail\Tenant\DocumentEmail;
 use App\Models\Tenant\Company;
@@ -23,11 +23,11 @@ class DocumentController extends Controller
 
     public function store(Request $request)
     {
-        $document_type_code = ($request->has('document'))?$request->input('document.document_type_code'):
-                                                          $request->input('document_type_code');
+        $document_type_id = ($request->has('document'))?$request->input('document.document_type_id'):
+                                                          $request->input('document_type_id');
 
-        $document = DB::connection('tenant')->transaction(function () use($request, $document_type_code) {
-            switch ($document_type_code) {
+        $document = DB::connection('tenant')->transaction(function () use($request, $document_type_id) {
+            switch ($document_type_id) {
                 case '01':
                 case '03':
                     $builder = new InvoiceBuilder();
@@ -43,8 +43,8 @@ class DocumentController extends Controller
             }
 
             $builder->save($request->all());
-            $xmlBuilder = new XmlBuilder();
-            $xmlBuilder->createXMLSigned($builder);
+//            $xmlBuilder = new XmlBuilder();
+//            $xmlBuilder->createXMLSigned($builder);
             $document = $builder->getDocument();
 
             return $document;

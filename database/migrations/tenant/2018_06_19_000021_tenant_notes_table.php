@@ -22,7 +22,7 @@ class TenantNotesTable extends Migration
             $table->char('note_debit_type_id', 2)->nullable();
             $table->string('description');
             $table->unsignedInteger('affected_document_id');
-            $table->decimal('total_global_discount', 12, 2)->default(0);
+//            $table->decimal('total_global_discount', 12, 2)->default(0);
             $table->decimal('total_prepayment', 12, 2)->default(0);
 
             $table->json('perception')->nullable();

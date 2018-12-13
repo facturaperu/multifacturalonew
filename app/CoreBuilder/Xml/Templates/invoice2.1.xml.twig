@@ -18,11 +18,11 @@
     {% if invoice.date_of_due -%}
     <cbc:DueDate>{{ invoice.date_of_due }}</cbc:DueDate>
     {% endif -%}
-    <cbc:InvoiceTypeCode listID="{{ invoice.operation_type_code }}">{{ doc.document_type_code }}</cbc:InvoiceTypeCode>
+    <cbc:InvoiceTypeCode listID="{{ invoice.operation_type_id }}">{{ doc.document_type_id }}</cbc:InvoiceTypeCode>
     {% for leg in doc.legends -%}
     <cbc:Note languageLocaleID="{{ leg.code }}"><![CDATA[{{ leg.value }}]]></cbc:Note>
     {% endfor -%}
-    <cbc:DocumentCurrencyCode>{{ doc.currency_type_code }}</cbc:DocumentCurrencyCode>
+    <cbc:DocumentCurrencyCode>{{ doc.currency_type_id }}</cbc:DocumentCurrencyCode>
     {% if doc.purchase_order -%}
     <cac:OrderReference>
         <cbc:ID>{{ doc.purchase_order }}</cbc:ID>
@@ -32,7 +32,7 @@
     {% for guide in doc.guides -%}
     <cac:DespatchDocumentReference>
         <cbc:ID>{{ guide.number }}</cbc:ID>
-        <cbc:DocumentTypeCode>{{ guide.document_type_code }}</cbc:DocumentTypeCode>
+        <cbc:DocumentTypeCode>{{ guide.document_type_id }}</cbc:DocumentTypeCode>
     </cac:DespatchDocumentReference>
     {% endfor -%}
     {% endif -%}
@@ -40,7 +40,7 @@
     {% for rel in doc.related_documents -%}
     <cac:AdditionalDocumentReference>
         <cbc:ID>{{ rel.number }}</cbc:ID>
-        <cbc:DocumentTypeCode>{{ rel.document_type_code }}</cbc:DocumentTypeCode>
+        <cbc:DocumentTypeCode>{{ rel.document_type_id }}</cbc:DocumentTypeCode>
     </cac:AdditionalDocumentReference>
     {% endfor -%}
     {% endif -%}
@@ -48,7 +48,7 @@
     {% for prepayment in doc.prepayments -%}
     <cac:AdditionalDocumentReference>
         <cbc:ID>{{ prepayment.number }}</cbc:ID>
-        <cbc:DocumentTypeCode>{{ prepayment.document_type_code }}</cbc:DocumentTypeCode>
+        <cbc:DocumentTypeCode>{{ prepayment.document_type_id }}</cbc:DocumentTypeCode>
         <cbc:DocumentStatusCode>{{ loop.index }}</cbc:DocumentStatusCode>
         <cac:IssuerParty>
             <cac:PartyIdentification>
@@ -87,19 +87,19 @@
                 <cbc:RegistrationName><![CDATA[{{ company.name|raw }}]]></cbc:RegistrationName>
                 {% set establishment = doc.establishment -%}
                 <cac:RegistrationAddress>
-                    <cbc:ID>{{ establishment.location_code }}</cbc:ID>
+                    <cbc:ID>{{ establishment.district_id }}</cbc:ID>
                     <cbc:AddressTypeCode>{{ establishment.code }}</cbc:AddressTypeCode>
                     {% if establishment.urbanization -%}
                     <cbc:CitySubdivisionName>{{ establishment.urbanization }}</cbc:CitySubdivisionName>
                     {% endif -%}
-                    <cbc:CityName>{{ establishment.province }}</cbc:CityName>
-                    <cbc:CountrySubentity>{{ establishment.department }}</cbc:CountrySubentity>
-                    <cbc:District>{{ establishment.district }}</cbc:District>
+                    <cbc:CityName>{{ establishment.province.description }}</cbc:CityName>
+                    <cbc:CountrySubentity>{{ establishment.department.description }}</cbc:CountrySubentity>
+                    <cbc:District>{{ establishment.district.description }}</cbc:District>
                     <cac:AddressLine>
                         <cbc:Line><![CDATA[{{ establishment.address|raw }}]]></cbc:Line>
                     </cac:AddressLine>
                     <cac:Country>
-                        <cbc:IdentificationCode>{{ establishment.country_code }}</cbc:IdentificationCode>
+                        <cbc:IdentificationCode>{{ establishment.country_id }}</cbc:IdentificationCode>
                     </cac:Country>
                 </cac:RegistrationAddress>
             </cac:PartyLegalEntity>
@@ -119,20 +119,20 @@
     <cac:AccountingCustomerParty>
         <cac:Party>
             <cac:PartyIdentification>
-                <cbc:ID schemeID="{{ customer.identity_document_type_code }}">{{ customer.number }}</cbc:ID>
+                <cbc:ID schemeID="{{ customer.identity_document_type_id }}">{{ customer.number }}</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName><![CDATA[{{ customer.name|raw }}]]></cbc:RegistrationName>
                 {% if customer.address -%}
                 <cac:RegistrationAddress>
-                    {% if customer.location_code -%}
-                    <cbc:ID>{{ customer.location_code }}</cbc:ID>
+                    {% if customer.district_id -%}
+                    <cbc:ID>{{ customer.district_id }}</cbc:ID>
                     {% endif -%}
                     <cac:AddressLine>
                         <cbc:Line><![CDATA[{{ customer.address|raw }}]]></cbc:Line>
                     </cac:AddressLine>
                     <cac:Country>
-                        <cbc:IdentificationCode>{{ customer.country_code }}</cbc:IdentificationCode>
+                        <cbc:IdentificationCode>{{ customer.country_id }}</cbc:IdentificationCode>
                     </cac:Country>
                 </cac:RegistrationAddress>
                 {% endif -%}
@@ -152,13 +152,13 @@
     {% if invoice.detraction -%}
     {% set detraction = doc.detraction -%}
     <cac:PaymentMeans>
-        <cbc:PaymentMeansCode>{{ detraction.payment_method_code }}</cbc:PaymentMeansCode>
+        <cbc:PaymentMeansCode>{{ detraction.payment_method_id }}</cbc:PaymentMeansCode>
         <cac:PayeeFinancialAccount>
             <cbc:ID>{{ detraction.bank_account }}</cbc:ID>
         </cac:PayeeFinancialAccount>
     </cac:PaymentMeans>
     <cac:PaymentTerms>
-        <cbc:PaymentMeansID>{{ detraction.detraction_type_code }}</cbc:PaymentMeansID>
+        <cbc:PaymentMeansID>{{ detraction.detraction_type_id }}</cbc:PaymentMeansID>
         <cbc:PaymentPercent>{{ detraction.percentage }}</cbc:PaymentPercent>
         <cbc:Amount currencyID="PEN">{{ detraction.amount|n_format }}</cbc:Amount>
     </cac:PaymentTerms>
@@ -174,7 +174,7 @@
     {% for prepayment in doc.prepayments -%}
     <cac:PrepaidPayment>
         <cbc:ID>{{ loop.index }}</cbc:ID>
-        <cbc:PaidAmount currencyID="{{ doc.currency_type_code }}">{{ prepayment.paid_amount|n_format }}</cbc:PaidAmount>
+        <cbc:PaidAmount currencyID="{{ doc.currency_type_id }}">{{ prepayment.amount|n_format }}</cbc:PaidAmount>
     </cac:PrepaidPayment>
     {% endfor -%}
     {% endif -%}
@@ -184,8 +184,8 @@
         <cbc:ChargeIndicator>true</cbc:ChargeIndicator>
         <cbc:AllowanceChargeReasonCode>{{ charge.code }}</cbc:AllowanceChargeReasonCode>
         <cbc:MultiplierFactorNumeric>{{ charge.percentage }}</cbc:MultiplierFactorNumeric>
-        <cbc:Amount currencyID="{{ doc.currency_type_code }}">{{ charge.amount|n_format }}</cbc:Amount>
-        <cbc:BaseAmount currencyID="{{ doc.currency_type_code }}">{{ charge.base|n_format }}</cbc:BaseAmount>
+        <cbc:Amount currencyID="{{ doc.currency_type_id }}">{{ charge.amount|n_format }}</cbc:Amount>
+        <cbc:BaseAmount currencyID="{{ doc.currency_type_id }}">{{ charge.base|n_format }}</cbc:BaseAmount>
     </cac:AllowanceCharge>
     {% endfor -%}
     {% endif -%}
@@ -195,8 +195,8 @@
         <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
         <cbc:AllowanceChargeReasonCode>{{ discount.code }}</cbc:AllowanceChargeReasonCode>
         <cbc:MultiplierFactorNumeric>{{ discount.percentage }}</cbc:MultiplierFactorNumeric>
-        <cbc:Amount currencyID="{{ doc.currency_type_code }}">{{ discount.amount|n_format }}</cbc:Amount>
-        <cbc:BaseAmount currencyID="{{ doc.currency_type_code }}">{{ discount.base|n_format }}</cbc:BaseAmount>
+        <cbc:Amount currencyID="{{ doc.currency_type_id }}">{{ discount.amount|n_format }}</cbc:Amount>
+        <cbc:BaseAmount currencyID="{{ doc.currency_type_id }}">{{ discount.base|n_format }}</cbc:BaseAmount>
     </cac:AllowanceCharge>
     {% endfor -%}
     {% endif -%}
@@ -211,11 +211,11 @@
     </cac:AllowanceCharge>
     {% endif -%}
     <cac:TaxTotal>
-        <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_taxes|n_format }}</cbc:TaxAmount>
+        <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_taxes|n_format }}</cbc:TaxAmount>
         {% if doc.total_isc -%}
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_base_isc|n_format }}</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_isc|n_format }}</cbc:TaxAmount>
+            <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_base_isc|n_format }}</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_isc|n_format }}</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cac:TaxScheme>
                     <cbc:ID>2000</cbc:ID>
@@ -227,8 +227,8 @@
         {% endif -%}
         {% if doc.total_taxed -%}
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_taxed|n_format }}</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_igv|n_format }}</cbc:TaxAmount>
+            <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_taxed|n_format }}</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_igv|n_format }}</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cac:TaxScheme>
                     <cbc:ID>1000</cbc:ID>
@@ -240,8 +240,8 @@
         {% endif -%}
         {% if doc.total_unaffected -%}
             <cac:TaxSubtotal>
-                <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_unaffected|n_format }}</cbc:TaxableAmount>
-                <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">0</cbc:TaxAmount>
+                <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_unaffected|n_format }}</cbc:TaxableAmount>
+                <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">0</cbc:TaxAmount>
                 <cac:TaxCategory>
                     <cac:TaxScheme>
                         <cbc:ID>9998</cbc:ID>
@@ -253,8 +253,8 @@
         {% endif -%}
         {% if doc.total_exonerated -%}
             <cac:TaxSubtotal>
-                <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_exonerated|n_format }}</cbc:TaxableAmount>
-                <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">0</cbc:TaxAmount>
+                <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_exonerated|n_format }}</cbc:TaxableAmount>
+                <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">0</cbc:TaxAmount>
                 <cac:TaxCategory>
                     <cac:TaxScheme>
                         <cbc:ID>9997</cbc:ID>
@@ -266,8 +266,8 @@
         {% endif -%}
         {% if doc.total_free -%}
             <cac:TaxSubtotal>
-                <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_free|n_format }}</cbc:TaxableAmount>
-                <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">0</cbc:TaxAmount>
+                <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_free|n_format }}</cbc:TaxableAmount>
+                <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">0</cbc:TaxAmount>
                 <cac:TaxCategory>
                     <cac:TaxScheme>
                         <cbc:ID>9996</cbc:ID>
@@ -279,8 +279,8 @@
         {% endif -%}
         {% if doc.total_exportation -%}
             <cac:TaxSubtotal>
-                <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_exportation|n_format }}</cbc:TaxableAmount>
-                <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">0</cbc:TaxAmount>
+                <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_exportation|n_format }}</cbc:TaxableAmount>
+                <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">0</cbc:TaxAmount>
                 <cac:TaxCategory>
                     <cac:TaxScheme>
                         <cbc:ID>9995</cbc:ID>
@@ -292,8 +292,8 @@
         {% endif -%}
         {% if doc.total_other_taxes -%}
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_other_taxes|n_format }}</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_base_other_taxes|n_format }}</cbc:TaxAmount>
+            <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_other_taxes|n_format }}</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_base_other_taxes|n_format }}</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cac:TaxScheme>
                     <cbc:ID>9999</cbc:ID>
@@ -305,27 +305,27 @@
         {% endif -%}
     </cac:TaxTotal>
     <cac:LegalMonetaryTotal>
-        <cbc:LineExtensionAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_value|n_format }}</cbc:LineExtensionAmount>
+        <cbc:LineExtensionAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_value|n_format }}</cbc:LineExtensionAmount>
         {% if doc.total_discount -%}
-        <cbc:AllowanceTotalAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_discount|n_format }}</cbc:AllowanceTotalAmount>
+        <cbc:AllowanceTotalAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_discount|n_format }}</cbc:AllowanceTotalAmount>
         {% endif -%}
         {% if doc.total_other_charges -%}
-        <cbc:ChargeTotalAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_other_charges|n_format }}</cbc:ChargeTotalAmount>
+        <cbc:ChargeTotalAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_other_charges|n_format }}</cbc:ChargeTotalAmount>
         {% endif -%}
         {% if doc.total_prepayment -%}
-        <cbc:PrepaidAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total_prepayment|n_format }}</cbc:PrepaidAmount>
+        <cbc:PrepaidAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total_prepayment|n_format }}</cbc:PrepaidAmount>
         {% endif -%}
-        <cbc:PayableAmount currencyID="{{ doc.currency_type_code }}">{{ doc.total|n_format }}</cbc:PayableAmount>
+        <cbc:PayableAmount currencyID="{{ doc.currency_type_id }}">{{ doc.total|n_format }}</cbc:PayableAmount>
     </cac:LegalMonetaryTotal>
     {% for detail in doc.details -%}
     <cac:InvoiceLine>
         <cbc:ID>{{ loop.index }}</cbc:ID>
-        <cbc:InvoicedQuantity unitCode="{{ detail.unit_type_code }}">{{ detail.quantity }}</cbc:InvoicedQuantity>
-        <cbc:LineExtensionAmount currencyID="{{ doc.currency_type_code }}">{{ detail.total_value|n_format }}</cbc:LineExtensionAmount>
+        <cbc:InvoicedQuantity unitCode="{{ detail.unit_type_id }}">{{ detail.quantity }}</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="{{ doc.currency_type_id }}">{{ detail.total_value|n_format }}</cbc:LineExtensionAmount>
         <cac:PricingReference>
             <cac:AlternativeConditionPrice>
-                <cbc:PriceAmount currencyID="{{ doc.currency_type_code }}">{{ detail.unit_price|n_format(6) }}</cbc:PriceAmount>
-                <cbc:PriceTypeCode>{{ detail.price_type_code }}</cbc:PriceTypeCode>
+                <cbc:PriceAmount currencyID="{{ doc.currency_type_id }}">{{ detail.unit_price|n_format(6) }}</cbc:PriceAmount>
+                <cbc:PriceTypeCode>{{ detail.price_type_id }}</cbc:PriceTypeCode>
             </cac:AlternativeConditionPrice>
         </cac:PricingReference>
         {% if detail.charges -%}
@@ -334,8 +334,8 @@
             <cbc:ChargeIndicator>true</cbc:ChargeIndicator>
             <cbc:AllowanceChargeReasonCode>{{ charge.code }}</cbc:AllowanceChargeReasonCode>
             <cbc:MultiplierFactorNumeric>{{ charge.percentage }}</cbc:MultiplierFactorNumeric>
-            <cbc:Amount currencyID="{{ doc.currency_type_code }}">{{ charge.amount }}</cbc:Amount>
-            <cbc:BaseAmount currencyID="{{ doc.currency_type_code }}">{{ charge.base }}</cbc:BaseAmount>
+            <cbc:Amount currencyID="{{ doc.currency_type_id }}">{{ charge.amount }}</cbc:Amount>
+            <cbc:BaseAmount currencyID="{{ doc.currency_type_id }}">{{ charge.base }}</cbc:BaseAmount>
         </cac:AllowanceCharge>
         {% endfor -%}
         {% endif -%}
@@ -345,20 +345,20 @@
             <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
             <cbc:AllowanceChargeReasonCode>{{ discount.code }}</cbc:AllowanceChargeReasonCode>
             <cbc:MultiplierFactorNumeric>{{ discount.percentage }}</cbc:MultiplierFactorNumeric>
-            <cbc:Amount currencyID="{{ doc.currency_type_code }}">{{ discount.amount }}</cbc:Amount>
-            <cbc:BaseAmount currencyID="{{ doc.currency_type_code }}">{{ discount.base }}</cbc:BaseAmount>
+            <cbc:Amount currencyID="{{ doc.currency_type_id }}">{{ discount.amount }}</cbc:Amount>
+            <cbc:BaseAmount currencyID="{{ doc.currency_type_id }}">{{ discount.base }}</cbc:BaseAmount>
         </cac:AllowanceCharge>
         {% endfor -%}
         {% endif -%}
         <cac:TaxTotal>
-            <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">{{ detail.total_taxes|n_format }}</cbc:TaxAmount>
+            <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">{{ detail.total_taxes|n_format }}</cbc:TaxAmount>
             {% if detail.total_isc -%}
             <cac:TaxSubtotal>
-                <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ detail.total_base_isc|n_format }}</cbc:TaxableAmount>
-                <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">{{ detail.total_isc|n_format }}</cbc:TaxAmount>
+                <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ detail.total_base_isc|n_format }}</cbc:TaxableAmount>
+                <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">{{ detail.total_isc|n_format }}</cbc:TaxAmount>
                 <cac:TaxCategory>
                     <cbc:Percent>{{ detail.percentage_isc }}</cbc:Percent>
-                    <cbc:TierRange>{{ detail.system_isc_type_code }}</cbc:TierRange>
+                    <cbc:TierRange>{{ detail.system_isc_type_id }}</cbc:TierRange>
                     <cac:TaxScheme>
                         <cbc:ID>2000</cbc:ID>
                         <cbc:Name>ISC</cbc:Name>
@@ -368,12 +368,12 @@
             </cac:TaxSubtotal>
             {% endif -%}
             <cac:TaxSubtotal>
-                <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ detail.total_base_igv|n_format }}</cbc:TaxableAmount>
-                <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">{{ detail.total_igv|n_format }}</cbc:TaxAmount>
+                <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ detail.total_base_igv|n_format }}</cbc:TaxableAmount>
+                <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">{{ detail.total_igv|n_format }}</cbc:TaxAmount>
                 <cac:TaxCategory>
                     <cbc:Percent>{{ detail.percentage_igv }}</cbc:Percent>
-                    <cbc:TaxExcompanytionReasonCode>{{ detail.affectation_igv_type_code }}</cbc:TaxExcompanytionReasonCode>
-                    {% set affectation = getTributeFunction(detail.affectation_igv_type_code) -%}
+                    <cbc:TaxExcompanytionReasonCode>{{ detail.affectation_igv_type_id }}</cbc:TaxExcompanytionReasonCode>
+                    {% set affectation = getTributeFunction(detail.affectation_igv_type_id) -%}
                     <cac:TaxScheme>
                         <cbc:ID>{{ affectation.id }}</cbc:ID>
                         <cbc:Name>{{ affectation.name }}</cbc:Name>
@@ -383,8 +383,8 @@
             </cac:TaxSubtotal>
             {% if detail.total_other_taxes -%}
                 <cac:TaxSubtotal>
-                    <cbc:TaxableAmount currencyID="{{ doc.currency_type_code }}">{{ detail.total_base_other_taxes|n_format }}</cbc:TaxableAmount>
-                    <cbc:TaxAmount currencyID="{{ doc.currency_type_code }}">{{ detail.total_other_taxes|n_format }}</cbc:TaxAmount>
+                    <cbc:TaxableAmount currencyID="{{ doc.currency_type_id }}">{{ detail.total_base_other_taxes|n_format }}</cbc:TaxableAmount>
+                    <cbc:TaxAmount currencyID="{{ doc.currency_type_id }}">{{ detail.total_other_taxes|n_format }}</cbc:TaxAmount>
                     <cac:TaxCategory>
                         <cbc:Percent>{{ detail.percentage_other_taxes }}</cbc:Percent>
                         <cac:TaxScheme>
@@ -439,7 +439,7 @@
             {% endif -%}
         </cac:Item>
         <cac:Price>
-            <cbc:PriceAmount currencyID="{{ doc.currency_type_code }}">{{ detail.unit_value|n_format(6) }}</cbc:PriceAmount>
+            <cbc:PriceAmount currencyID="{{ doc.currency_type_id }}">{{ detail.unit_value|n_format(6) }}</cbc:PriceAmount>
         </cac:Price>
     </cac:InvoiceLine>
     {% endfor -%}

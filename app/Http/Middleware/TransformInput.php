@@ -2,8 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Core\Helpers\NumberHelper;
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\UnitType;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Customer;
 use App\Models\Tenant\Document;
@@ -52,94 +51,106 @@ class TransformInput
                 $charges = $this->getChargesDiscounts($row, 'cargos');
                 $discounts = $this->getChargesDiscounts($row, 'descuentos');
 
-                $items[] = [
+                $item = [
                     'internal_id' => array_key_exists('codigo_interno', $row)?$row['codigo_interno']:null,
-                    'item_description' => $row['descripcion'],
-                    'item_code' => array_key_exists('codigo_producto_de_sunat', $row)?$row['codigo_producto_sunat']:null,
+                    'description' => $row['descripcion'],
+                    'item_code' => array_key_exists('codigo_producto_sunat', $row)?$row['codigo_producto_sunat']:null,
                     'item_code_gs1' => array_key_exists('codigo_producto_gsl', $row)?$row['codigo_producto_gsl']:null,
-                    'unit_type_id' => $row['unidad_de_medida'],
+                    'unit_type_id' => strtoupper($row['unidad_de_medida']),
+                    'unit_price' => $row['precio_unitario'],
+                ];
+
+                $items[] = [
+                    'item_id' => $this->itemFirstOrCreate($item),
+                    'internal_id' => $item['internal_id'],
+                    'item_description' => $item['description'],
+                    'item_code' => $item['item_code'],
+                    'item_code_gs1' => $item['item_code_gs1'],
+                    'unit_type_id' => $item['unit_type_id'],
                     'quantity' => $row['cantidad'],
                     'unit_value' => $row['valor_unitario'],
+                    'price_type_id' => $row['codigo_tipo_precio'],
+                    'unit_price' => $row['precio_unitario'],
 
                     'affectation_igv_type_id' => $row['codigo_tipo_afectacion_igv'],
                     'total_base_igv' => $row['total_base_igv'],
-                    'percentage_igv' => $row['porcentaje_de_igv'],
+                    'percentage_igv' => $row['porcentaje_igv'],
                     'total_igv' => $row['total_igv'],
 
                     'system_isc_type_id' => array_key_exists('codigo_tipo_sistema_isc', $row)?$row['codigo_tipo_sistema_isc']:null,
                     'total_base_isc' => array_key_exists('total_base_isc', $row)?$row['total_base_isc']:0,
-                    'percentage_isc' => array_key_exists('porcentaje_de_isc', $row)?$row['porcentaje_de_isc']:0,
+                    'percentage_isc' => array_key_exists('porcentaje_isc', $row)?$row['porcentaje_isc']:0,
                     'total_isc' => array_key_exists('total_isc', $row)?$row['total_isc']:0,
 
                     'total_base_other_taxes' => array_key_exists('total_base_otros_impuestos', $row)?$row['total_base_otros_impuestos']:0,
-                    'percentage_other_taxes' => array_key_exists('percentage_other_taxes', $row)?$row['percentage_other_taxes']:0,
+                    'percentage_other_taxes' => array_key_exists('porcentaje_otros_impuestos', $row)?$row['porcentaje_otros_impuestos']:0,
                     'total_other_taxes' => array_key_exists('total_otros_impuestos', $row)?$row['total_otros_impuestos']:0,
 
                     'total_taxes' => $row['total_impuestos'],
+                    'total_value' => $row['total_valor_item'],
+                    'total' => $row['total_item'],
 
-                    'price_type_id' => $row['codigo_tipo_precio'],
-                    'unit_price' => $row['precio_unitario'],
-
-                    'total_value' => $row['valor_de_venta_por_item'],
-                    'total' => $row['total_por_item'],
-
-                    'attributes' => $attributes,
                     'charges' => $charges,
-                    'discounts' => $discounts
+                    'discounts' => $discounts,
+                    'attributes' => $attributes,
                 ];
             }
 
-            $prepayments = null;
-//        if(array_key_exists('informacion_adicional_anticipos', $inputs)) {
-//                $serie_number = explode('-',$inputs['informacion_adicional_anticipos']['informacion_prepagado_o_anticipado']['serie_y_numero_de_documento_que_se_realizo_el_anticipo']);
-//                $prepayments[] = [
-//                    'series' => $serie_number[0],
-//                    'number' => $serie_number[1],
-//                    'document_type_code' => $inputs['informacion_adicional_anticipos']['informacion_prepagado_o_anticipado']['tipo_de_comprobante_que_se_realizo_el_anticipo'],
-//                    'currency_type_code' => $inputs['informacion_adicional_anticipos']['informacion_prepagado_o_anticipado']['tipo_de_documento_del_emisor_del_anticipo'],
-//                    'total' => array_key_exists('total_anticipos', $inputs['informacion_adicional_anticipos'])?$inputs['informacion_adicional_anticipos']['total_anticipos']:0,
-//                ];
-//        }
-//
-            $additional_documents = null;
-//        if(array_key_exists('DocumentosAdicionalesRelacionados', $inputs)) {
-//            foreach ($inputs['DocumentosAdicionalesRelacionados'] as $row)
-//            {
-//                $additional_documents[] = [
-//                    'number' => $row['NumeroDocumento'],
-//                    'document_type_code' => $row['CodigoTipoDocumento'],
-//                ];
-//            }
-//        }
+            $prepayments = [];
+            if (array_key_exists('anticipos', $inputs)) {
+                foreach ($inputs['anticipos'] as $row)
+                {
+                    $prepayments[] = [
+                        'number' => $row['numero'],
+                        'document_type_id' => $row['codigo_tipo_documento'],
+                        'amount' => $row['monto'],
+                    ];
+                }
+            }
+
+            $related_documents = null;
+            if (array_key_exists('documentos_relacionados', $inputs)) {
+                foreach ($inputs['documentos_relacionados'] as $row)
+                {
+                    $prepayments[] = [
+                        'number' => $row['numero'],
+                        'document_type_id' => $row['codigo_tipo_documento']
+                    ];
+                }
+            }
 
             $perception = null;
             if(array_key_exists('percepcion', $inputs)) {
+                $data = $inputs['percepcion'];
                 $perception = [
-                    'code' => $inputs['percepcion']['codigo'],
-                    'percentage' => $inputs['percepcion']['porcentaje'],
-                    'amount' => $inputs['percepcion']['monto'],
-                    'base' => $inputs['percepcion']['base'],
+                    'code' => $data['codigo'],
+                    'percentage' => $data['porcentaje'],
+                    'amount' => $data['monto'],
+                    'base' => $data['base'],
                 ];
             }
-//
+
             $detraction = null;
-//        if(array_key_exists('Detraccion', $inputs)) {
-//            $detraction = [
-//                'account' => $inputs['Detraccion']['CuentaBancoNacion'],
-//                'code' => $inputs['Detraccion']['CodigoBienServicio'],
-//                'percentage' => $inputs['Detraccion']['PorcentajeDetraccion'],
-//                'total' => $inputs['Detraccion']['TotalDetraccion'],
-//            ];
-//        }
+            if(array_key_exists('detraccion', $inputs)) {
+                $data = $inputs['detraccion'];
+                $detraction = [
+                    'payment_method_id' => $data['codigo_metodo_pago'],
+                    'bank_account' => $data['cuenta_bancaria'],
+                    'detraction_type_id' => $data['codigo_tipo_detraccion'],
+                    'percentage' => $data['porcentaje'],
+                    'amount' => $data['monto'],
+                ];
+            }
 
             $optional = [];
             if(array_key_exists('extras', $inputs)) {
+                $data = $inputs['extras'];
                 $optional = [
-                    'observations' => array_key_exists('observaciones', $inputs['extras'])?$inputs['extras']['observaciones']:null,
-                    'method_payment' => array_key_exists('forma_de_pago', $inputs['extras'])?$inputs['extras']['forma_de_pago']:null,
-                    'salesman' => array_key_exists('vendedor', $inputs['extras'])?$inputs['extras']['vendedor']:null,
-                    'box_number' => array_key_exists('caja', $inputs['extras'])?$inputs['extras']['caja']:null ,
-                    'format_pdf' => array_key_exists('formato_pdf', $inputs['extras'])?$inputs['extras']['formato_pdf']:'a4'
+                    'observations' => array_key_exists('observaciones', $data)?$data['observaciones']:null,
+                    'method_payment' => array_key_exists('forma_de_pago', $data)?$data['forma_de_pago']:null,
+                    'salesman' => array_key_exists('vendedor', $data)?$data['vendedor']:null,
+                    'box_number' => array_key_exists('caja', $data)?$data['caja']:null ,
+                    'format_pdf' => array_key_exists('formato_pdf', $data)?$data['formato_pdf']:'a4'
                 ];
             }
 
@@ -163,7 +174,7 @@ class TransformInput
             $total_charge = array_key_exists('total_cargos', $inputs['totales'])?$inputs['totales']['total_cargos']:0;
             $total_prepayment = array_key_exists('total_anticipos', $inputs['totales'])?$inputs['totales']['total_anticipos']:0;
             $total_value = array_key_exists('total_valor', $inputs['totales'])?$inputs['totales']['total_valor']:0;
-            $total = $inputs['totales']['total_de_la_venta'];
+            $total = $inputs['totales']['total_venta'];
 
             // Date Variables
             $date_of_issue = $inputs['fecha_de_emision'];
@@ -171,9 +182,9 @@ class TransformInput
             $date_of_due = array_key_exists('fecha_de_vencimiento', $inputs)?$inputs['fecha_de_vencimiento']:null;
 
             // Document Variables
-            $document_type_id = $inputs['tipo_de_documento'];
-            $ubl_version = $inputs['version_del_ubl'];
-            $currency_type_id = $inputs['tipo_de_moneda'];
+            $document_type_id = $inputs['codigo_tipo_documento'];
+            $ubl_version = "2.1";
+            $currency_type_id = $inputs['codigo_tipo_moneda'];
             $document_series = $inputs['serie_documento'];
             $document_number = $inputs['numero_documento'];
 
@@ -189,26 +200,32 @@ class TransformInput
                 ];
             }
 
-            $purchase_order = array_key_exists('orden_compra', $inputs)?$inputs['orden_compra']:null;
+            $purchase_order = array_key_exists('numero_orden_de_compra', $inputs)?$inputs['numero_orden_de_compra']:null;
+
+            // Establishment
+            $data = $inputs['datos_del_emisor'];
             $establishment = [
-                'code' => $inputs['datos_del_emisor']['codigo_del_domicilio_fiscal']
+                'code' => $data['codigo_del_domicilio_fiscal']
             ];
+
+            // Customer
+            $data = $inputs['datos_del_cliente_o_receptor'];
             $customer = [
-                'identity_document_type_id' => $inputs['datos_del_cliente_o_receptor']['tipo_de_documento_identidad'],
-                'number' => $inputs['datos_del_cliente_o_receptor']['numero_de_documento'],
-                'name' => $inputs['datos_del_cliente_o_receptor']['apellidos_y_nombres_o_razon_social'],
-                'trade_name' => array_key_exists('nombre_comercial', $inputs['datos_del_cliente_o_receptor'])?$inputs['datos_del_cliente_o_receptor']['nombre_comercial']:null,
-                'address' => array_key_exists('address', $inputs['datos_del_cliente_o_receptor'])?$inputs['datos_del_cliente_o_receptor']['address']:null,
-                'district_id' => array_key_exists('ubigeo', $inputs['datos_del_cliente_o_receptor'])?$inputs['datos_del_cliente_o_receptor']['ubigeo']:null,
-                'country_id' => array_key_exists('codigo_pais', $inputs['datos_del_cliente_o_receptor'])?$inputs['datos_del_cliente_o_receptor']['codigo_pais']:null,
-                'email' => array_key_exists('email', $inputs['datos_del_cliente_o_receptor'])?$inputs['datos_del_cliente_o_receptor']['email']:null,
-                'telephone' => array_key_exists('telephone', $inputs['datos_del_cliente_o_receptor'])?$inputs['datos_del_cliente_o_receptor']['telephone']:null,
+                'identity_document_type_id' => $data['codigo_tipo_documento_identidad'],
+                'number' => $data['numero_documento'],
+                'name' => $data['apellidos_y_nombres_o_razon_social'],
+                'trade_name' => array_key_exists('nombre_comercial', $data)?$data['nombre_comercial']:null,
+                'country_id' => array_key_exists('codigo_pais', $data)?$data['codigo_pais']:null,
+                'district_id' => array_key_exists('ubigeo', $data)?$data['ubigeo']:null,
+                'address' => array_key_exists('direccion', $data)?$data['direccion']:null,
+                'email' => array_key_exists('correo_electronico', $data)?$data['correo_electronico']:null,
+                'telephone' => array_key_exists('telephone', $data)?$data['telefono']:null,
             ];
 
             $document_base = [];
             $group_id = null;
             // Invoice Variables
-            $operation_type_id = array_key_exists('tipo_de_operacion', $inputs)?$inputs['tipo_de_operacion']:null;
+            $operation_type_id = array_key_exists('codigo_tipo_operacion', $inputs)?$inputs['codigo_tipo_operacion']:null;
             // Note Variables
             $affected_document_series = array_key_exists('serie_de_documento_afectado', $inputs)?$inputs['serie_de_documento_afectado']:null;
             $affected_document_number_ = array_key_exists('numero_de_documento_afectado', $inputs)?$inputs['numero_de_documento_afectado']:null;
@@ -337,7 +354,7 @@ class TransformInput
                     'customer_id' => $this->customerFirstOrCreate($customer),
                     'legends' => $legends,
                     'guides' => $guides,
-                    'additional_documents' => $additional_documents,
+                    'related_documents' => $related_documents,
                     'optional' => $optional,
 
                     'items' => $items,
@@ -403,10 +420,10 @@ class TransformInput
 
         $customer = Customer::updateOrCreate(
             [
+                'identity_document_type_id' => $data['identity_document_type_id'],
                 'number' => $data['number']
             ],
             [
-                'identity_document_type_id' => $data['identity_document_type_id'],
                 'name' => $data['name'],
                 'country_id' =>  $data['country_id'],
                 'department_id' => $department_id,
@@ -423,31 +440,22 @@ class TransformInput
 
     private function itemFirstOrCreate($data)
     {
-        $unit_type_code = strtoupper($data['unidad_de_medida']);
-
-        $unit_type = Code::firstOrNew([
-            'catalog_id' => '03',
-            'code' => $unit_type_code,
-        ]);
-
+        $unit_type_id = $data['unit_type_id'];
+        $unit_type = UnitType::firstOrNew(['id' => $unit_type_id]);
         if(!$unit_type->id) {
-            $unit_type->id = '03'.str_pad($unit_type_code, 6, '0');
-            $unit_type->catalog_id = '03';
-            $unit_type->code = $unit_type_code;
-            $unit_type->description = $unit_type_code;
-            $unit_type->active = true;
+            $unit_type->description = $unit_type_id;
             $unit_type->save();
         }
 
         $item = Item::firstOrCreate(
             [
-                'internal_id' => $data['codigo_interno_del_producto']
+                'internal_id' => $data['internal_id']
             ],
             [
                 'item_type_id' => '01',
-                'unit_type_id' => $unit_type->id,
-                'description' => $data['descripcion_detallada'],
-                'unit_price' => $data['precio_de_venta_unitario_valor_referencial'],
+                'unit_type_id' => $data['unit_type_id'],
+                'description' => $data['description'],
+                'unit_price' => $data['unit_price'],
             ]
         );
 
