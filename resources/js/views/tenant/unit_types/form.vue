@@ -3,27 +3,32 @@
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.code}">
+                    <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.id}">
                             <label class="control-label">Código</label>
-                            <el-input v-model="form.code"></el-input>
-                            <small class="form-control-feedback" v-if="errors.code" v-text="errors.code[0]"></small>
+                            <el-input v-model="form.id"></el-input>
+                            <small class="form-control-feedback" v-if="errors.id" v-text="errors.id[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.active}">
-                            <label class="control-label">Activo</label>
-                            <el-switch v-model="form.active" active-text="Si" inactive-text="No"></el-switch>
-                            <small class="form-control-feedback" v-if="errors.active" v-text="errors.active[0]"></small>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.description}">
                             <label class="control-label">Descripción</label>
                             <el-input v-model="form.description"></el-input>
                             <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.symbol}">
+                            <label class="control-label">Símbolo</label>
+                            <el-input v-model="form.symbol"></el-input>
+                            <small class="form-control-feedback" v-if="errors.symbol" v-text="errors.symbol[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.active}">
+                            <label class="control-label">Activo</label>
+                            <el-switch v-model="form.active" active-text="Si" inactive-text="No"></el-switch>
+                            <small class="form-control-feedback" v-if="errors.active" v-text="errors.active[0]"></small>
                         </div>
                     </div>
                 </div>
@@ -38,8 +43,6 @@
 </template>
 
 <script>
-
-    import {EventBus} from '../../../helpers/bus'
 
     export default {
         props: ['showDialog', 'recordId'],
@@ -61,10 +64,9 @@
                 this.errors = {}
                 this.form = {
                     id: null,
-                    code: null,
                     description: null,
-                    active: null,
-                    catalog_id: '03',
+                    symbol: null,
+                    active: true
                 }
             },
             create() {

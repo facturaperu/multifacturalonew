@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers\Tenant\Api;
 
-use App\Core\Builder\XmlBuilder;
 use App\CoreBuilder\Documents\NoteCreditBuilder;
 use App\CoreBuilder\Documents\NoteDebitBuilder;
 use App\CoreBuilder\Xml\Builder\InvoiceBuilder;
@@ -13,6 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class DocumentController extends Controller
 {
@@ -24,54 +24,55 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $document_type_id = ($request->has('document'))?$request->input('document.document_type_id'):
-                                                          $request->input('document_type_id');
+                                                        $request->input('document_type_id');
 
-        $document = DB::connection('tenant')->transaction(function () use($request, $document_type_id) {
-            switch ($document_type_id) {
-                case '01':
-                case '03':
+        try {
+            $document = DB::connection('tenant')->transaction(function () use ($request, $document_type_id) {
+                if (in_array($document_type_id, ['01', '03'])) {
                     $builder = new InvoiceBuilder();
-                    break;
-                case '07':
+                } elseif ($document_type_id === '07') {
                     $builder = new NoteCreditBuilder();
-                    break;
-                case '08':
+                } else {
                     $builder = new NoteDebitBuilder();
-                    break;
-                default:
-                    throw new Exception('Tipo de documento ingresado es inválido');
+                }
+                $builder->save($request->all());
+                //            $xmlBuilder = new XmlBuilder();
+                //            $xmlBuilder->createXMLSigned($builder);
+                $document = $builder->getDocument();
+
+                return $document;
+            });
+
+            $actions = $request->input('actions');
+
+            $send_email = false;
+            if($actions['send_email']) {
+                $send_email = $this->email($document->id);
             }
 
-            $builder->save($request->all());
-//            $xmlBuilder = new XmlBuilder();
-//            $xmlBuilder->createXMLSigned($builder);
-            $document = $builder->getDocument();
+            return [
+                'success' => true,
+                'data' => [
+                    'id' => $document->id,
+                    'number' => $document->number_full,
+                    'hash' => $document->hash,
+                    'qr' => $document->qr,
+                    'filename' => $document->filename,
+                    'external_id' => $document->external_id,
+                    'number_to_letter' => $document->number_to_letter,
+                    'link_xml' => $document->download_external_xml,
+                    'link_pdf' => $document->download_external_pdf,
+                    'link_cdr' => $document->download_external_cdr,
+                ],
+                'send_email' => $send_email,
+            ];
 
-            return $document;
-        });
-
-        $send_email = $request->input('send_email');
-
-        if($send_email) {
-            $send_email = $this->email($document->id);
+        } catch (Throwable $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
         }
-
-        return [
-            'success' => true,
-            'data' => [
-                'id' => $document->id,
-                'number' => $document->number_full,
-                'hash' => $document->hash,
-                'qr' => $document->qr,
-                'filename' => $document->filename,
-                'external_id' => $document->external_id,
-                'number_to_letter' => $document->number_to_letter,
-                'link_xml' => $document->download_external_xml,
-                'link_pdf' => $document->download_external_pdf,
-                'link_cdr' => $document->download_external_cdr,
-            ],
-            'send_email' => $send_email,
-        ];
     }
 
     public function email($document_id)

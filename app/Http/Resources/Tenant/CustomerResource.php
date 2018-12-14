@@ -25,7 +25,7 @@ class CustomerResource extends JsonResource
             'province_id' => $this->province_id,
             'district_id' => $this->district_id,
             'address' => $this->address,
-            'phone' => $this->phone,
+            'telephone' => $this->telephone,
             'email' => $this->email,
         ];
     }

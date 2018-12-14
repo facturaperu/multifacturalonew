@@ -5,7 +5,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\CurrencyTypeRequest;
 use App\Http\Resources\Tenant\CurrencyTypeCollection;
 use App\Http\Resources\Tenant\CurrencyTypeResource;
-use App\Models\Tenant\CurrencyType;
+use App\Models\Tenant\Catalogs\CurrencyType;
+
 
 class CurrencyTypeController extends Controller
 {

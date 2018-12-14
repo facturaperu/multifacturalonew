@@ -375,8 +375,6 @@
 //                row.total_value = _.round(row.total_base_igv - _discount_no_base, 2)
 //                row.total = row.total_value + row.total_taxes
 
-
-
                 console.log(row)
 
 //                this.form.affectation_igv_type_id === '') {

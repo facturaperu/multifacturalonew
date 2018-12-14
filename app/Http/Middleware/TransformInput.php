@@ -183,6 +183,14 @@ class TransformInput
 
             // Document Variables
             $document_type_id = $inputs['codigo_tipo_documento'];
+
+            if(!in_array($document_type_id, ['01', '03', '07', '08'])) {
+                return [
+                    'success' => false,
+                    'message' => 'El código del tipo de documento es incorrecto.'
+                ];
+            }
+
             $ubl_version = "2.1";
             $currency_type_id = $inputs['codigo_tipo_moneda'];
             $document_series = $inputs['serie_documento'];

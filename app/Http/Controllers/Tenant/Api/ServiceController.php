@@ -13,7 +13,7 @@ use App\Models\Tenant\Document;
 use Illuminate\Http\Request;
 use App\Core\Services\Ruc\ExchangeRate;
 use Carbon\Carbon;
-use App\Models\Tenant\ExchangeRate as ExchangeRateModel;
+use App\Models\Tenant\System\ExchangeRate as ExchangeRateModel;
 
 class ServiceController extends Controller
 {

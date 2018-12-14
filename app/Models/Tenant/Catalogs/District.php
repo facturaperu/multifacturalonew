@@ -3,9 +3,8 @@
 namespace App\Models\Tenant\Catalogs;
 
 use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
 
-class District extends Model
+class District extends ModelCatalog
 {
     use UsesTenantConnection;
 

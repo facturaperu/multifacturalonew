@@ -13,6 +13,7 @@ class Establishment extends Model
 {
     use UsesTenantConnection;
 
+    protected $with = ['country', 'department', 'province', 'district'];
     protected $fillable = [
         'description',
         'country_id',
@@ -21,7 +22,7 @@ class Establishment extends Model
         'district_id',
         'address',
         'email',
-        'phone',
+        'telephone',
         'code',
     ];
 

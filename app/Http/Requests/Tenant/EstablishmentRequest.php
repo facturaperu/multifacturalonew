@@ -36,7 +36,7 @@ class EstablishmentRequest extends FormRequest
                 'required',
                 'email'
             ],
-            'phone' => [
+            'telephone' => [
                 'required',
             ],
             'code' => [

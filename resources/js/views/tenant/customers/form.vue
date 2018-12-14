@@ -16,7 +16,7 @@
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">Número</label>
                             <el-input v-model="form.number" :maxlength="maxLength">
-                                <template v-if="form.identity_document_type_id === '06000006' || form.identity_document_type_id === '06000001'">
+                                <template v-if="form.identity_document_type_id === '6' || form.identity_document_type_id === '1'">
                                     <el-button type="primary" slot="append" :loading="loading_search_customer" icon="el-icon-search" @click.prevent="searchCustomer"></el-button>
                                 </template>
                             </el-input>
@@ -89,10 +89,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.phone}">
+                        <div class="form-group" :class="{'has-danger': errors.telephone}">
                             <label class="control-label">Teléfono</label>
-                            <el-input v-model="form.phone"></el-input>
-                            <small class="form-control-feedback" v-if="errors.phone" v-text="errors.phone[0]"></small>
+                            <el-input v-model="form.telephone"></el-input>
+                            <small class="form-control-feedback" v-if="errors.telephone" v-text="errors.telephone[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -148,10 +148,10 @@
         },
         computed: {
             maxLength: function () {
-                if (this.form.identity_document_type_id === '06000006') {
+                if (this.form.identity_document_type_id === '6') {
                     return 11
                 }
-                if (this.form.identity_document_type_id === '06000001') {
+                if (this.form.identity_document_type_id === '1') {
                     return 8
                 }
             }
@@ -161,16 +161,16 @@
                 this.errors = {}
                 this.form = {
                     id: null,
-                    identity_document_type_id: '06000006',
+                    identity_document_type_id: '6',
                     number: null,
                     name: null,
                     trade_name: null,
-                    country_id: '040000PE',
+                    country_id: 'PE',
                     department_id: null,
                     province_id: null,
                     district_id: null,
                     address: null,
-                    phone: null,
+                    telephone: null,
                     email: null
                 }
             },

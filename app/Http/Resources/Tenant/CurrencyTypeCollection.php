@@ -18,6 +18,8 @@ class CurrencyTypeCollection extends ResourceCollection
             return [
                 'id' => $row->id,
                 'description' => $row->description,
+                'symbol' => $row->symbol,
+                'active' => ($row->active)?'Si':'No',
             ];
         });
     }

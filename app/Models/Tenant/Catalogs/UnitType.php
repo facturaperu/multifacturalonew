@@ -3,12 +3,18 @@
 namespace App\Models\Tenant\Catalogs;
 
 use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
 
-class UnitType extends Model
+class UnitType extends ModelCatalog
 {
     use UsesTenantConnection;
 
     public $incrementing = false;
     public $timestamps = false;
+
+    protected $fillable = [
+        'id',
+        'description',
+        'symbol',
+        'active',
+    ];
 }

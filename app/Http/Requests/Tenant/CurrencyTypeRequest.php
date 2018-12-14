@@ -18,6 +18,7 @@ class CurrencyTypeRequest extends FormRequest
         return [
             'id' => [
                 'required',
+                Rule::unique('tenant.currency_types'),
             ],
             'description' => [
                 'required',

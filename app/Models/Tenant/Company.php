@@ -10,8 +10,9 @@ class Company extends Model
 {
     use UsesTenantConnection;
 
+    protected $with = ['identity_document_type'];
     protected $fillable = [
-        'identity_document_type_code',
+        'identity_document_type_id',
         'number',
         'name',
         'trade_name',
@@ -24,6 +25,6 @@ class Company extends Model
 
     public function identity_document_type()
     {
-        return $this->belongsTo(IdentityDocumentType::class, 'identity_document_type_code');
+        return $this->belongsTo(IdentityDocumentType::class);
     }
 }

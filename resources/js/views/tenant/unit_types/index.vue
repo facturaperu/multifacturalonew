@@ -9,18 +9,20 @@
                     <thead>
                     <tr>
                         <th>#</th>
+                        <th>Código</th>
                         <th>Descripción</th>
-                        <th class="text-right">Código</th>
-                        <th class="text-right">Activo</th>
+                        <th>Símbolo</th>
+                        <th class="text-center">Activo</th>
                         <th class="text-right">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="(row, index) in records">
                         <td>{{ index + 1 }}</td>
+                        <td>{{ row.id }}</td>
                         <td>{{ row.description }}</td>
-                        <td class="text-right">{{ row.code }}</td>
-                        <td class="text-right">{{ row.active_text }}</td>
+                        <td>{{ row.symbol }}</td>
+                        <td class="text-center">{{ row.active }}</td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"  @click.prevent="clickDelete(row.id)">Eliminar</button>
@@ -35,19 +37,19 @@
                 </div>
             </div>
         </div>
-        <units-form :showDialog.sync="showDialog"
-                            :recordId="recordId"></units-form>
+        <unit-types-form :showDialog.sync="showDialog"
+                         :recordId="recordId"></unit-types-form>
     </div>
 </template>
 
 <script>
 
-    import UnitsForm from './form.vue'
+    import UnitTypesForm from './form.vue'
     import {deletable} from '../../../mixins/deletable'
 
     export default {
         mixins: [deletable],
-        components: {UnitsForm},
+        components: {UnitTypesForm},
         data() {
             return {
                 showDialog: false,

@@ -5,6 +5,9 @@ namespace App\Models\Tenant;
 use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
+use App\Models\Tenant\System\Group;
+use App\Models\Tenant\System\SoapType;
+use App\Models\Tenant\System\StateType;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\EstablishmentRequest;
 use App\Http\Resources\Tenant\EstablishmentResource;
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
@@ -20,10 +20,10 @@ class EstablishmentController extends Controller
 
     public function tables()
     {
-        $countries = Code::byCatalog('04');
-        $departments = Department::orderBy('description')->get();
-        $provinces = Province::orderBy('description')->get();
-        $districts = District::orderBy('description')->get();
+        $countries = Country::listActivesAndOrderByDescription();
+        $departments = Department::listActivesAndOrderByDescription();
+        $provinces = Province::listActivesAndOrderByDescription();
+        $districts = District::listActivesAndOrderByDescription();
 
         return compact('countries', 'departments', 'provinces', 'districts');
     }

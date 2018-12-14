@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\BankRequest;
 use App\Http\Resources\Tenant\BankCollection;
 use App\Http\Resources\Tenant\BankResource;
-use App\Models\Tenant\Bank;
+use App\Models\Tenant\System\Bank;
 
 class BankController extends Controller
 {

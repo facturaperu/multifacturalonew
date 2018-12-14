@@ -14,6 +14,7 @@ class Customer extends Model
 {
     use UsesTenantConnection;
 
+    protected $with = ['identity_document_type', 'country', 'department', 'province', 'district'];
     protected $fillable = [
         'identity_document_type_id',
         'number',
@@ -25,7 +26,7 @@ class Customer extends Model
         'district_id',
         'address',
         'email',
-        'phone',
+        'telephone',
     ];
 
     public function identity_document_type()

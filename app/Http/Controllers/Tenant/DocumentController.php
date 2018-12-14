@@ -19,9 +19,10 @@ use App\Models\Tenant\Catalogs\AffectationIgvType;
 use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
+use App\Models\Tenant\Catalogs\NoteCreditType;
+use App\Models\Tenant\Catalogs\NoteDebitType;
 use App\Models\Tenant\Catalogs\PriceType;
 use App\Models\Tenant\Catalogs\SystemIscType;
-use App\Models\Tenant\ChargeDiscount;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Customer;
 use App\Models\Tenant\Document;
@@ -32,6 +33,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use Throwable;
 
 class DocumentController extends Controller
 {
@@ -68,13 +70,13 @@ class DocumentController extends Controller
     {
         $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();
         $document_types_note = DocumentType::whereIn('id', ['07', '08'])->get();
-        $note_credit_types = Code::byCatalog('09');
-        $note_debit_types = Code::byCatalog('10');
-        $currency_types = CurrencyType::all();
+        $note_credit_types = NoteCreditType::listActivesAndOrderByDescription();
+        $note_debit_types = NoteDebitType::listActivesAndOrderByDescription();
+        $currency_types = CurrencyType::listActivesAndOrderByDescription();
 //        $affectation_igv_types = AffectationType::all();
         $customers = $this->table('customers');
         $items = $this->table('items');
-        $company = Company::with(['identity_document_type'])->first();
+        $company = Company::first();
 //        $establishment = Establishment::first();
         $establishments = Establishment::all();
         $series = Series::all();
@@ -87,17 +89,17 @@ class DocumentController extends Controller
     public function item_tables()
     {
         $items = $this->table('items');
-        $affectation_igv_types = AffectationIgvType::all();
-        $system_isc_types = SystemIscType::all();
-        $price_types = PriceType::all();
+        $affectation_igv_types = AffectationIgvType::listActivesAndOrderByDescription();
+        $system_isc_types = SystemIscType::listActivesAndOrderByDescription();
+        $price_types = PriceType::listActivesAndOrderByDescription();
         $unit_types = [];//Code::byCatalog('03');
         $categories = [];//Category::cascade();
-        $discounts = ChargeDiscount::whereIn('level', ['item', 'both'])
-                                    ->where('type', 'discount')
-                                    ->get();
-        $charges = ChargeDiscount::whereIn('level', ['item', 'both'])
-                                ->where('type', 'charge')
-                                ->get();
+        $discounts = []; //ChargeDiscount::whereIn('level', ['item', 'both'])
+                           //         ->where('type', 'discount')
+                             //       ->get();
+        $charges = [];// ChargeDiscount::whereIn('level', ['item', 'both'])
+                        //        ->where('type', 'charge')
+                          //      ->get();
 
         return compact('items', 'unit_types', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types', 'discounts', 'charges');
     }
@@ -133,47 +135,88 @@ class DocumentController extends Controller
 
     public function store(DocumentRequest $request)
     {
-        $document = DB::connection('tenant')->transaction(function () use($request) {
-            $document_type_code = ($request->has('document'))?$request->input('document.document_type_code'):
-                                                              $request->input('document_type_code');
-            switch ($document_type_code) {
-                case '01':
-                case '03':
+        $document_type_id = ($request->has('document'))?$request->input('document.document_type_id'):
+                                                        $request->input('document_type_id');
+        try {
+            $document = DB::connection('tenant')->transaction(function () use ($request, $document_type_id) {
+                if (in_array($document_type_id, ['01', '03'])) {
                     $builder = new InvoiceBuilder();
-                    break;
-                case '07':
+                } elseif ($document_type_id === '07') {
                     $builder = new NoteCreditBuilder();
-                    break;
-                case '08':
+                } else {
                     $builder = new NoteDebitBuilder();
-                    break;
-                default:
-                    throw new Exception('Tipo de documento ingresado es inválido');
-            }
+                }
+                $builder->save($request->all());
+                //            $xmlBuilder = new XmlBuilder();
+                //            $xmlBuilder->createXMLSigned($builder);
+                $document = $builder->getDocument();
 
-            $builder->save($request->all());
-            $xmlBuilder = new XmlBuilder();
-            $xmlBuilder->createXMLSigned($builder);
-            $document = $builder->getDocument();
+                return $document;
+            });
 
-            return $document;
-        });
+            return [
+                'success' => true,
+                'data' => [
+                    'id' => $document->id,
+                    'number' => $document->number_full,
+                    'hash' => $document->hash,
+                    'qr' => $document->qr,
+                    'filename' => $document->filename,
+                    'external_id' => $document->external_id,
+                    'number_to_letter' => $document->number_to_letter,
+                    'link_xml' => $document->download_xml,
+                    'link_pdf' => $document->download_pdf,
+                    'link_cdr' => $document->download_cdr,
+                ]
+            ];
 
-        return [
-            'success' => true,
-            'data' => [
-                'id' => $document->id,
-                'number' => $document->number_full,
-                'hash' => $document->hash,
-                'qr' => $document->qr,
-                'filename' => $document->filename,
-                'external_id' => $document->external_id,
-                'number_to_letter' => $document->number_to_letter,
-                'link_xml' => $document->download_xml,
-                'link_pdf' => $document->download_pdf,
-                'link_cdr' => $document->download_cdr,
-            ]
-        ];
+        } catch (Throwable $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+//        $document = DB::connection('tenant')->transaction(function () use($request) {
+//            $document_type_code = ($request->has('document'))?$request->input('document.document_type_code'):
+//                                                              $request->input('document_type_code');
+//            switch ($document_type_code) {
+//                case '01':
+//                case '03':
+//                    $builder = new InvoiceBuilder();
+//                    break;
+//                case '07':
+//                    $builder = new NoteCreditBuilder();
+//                    break;
+//                case '08':
+//                    $builder = new NoteDebitBuilder();
+//                    break;
+//                default:
+//                    throw new Exception('Tipo de documento ingresado es inválido');
+//            }
+//
+//            $builder->save($request->all());
+//            $xmlBuilder = new XmlBuilder();
+//            $xmlBuilder->createXMLSigned($builder);
+//            $document = $builder->getDocument();
+//
+//            return $document;
+//        });
+//
+//        return [
+//            'success' => true,
+//            'data' => [
+//                'id' => $document->id,
+//                'number' => $document->number_full,
+//                'hash' => $document->hash,
+//                'qr' => $document->qr,
+//                'filename' => $document->filename,
+//                'external_id' => $document->external_id,
+//                'number_to_letter' => $document->number_to_letter,
+//                'link_xml' => $document->download_xml,
+//                'link_pdf' => $document->download_pdf,
+//                'link_cdr' => $document->download_cdr,
+//            ]
+//        ];
     }
 
     public function downloadExternal($type, $external_id)

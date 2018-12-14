@@ -11,6 +11,9 @@
                         <th>#</th>
                         <th>Código</th>
                         <th>Descripción</th>
+                        <th>Símbolo</th>
+                        <th class="text-center">Activo</th>
+                        <th class="text-right">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -18,6 +21,8 @@
                         <td>{{ index + 1 }}</td>
                         <td>{{ row.id }}</td>
                         <td>{{ row.description }}</td>
+                        <td>{{ row.symbol }}</td>
+                        <td class="text-center">{{ row.active }}</td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"  @click.prevent="clickDelete(row.id)">Eliminar</button>

@@ -20,7 +20,6 @@ class TenantInvoicesTable extends Migration
             $table->char('operation_type_id', 4);
             $table->date('date_of_due')->nullable();
             $table->decimal('total_free', 12, 2)->default(0);
-//            $table->decimal('total_global_discount', 12, 2)->default(0);
             $table->decimal('total_discount', 12, 2)->default(0);
             $table->decimal('total_charge', 12, 2)->default(0);
             $table->decimal('total_prepayment', 12, 2)->default(0);

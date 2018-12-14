@@ -37,10 +37,10 @@ export const functions = {
             return new Promise((resolve) => {
                 this.loading_search_customer = true
                 let identity_document_type_name = ''
-                if (this.form.identity_document_type_id === '06000006') {
+                if (this.form.identity_document_type_id === '6') {
                     identity_document_type_name = 'ruc'
                 }
-                if (this.form.identity_document_type_id === '06000001') {
+                if (this.form.identity_document_type_id === '1') {
                     identity_document_type_name = 'dni'
                 }
                 this.$http.get(`/services/${identity_document_type_name}/${this.form.number}`)

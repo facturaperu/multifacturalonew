@@ -6,8 +6,10 @@ use App\Http\Requests\Tenant\CustomerRequest;
 use App\Http\Resources\Tenant\CustomerCollection;
 use App\Http\Resources\Tenant\CustomerResource;
 use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
+use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
 use App\Models\Tenant\Customer;
 use Illuminate\Http\Request;
@@ -43,11 +45,11 @@ class CustomerController extends Controller
 
     public function tables()
     {
-        $countries = Code::byCatalog('04');
-        $departments = Department::orderBy('description')->get();
-        $provinces = Province::orderBy('description')->get();
-        $districts = District::orderBy('description')->get();
-        $identity_document_types = Code::byCatalog('06');
+        $countries = Country::listActivesAndOrderByDescription();
+        $departments = Department::listActivesAndOrderByDescription();
+        $provinces = Province::listActivesAndOrderByDescription();
+        $districts = District::listActivesAndOrderByDescription();
+        $identity_document_types = IdentityDocumentType::listActivesAndOrderByDescription();
 
         return compact('countries', 'departments', 'provinces', 'districts', 'identity_document_types');
     }

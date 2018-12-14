@@ -11,6 +11,13 @@
                         </div>
                     </div>
                     <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.description}">
+                            <label class="control-label">Descripción</label>
+                            <el-input v-model="form.description"></el-input>
+                            <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.symbol}">
                             <label class="control-label">Símbolo</label>
                             <el-input v-model="form.symbol"></el-input>
@@ -22,15 +29,6 @@
                             <label class="control-label">Activo</label>
                             <el-switch v-model="form.active" active-text="Si" inactive-text="No"></el-switch>
                             <small class="form-control-feedback" v-if="errors.active" v-text="errors.active[0]"></small>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group" :class="{'has-danger': errors.description}">
-                            <label class="control-label">Descripción</label>
-                            <el-input v-model="form.description"></el-input>
-                            <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
                         </div>
                     </div>
                 </div>
@@ -66,7 +64,7 @@
                     id: null,
                     description: null,
                     symbol: null,
-                    active: null
+                    active: true
                 }
             },
             create() {

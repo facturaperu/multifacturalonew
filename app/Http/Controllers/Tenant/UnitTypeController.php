@@ -6,19 +6,20 @@ use App\Http\Requests\Tenant\UnitTypeRequest;
 use App\Http\Resources\Tenant\UnitTypeCollection;
 use App\Http\Resources\Tenant\UnitTypeResource;
 use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\UnitType;
 
 class UnitTypeController extends Controller
 {
     public function records()
     {
-        $records = Code::byCatalogAll('03');
+        $records = UnitType::all();
 
         return new UnitTypeCollection($records);
     }
 
     public function record($id)
     {
-        $record = new UnitTypeResource(Code::findOrFail($id));
+        $record = new UnitTypeResource(UnitType::findOrFail($id));
 
         return $record;
     }
@@ -26,12 +27,9 @@ class UnitTypeController extends Controller
     public function store(UnitTypeRequest $request)
     {
         $id = $request->input('id');
-        $record = Code::firstOrNew(['id' => $id]);
-        $parameters = $request->all();
-        $parameters['id'] = $parameters['catalog_id'].str_pad($parameters['code'], 6, "0", STR_PAD_LEFT);
-        $parameters['active'] = (int)$parameters['active'];
-        $record->fill($parameters);
-        $record->save();
+        $unit_type = UnitType::firstOrNew(['id' => $id]);
+        $unit_type->fill($request->all());
+        $unit_type->save();
 
         return [
             'success' => true,

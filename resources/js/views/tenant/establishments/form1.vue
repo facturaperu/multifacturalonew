@@ -67,10 +67,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.phone}">
+                        <div class="form-group" :class="{'has-danger': errors.telephone}">
                             <label class="control-label">Teléfono</label>
-                            <el-input v-model="form.phone"></el-input>
-                            <small class="form-control-feedback" v-if="errors.phone" v-text="errors.phone[0]"></small>
+                            <el-input v-model="form.telephone"></el-input>
+                            <small class="form-control-feedback" v-if="errors.telephone" v-text="errors.telephone[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -126,12 +126,12 @@
                 this.form = {
                     id: null,
                     description: null,
-                    country_id: '040000PE',
+                    country_id: 'PE',
                     department_id: null,
                     province_id: null,
                     district_id: null,
                     address: null,
-                    phone: null,
+                    telephone: null,
                     email: null,
                     code: null,
                 }

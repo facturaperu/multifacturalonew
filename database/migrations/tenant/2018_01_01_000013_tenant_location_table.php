@@ -17,6 +17,7 @@ class TenantLocationTable extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->char('id', 2)->index();
             $table->string('description');
+            $table->boolean('active')->default(true);
         });
 
         DB::table('countries')->insert([
@@ -265,6 +266,7 @@ class TenantLocationTable extends Migration
         Schema::create('departments', function (Blueprint $table) {
             $table->char('id', 2)->index();
             $table->string('description');
+            $table->boolean('active')->default(true);
         });
 
         DB::table('departments')->insert([
@@ -299,6 +301,8 @@ class TenantLocationTable extends Migration
             $table->char('id', 4)->index();
             $table->char('department_id', 2);
             $table->string('description');
+            $table->boolean('active')->default(true);
+
             $table->foreign('department_id')->references('id')->on('departments');
         });
 
@@ -505,6 +509,8 @@ class TenantLocationTable extends Migration
             $table->char('id', 6)->index();
             $table->char('province_id', 4);
             $table->string('description');
+            $table->boolean('active')->default(true);
+
             $table->foreign('province_id')->references('id')->on('provinces');
         });
 

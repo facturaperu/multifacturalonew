@@ -73,7 +73,7 @@ class ClientController extends Controller
         }
 
         DB::connection('tenant')->table('companies')->insert([
-            'identity_document_type_id' => '06000006',
+            'identity_document_type_id' => '6',
             'number' => $request->input('number'),
             'name' => $request->input('name'),
             'soap_type_id' => '01'
@@ -81,14 +81,14 @@ class ClientController extends Controller
 
         DB::connection('tenant')->table('establishments')->insert([
             'description' => 'Oficina Principal',
-            'country_id' => '040000PE',
+            'country_id' => 'PE',
             'department_id' => '15',
             'province_id' => '1501',
             'district_id' => '150101',
             'address' => '-',
             'email' => $request->input('email'),
-            'phone' => '-',
-            'code' => '0001'
+            'telephone' => '-',
+            'code' => '0000'
         ]);
 
         DB::connection('tenant')->table('users')->insert([
