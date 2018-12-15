@@ -22,7 +22,6 @@ class Note extends Model
         'note_debit_type_id',
         'description',
         'affected_document_id',
-        'total_global_discount',
         'total_prepayment',
 
         'perception'

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreBuilder\XmlDsig\Certificate;
+namespace App\CoreBuilder\XmlDsig\Sunat;
 
 use DOMDocument;
 use RobRichards\XMLSecLibs\XMLSecEnc;

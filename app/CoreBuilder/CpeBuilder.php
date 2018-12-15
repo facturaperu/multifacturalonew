@@ -2,6 +2,7 @@
 
 namespace App\CoreBuilder;
 
+use App\CoreBuilder\Documents\InvoiceBuilder;
 use App\CoreBuilder\Interfaces\BuilderInterface;
 use App\CoreBuilder\Interfaces\DocumentInterface;
 use App\CoreBuilder\Interfaces\ErrorCodeProviderInterface;
@@ -12,9 +13,10 @@ use App\CoreBuilder\WS\Services\BillSender;
 use App\CoreBuilder\WS\Services\ExtService;
 use App\CoreBuilder\WS\Services\SoapClient\WsSoapClient;
 use App\CoreBuilder\WS\Services\SummarySender;
-use App\CoreBuilder\Xml\Builder\InvoiceBuilder;
-use App\CoreBuilder\XmlDsig\Certificate\SignedXml;
-use App\Models\Tenant\Invoice;
+use App\CoreBuilder\Xml\Builder\InvoiceXmlBuilder;
+
+//use App\Models\Tenant\Invoice;
+use App\CoreBuilder\XmlDsig\Sunat\SignedXml;
 use App\Models\Tenant\Summary;
 use App\Models\Tenant\Voided;
 
@@ -63,7 +65,7 @@ class CpeBuilder
         $this->wsClient = new WsSoapClient();
         $this->signer = new SignedXml();
         $this->builders = [
-            Invoice::class => InvoiceBuilder::class,
+            InvoiceBuilder::class => InvoiceXmlBuilder::class,
 //            Model\Sale\Note::class => Xml\Builder\NoteBuilder::class,
 //            Model\Summary\Summary::class => Xml\Builder\SummaryBuilder::class,
 //            Model\Voided\Voided::class => Xml\Builder\VoidedBuilder::class,

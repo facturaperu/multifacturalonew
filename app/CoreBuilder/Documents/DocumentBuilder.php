@@ -27,7 +27,7 @@ class DocumentBuilder implements DocumentInterface
         $legends = key_exists('legends', $data)?$data['legends']:[];
         $legends[] = [
             'code' => 1000,
-            'description' => NumberHelper::convertToLetter($data['total'])
+            'value' => '1111'//NumberHelper::convertToLetter($data['total'])
         ];
 
         return $legends;
@@ -44,12 +44,12 @@ class DocumentBuilder implements DocumentInterface
     {
         $number = $data['number'];
         $series = $data['series'];
-        $document_type_code = $data['document_type_code'];
+        $document_type_id = $data['document_type_id'];
         $soap_type_id = $data['soap_type_id'];
         if ($data['number'] === '#') {
             $document = Document::select('number')
                                     ->where('series', $series)
-                                    ->where('document_type_code', $document_type_code)
+                                    ->where('document_type_id', $document_type_id)
                                     ->where('soap_type_id', $soap_type_id)
                                     ->orderBy('number', 'desc')
                                     ->first();
@@ -62,7 +62,7 @@ class DocumentBuilder implements DocumentInterface
     {
         $company = Company::first();
 
-        return join('-', [$company->number, $data['document_type_code'], $data['series'], $data['number']]);
+        return join('-', [$company->number, $data['document_type_id'], $data['series'], $data['number']]);
     }
 
     public function getName()

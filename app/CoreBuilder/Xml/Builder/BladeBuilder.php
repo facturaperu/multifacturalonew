@@ -2,19 +2,19 @@
 
 namespace App\CoreBuilder\Xml\Builder;
 
-use App\Core\Xml\Filter\TributeFunction;
+//use App\Core\Xml\Filter\TributeFunction;
 
-class TwigBuilder
+class BladeBuilder
 {
-    /**
-     * @var \Twig_Environment
-     */
-    protected $twig;
+//    /**
+//     * @var \Twig_Environment
+//     */
+//    protected $twig;
 
-    /**
-     * TwigBuilder constructor.
-     * @param array $options [optional] Recommended: 'cache' => '/dir/cache'
-     */
+//    /**
+//     * TwigBuilder constructor.
+//     * @param array $options [optional] Recommended: 'cache' => '/dir/cache'
+//     */
     public function __construct($options = [])
     {
         $this->initTwig($options);
@@ -22,10 +22,21 @@ class TwigBuilder
 
     public function render($template, $doc)
     {
-        return $this->twig->render($template, [
+        view()->addLocation(__DIR__.'/../Templates');
+//        dd(view('invoice')->render());
+        $view = view($template, [
             'company' => $doc->getCompany(),
-            'doc' => $doc->getDocument()
-        ]);
+            'document' => $doc->getDocument()
+        ])->render();
+
+        dd($view);
+        file_put_contents(public_path('prueba.xml'), $view);
+
+        return $view;
+//        return $this->twig->render($template, [
+//            'company' => $doc->getCompany(),
+//            'doc' => $doc->getDocument()
+//        ]);
     }
 
     private function initTwig($options)

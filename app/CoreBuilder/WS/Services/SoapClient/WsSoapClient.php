@@ -3,6 +3,7 @@
 namespace App\CoreBuilder\WS\Services\SoapClient;
 
 use App\CoreBuilder\WS\Services\SoapClient\Header\WSSESecurityHeader;
+use SoapClient;
 
 class WsSoapClient implements WsClientInterface
 {
@@ -17,9 +18,11 @@ class WsSoapClient implements WsClientInterface
     public function __construct($wsdl = '', $parameters = [])
     {
         if (empty($wsdl)) {
-            $wsdl = __DIR__.'/../Resources/wsdl/billService.wsdl';
+            $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
+                            DIRECTORY_SEPARATOR.'wsdl'.
+                            DIRECTORY_SEPARATOR.'billService.wsdl';
         }
-        $this->client = new \SoapClient($wsdl, $parameters);
+        $this->client = new SoapClient($wsdl, $parameters);
     }
 
     /**

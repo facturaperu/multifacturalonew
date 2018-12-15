@@ -9,13 +9,13 @@
         "barryvdh/laravel-dompdf": "^0.8.2",
         "fabpot/goutte": "^3.2",
         "fideloper/proxy": "^4.0",
-        "greenter/greenter": "^3.0",
         "guzzlehttp/guzzle": "~6.0",
         "hyn/multi-tenant": "5.*",
         "imangazaliev/didom": "^1.13",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
+        "twig/twig": "^2.0",
         "wapnen/google-cloud-vision-php": "dev-master"
     },
     "require-dev": {

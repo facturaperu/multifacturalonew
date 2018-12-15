@@ -21,9 +21,9 @@ class Detail extends Model
         'document_id',
         'item_id',
         'item_description',
-        'item_code',
-        'item_code_gsl',
-        'unit_type_id',
+//        'item_code',
+//        'item_code_gsl',
+//        'unit_type_id',
         'quantity',
         'unit_value',
 
@@ -44,7 +44,6 @@ class Detail extends Model
 
         'price_type_id',
         'unit_price',
-        'unit_price_free',
 
         'total_value',
         'total',

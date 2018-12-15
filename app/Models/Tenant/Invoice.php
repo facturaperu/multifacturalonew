@@ -18,7 +18,6 @@ class Invoice extends Model
         'operation_type_id',
         'date_of_due',
         'total_free',
-        'total_global_discount',
         'total_discount',
         'total_charge',
         'total_prepayment',

@@ -13,10 +13,10 @@
     <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
     <cbc:CustomizationID>2.0</cbc:CustomizationID>
     <cbc:ID>{{ doc.series }}-{{ doc.number }}</cbc:ID>
-    <cbc:IssueDate>{{ doc.date_of_issue }}</cbc:IssueDate>
+    <cbc:IssueDate>{{ doc.date_of_issue|date("Y-m-d") }}</cbc:IssueDate>
     <cbc:IssueTime>{{ doc.time_of_issue }}</cbc:IssueTime>
     {% if invoice.date_of_due -%}
-    <cbc:DueDate>{{ invoice.date_of_due }}</cbc:DueDate>
+    <cbc:DueDate>{{ invoice.date_of_due|date("Y-m-d") }}</cbc:DueDate>
     {% endif -%}
     <cbc:InvoiceTypeCode listID="{{ invoice.operation_type_id }}">{{ doc.document_type_id }}</cbc:InvoiceTypeCode>
     {% for leg in doc.legends -%}
@@ -103,7 +103,7 @@
                     </cac:Country>
                 </cac:RegistrationAddress>
             </cac:PartyLegalEntity>
-            {% if establishment.email establishment company.telephone -%}
+            {% if establishment.email or establishment.telephone -%}
             <cac:Contact>
                 {% if establishment.telephone -%}
                 <cbc:Telephone>{{ establishment.telephone }}</cbc:Telephone>

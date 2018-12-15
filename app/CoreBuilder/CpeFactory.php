@@ -6,7 +6,7 @@ use App\CoreBuilder\Interfaces\BuilderInterface;
 use App\CoreBuilder\Interfaces\DocumentInterface;
 use App\CoreBuilder\Interfaces\SenderInterface;
 use App\CoreBuilder\WS\Response\BaseResult;
-use App\CoreBuilder\XmlDsig\Certificate\SignedXml;
+use App\CoreBuilder\XmlDsig\Sunat\SignedXml;
 
 class CpeFactory
 {
@@ -142,6 +142,9 @@ class CpeFactory
     public function getXmlSigned(DocumentInterface $document)
     {
         $xml = $this->builder->build($document);
+
+//        public_path(file_put_contents('prueba.xml', $xml));
+//        dd($xml);
 
         $this->lastXml = $this->signer->signXml($xml);
 

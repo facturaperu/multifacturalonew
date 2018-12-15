@@ -49,6 +49,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+//        dd($exception);
         if ($exception instanceof AuthenticationException) {
             return $this->unauthenticated($request, $exception);
         }

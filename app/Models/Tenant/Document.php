@@ -43,8 +43,9 @@ class Document extends Model
         'total_isc',
         'total_base_other_taxes',
         'total_other_taxes',
-        'total_discount',
+        'total_taxes',
         'total',
+        'purchase_order',
 
         'legends',
         'guides',

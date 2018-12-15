@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Xml\Filter;
+namespace App\CoreBuilder\Xml\Filter;
 
 class TributeFunction
 {

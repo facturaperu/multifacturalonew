@@ -22,14 +22,14 @@ class TransformInput
      */
     public function handle($request, Closure $next)
     {
-        $request->replace($this->originalAttribute($request->all()));
+        $originalAttributes = $this->originalAttribute($request->all());
+        $request->replace($originalAttributes);
         return $next($request);
     }
 
     private function originalAttribute($inputs)
     {
         try {
-
             $items = [];
             foreach ($inputs['items'] as $row)
             {
@@ -58,6 +58,7 @@ class TransformInput
                     'item_code_gs1' => array_key_exists('codigo_producto_gsl', $row)?$row['codigo_producto_gsl']:null,
                     'unit_type_id' => strtoupper($row['unidad_de_medida']),
                     'unit_price' => $row['precio_unitario'],
+                    'currency_type_id' => $inputs['codigo_tipo_moneda']
                 ];
 
                 $items[] = [
@@ -108,11 +109,11 @@ class TransformInput
                 }
             }
 
-            $related_documents = null;
+            $related_documents = [];
             if (array_key_exists('documentos_relacionados', $inputs)) {
                 foreach ($inputs['documentos_relacionados'] as $row)
                 {
-                    $prepayments[] = [
+                    $related_documents[] = [
                         'number' => $row['numero'],
                         'document_type_id' => $row['codigo_tipo_documento']
                     ];
@@ -185,10 +186,7 @@ class TransformInput
             $document_type_id = $inputs['codigo_tipo_documento'];
 
             if(!in_array($document_type_id, ['01', '03', '07', '08'])) {
-                return [
-                    'success' => false,
-                    'message' => 'El código del tipo de documento es incorrecto.'
-                ];
+                throw new Exception("El código {$document_type_id} de tipo de documento es incorrecto.");
             }
 
             $ubl_version = "2.1";
@@ -202,10 +200,7 @@ class TransformInput
                 ->first();
 
             if($doc) {
-                return [
-                    'success' => false,
-                    'message' => 'El documento ya se encuentra registrado.'
-                ];
+                throw new Exception("El documento {$document_series}-{$document_number} ya se encuentra registrado.");
             }
 
             $purchase_order = array_key_exists('numero_orden_de_compra', $inputs)?$inputs['numero_orden_de_compra']:null;
@@ -236,7 +231,7 @@ class TransformInput
             $operation_type_id = array_key_exists('codigo_tipo_operacion', $inputs)?$inputs['codigo_tipo_operacion']:null;
             // Note Variables
             $affected_document_series = array_key_exists('serie_de_documento_afectado', $inputs)?$inputs['serie_de_documento_afectado']:null;
-            $affected_document_number_ = array_key_exists('numero_de_documento_afectado', $inputs)?$inputs['numero_de_documento_afectado']:null;
+            $affected_document_number = array_key_exists('numero_de_documento_afectado', $inputs)?$inputs['numero_de_documento_afectado']:null;
             $affected_document_type_id = array_key_exists('tipo_de_documento_afectado', $inputs)?$inputs['tipo_de_documento_afectado']:null;
             $note_credit_or_debit_type_id = array_key_exists('codigo_de_tipo_de_la_nota', $inputs)?$inputs['tipo_de_operacion']:null;
             $description = array_key_exists('motivo_o_sustento_de_la_nota', $inputs)?$inputs['motivo_o_sustento_de_la_nota']:null;
@@ -282,7 +277,7 @@ class TransformInput
 
                 $affected_document = Document::where('document_type_id', $affected_document_type_id)
                     ->where('series', $affected_document_series)
-                    ->where('number', $affected_document_number_)
+                    ->where('number', $affected_document_number)
                     ->where('state_type_id', '05')
                     ->first();
                 if ($affected_document) {
@@ -296,10 +291,7 @@ class TransformInput
                     ];
                     $group_id = ($affected_document_type_id === '01')?'01':'02';
                 } else {
-                    return [
-                        'success' => false,
-                        'message' => 'El documento afectado no se encuentra registrado, o no se encuentra aceptado.'
-                    ];
+                    throw new Exception("El documento afectado {$affected_document_series}-{$affected_document_number} no se encuentra registrado, o no se encuentra aceptado.");
                 }
             }
 
@@ -371,7 +363,8 @@ class TransformInput
                     'qr' => '',
                 ],
                 'document_base' => $document_base,
-                'actions' => $actions
+                'actions' => $actions,
+                'success' => true
             ];
 
             return $original_attributes;
@@ -379,7 +372,7 @@ class TransformInput
         } catch (Exception $e) {
             return [
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ];
         }
     }
@@ -464,6 +457,7 @@ class TransformInput
                 'unit_type_id' => $data['unit_type_id'],
                 'description' => $data['description'],
                 'unit_price' => $data['unit_price'],
+                'currency_type_id' => $data['currency_type_id']
             ]
         );
 
