@@ -3,13 +3,9 @@
 namespace App\Models\Tenant;
 
 use App\Models\Tenant\Catalogs\DocumentType;
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
 
-class Series extends Model
+class Series extends ModelTenant
 {
-    use UsesTenantConnection;
-
     protected $table = 'series';
 
     protected $fillable = [

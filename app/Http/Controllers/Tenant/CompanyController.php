@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
+use App\Models\Tenant\Company;
+use App\Models\Tenant\SoapType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\CompanyRequest;
 use App\Http\Resources\Tenant\CompanyResource;
-use App\Models\Tenant\Company;
-use App\Models\Tenant\System\SoapType;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -24,7 +24,7 @@ class CompanyController extends Controller
 
     public function record()
     {
-        $company = Company::first();
+        $company = Company::active();
         if ($company) {
             $record = new CompanyResource($company);
         } else {
@@ -51,7 +51,7 @@ class CompanyController extends Controller
     {
         if ($request->hasFile('file')) {
 
-            $company = Company::first();
+            $company = Company::active();
 
             $type = $request->input('type');
             $file = $request->file('file');

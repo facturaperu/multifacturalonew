@@ -1,19 +1,17 @@
 <?php
 namespace App\Http\Controllers\Tenant\Api;
 
-use App\Core\Cpe\ConsultCdrService;
-use App\Core\Services\Dni\Dni;
-use App\Core\Services\Extras\ValidateCpe;
-use App\Core\Services\Ruc\Sunat;
+use App\CoreFacturalo\Services\Dni\Dni;
+use App\CoreFacturalo\Services\Extras\ExchangeRateService;
+use App\CoreFacturalo\Services\Ruc\Sunat;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
 use App\Models\Tenant\Document;
+use App\Models\Tenant\ExchangeRate;
 use Illuminate\Http\Request;
-use App\Core\Services\Ruc\ExchangeRate;
 use Carbon\Carbon;
-use App\Models\Tenant\System\ExchangeRate as ExchangeRateModel;
 
 class ServiceController extends Controller
 {
@@ -84,15 +82,15 @@ class ServiceController extends Controller
     {
         $records = [];
         if (!$request['last_date']) {
-            $records = ExchangeRateModel::where('date', $request['date'])->get()->keyBy('date')->toArray();
+            $records = ExchangeRate::where('date', $request['date'])->get()->keyBy('date')->toArray();
         }
         if (empty($records)) {
-            $exchange_rate = new ExchangeRate($request['cur_date'],$request['last_date']);
+            $exchange_rate = new ExchangeRateService($request['cur_date'],$request['last_date']);
             $records = $exchange_rate->get();
             if ($records) {
                 foreach ($records as $key => $item) {
-                    if (!ExchangeRateModel::where('date',$key)->first() && (Carbon::today()->toDateString() != $key || $item['date'] == $item['date_original'])) {
-                        ExchangeRateModel::create($item);
+                    if (!ExchangeRate::where('date',$key)->first() && (Carbon::today()->toDateString() != $key || $item['date'] == $item['date_original'])) {
+                        ExchangeRate::create($item);
                     }
                 }
             }

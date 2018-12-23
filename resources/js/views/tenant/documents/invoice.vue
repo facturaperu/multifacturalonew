@@ -46,7 +46,7 @@
                         <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
                                 <label class="control-label">Fecha de emisión</label>
-                                <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
+                                <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false" @change="changeDateOfIssue"></el-date-picker>
                                 <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
                             </div>
                         </div>
@@ -74,6 +74,13 @@
                                 <label class="control-label">Orden Compra</label>
                                 <el-input v-model="form.purchase_order"></el-input>
                                 <small class="form-control-feedback" v-if="errors.purchase_order" v-text="errors.purchase_order[0]"></small>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.exchange_rate}">
+                                <label class="control-label">Tipo de cambio</label>
+                                <el-input v-model="form.exchange_rate"></el-input>
+                                <small class="form-control-feedback" v-if="errors.exchange_rate" v-text="errors.exchange_rate[0]"></small>
                             </div>
                         </div>
                         <div class="col-lg-2">
@@ -108,9 +115,9 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Descripcición</th>
-                                        <th>Afectación Igv</th>
-                                        <th class="text-right">Precio Unitario</th>
+                                        <th class="text-center">Unidad</th>
                                         <th class="text-right">Cantidad</th>
+                                        <th class="text-right">Precio Unitario</th>
                                         <th class="text-right">Total</th>
                                         <th></th>
                                     </tr>
@@ -118,25 +125,11 @@
                                     <tbody>
                                     <tr v-for="(row, index) in form.items">
                                         <td>{{ index + 1 }}</td>
-                                        <td>
-                                            <el-select v-model="row.item_id" @change="changeItem(index)" filterable>
-                                                <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                            </el-select>
-                                        </td>
-                                        <td>
-                                            <el-select v-model="row.affectation_igv_type_code" @change="changeItem(index)" filterable>
-                                                <el-option v-for="option in affectation_igv_types" :key="option.code" :value="option.code" :label="option.description"></el-option>
-                                            </el-select>
-                                        </td>
-                                        <td>
-                                            <el-input v-model="row.unit_price" @input="changeRow(index)" class="input-text-right"></el-input>
-                                        </td>
-                                        <td class="text-right">
-                                            <el-input-number v-model="row.quantity" :min="1"   @focus="changeRow(index)"  @change="changeRow(index)"></el-input-number>
-                                        </td>
-                                        <td class="text-right">
-                                            <span v-text="row.total"></span>
-                                        </td>
+                                        <td>{{ row.item_description }}<br/><small>{{ row.affectation_igv_type_description }}</small></td>
+                                        <td class="text-center">{{ row.unit_type_id }}</td>
+                                        <td class="text-right">{{ row.quantity }}</td>
+                                        <td class="text-right">{{ form.currency_type.symbol }} {{ row.unit_price }}</td>
+                                        <td class="text-right">{{ form.currency_type.symbol }} {{ row.total }}</td>
                                         <td class="text-right">
                                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickRemoveItem(index)">x</button>
                                         </td>
@@ -146,26 +139,28 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <p class="text-right" v-if="form.total_exonerated > 0">Total Exoneradas : {{ currency_symbol }} {{ form.total_exonerated }}</p>
-                            <p class="text-right" v-if="form.total_taxed > 0">Total Gravadas : {{ currency_symbol }} {{ form.total_taxed }}</p>
-                            <p class="text-right" v-if="form.total_igv > 0">Total Igv : {{ currency_symbol }} {{ form.total_igv }}</p>
+                            <p class="text-right" v-if="form.total_free > 0">OP.GRATUITAS: {{ form.currency_type.symbol }} {{ form.total_free }}</p>
+                            <p class="text-right" v-if="form.total_unaffected > 0">OP.INAFECTAS: {{ form.currency_type.symbol }} {{ form.total_unaffected }}</p>
+                            <p class="text-right" v-if="form.total_exonerated > 0">OP.EXONERADAS: {{ form.currency_type.symbol }} {{ form.total_exonerated }}</p>
+                            <p class="text-right" v-if="form.total_taxed > 0">OP.GRAVADA: {{ form.currency_type.symbol }} {{ form.total_taxed }}</p>
+                            <p class="text-right" v-if="form.total_igv > 0">IGV: {{ form.currency_type.symbol }} {{ form.total_igv }}</p>
                             <template v-if="form.total > 0">
                                 <hr>
-                                <h3 class="text-right"><b>Total : </b>{{ currency_symbol }} {{ form.total }}</h3>
+                                <h3 class="text-right"><b>TOTAL A PAGAR: </b>{{ form.currency_type.symbol }} {{ form.total }}</h3>
                             </template>
                         </div>
                     </div>
                 </div>
                 <div class="form-actions text-right mt-4">
                     <el-button @click.prevent="close()">Cancelar</el-button>
-                    <el-button type="primary" native-type="submit" :loading="loading_submit" v-if="form.items.length > 0 && form.total > 0">Generar</el-button>
+                    <el-button type="primary" native-type="submit" :loading="loading_submit" v-if="form.items.length > 0">Generar</el-button>
                 </div>
             </form>
         </div>
 
         <invoice-form-item :showDialog.sync="showDialogAddItem"
                            :operation-type-id="form.operation_type_code"
-                           @add="addItem"></invoice-form-item>
+                           @add="addRow"></invoice-form-item>
 
         <customer-form :showDialog.sync="showDialogNewCustomer"
                        :external="true"></customer-form>
@@ -195,13 +190,11 @@
                 form: {}, 
                 document_types: [],
                 currency_types: [],
-//                affectation_igv_types: [],
                 discounts: [],
                 charges: [],
                 items: [],
                 customers: [],
                 company: null,
-//                establishment: null,
                 establishments: [],
                 all_series: [],
                 series: [],
@@ -214,13 +207,11 @@
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.document_types = response.data.document_types_invoice
-//                    this.affectation_igv_types = response.data.affectation_igv_types
                     this.currency_types = response.data.currency_types
                     this.items = response.data.items
                     this.customers = response.data.customers
                     this.company = response.data.company
                     this.establishments = response.data.establishments
-                    //this.establishment = response.data.establishment
                     this.all_series = response.data.series
 
                     this.form.soap_type_id = this.company.soap_type_id
@@ -228,11 +219,11 @@
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
                     this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
+                    this.changeCurrencyType()
                     this.changeDocumentType()
-
                 })
-            this.$eventHub.$on('reloadDataCustomers', () => {
-                this.reloadDataCustomers()
+            this.$eventHub.$on('reloadDataCustomers', (customer_id) => {
+                this.reloadDataCustomers(customer_id)
             })
         },
         methods: {
@@ -252,7 +243,9 @@
                     date_of_issue: moment().format('YYYY-MM-DD'),
                     time_of_issue: moment().format('HH:mm:ss'),
                     date_of_due: moment().format('YYYY-MM-DD'),
+                    exchange_rate: 0,
                     currency_type_id: null,
+                    currency_type: null,
                     customer_id: null,
                     items: [],
                     total_exportation: 0,
@@ -296,111 +289,123 @@
                 this.form.group_id = (this.form.document_type_id === '01000001')?'01':'02'
                 this.filterSeries()
             },
+            changeDateOfIssue() {
+                this.form.date_of_due = this.form.date_of_issue
+            },
             filterSeries() {
                 this.form.series = null
                 this.series = _.filter(this.all_series, {'establishment_id': this.form.establishment_id,
                                                          'document_type_id': this.form.document_type_id})
                 this.form.series_id = (this.series.length > 0)?this.series[0].number:null
             },
-            addItem() {
-
+            addRow(row) {
+                this.form.items.push(row)
+                this.calculateTotal()
             },
-            clickAddItem() { 
-                this.form.items.push({
-                    item_id: null,
-                    item_description: null,
-                    unit_type_code: null,
-                    carriage_plate: null,
-                    quantity: 0,
-                    unit_value: 0,
-                    price_type_code: '01',
-                    unit_price: 0,
-                    affectation_igv_type_code: '10',
-                    total_igv: 0,
-                    percentage_igv: 18,
-                    system_isc_type_code: null,
-                    total_isc: 0,
-                    charge_type_code: null,
-                    charge_percentage: 0,
-                    total_charge: 0,
-                    discount_type_code: null,
-                    discount_percentage: 0,
-                    total_discount: 0,
-                    total_value: 0,
-                    total: 0,
-                })
- 
-            },
+//            clickAddItem() {
+//                this.form.items.push({
+//                    item_id: null,
+//                    item_description: null,
+//                    unit_type_code: null,
+//                    carriage_plate: null,
+//                    quantity: 0,
+//                    unit_value: 0,
+//                    price_type_code: '01',
+//                    unit_price: 0,
+//                    affectation_igv_type_code: '10',
+//                    total_igv: 0,
+//                    percentage_igv: 18,
+//                    system_isc_type_code: null,
+//                    total_isc: 0,
+//                    charge_type_code: null,
+//                    charge_percentage: 0,
+//                    total_charge: 0,
+//                    discount_type_code: null,
+//                    discount_percentage: 0,
+//                    total_discount: 0,
+//                    total_value: 0,
+//                    total: 0,
+//                })
+//
+//            },
             clickRemoveItem(index) { 
                 this.form.items.splice(index, 1)
                 this.calculateTotal()  
             },
-            changeItem(index) {
-                let item = _.find(this.items, {id: this.form.items[index].item_id})
-                this.form.items[index].item_description = item.description
-                this.form.items[index].unit_price = parseFloat(item.unit_price)
-                this.form.items[index].unit_type_code = item.unit_type.code
-                this.calculateRowTotal(index)
-            },
+//            changeItem(index) {
+//                let item = _.find(this.items, {id: this.form.items[index].item_id})
+//                this.form.items[index].item_description = item.description
+//                this.form.items[index].unit_price = parseFloat(item.unit_price)
+//                this.form.items[index].unit_type_code = item.unit_type.code
+//                this.calculateRowTotal(index)
+//            },
             changeCurrencyType() {
-                this.currency_symbol = (this.form.currency_type_code === 'PEN')?'S/':'$'
+                this.form.currency_type = _.find(this.currency_types, {'id': this.form.currency_type_id})
+                //this.currency_symbol = (this.form.currency_type_code === 'PEN')?'S/':'$'
             },
-            changeRow(index) {
-                this.calculateRowTotal(index)
-            },
-            calculateRowTotal(index) {
-                let unit_price = parseFloat(this.form.items[index].unit_price)
-                let quantity = parseFloat(this.form.items[index].quantity)
-
-                let unit_value = 0
-                let total = 0
-                let total_igv = 0
-                let total_value = 0
-
-                if (this.form.items[index].affectation_igv_type_code === '10') {
-                    unit_value = _.round(unit_price / 1.18, 2)
-                    total = _.round(unit_price * quantity, 2)
-                    total_igv = _.round(total - (_.round(total /1.18, 2)), 2)
-                    total_value = _.round(total /1.18, 2)
-                }
-                if (this.form.items[index].affectation_igv_type_code === '20') {
-                    unit_value = _.round(unit_price, 2)
-                    total = _.round(unit_price * quantity, 2)
-                    total_igv = 0
-                    total_value = total
-                }
-
-                this.form.items[index].unit_value = unit_value
-                this.form.items[index].total_value = total_value
-                this.form.items[index].total_igv = total_igv
-                this.form.items[index].total = total
-                this.calculateTotal()
-            },
+//            changeRow(index) {
+//                this.calculateRowTotal(index)
+//            },
+//            calculateRowTotal(index) {
+//                let unit_price = parseFloat(this.form.items[index].unit_price)
+//                let quantity = parseFloat(this.form.items[index].quantity)
+//
+//                let unit_value = 0
+//                let total = 0
+//                let total_igv = 0
+//                let total_value = 0
+//
+//                if (this.form.items[index].affectation_igv_type_code === '10') {
+//                    unit_value = _.round(unit_price / 1.18, 2)
+//                    total = _.round(unit_price * quantity, 2)
+//                    total_igv = _.round(total - (_.round(total /1.18, 2)), 2)
+//                    total_value = _.round(total /1.18, 2)
+//                }
+//                if (this.form.items[index].affectation_igv_type_code === '20') {
+//                    unit_value = _.round(unit_price, 2)
+//                    total = _.round(unit_price * quantity, 2)
+//                    total_igv = 0
+//                    total_value = total
+//                }
+//
+//                this.form.items[index].unit_value = unit_value
+//                this.form.items[index].total_value = total_value
+//                this.form.items[index].total_igv = total_igv
+//                this.form.items[index].total = total
+//                this.calculateTotal()
+//            },
             calculateTotal() {
-                let total_exonerated = 0
                 let total_taxed = 0
+                let total_exonerated = 0
+                let total_unaffected = 0
+                let total_free = 0
                 let total_igv = 0
                 let total = 0
                 this.form.items.forEach((row) => {
-                    if (row.affectation_igv_type_code === '10') {
+                    if (row.affectation_igv_type_id === '10') {
                         total_taxed += parseFloat(row.total_value)
                     }
-                    if (row.affectation_igv_type_code === '20') {
+                    if (row.affectation_igv_type_id === '20') {
                         total_exonerated += parseFloat(row.total_value)
+                    }
+                    if (row.affectation_igv_type_id === '30') {
+                        total_unaffected += parseFloat(row.total_value)
+                    }
+                    if (['10', '20', '30'].indexOf(row.affectation_igv_type_id) < 0) {
+                        total_free += parseFloat(row.total_value)
                     }
                     total_igv += parseFloat(row.total_igv)
                     total += parseFloat(row.total)
                 });
-                this.form.total_exonerated = _.round(total_exonerated, 2)
                 this.form.total_taxed = _.round(total_taxed, 2)
+                this.form.total_exonerated = _.round(total_exonerated, 2)
+                this.form.total_unaffected = _.round(total_unaffected, 2)
+                this.form.total_free = _.round(total_free, 2)
                 this.form.total_igv = _.round(total_igv, 2)
-                this.form.total_value = _.round(total_taxed, 2)
+                //this.form.total_value = _.round(total_taxed, 2)
                 this.form.total = _.round(total, 2)
- 
-            },
-
+             },
             submit() {
-                
                 this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form)
                     .then(response => {
@@ -426,10 +431,10 @@
             close() {
                 location.href = '/documents'
             },
-            reloadDataCustomers() {
+            reloadDataCustomers(customer_id) {
                 this.$http.get(`/${this.resource}/table/customers`).then((response) => {
                     this.customers = response.data
-                    //this.filterCustomers()
+                    this.form.customer_id = customer_id
                 })
             },
         }

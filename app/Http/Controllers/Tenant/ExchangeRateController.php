@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Tenant\ExchangeRateCollection;
-use App\Models\Tenant\System\ExchangeRate;
+use App\Models\Tenant\ExchangeRate;
 use Illuminate\Http\Request;
 
 class ExchangeRateController extends Controller

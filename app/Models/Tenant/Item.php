@@ -4,15 +4,10 @@ namespace App\Models\Tenant;
 
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\SystemIscType;
-use App\Models\Tenant\System\ItemType;
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use App\Models\Tenant\Catalogs\Code;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Tenant\Catalogs\UnitType;
 
-class Item extends Model
+class Item extends ModelTenant
 {
-    use UsesTenantConnection;
-
     protected $with = ['item_type', 'unit_type', 'currency_type'];
     protected $fillable = [
         'description',
@@ -36,7 +31,7 @@ class Item extends Model
 
     public function unit_type()
     {
-        return $this->belongsTo(Code::class, 'unit_type_id');
+        return $this->belongsTo(UnitType::class, 'unit_type_id');
     }
 
     public function currency_type()

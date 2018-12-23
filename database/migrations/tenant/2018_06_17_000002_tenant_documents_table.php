@@ -16,8 +16,8 @@ class TenantDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('establishment_id');
             $table->uuid('external_id');
+            $table->json('establishment');
             $table->char('soap_type_id', 2);
             $table->char('state_type_id', 2);
             $table->string('ubl_version');
@@ -27,25 +27,34 @@ class TenantDocumentsTable extends Migration
             $table->integer('number');
             $table->date('date_of_issue');
             $table->time('time_of_issue');
-            $table->unsignedInteger('customer_id');
+            $table->json('customer');
             $table->char('currency_type_id', 3);
-            $table->decimal('total_other_charges', 12, 2)->default(0);
+            $table->string('purchase_order')->nullable();
+            $table->decimal('total_prepayment', 12, 2)->default(0);
+            $table->decimal('total_discount', 12, 2)->default(0);
+            $table->decimal('total_charge', 12, 2)->default(0);
             $table->decimal('total_exportation', 12, 2)->default(0);
-            $table->decimal('total_taxed', 12, 2);
+            $table->decimal('total_free', 12, 2)->default(0);
+            $table->decimal('total_taxed', 12, 2)->default(0);
             $table->decimal('total_unaffected', 12, 2)->default(0);
             $table->decimal('total_exonerated', 12, 2)->default(0);
-            $table->decimal('total_igv', 12, 2);
+            $table->decimal('total_igv', 12, 2)->default(0);
             $table->decimal('total_base_isc', 12, 2)->default(0);
             $table->decimal('total_isc', 12, 2)->default(0);
             $table->decimal('total_base_other_taxes', 12, 2)->default(0);
             $table->decimal('total_other_taxes', 12, 2)->default(0);
-            $table->decimal('total_taxes', 12, 2);
+            $table->decimal('total_taxes', 12, 2)->default(0);
+            $table->decimal('total_value', 12, 2)->default(0);
             $table->decimal('total', 12, 2);
-            $table->string('purchase_order')->nullable();
 
-            $table->json('legends')->nullable();
+            $table->json('charges')->nullable();
+            $table->json('discounts')->nullable();
+            $table->json('prepayments')->nullable();
             $table->json('guides')->nullable();
-            $table->json('related_documents')->nullable();
+            $table->json('related')->nullable();
+            $table->json('perception')->nullable();
+            $table->json('detraction')->nullable();
+            $table->json('legends')->nullable();
             $table->json('optional')->nullable();
 
             $table->string('filename')->nullable();
@@ -57,12 +66,10 @@ class TenantDocumentsTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->foreign('soap_type_id')->references('id')->on('soap_types');
             $table->foreign('state_type_id')->references('id')->on('state_types');
             $table->foreign('group_id')->references('id')->on('groups');
             $table->foreign('document_type_id')->references('id')->on('document_types');
-            $table->foreign('customer_id')->references('id')->on('customers');
             $table->foreign('currency_type_id')->references('id')->on('currency_types');
         });
     }

@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\Core\WS\Signed\Certificate\X509Certificate;
 use App\Core\WS\Signed\Certificate\X509ContentType;
+use App\CoreFacturalo\Helpers\Certificate\GenerateCertificate;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Company;
 use Exception;
@@ -12,7 +13,7 @@ class CertificateController extends Controller
 {
     public function record()
     {
-        $company = Company::first();
+        $company = Company::active();
 
         return [
             'certificate' => $company->certificate
@@ -23,12 +24,11 @@ class CertificateController extends Controller
     {
         if ($request->hasFile('file')) {
             try {
-                $company = Company::first();
+                $company = Company::active();
                 $password = $request->input('password');
                 $file = $request->file('file');
                 $pfx = file_get_contents($file);
-                $certificate = new X509Certificate($pfx, $password);
-                $pem = $certificate->export(X509ContentType::PEM);
+                $pem = GenerateCertificate::typePEM($pfx, $password);
                 $name = 'certificate_'.$company->number.'.pem';
                 if(!file_exists(storage_path('app'.DIRECTORY_SEPARATOR.'certificates'))) {
                     mkdir(storage_path('app'.DIRECTORY_SEPARATOR.'certificates'));
@@ -56,7 +56,7 @@ class CertificateController extends Controller
 
     public function destroy()
     {
-        $company = Company::first();
+        $company = Company::active();
         $company->certificate = null;
         $company->save();
 

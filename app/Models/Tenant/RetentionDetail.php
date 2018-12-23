@@ -4,13 +4,9 @@ namespace App\Models\Tenant;
 
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
 
-class RetentionDetail extends Model
+class RetentionDetail extends ModelTenant
 {
-    use UsesTenantConnection;
-
     public $timestamps = false;
     protected $with = ['document_type', 'currency_type'];
     protected $fillable = [

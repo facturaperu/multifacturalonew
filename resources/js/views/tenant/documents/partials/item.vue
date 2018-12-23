@@ -9,7 +9,7 @@
                                 Producto/Servicio
                                 <a href="#" @click.prevent="showDialogNewItem = true">[+ Nuevo]</a>
                             </label>
-                            <el-select v-model="form.item_id" @change="filterItem" filterable>
+                            <el-select v-model="form.item_id" @change="changeItem" filterable>
                                 <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.item_id" v-text="errors.item_id[0]"></small>
@@ -34,7 +34,9 @@
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.unit_price}">
                             <label class="control-label">Precio Unitario</label>
-                            <el-input v-model="form.unit_price"></el-input>
+                            <el-input v-model="form.unit_price">
+                                <template slot="prepend">{{ form.currency_type_symbol }}</template>
+                            </el-input>
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
@@ -137,14 +139,13 @@
 <script>
 
     import itemForm from '../../items/form.vue'
-//    import ElInput from "../../../../../../node_modules/element-ui/packages/input/src/input";
 
     export default {
         props: ['showDialog', 'operationTypeId'],
         components: {itemForm},
         data() {
             return {
-                titleDialog: '',//this.$t('items.titles.new'),
+                titleDialog: 'Agregar Producto o Servicio',
                 resource: 'documents',
                 showDialogNewItem: false,
                 errors: {},
@@ -171,8 +172,8 @@
                 this.charges = response.data.charges
             })
 
-            this.$eventHub.$on('reloadDataItems', () => {
-                this.reloadDataItems()
+            this.$eventHub.$on('reloadDataItems', (item_id) => {
+                this.reloadDataItems(item_id)
             })
         },
         methods: {
@@ -181,19 +182,17 @@
                 this.form = {
 //                    category_id: [1],
                     item_id: null,
-                    affectation_igv_type_id: null,
+                    affectation_igv_type_id: '10',
                     has_isc: false,
                     system_isc_type_id: null,
                     percentage_isc: 0,
                     suggested_price: 0,
                     quantity: 1,
                     unit_price: 0,
-                    // retail_unit_price: 0,
-                    // wholesale_unit_price: 0
                     charges: [],
-                    discounts: []
+                    discounts: [],
+                    currency_type_symbol: null,
                 }
-                // this.use_price = 1
             },
             clickAddDiscount() {
                 this.form.discounts.push({
@@ -233,25 +232,24 @@
 //                    return f.category_id === _.last(this.form.category_id)
 //                });
 //            },
-            filterItem() {
+            changeItem() {
                 this.item = _.find(this.items, {'id': this.form.item_id})
                 this.form.unit_price = this.item.unit_price
-                this.form.retail_unit_price = this.item.retail_unit_price
-                this.form.wholesale_unit_price = this.item.wholesale_unit_price
+                this.form.currency_type_symbol = this.item.currency_type.symbol
             },
-//            changeHasIsc() {
-//                this.form.system_isc_type_id = null
-//                this.form.percentage_isc = 0
-//                this.form.suggested_price = 0
-//            },
             clickAddItem() {
                 let item_description = this.item.description
+                let affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
+
                 let row = {
                     item_id: this.item.id,
                     item_description: item_description,
+                    currency_type_id: this.item.currency_type_id,
+                    unit_type_id: this.item.unit_type_id,
                     quantity: this.form.quantity,
                     unit_value: 0,
-                    affectation_igv_type_id: null,
+                    affectation_igv_type_id: affectation_igv_type.id,
+                    affectation_igv_type_description: affectation_igv_type.description,
                     total_base_igv: 0,
                     percentage_igv: 18,
                     total_igv: 0,
@@ -265,9 +263,9 @@
                     total_taxes: 0,
                     price_type_id: '01',
                     unit_price: parseFloat(this.form.unit_price),
-//                    unit_price_free: 0,
                     total_value: 0,
                     total: 0,
+
                     total_discount: 0,
                     total_charge: 0,
                     attributes: [],
@@ -275,54 +273,44 @@
                     discounts: [],
                 };
 
-                let _affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
-                row.affectation_igv_type_id = _affectation_igv_type.id
-                //let _quantity = this.form.quantity
                 let _percentage_igv = 18
-//                let _price_type_id = '01'
-                //let _unit_price_free = 0
-//                let _unit_price = 0
-//                let _unit_value = 0
-//                let _unit_value_isc = 0
-//                let _total_isc = 0
-//                let _total_discount = 0
-
-//                let _total_value = 0
-//                let _total_igv = 0
 
                 if (row.affectation_igv_type_id !== '10') {
                     _percentage_igv = 0
                 }
 
                 //row.unit_price = parseFloat(this.form.unit_price)
-                let _unit_value = 0
+                let _unit_value = row.unit_price / (1 + _percentage_igv / 100)
 
-                if (this.item.has_isc) {
-                    row.percentage_isc = parseFloat(this.item.percentage_isc)
-                    row.suggested_price = parseFloat(this.item.suggested_price)
-                    row.system_isc_type_id = this.item.system_isc_type_id
+                row.unit_value = _.round(_unit_value, 2)
+//                _unit_value = row.unit_price / (1 + _percentage_igv / 100)
 
-                    let _unit_value_isc = 0
-                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-
-                    if (this.item.system_isc_type_id === '01') {
-                        _unit_value /= (1 + row.percentage_isc / 100)
-                        _unit_value_isc = _unit_value * row.percentage_isc / 100
-                        //row.unit_value = _unit_value /_unit_value_isc
-                    }
-                    if (this.item.system_isc_type_id === '02') {
-                        //_unit_value = _unit_value
-                    }
-                    if (this.item.system_isc_type_id === '03') {
-                        _unit_value_isc = row.suggested_price * row.percentage_isc / 100
-                        row.unit_value = _unit_value - _unit_value_isc
-                    }
-
-                    row.total_isc = _unit_value_isc * row.quantity
-
-                } else {
-                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-                }
+//                if (this.item.has_isc) {
+//                    row.percentage_isc = parseFloat(this.item.percentage_isc)
+//                    row.suggested_price = parseFloat(this.item.suggested_price)
+//                    row.system_isc_type_id = this.item.system_isc_type_id
+//
+//                    let _unit_value_isc = 0
+//                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
+//
+//                    if (this.item.system_isc_type_id === '01') {
+//                        _unit_value /= (1 + row.percentage_isc / 100)
+//                        _unit_value_isc = _unit_value * row.percentage_isc / 100
+//                        //row.unit_value = _unit_value /_unit_value_isc
+//                    }
+//                    if (this.item.system_isc_type_id === '02') {
+//                        //_unit_value = _unit_value
+//                    }
+//                    if (this.item.system_isc_type_id === '03') {
+//                        _unit_value_isc = row.suggested_price * row.percentage_isc / 100
+//                        row.unit_value = _unit_value - _unit_value_isc
+//                    }
+//
+//                    row.total_isc = _unit_value_isc * row.quantity
+//
+//                } else {
+//                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
+//                }
                 row.unit_value = _.round(_unit_value, 2)
 
                 let _total_value_partial = _unit_value * row.quantity
@@ -330,7 +318,6 @@
                 let _discount_no_base = 0
                 this.form.discounts.forEach((discount) => {
                     let discount_type = _.find(this.discounts, {'id': discount.discount_type_id})
-                    // console.log(discount)
                     if (discount_type.base) {
                         _discount_base += _.round(_total_value_partial * discount.percentage / 100, 2)
                         console.log('total base:'+_discount_base)
@@ -340,78 +327,26 @@
                     }
                 })
 
-                if (_affectation_igv_type.free) {
-                    row.price_type_id = '02'
-                }
-
                 row.total_discount = _discount_base + _discount_no_base
                 row.total_value = _.round(_total_value_partial - row.total_discount, 2)
                 row.total_base_igv = _.round(_total_value_partial - _discount_base + row.total_isc, 2)
                 row.total_igv =  _.round(row.total_base_igv * _percentage_igv / 100, 2)
                 row.total_taxes = row.total_igv + row.total_isc + row.total_other_taxes
                 row.total = row.total_value + row.total_igv + row.total_isc
-//                let _unit_value_isc = 0
-//                if (this.form.has_isc) {
-//                    row.percentage_isc = this.form.percentage_isc
-//                    if (this.form.system_isc_type_id === '01') {
-//                        _unit_value_isc = _.round(_unit_value * row.percentage_isc / 100)
-//                    }
-//                    if (this.form.system_isc_type_id === '02') {
-//                        _unit_value_isc = _.round(this.form.suggested_price * row.percentage_isc / 100)
-//                    }
-//                    row.total_base_isc = 0
-//                    row.total_isc = _.round(_unit_value_isc * row.quantity, 2)
-//                } else {
-//
-//                }
 
-//                row.unit_value = _.round(_unit_value, 2)
-//                row.total_discount = _.round(_discount_base + _discount_no_base, 2)
-//
-//                row.total_base_igv = _.round(_total_value - _discount_base, 2)
-//                row.total_igv = _.round(row.total_base_igv * _percentage_igv / 100, 2)
-//
-//                row.total_taxes = row.total_igv + row.total_isc + row.total_other_taxes
-//                row.total_value = _.round(row.total_base_igv - _discount_no_base, 2)
-//                row.total = row.total_value + row.total_taxes
+                if (affectation_igv_type.free) {
+                    row.price_type_id = '02'
+                    row.total = 0
+                }
 
-                console.log(row)
-
-//                this.form.affectation_igv_type_id === '') {
-//
-//                }
-
-//                let percentage_igv = 18
-
-//                switch (this.use_price) {
-//                    case 2:
-//                        row.unit_price =  this.form.retail_unit_price
-//                       break;
-//                    case 3:
-//                        row.unit_price =  this.form.wholesale_unit_price
-//                        break;
-//                }
-//
-//                let exportation = (this.operationTypeId === '17000002')
-
-//                let igv_percentage =  (exportation)?0:0.18
-//                 row.total = _.round(row.unit_price * row.quantity, 2)
-//                 row.total_igv = _.round(row.total / (1 + igv_percentage) * igv_percentage, 2)
-//                 let subtotal = _.round(row.total - row.total_igv, 2)
-//                 row.unit_value = _.round(subtotal / row.quantity, 2)
-//
-//                 row.affectation_igv_type_id = (exportation)?'07000040':'07000010'
-//                 row.total_unaffected = (exportation)?subtotal:0
-//                 row.total_taxed = (!exportation)?subtotal:0
-//
-//                 row.total_value = _.round(row.unit_value * row.quantity, 2)
-//
-//                 this.initForm()
-//                 this.$emit('add', row)
+                this.initForm()
+                this.$emit('add', row)
             },
-            reloadDataItems() {
+            reloadDataItems(item_id) {
                 this.$http.get(`/${this.resource}/table/items`).then((response) => {
                     this.items = response.data
+                    this.form.item_id = item_id
+                    this.changeItem()
                 })
             },
         }

@@ -16,6 +16,7 @@ class TenantVoidedTable extends Migration
         Schema::create('voided', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
+            $table->uuid('external_id');
             $table->char('soap_type_id', 2);
             $table->char('state_type_id', 2);
             $table->string('ubl_version');
@@ -41,6 +42,6 @@ class TenantVoidedTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('annulments');
+        Schema::dropIfExists('voided');
     }
 }

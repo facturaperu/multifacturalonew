@@ -16,6 +16,7 @@ class TenantSummariesTable extends Migration
         Schema::create('summaries', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
+            $table->uuid('external_id');
             $table->char('soap_type_id', 2);
             $table->char('state_type_id', 2);
             $table->char('process_type_id', 1);

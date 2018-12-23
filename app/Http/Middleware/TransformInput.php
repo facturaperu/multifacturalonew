@@ -48,8 +48,8 @@ class TransformInput
                     }
                 }
 
-                $charges = $this->getChargesDiscounts($row, 'cargos');
-                $discounts = $this->getChargesDiscounts($row, 'descuentos');
+                $item_charges = $this->getChargesDiscounts($row, 'cargos');
+                $item_discounts = $this->getChargesDiscounts($row, 'descuentos');
 
                 $item = [
                     'internal_id' => array_key_exists('codigo_interno', $row)?$row['codigo_interno']:null,
@@ -91,10 +91,11 @@ class TransformInput
                     'total_value' => $row['total_valor_item'],
                     'total' => $row['total_item'],
 
-                    'charges' => $charges,
-                    'discounts' => $discounts,
+                    'charges' => $item_charges,
+                    'discounts' => $item_discounts,
                     'attributes' => $attributes,
                 ];
+//                dd($items);
             }
 
             $prepayments = [];
@@ -321,6 +322,7 @@ class TransformInput
                 'send_email' => $send_email
             ];
 
+//            dd($document_base);
             $original_attributes = [
                 'document' => [
                     'user_id' => auth()->id(),

@@ -1,14 +1,14 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Tenant\EstablishmentRequest;
-use App\Http\Resources\Tenant\EstablishmentResource;
 use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
 use App\Models\Tenant\Establishment;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Tenant\EstablishmentRequest;
+use App\Http\Resources\Tenant\EstablishmentResource;
 use App\Http\Resources\Tenant\EstablishmentCollection;
 
 class EstablishmentController extends Controller

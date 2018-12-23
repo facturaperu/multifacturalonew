@@ -2,17 +2,13 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use App\Models\Tenant\Catalogs\Code;
-use Illuminate\Database\Eloquent\Model;
 
-class Establishment extends Model
+class Establishment extends ModelTenant
 {
-    use UsesTenantConnection;
-
     protected $with = ['country', 'department', 'province', 'district'];
     protected $fillable = [
         'description',
@@ -28,7 +24,7 @@ class Establishment extends Model
 
     public function country()
     {
-        return $this->belongsTo(Code::class, 'country_id');
+        return $this->belongsTo(Country::class, 'country_id');
     }
 
     public function department()

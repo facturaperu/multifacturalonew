@@ -1,12 +1,11 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
+use App\Models\Tenant\Catalogs\UnitType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\UnitTypeRequest;
 use App\Http\Resources\Tenant\UnitTypeCollection;
 use App\Http\Resources\Tenant\UnitTypeResource;
-use App\Models\Tenant\Catalogs\Code;
-use App\Models\Tenant\Catalogs\UnitType;
 
 class UnitTypeController extends Controller
 {
@@ -39,7 +38,7 @@ class UnitTypeController extends Controller
 
     public function destroy($id)
     {
-        $record = Code::findOrFail($id);
+        $record = UnitType::findOrFail($id);
         $record->delete();
 
         return [

@@ -2,17 +2,12 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\NoteCreditType;
 use App\Models\Tenant\Catalogs\NoteDebitType;
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
 
-class Note extends Model
+class Note extends ModelTenant
 {
-    use UsesTenantConnection;
-
-    protected $with = ['note_type'];
+    protected $with = ['affected_document', 'note_credit_type', 'note_debit_type'];
     public $timestamps = false;
 
     protected $fillable = [
@@ -22,20 +17,7 @@ class Note extends Model
         'note_debit_type_id',
         'description',
         'affected_document_id',
-        'total_prepayment',
-
-        'perception'
     ];
-
-    public function getPerceptionAttribute($value)
-    {
-        return (object) json_decode($value);
-    }
-
-    public function setPerceptionAttribute($value)
-    {
-        $this->attributes['perception'] = json_encode($value);
-    }
 
     public function document()
     {

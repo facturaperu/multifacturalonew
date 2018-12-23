@@ -192,7 +192,7 @@
                         if (response.data.success) {
                             this.$message.success(response.data.message)
                             if (this.external) {
-                                this.$eventHub.$emit('reloadDataCustomers')
+                                this.$eventHub.$emit('reloadDataCustomers', response.data.id)
                             } else {
                                 this.$eventHub.$emit('reloadData')
                             }

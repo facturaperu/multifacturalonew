@@ -7,13 +7,9 @@ use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Customer extends ModelTenant
 {
-    use UsesTenantConnection;
-
     protected $with = ['identity_document_type', 'country', 'department', 'province', 'district'];
     protected $fillable = [
         'identity_document_type_id',

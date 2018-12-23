@@ -2,16 +2,12 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Tenant\Catalogs\PerceptionType;
 
-class Perception extends Model
+class Perception extends ModelTenant
 {
-    use UsesTenantConnection;
-
     protected $with = ['user', 'establishment', 'soap_type', 'state_type', 'document_type', 'series',
                        'customer', 'currency_type', 'system_code_perception', 'details'];
 
@@ -85,9 +81,9 @@ class Perception extends Model
         return $this->belongsTo(CurrencyType::class);
     }
 
-    public function system_code_perception()
+    public function perception_type()
     {
-        return $this->belongsTo(Code::class, 'system_code_perception_id');
+        return $this->belongsTo(PerceptionType::class);
     }
 
     public function details()

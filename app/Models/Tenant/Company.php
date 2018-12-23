@@ -3,15 +3,12 @@
 namespace App\Models\Tenant;
 
 use App\Models\Tenant\Catalogs\IdentityDocumentType;
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
 
-class Company extends Model
+class Company extends ModelTenant
 {
-    use UsesTenantConnection;
-
     protected $with = ['identity_document_type'];
     protected $fillable = [
+        'user_id',
         'identity_document_type_id',
         'number',
         'name',
@@ -26,5 +23,10 @@ class Company extends Model
     public function identity_document_type()
     {
         return $this->belongsTo(IdentityDocumentType::class);
+    }
+
+    public static function active()
+    {
+        return Company::first();
     }
 }

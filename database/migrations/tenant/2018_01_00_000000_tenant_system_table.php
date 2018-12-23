@@ -59,18 +59,6 @@ class TenantSystemTable extends Migration
             ['id' => '02', 'description' => 'Servicio']
         ]);
 
-        Schema::create('charge_discounts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->enum('type', ['charge', 'discount']);
-            $table->char('charge_discount_type_id', 8);
-            $table->enum('level', ['global', 'item', 'both']);
-            $table->boolean('base')->default(true);
-            $table->string('description');
-            $table->decimal('percentage', 10, 2);
-
-            $table->foreign('charge_discount_type_id')->references('id')->on('codes');
-        });
-
         Schema::create('banks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
@@ -91,7 +79,7 @@ class TenantSystemTable extends Migration
             $table->unsignedInteger('bank_id');
             $table->string('description');
             $table->string('number');
-            $table->char('currency_type_id', 2);
+            $table->char('currency_type_id', 3);
 
             $table->foreign('bank_id')->references('id')->on('banks');
             $table->foreign('currency_type_id')->references('id')->on('currency_types');
@@ -104,7 +92,6 @@ class TenantSystemTable extends Migration
             $table->date('date_original');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -117,7 +104,6 @@ class TenantSystemTable extends Migration
         Schema::dropIfExists('exchange_rates');
         Schema::dropIfExists('bank_accounts');
         Schema::dropIfExists('banks');
-        Schema::dropIfExists('charge_discounts');
         Schema::dropIfExists('item_types');
         Schema::dropIfExists('groups');
         Schema::dropIfExists('soap_types');

@@ -1,13 +1,6 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
-use App\Core\Builder\Documents\InvoiceBuilder;
-use App\Core\Builder\Documents\NoteCreditBuilder;
-use App\Core\Builder\Documents\NoteDebitBuilder;
-use App\Core\Builder\Documents\SummaryBuilder;
-use App\Core\Builder\Documents\VoidedBuilder;
-use App\Core\Builder\XmlBuilder;
-use App\Core\Helpers\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\DocumentEmailRequest;
 use App\Http\Requests\Tenant\DocumentRequest;
@@ -16,7 +9,6 @@ use App\Http\Resources\Tenant\DocumentCollection;
 use App\Http\Resources\Tenant\DocumentResource;
 use App\Mail\Tenant\DocumentEmail;
 use App\Models\Tenant\Catalogs\AffectationIgvType;
-use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Catalogs\NoteCreditType;
@@ -37,7 +29,7 @@ use Throwable;
 
 class DocumentController extends Controller
 {
-    use StorageDocument;
+//    use StorageDocument;
 
     public function index()
     {
@@ -76,7 +68,7 @@ class DocumentController extends Controller
 //        $affectation_igv_types = AffectationType::all();
         $customers = $this->table('customers');
         $items = $this->table('items');
-        $company = Company::first();
+        $company = Company::active();
 //        $establishment = Establishment::first();
         $establishments = Establishment::all();
         $series = Series::all();

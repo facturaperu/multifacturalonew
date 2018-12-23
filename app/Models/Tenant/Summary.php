@@ -2,16 +2,15 @@
 
 namespace App\Models\Tenant;
 
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Tenant\Catalogs\ProcessType;
 
-class Summary extends Model
+class Summary extends ModelTenant
 {
-    use UsesTenantConnection;
+    protected $with = ['user', 'soap_type', 'state_type', 'process_type', 'details'];
 
-    protected $with = ['user', 'soap_type', 'state_type', 'process_type'];
     protected $fillable = [
         'user_id',
+        'external_id',
         'soap_type_id',
         'state_type_id',
         'process_type_id',
@@ -50,13 +49,28 @@ class Summary extends Model
         return $this->belongsTo(ProcessType::class);
     }
 
-    public function getDownloadCdrAttribute()
+    public function details()
     {
-        return route('tenant.summaries.download', ['type' => 'cdr', 'id' => $this->id]);
+        return $this->hasMany(SummaryDetail::class);
     }
 
-    public function getDownloadXmlAttribute()
+    public function getDownloadExternalXmlAttribute()
     {
-        return route('tenant.summaries.download', ['type' => 'xml', 'id' => $this->id]);
+        return route('summaries.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+    }
+
+    public function getDownloadExternalPdfAttribute()
+    {
+        return route('summaries.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+    }
+
+    public function getDownloadExternalCdrAttribute()
+    {
+        return route('summaries.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
+    }
+
+    public function scopeWhereSoapTypeId($query, $soap_type_id)
+    {
+        return $query->where('soap_type_id', $soap_type_id);
     }
 }

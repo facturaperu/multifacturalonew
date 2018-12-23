@@ -1,17 +1,16 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Tenant\CustomerRequest;
-use App\Http\Resources\Tenant\CustomerCollection;
-use App\Http\Resources\Tenant\CustomerResource;
-use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
 use App\Models\Tenant\Customer;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Tenant\CustomerRequest;
+use App\Http\Resources\Tenant\CustomerCollection;
+use App\Http\Resources\Tenant\CustomerResource;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -33,9 +32,9 @@ class CustomerController extends Controller
     public function records(Request $request)
     {
         $records = Customer::where($request->column, 'like', "%{$request->value}%")
-                    ->orderBy('name');
+                            ->orderBy('name');
 
-        return new CustomerCollection($records->paginate(env('ITEMS_PER_PAGE', 5)));
+        return new CustomerCollection($records->paginate(env('ITEMS_PER_PAGE',20)));
     }
 
     public function create()
@@ -70,7 +69,8 @@ class CustomerController extends Controller
 
         return [
             'success' => true,
-            'message' => ($id)?'Cliente editado con éxito':'Cliente registrado con éxito'
+            'message' => ($id)?'Cliente editado con éxito':'Cliente registrado con éxito',
+            'id' => $customer->id
         ];
     }
 

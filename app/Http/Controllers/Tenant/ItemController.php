@@ -1,15 +1,14 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Tenant\ItemRequest;
-use App\Http\Resources\Tenant\ItemCollection;
-use App\Http\Resources\Tenant\ItemResource;
-use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\Catalogs\UnitType;
 use App\Models\Tenant\Item;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Tenant\ItemRequest;
+use App\Http\Resources\Tenant\ItemCollection;
+use App\Http\Resources\Tenant\ItemResource;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -66,7 +65,8 @@ class ItemController extends Controller
 
         return [
             'success' => true,
-            'message' => ($id)?'Producto editado con éxito':'Producto registrado con éxito'
+            'message' => ($id)?'Producto editado con éxito':'Producto registrado con éxito',
+            'id' => $item->id
         ];
     }
 

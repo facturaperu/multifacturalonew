@@ -28,7 +28,7 @@ class TenantPerceptionsTable extends Migration
             $table->unsignedInteger('customer_id');
             $table->char('currency_type_id', 3);
             $table->text('observation');
-            $table->char('system_code_perception_id', 8);
+            $table->char('perception_type_id', 2);
             $table->decimal('percent', 10, 2);
             $table->decimal('total_perception', 10, 2);
             $table->decimal('total', 10, 2);
@@ -47,7 +47,7 @@ class TenantPerceptionsTable extends Migration
             $table->foreign('document_type_id')->references('id')->on('document_types');
             $table->foreign('series_id')->references('id')->on('series');
             $table->foreign('currency_type_id')->references('id')->on('currency_types');
-            $table->foreign('system_code_perception_id')->references('id')->on('codes');
+            $table->foreign('perception_type_id')->references('id')->on('perception_types');
         });
     }
 

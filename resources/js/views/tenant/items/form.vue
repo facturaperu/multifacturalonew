@@ -56,43 +56,43 @@
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group" :class="{'has-danger': errors.has_isc}">
-                            <label class="control-label d-block">¿Tiene ISC?</label>
-                            <el-switch
-                                    v-model="form.has_isc"
-                                    active-text="Si"
-                                    inactive-text="No"
-                                    @change="changeHasIsc">
-                            </el-switch>
-                            <small class="form-control-feedback" v-if="errors.has_isc" v-text="errors.has_isc[0]"></small>
-                        </div>
-                    </div>
-                    <template v-if="form.has_isc">
-                        <div class="col-md-6">
-                            <div class="form-group" :class="{'has-danger': errors.system_isc_type_id}">
-                                <label class="control-label">Sistema Isc</label>
-                                <el-select v-model="form.system_isc_type_id" filterable @change="changeSystemIscType">
-                                    <el-option v-for="option in system_isc_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.system_isc_type_id" v-text="errors.system_isc_type_id[0]"></small>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group" :class="{'has-danger': errors.percentage_isc}">
-                                <label class="control-label">Porcentaje Isc</label>
-                                <el-input v-model="form.percentage_isc"></el-input>
-                                <small class="form-control-feedback" v-if="errors.percentage_isc" v-text="errors.percentage_isc[0]"></small>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group" :class="{'has-danger': errors.suggested_price}">
-                                <label class="control-label">Precio sugerido</label>
-                                <el-input v-model="form.suggested_price"></el-input>
-                                <small class="form-control-feedback" v-if="errors.suggested_price" v-text="errors.suggested_price[0]"></small>
-                            </div>
-                        </div>
-                    </template>
+                    <!--<div class="col-md-2">-->
+                        <!--<div class="form-group" :class="{'has-danger': errors.has_isc}">-->
+                            <!--<label class="control-label d-block">¿Tiene ISC?</label>-->
+                            <!--<el-switch-->
+                                    <!--v-model="form.has_isc"-->
+                                    <!--active-text="Si"-->
+                                    <!--inactive-text="No"-->
+                                    <!--@change="changeHasIsc">-->
+                            <!--</el-switch>-->
+                            <!--<small class="form-control-feedback" v-if="errors.has_isc" v-text="errors.has_isc[0]"></small>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<template v-if="form.has_isc">-->
+                        <!--<div class="col-md-6">-->
+                            <!--<div class="form-group" :class="{'has-danger': errors.system_isc_type_id}">-->
+                                <!--<label class="control-label">Sistema Isc</label>-->
+                                <!--<el-select v-model="form.system_isc_type_id" filterable @change="changeSystemIscType">-->
+                                    <!--<el-option v-for="option in system_isc_types" :key="option.id" :value="option.id" :label="option.description"></el-option>-->
+                                <!--</el-select>-->
+                                <!--<small class="form-control-feedback" v-if="errors.system_isc_type_id" v-text="errors.system_isc_type_id[0]"></small>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-2">-->
+                            <!--<div class="form-group" :class="{'has-danger': errors.percentage_isc}">-->
+                                <!--<label class="control-label">Porcentaje Isc</label>-->
+                                <!--<el-input v-model="form.percentage_isc"></el-input>-->
+                                <!--<small class="form-control-feedback" v-if="errors.percentage_isc" v-text="errors.percentage_isc[0]"></small>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-2">-->
+                            <!--<div class="form-group" :class="{'has-danger': errors.suggested_price}">-->
+                                <!--<label class="control-label">Precio sugerido</label>-->
+                                <!--<el-input v-model="form.suggested_price"></el-input>-->
+                                <!--<small class="form-control-feedback" v-if="errors.suggested_price" v-text="errors.suggested_price[0]"></small>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</template>-->
                 </div>
             </div>
             <div class="form-actions text-right pt-2">
@@ -138,8 +138,8 @@
                     item_code: null,
                     item_code_gs1: null,
                     description: null,
-                    unit_type_id: null,
-                    currency_type_id: null,
+                    unit_type_id: 'NIU',
+                    currency_type_id: 'PEN',
                     unit_price: null,
                     has_isc: false,
                     system_isc_type_id: null,
@@ -163,7 +163,7 @@
                         if (response.data.success) {
                             this.$message.success(response.data.message)
                             if (this.external) {
-                                this.$eventHub.$emit('reloadDataItems')
+                                this.$eventHub.$emit('reloadDataItems', response.data.id)
                             } else {
                                 this.$eventHub.$emit('reloadData')
                             }

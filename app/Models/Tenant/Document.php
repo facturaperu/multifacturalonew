@@ -2,26 +2,18 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
-use App\Models\Tenant\System\Group;
-use App\Models\Tenant\System\SoapType;
-use App\Models\Tenant\System\StateType;
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
 
-class Document extends Model
+class Document extends ModelTenant
 {
-    use UsesTenantConnection;
-
-    protected $with = ['user', 'establishment', 'soap_type', 'state_type', 'group', 'document_type',
-                       'customer', 'currency_type', 'details', 'invoice', 'note'];
+    protected $with = ['user', 'soap_type', 'state_type', 'group', 'document_type',
+                       'currency_type', 'details', 'invoice', 'note'];
 
     protected $fillable = [
         'user_id',
-        'establishment_id',
         'external_id',
+        'establishment',
         'soap_type_id',
         'state_type_id',
         'ubl_version',
@@ -31,10 +23,14 @@ class Document extends Model
         'number',
         'date_of_issue',
         'time_of_issue',
-        'customer_id',
+        'customer',
         'currency_type_id',
-        'total_other_charges',
+        'purchase_order',
+        'total_prepayment',
+        'total_discount',
+        'total_charge',
         'total_exportation',
+        'total_free',
         'total_taxed',
         'total_unaffected',
         'total_exonerated',
@@ -44,12 +40,17 @@ class Document extends Model
         'total_base_other_taxes',
         'total_other_taxes',
         'total_taxes',
+        'total_value',
         'total',
-        'purchase_order',
 
-        'legends',
+        'charges',
+        'discounts',
+        'prepayments',
         'guides',
-        'related_documents',
+        'related',
+        'perception',
+        'detraction',
+        'legends',
         'optional',
 
         'filename',
@@ -65,66 +66,119 @@ class Document extends Model
         'date_of_issue' => 'date',
     ];
 
-    public function getLegendsAttribute($value)
+    public function getEstablishmentAttribute($value)
     {
-        return (object)json_decode($value);
+        return (is_null($value))?null:(object) json_decode($value);
     }
 
-    public function setLegendsAttribute($value)
+    public function setEstablishmentAttribute($value)
     {
-        $this->attributes['legends'] = json_encode($value);
+        $this->attributes['establishment'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getCustomerAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setCustomerAttribute($value)
+    {
+        $this->attributes['customer'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getChargesAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setChargesAttribute($value)
+    {
+        $this->attributes['charges'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getDiscountsAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setDiscountsAttribute($value)
+    {
+        $this->attributes['discounts'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getPrepaymentsAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setPrepaymentsAttribute($value)
+    {
+        $this->attributes['prepayments'] = (is_null($value))?null:json_encode($value);
     }
 
     public function getGuidesAttribute($value)
     {
-        return (object)json_decode($value);
+        return (is_null($value))?null:(object) json_decode($value);
     }
 
     public function setGuidesAttribute($value)
     {
-        $this->attributes['guides'] = json_encode($value);
+        $this->attributes['guides'] = (is_null($value))?null:json_encode($value);
     }
 
-    public function getAdditionalDocumentsAttribute($value)
+    public function getRelatedAttribute($value)
     {
-        return (object)json_decode($value);
+        return (is_null($value))?null:(object) json_decode($value);
     }
 
-    public function setAdditionalDocumentsAttribute($value)
+    public function setRelatedDocumentsAttribute($value)
     {
-        $this->attributes['additional_documents'] = json_encode($value);
+        $this->attributes['related'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getPerceptionAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setPerceptionAttribute($value)
+    {
+        $this->attributes['perception'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getDetractionAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setDetractionAttribute($value)
+    {
+        $this->attributes['detraction'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getLegendsAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setLegendsAttribute($value)
+    {
+        $this->attributes['legends'] = (is_null($value))?null:json_encode($value);
     }
 
     public function getOptionalAttribute($value)
     {
-        return (object)json_decode($value);
+        return (is_null($value))?null:(object) json_decode($value);
     }
 
     public function setOptionalAttribute($value)
     {
-        $this->attributes['optional'] = json_encode($value);
-    }
-
-    public function getNumberFullAttribute()
-    {
-        return $this->series . '-' . $this->number;
-    }
-
-    public function getNumberToLetterAttribute()
-    {
-        $legends = $this->legends;
-        $legend = collect($legends)->where('code', '1000')->first();
-        return $legend->description;
+        $this->attributes['optional'] = (is_null($value))?null:json_encode($value);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function establishment()
-    {
-        return $this->belongsTo(Establishment::class);
     }
 
     public function soap_type()
@@ -147,11 +201,6 @@ class Document extends Model
         return $this->belongsTo(DocumentType::class);
     }
 
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
-    }
-
     public function currency_type()
     {
         return $this->belongsTo(CurrencyType::class);
@@ -172,75 +221,50 @@ class Document extends Model
         return $this->hasMany(Detail::class);
     }
 
-    public function logs()
+    public function getNumberFullAttribute()
     {
-        return $this->hasMany(Log::class);
+        return $this->series.'-'.$this->number;
     }
 
-    public function getVoidedAttribute()
+    public function getNumberToLetterAttribute()
     {
-        if ($this->group_id === '01') {
-            return Voided::whereHas('documents', function ($query) {
-                                $query->where('document_id', $this->id);
-                            })
-                            ->whereIn('state_type_id', ['03', '05'])
-                            ->first();
-        }
-
-        return Summary::whereHas('documents', function ($query) {
-                            $query->where('document_id', $this->id);
-                        })
-                        ->whereIn('state_type_id', ['03', '05'])
-                        ->where('process_type_id', 3)
-                        ->first();
-    }
-
-    public function scopeWhereUser($query)
-    {
-        return $query->where('user_id', cache('selected_user_id'));
-    }
-
-    public function scopeWhereProcessType($query, $process_type_id)
-    {
-        if($process_type_id === 1) {
-            return $query->where('state_type_id', '01');
-        }
-        return $query->where('state_type_id', '13');
+        $legends = $this->legends;
+        $legend = collect($legends)->where('code', '1000')->first();
+        return $legend->value;
     }
 
     public function getDownloadXmlAttribute()
     {
-        return route('tenant.documents.download', ['type' => 'xml', 'document' => $this->id]);
+        return route('documents.download', ['type' => 'xml', 'document' => $this->id]);
     }
 
     public function getDownloadPdfAttribute()
     {
-        return route('tenant.documents.download', ['type' => 'pdf', 'document' => $this->id]);
+        return route('documents.download', ['type' => 'pdf', 'document' => $this->id]);
     }
 
     public function getDownloadCdrAttribute()
     {
-        return route('tenant.documents.download', ['type' => 'cdr', 'document' => $this->id]);
+        return route('documents.download', ['type' => 'cdr', 'document' => $this->id]);
     }
 
     public function getDownloadExternalXmlAttribute()
     {
-        return route('tenant.documents.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+        return route('documents.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalPdfAttribute()
     {
-        return route('tenant.documents.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+        return route('documents.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalCdrAttribute()
     {
-        return route('tenant.documents.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
+        return route('documents.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
     }
 
-    public function getDocumentTypeDescriptionAttribute()
+    public function scopeWhereSoapTypeId($query, $soap_type_id)
     {
-        $document_type = Code::byCatalogAndCode('01', $this->document_type_code);
-        return $document_type->description;
+        return $query->where('soap_type_id', $soap_type_id);
     }
 }

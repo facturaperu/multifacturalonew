@@ -2,18 +2,14 @@
 
 namespace App\Models\Tenant;
 
-use Hyn\Tenancy\Traits\UsesTenantConnection;
-use Illuminate\Database\Eloquent\Model;
-
-class Voided extends Model
+class Voided extends ModelTenant
 {
-    use UsesTenantConnection;
-
-    protected $with = ['user', 'soap_type', 'state_type'];
     protected $table = 'voided';
+    protected $with = ['user', 'soap_type', 'state_type', 'details'];
 
     protected $fillable = [
         'user_id',
+        'external_id',
         'soap_type_id',
         'state_type_id',
         'ubl_version',
@@ -46,13 +42,23 @@ class Voided extends Model
         return $this->belongsTo(StateType::class);
     }
 
-    public function getDownloadCdrAttribute()
+    public function details()
     {
-        return route('tenant.voided.download', ['type' => 'cdr', 'id' => $this->id]);
+        return $this->hasMany(VoidedDetail::class);
     }
 
-    public function getDownloadXmlAttribute()
+    public function getDownloadExternalXmlAttribute()
     {
-        return route('tenant.voided.download', ['type' => 'xml', 'id' => $this->id]);
+        return route('summaries.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+    }
+
+    public function getDownloadExternalPdfAttribute()
+    {
+        return route('summaries.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+    }
+
+    public function getDownloadExternalCdrAttribute()
+    {
+        return route('summaries.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }
