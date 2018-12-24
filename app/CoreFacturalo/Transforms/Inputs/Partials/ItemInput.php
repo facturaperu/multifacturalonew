@@ -10,8 +10,8 @@ class ItemInput
         foreach ($inputs['items'] as $row)
         {
             $attributes = ItemAttributeInput::transform($row);
-            $discounts = ChargeInput::transform($row);
-            $charges = DiscountInput::transform($row);
+            $charges = ChargeInput::transform($row);
+            $discounts = DiscountInput::transform($row);
 
             $item = [
                 'description' => $row['descripcion'],

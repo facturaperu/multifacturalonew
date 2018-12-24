@@ -14,6 +14,4 @@ class InvoiceBuilder extends DocumentBuilder
 
         return $document;
     }
-
-
 }

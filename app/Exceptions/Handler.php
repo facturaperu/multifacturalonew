@@ -3,8 +3,11 @@
 namespace App\Exceptions;
 
 use Exception;
+use Http\Client\Exception\HttpException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -49,46 +52,49 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-//        dd($exception);
         if ($exception instanceof AuthenticationException) {
-            return $this->unauthenticated($request, $exception);
+            if ($this->isFrontend($request)) {
+                return redirect()->guest('login');
+            }
+            return $this->errorResponse('No se encuentra autenticado', 401, $exception);
+        }
+        if($exception instanceof AuthorizationException) {
+            return $this->errorResponse('No posee permisos para ejecutar esta acción', 403, $exception);
+        }
+        if($exception instanceof NotFoundHttpException) {
+            return $this->errorResponse('No se encontró la URL especificada', 404, $exception);
+        }
+        if($exception instanceof MethodNotAllowedHttpException) {
+            return $this->errorResponse('El método especificado en la petición no es válido', 405, $exception);
+        }
+        if($exception instanceof HttpException) {
+            return $this->errorResponse('', '', $exception);
         }
 
-        if ($exception instanceof NotFoundHttpException) {
-            return $this->errorResponse('No se encontró la URL especificada.', 404);
-        }
-
-        if ($exception instanceof MethodNotAllowedHttpException) {
-            return $this->errorResponse('El método especificado en la petición no es válido.', 405);
+        if(env('APP_ENV') === 'local') {
+            return $this->errorResponse('', 500, $exception);
         }
 
         return parent::render($request, $exception);
     }
 
-    protected function unauthenticated($request, AuthenticationException $exception)
-    {
-        if ($this->isFrontend($request)) {
-            return redirect()->guest('login');
-        }
-        return $this->errorResponse('No autenticado.', 401);
-    }
-
-    /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return boolean
-     */
-    private function isFrontend($request)
+    private function isFrontend(Request $request)
     {
         return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
     }
 
-    private function errorResponse($message, $code)
+    private function errorResponse($message, $code , Exception $exception)
     {
+        $message = ($message === '')?$exception->getMessage():$message;
+        $code = ($code === '')?$exception->getCode():$code;
+        $file = $exception->getFile();
+        $line = $exception->getLine();
+
         return response()->json([
             'success' => false,
-            'message' => $message
+            'message' => $message,
+            'file' => $file,
+            'line' => $line
         ], $code);
     }
-
-
 }

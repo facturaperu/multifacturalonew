@@ -2,8 +2,6 @@
 
 namespace App\CoreFacturalo\Transforms\Inputs;
 
-use App\Models\Tenant\Company;
-use App\Models\Tenant\Document;
 use App\CoreFacturalo\Transforms\Inputs\Partials\ActionInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\ChargeInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\CustomerInput;
@@ -17,6 +15,8 @@ use App\CoreFacturalo\Transforms\Inputs\Partials\OptionalInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\PerceptionInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\PrepaymentInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\RelatedInput;
+use App\Models\Company;
+use App\Models\Document;
 use Exception;
 use Illuminate\Support\Str;
 
@@ -112,7 +112,7 @@ class DocumentInput
     {
         if ($number === '#') {
             $document = Document::select('number')
-                                ->whereSoapTypeId($soap_type_id)
+                                ->where('soap_type_id', $soap_type_id)
                                 ->where('document_type_id', $document_type_id)
                                 ->where('series', $series)
                                 ->orderBy('number', 'desc')
@@ -139,7 +139,7 @@ class DocumentInput
 
     private static function validateUniqueDocument($soap_type_id, $document_type_id, $series, $number)
     {
-        $document = Document::whereSoapTypeId($soap_type_id)
+        $document = Document::where('soap_type_id', $soap_type_id)
                             ->where('document_type_id', $document_type_id)
                             ->where('series', $series)
                             ->where('number', $number)

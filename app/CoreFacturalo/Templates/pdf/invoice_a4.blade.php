@@ -147,9 +147,9 @@
 <table class="voucher-company">
     <tr>
         @if($company->logo)
-        <td width="25%">
-            <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo">
-        </td>
+            <td width="25%">
+                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo">
+            </td>
         @endif
         <td width="100%">
             <table class="voucher-company-left">

@@ -68,9 +68,4 @@ class Summary extends ModelTenant
     {
         return route('summaries.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
     }
-
-    public function scopeWhereSoapTypeId($query, $soap_type_id)
-    {
-        return $query->where('soap_type_id', $soap_type_id);
-    }
 }

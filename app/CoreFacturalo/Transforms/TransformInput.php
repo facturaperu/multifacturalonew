@@ -70,8 +70,8 @@ class TransformInput
         $summary = VoidedInput::transform($inputs);
 
         $original_attributes = [
-            'type' => 'summary',
-            'summary' => $summary,
+            'type' => 'voided',
+            'voided' => $summary,
             'success' => true
         ];
         return $original_attributes;

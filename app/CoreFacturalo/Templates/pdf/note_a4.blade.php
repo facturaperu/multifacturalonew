@@ -145,119 +145,119 @@
     </style>
 </head>
 <body>
-    {{--<script type="text/php">--}}
-      {{--if (isset($pdf)) {--}}
-        {{--$pdf->page_text(120, 740, "Para consultar el comprobante ingresar a {!! url('/') !!}/search", "Arial", 8, array(0, 0, 0));--}}
-        {{--$font = $fontMetrics->getFont("Arial", "bold");--}}
-        {{--$pdf->page_text(530, 740, "Página {PAGE_NUM} de {PAGE_COUNT}", $font, 7, array(0, 0, 0));--}}
-      {{--}--}}
-    {{--</script>--}}
-    <table class="voucher-company">
-        <tr>
-            @if($company->logo)
-                <td width="25%">
-                    <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo">
-                </td>
-            @endif
-            <td width="100%">
-                <table class="voucher-company-left">
-                    <tbody>
-                    <tr><td class="text-left font-xxlg font-bold">{{ $company->name }}</td></tr>
-                    <tr><td class="text-left font-xl font-bold">{{ 'RUC '.$company->number }}</td></tr>
-                    @if($establishment)
-                        <tr><td class="text-left font-lg">{{ $establishment->address }}</td></tr>
-                        <tr><td class="text-left font-lg">{{ ($establishment->email != '-')? $establishment->email : '' }}</td></tr>
-                        <tr><td class="text-left font-lg font-bold">{{ ($establishment->telephone != '-')? $establishment->telephone : '' }}</td></tr>
-                    @endif
-                    </tbody>
-                </table>
+{{--<script type="text/php">--}}
+{{--if (isset($pdf)) {--}}
+{{--$pdf->page_text(120, 740, "Para consultar el comprobante ingresar a {!! url('/') !!}/search", "Arial", 8, array(0, 0, 0));--}}
+{{--$font = $fontMetrics->getFont("Arial", "bold");--}}
+{{--$pdf->page_text(530, 740, "Página {PAGE_NUM} de {PAGE_COUNT}", $font, 7, array(0, 0, 0));--}}
+{{--}--}}
+{{--</script>--}}
+<table class="voucher-company">
+    <tr>
+        @if($company->logo)
+            <td width="25%">
+                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo">
             </td>
-            <td width="30%">
-                <table class="voucher-company-right">
-                    <tbody>
-                    <tr><td class="text-center font-lg">{{ $document->document_type->description }}</td></tr>
-                    <tr><td class="text-center font-xlg font-bold">{{ $document_number }}</td></tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </table>
-    <table class="voucher-information">
-        <tr>
-            <td width="55%">
-                <table class="voucher-information-left">
-                    <tbody>
+        @endif
+        <td width="100%">
+            <table class="voucher-company-left">
+                <tbody>
+                <tr><td class="text-left font-xxlg font-bold">{{ $company->name }}</td></tr>
+                <tr><td class="text-left font-xl font-bold">{{ 'RUC '.$company->number }}</td></tr>
+                @if($establishment)
+                    <tr><td class="text-left font-lg">{{ $establishment->address }}</td></tr>
+                    <tr><td class="text-left font-lg">{{ ($establishment->email != '-')? $establishment->email : '' }}</td></tr>
+                    <tr><td class="text-left font-lg font-bold">{{ ($establishment->telephone != '-')? $establishment->telephone : '' }}</td></tr>
+                @endif
+                </tbody>
+            </table>
+        </td>
+        <td width="30%">
+            <table class="voucher-company-right">
+                <tbody>
+                <tr><td class="text-center font-lg">{{ $document->document_type->description }}</td></tr>
+                <tr><td class="text-center font-xlg font-bold">{{ $document_number }}</td></tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+<table class="voucher-information">
+    <tr>
+        <td width="55%">
+            <table class="voucher-information-left">
+                <tbody>
+                <tr>
+                    <td width="50%">Fecha de emisión: </td>
+                    <td width="50%">{{ $document->date_of_issue->format('d/m/Y') }}</td>
+                </tr>
+                <tr>
+                    <td width="20%">Cliente:</td>
+                    <td width="80%">{{ $customer->name }}</td>
+                </tr>
+                <tr>
+                    <td width="20%">{{ $customer->identity_document_type->description }}:</td>
+                    <td width="80%">{{ $customer->number }}</td>
+                </tr>
+                @if ($customer->address !== '')
                     <tr>
-                        <td width="50%">Fecha de emisión: </td>
-                        <td width="50%">{{ $document->date_of_issue->format('d/m/Y') }}</td>
+                        <td width="20%">Dirección:</td>
+                        <td width="80%">{{ $customer->address }}</td>
                     </tr>
+                @endif
+                </tbody>
+            </table>
+        </td>
+        <td width="45%">
+            <table class="voucher-information-right">
+                <tbody>
+                @if ($document->purchase_order)
                     <tr>
-                        <td width="20%">Cliente:</td>
-                        <td width="80%">{{ $customer->name }}</td>
+                        <td width="50%">Orden de Compra: </td>
+                        <td width="50%">{{ $document->purchase_order }}</td>
                     </tr>
-                    <tr>
-                        <td width="20%">{{ $customer->identity_document_type->description }}:</td>
-                        <td width="80%">{{ $customer->number }}</td>
-                    </tr>
-                    @if ($customer->address !== '')
+                @endif
+                @if ($document->guides)
+                    @foreach($document->guides as $guide)
                         <tr>
-                            <td width="20%">Dirección:</td>
-                            <td width="80%">{{ $customer->address }}</td>
+                            <td>{{ $guide->document_type_id }}</td>
+                            <td>{{ $guide->number }}</td>
                         </tr>
-                    @endif
-                    </tbody>
-                </table>
-            </td>
-            <td width="45%">
-                <table class="voucher-information-right">
-                    <tbody>
-                    @if ($document->purchase_order)
-                        <tr>
-                            <td width="50%">Orden de Compra: </td>
-                            <td width="50%">{{ $document->purchase_order }}</td>
-                        </tr>
-                    @endif
-                    @if ($document->guides)
-                        @foreach($document->guides as $guide)
-                            <tr>
-                                <td>{{ $guide->document_type_id }}</td>
-                                <td>{{ $guide->number }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </table>
-    <table class="voucher-information top-note">
-        <tr>
-            <td>
-                <table class="voucher-information-left">
-                    <tbody>
-                        <tr>
-                            <td width="20%">Documento Afectado:</td>
-                            <td width="20%">{{ $note->affected_document->series }}-{{ $note->affected_document->number }}</td>
-                            <td width="25%" class="text-right">Tipo de nota:</td>
-                            <td width="35%">{{ ($note->note_type === 'credit')?$note->note_credit_type->description:$note->note_debit_type->description}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td width="100%">
-                <table class="voucher-information-left">
-                    <tbody>
-                        <tr>
-                            <td width="20%">Descripción:</td>
-                            <td width="80%" class="text-left">{{ $note->description }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </table>
+                    @endforeach
+                @endif
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+<table class="voucher-information top-note">
+    <tr>
+        <td>
+            <table class="voucher-information-left">
+                <tbody>
+                <tr>
+                    <td width="20%">Documento Afectado:</td>
+                    <td width="20%">{{ $note->affected_document->series }}-{{ $note->affected_document->number }}</td>
+                    <td width="25%" class="text-right">Tipo de nota:</td>
+                    <td width="35%">{{ ($note->note_type === 'credit')?$note->note_credit_type->description:$note->note_debit_type->description}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td width="100%">
+            <table class="voucher-information-left">
+                <tbody>
+                <tr>
+                    <td width="20%">Descripción:</td>
+                    <td width="80%" class="text-left">{{ $note->description }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
 <table class="voucher-details">
     <thead>
     <tr>
@@ -287,10 +287,10 @@
     @endforeach
     </tbody>
     <tfoot style="border-top: 1px solid #333;">
-        <tr>
-            <td colspan="5" class="font-lg font-bold"  style="padding-top: 2rem;">Son: {{ $document->number_to_letter }} {{ $document->currency_type->description }}</td>
-        </tr>
-        @if(isset($document->optional->observations))
+    <tr>
+        <td colspan="5" class="font-lg font-bold"  style="padding-top: 2rem;">Son: {{ $document->number_to_letter }} {{ $document->currency_type->description }}</td>
+    </tr>
+    @if(isset($document->optional->observations))
         <tr>
             <td colspan="3"><b>Obsevaciones</b></td>
             <td colspan="2"></td>
@@ -299,7 +299,7 @@
             <td colspan="3">{{ $document->optional->observations }}</td>
             <td colspan="2"></td>
         </tr>
-        @endif
+    @endif
     </tfoot>
 </table>
 <table class="voucher-totals">

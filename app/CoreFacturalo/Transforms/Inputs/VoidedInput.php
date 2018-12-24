@@ -2,8 +2,9 @@
 
 namespace App\CoreFacturalo\Transforms\Inputs;
 
-use App\Models\Tenant\Company;
-use App\Models\Tenant\Voided;
+use App\Models\Company;
+use App\Models\Document;
+use App\Models\Voided;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Str;
@@ -12,27 +13,15 @@ class VoidedInput
 {
     public static function transform($inputs)
     {
-        $soap_type_id = Company::active()->soap_type_id;
+        $soap_type_id = Company::getSoapTypeId();
 
-        $date_of_issue = $inputs['fecha_de_emision'];
-        $date_of_reference = $inputs['fecha_de_referencia'];
+        $date_of_reference = $inputs['fecha_de_emision_de_documentos'];
+        $date_of_issue = date('Y-m-d');
+
+        $docs = array_key_exists('documentos', $inputs)?$inputs['documentos']:[];
+        $documents = self::verifyDocuments($soap_type_id, $date_of_reference, $docs);
         $identifier = self::identifier($soap_type_id, $date_of_issue);
         $filename = self::filename($identifier);
-
-        $documents = '';
-//        $aux_documents = Document::allDocuments($soap_type_id,  $date_of_reference, $group_id);
-//
-//        if(count($aux_documents) === 0) {
-//            throw new Exception("No se encontraron documentos en la fecha {$date_of_reference}");
-//        }
-//
-//        $documents = [];
-//        foreach ($aux_documents as $document)
-//        {
-//            $documents[] = [
-//                'document_id' => $document->id
-//            ];
-//        }
 
         return [
             'user_id' => auth()->id(),
@@ -50,31 +39,45 @@ class VoidedInput
 
     private static function identifier($soap_type_id, $date_of_issue)
     {
-        $voided = Voided::whereSoapTypeId($soap_type_id)
-            ->where('date_of_issue', $date_of_issue)
-            ->get();
+        $voided = Voided::where('soap_type_id', $soap_type_id)
+                            ->where('date_of_issue', $date_of_issue)
+                            ->get();
         $numeration = count($voided) + 1;
 
         return join('-', ['RA', Carbon::parse($date_of_issue)->format('Ymd'), $numeration]);
     }
 
-    private function filename($identifier)
+    private static function filename($identifier)
     {
         $company = Company::active();
         return $company->number.'-'.$identifier;
     }
 
-    private static function findDocuments($soap_type_id, $date_of_reference)
+    private static function verifyDocuments($soap_type_id, $date_of_reference, $documents)
     {
-//        $documents = Document::whereSoapTypeId('soap_type_id', $soap_type_id)
-//            ->where('date_of_issue', $date_of_reference)
-//            ->where('group_id', '02')
-//            ->get();
-//
-//        if(count($documents) === 0) {
-//            throw new Exception("No se encontraron documentos con la fecha {$date_of_reference}");
-//        }
-//
-//        return $documents->pluck('id');
+        $aux_documents = [];
+        foreach ($documents as $doc)
+        {
+            $external_id = $doc['external_id'];
+            $description = $doc['motivo_anulacion'];
+
+            $document = Document::where('soap_type_id', $soap_type_id)
+                                ->where('external_id', $external_id)
+                                ->where('group_id', '01')
+                                ->where('date_of_issue', $date_of_reference)
+                                ->first();
+            if(!$document) {
+                throw new Exception("El documento con codigo externo {$external_id} no es encontró");
+            }
+            $aux_documents[] = [
+                'document_id' => $document->id,
+                'description' => $description
+            ];
+        }
+        if(count($aux_documents) === 0) {
+            throw new Exception("No se enviaron documentos para la anulación");
+        }
+
+        return $aux_documents;
     }
 }

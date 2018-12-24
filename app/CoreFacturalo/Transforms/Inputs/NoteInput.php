@@ -2,7 +2,7 @@
 
 namespace App\CoreFacturalo\Transforms\Inputs;
 
-use App\Models\Tenant\Document;
+use App\Models\Document;
 use Exception;
 
 class NoteInput
@@ -45,13 +45,13 @@ class NoteInput
 
     private static function findAffectedDocument($soap_type_id, $document_type_id, $series, $number)
     {
-        $document = Document::whereSoapTypeId($soap_type_id)
-                            ->whereDocumentTypeId($document_type_id)
-                            ->whereSeries($series)
-                            ->whereNumber($number)
+        $document = Document::where('soap_type_id', $soap_type_id)
+                            ->where('document_type_id', $document_type_id)
+                            ->where('series', $series)
+                            ->where('number', $number)
                             ->first();
         if(!$document) {
-            throw new Exception("El documento: {$document_type_id} {$series}-{$number} ya se encuentra registrado.");
+            throw new Exception("El documento: {$series}-{$number} no se encuentra registrado.");
         }
 
         return $document;
