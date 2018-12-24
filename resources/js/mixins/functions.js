@@ -31,7 +31,27 @@ export const functions = {
                         this.loading_search_exchange_rate = false
                     })
             })
-
+        },
+        searchExchangeRateByDate() {
+            return new Promise((resolve) => {
+                this.loading_search_exchange_rate = true
+                this.$http.post(`/services/exchange_rate`, this.form)
+                    .then(response => {
+                        let res = response.data
+                        if (res.success) {
+                            this.form.exchange_rate_sell = res.data.sell
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                        resolve()
+                    })
+                    .catch(error => {
+                        console.log(error.response)
+                    })
+                    .then(() => {
+                        this.loading_search_exchange_rate = false
+                    })
+            })
         },
         searchCustomerByNumber() {
             return new Promise((resolve) => {

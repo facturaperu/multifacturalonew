@@ -108,4 +108,21 @@ class ServiceController extends Controller
             ];
         }
     }
+
+    public function searchExchangeRateByDate(Request $request)
+    {
+        $date = $request->input('exchange_rate_date');
+        $exchange_rate = ExchangeRate::where('date', $date)->first();
+        if($exchange_rate) {
+              return [
+                  'success' => true,
+                  'data' => $exchange_rate
+              ];
+        } else {
+            return [
+                'success' => false,
+                'message' => "Tipo de cambio no encontrado en la fecha {$date}"
+            ];
+        }
+    }
 }

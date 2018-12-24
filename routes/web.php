@@ -26,10 +26,19 @@
 //    });
 //});
 
+//public function search($document_type_code, $series, $number, $date_of_issue, $total = null)
+//
+//    \App\Core\Services\Extras\ValidateCpe::
+
 $hostname = app(Hyn\Tenancy\Contracts\CurrentHostname::class);
 
 if ($hostname) {
     Route::domain($hostname->fqdn)->group(function() {
+
+        Route::get('cpe', function () {
+            $cpe = new \App\Core\Services\Extras\ValidateCpe();
+            $cpe->search('01', 'F001', 1, '2018-12-20');
+        });
 
         Auth::routes();
 
@@ -217,6 +226,9 @@ if ($hostname) {
     });
 } else {
     Route::domain(env('APP_URL_BASE'))->group(function() {
+
+
+
 
         Route::get('login', 'System\LoginController@showLoginForm')->name('login');
         Route::post('login', 'System\LoginController@login');

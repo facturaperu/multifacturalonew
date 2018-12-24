@@ -77,10 +77,10 @@
                             </div>
                         </div>
                         <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.exchange_rate}">
+                            <div class="form-group" :class="{'has-danger': errors.exchange_rate_sell}">
                                 <label class="control-label">Tipo de cambio</label>
-                                <el-input v-model="form.exchange_rate"></el-input>
-                                <small class="form-control-feedback" v-if="errors.exchange_rate" v-text="errors.exchange_rate[0]"></small>
+                                <el-input v-model="form.exchange_rate_sell"></el-input>
+                                <small class="form-control-feedback" v-if="errors.exchange_rate_sell" v-text="errors.exchange_rate_sell[0]"></small>
                             </div>
                         </div>
                         <div class="col-lg-2">
@@ -176,8 +176,10 @@
     import InvoiceFormItem from './partials/item.vue'
     import CustomerForm from '../customers/form.vue'
     import DocumentOptions from '../documents/partials/options.vue'
+    import {functions} from '../../../mixins/functions'
 
     export default {
+        mixins: [functions],
         components: {InvoiceFormItem, CustomerForm, DocumentOptions},
         data() {
             return {
@@ -243,7 +245,8 @@
                     date_of_issue: moment().format('YYYY-MM-DD'),
                     time_of_issue: moment().format('HH:mm:ss'),
                     date_of_due: moment().format('YYYY-MM-DD'),
-                    exchange_rate: 0,
+                    exchange_rate_date: null,
+                    exchange_rate_sell: null,
                     currency_type_id: null,
                     currency_type: null,
                     customer_id: null,
@@ -291,6 +294,8 @@
             },
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
+                this.form.exchange_rate_date = this.form.date_of_issue
+                this.searchExchangeRateByDate()
             },
             filterSeries() {
                 this.form.series = null

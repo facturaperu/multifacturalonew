@@ -9,6 +9,7 @@ use Exception;
 use GoogleCloudVision\GoogleCloudVision;
 use GoogleCloudVision\Request\AnnotateImageRequest;
 use GuzzleHttp\Client;
+use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class ValidateCpe
 {
@@ -29,6 +30,7 @@ class ValidateCpe
 
     public function search($document_type_code, $series, $number, $date_of_issue, $total = null)
     {
+        $this->getCaptchaImage();
         try {
             $captcha = trim($this->getCaptchaImage());
             $response = $this->client->request('POST', self::URL_CONSULT, [
@@ -69,18 +71,19 @@ class ValidateCpe
     private function getCaptchaImage()
     {
         $response = $this->client->request('GET', self::URL_CAPTCHA);
-        $image = base64_encode($response->getBody()->getContents());
-
-        $request = new AnnotateImageRequest();
-        $request->setImage($image);
-        $request->setFeature("TEXT_DETECTION");
-        $gcvRequest = new GoogleCloudVision([$request],  env('GOOGLE_CLOUD_VISION_API_KEY'));
-        $response = $gcvRequest->annotate();
-
-        if ($response->responses) {
-            return str_replace(' ', '', $response->responses[0]->textAnnotations[0]->description);
-        } else {
-            return 'ERROR';
+        $temp = tempnam(sys_get_temp_dir(), 'captcha_');
+        file_put_contents($temp, $response->getBody()->getContents());
+        $ocr = new TesseractOCR($temp);
+        if($this->isWindows()) {
+            $ocr->executable("C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe");
         }
+        $text =  $ocr->run();
+
+        return $text;
+    }
+
+    private function isWindows()
+    {
+        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
     }
 }
