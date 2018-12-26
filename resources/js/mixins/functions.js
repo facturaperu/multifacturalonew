@@ -35,12 +35,13 @@ export const functions = {
         searchExchangeRateByDate() {
             return new Promise((resolve) => {
                 this.loading_search_exchange_rate = true
-                this.$http.post(`/services/exchange_rate`, this.form)
+                this.$http.post(`/services/search_exchange_rate`, this.form)
                     .then(response => {
                         let res = response.data
                         if (res.success) {
                             this.form.exchange_rate_sell = res.data.sell
                         } else {
+                            this.form.exchange_rate_sell = 0
                             this.$message.error(res.message)
                         }
                         resolve()

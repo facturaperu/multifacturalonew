@@ -27440,11 +27440,12 @@ var functions = {
 
             return new Promise(function (resolve) {
                 _this2.loading_search_exchange_rate = true;
-                _this2.$http.post('/services/exchange_rate', _this2.form).then(function (response) {
+                _this2.$http.post('/services/search_exchange_rate', _this2.form).then(function (response) {
                     var res = response.data;
                     if (res.success) {
                         _this2.form.exchange_rate_sell = res.data.sell;
                     } else {
+                        _this2.form.exchange_rate_sell = 0;
                         _this2.$message.error(res.message);
                     }
                     resolve();
@@ -121449,16 +121450,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 discounts: []
             };
 
-            var _percentage_igv = 18;
+            var percentage_igv = 18;
 
             if (row.affectation_igv_type_id !== '10') {
-                _percentage_igv = 0;
+                percentage_igv = 0;
             }
 
             //row.unit_price = parseFloat(this.form.unit_price)
-            var _unit_value = row.unit_price / (1 + _percentage_igv / 100);
+            var unit_value = row.unit_price / (1 + percentage_igv / 100);
 
-            row.unit_value = _.round(_unit_value, 2);
+            //row.unit_value = _.round(_unit_value, 2)
             //                _unit_value = row.unit_price / (1 + _percentage_igv / 100)
 
             //                if (this.item.has_isc) {
@@ -121487,23 +121488,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //                } else {
             //                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
             //                }
-            row.unit_value = _.round(_unit_value, 2);
+            row.unit_value = _.round(unit_value, 2);
 
-            var _total_value_partial = _unit_value * row.quantity;
-            var _discount_base = 0;
-            var _discount_no_base = 0;
+            var total_value_partial = unit_value * row.quantity;
+            var discount_base = 0;
+            var discount_no_base = 0;
             this.form.discounts.forEach(function (discount) {
                 var discount_type = _.find(_this2.discounts, { 'id': discount.discount_type_id });
                 if (discount_type.base) {
-                    _discount_base += _.round(_total_value_partial * discount.percentage / 100, 2);
-                    console.log('total base:' + _discount_base);
+                    discount_base += _.round(total_value_partial * discount.percentage / 100, 2);
+                    console.log('total base:' + discount_base);
                 } else {
-                    _discount_no_base += _.round(_total_value_partial * discount.percentage / 100, 2);
-                    console.log('total no base:' + _discount_no_base);
+                    discount_no_base += _.round(total_value_partial * discount.percentage / 100, 2);
+                    console.log('total no base:' + discount_no_base);
                 }
             });
 
-            row.total_discount = _discount_base + _discount_no_base;
+            var total_isc = 0;
+            var total_other_taxes = 0;
+
+            var total_discount = discount_base + discount_no_base;
+            var total_value = total_value_partial - total_discount;
+            var total_base_igv = total_value_partial - discount_base + total_isc;
+            var total_igv = total_base_igv * percentage_igv / 100;
+            var total_taxes = total_igv + total_isc + total_other_taxes;
+            var total = total_value + total_igv + total_isc;
+
             row.total_value = _.round(_total_value_partial - row.total_discount, 2);
             row.total_base_igv = _.round(_total_value_partial - _discount_base + row.total_isc, 2);
             row.total_igv = _.round(row.total_base_igv * _percentage_igv / 100, 2);
@@ -121515,7 +121525,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 row.total = 0;
             }
 
-            this.initForm();
+            row.total_discount = this.initForm();
             this.$emit('add', row);
         },
         reloadDataItems: function reloadDataItems(item_id) {

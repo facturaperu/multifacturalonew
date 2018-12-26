@@ -273,16 +273,16 @@
                     discounts: [],
                 };
 
-                let _percentage_igv = 18
+                let percentage_igv = 18
 
                 if (row.affectation_igv_type_id !== '10') {
-                    _percentage_igv = 0
+                    percentage_igv = 0
                 }
 
                 //row.unit_price = parseFloat(this.form.unit_price)
-                let _unit_value = row.unit_price / (1 + _percentage_igv / 100)
+                let unit_value = row.unit_price / (1 + percentage_igv / 100)
 
-                row.unit_value = _.round(_unit_value, 2)
+                //row.unit_value = _.round(_unit_value, 2)
 //                _unit_value = row.unit_price / (1 + _percentage_igv / 100)
 
 //                if (this.item.has_isc) {
@@ -311,23 +311,32 @@
 //                } else {
 //                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
 //                }
-                row.unit_value = _.round(_unit_value, 2)
+                row.unit_value = _.round(unit_value, 2)
 
-                let _total_value_partial = _unit_value * row.quantity
-                let _discount_base = 0
-                let _discount_no_base = 0
+                let total_value_partial = unit_value * row.quantity
+                let discount_base = 0
+                let discount_no_base = 0
                 this.form.discounts.forEach((discount) => {
                     let discount_type = _.find(this.discounts, {'id': discount.discount_type_id})
                     if (discount_type.base) {
-                        _discount_base += _.round(_total_value_partial * discount.percentage / 100, 2)
-                        console.log('total base:'+_discount_base)
+                        discount_base += _.round(total_value_partial * discount.percentage / 100, 2)
+                        console.log('total base:'+discount_base)
                     } else {
-                        _discount_no_base += _.round(_total_value_partial * discount.percentage / 100, 2)
-                        console.log('total no base:'+_discount_no_base)
+                        discount_no_base += _.round(total_value_partial * discount.percentage / 100, 2)
+                        console.log('total no base:'+discount_no_base)
                     }
                 })
 
-                row.total_discount = _discount_base + _discount_no_base
+                let total_isc = 0
+                let total_other_taxes = 0
+
+                let total_discount = discount_base + discount_no_base
+                let total_value = total_value_partial - total_discount
+                let total_base_igv = total_value_partial - discount_base + total_isc
+                let total_igv  = total_base_igv * percentage_igv / 100
+                let total_taxes = total_igv + total_isc + total_other_taxes
+                let total = total_value + total_igv + total_isc
+
                 row.total_value = _.round(_total_value_partial - row.total_discount, 2)
                 row.total_base_igv = _.round(_total_value_partial - _discount_base + row.total_isc, 2)
                 row.total_igv =  _.round(row.total_base_igv * _percentage_igv / 100, 2)
@@ -338,6 +347,8 @@
                     row.price_type_id = '02'
                     row.total = 0
                 }
+
+                row.total_discount =
 
                 this.initForm()
                 this.$emit('add', row)
