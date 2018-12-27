@@ -13,6 +13,7 @@ class Document extends ModelTenant
     protected $fillable = [
         'user_id',
         'external_id',
+        'establishment_id',
         'establishment',
         'soap_type_id',
         'state_type_id',
@@ -23,6 +24,7 @@ class Document extends ModelTenant
         'number',
         'date_of_issue',
         'time_of_issue',
+        'customer_id',
         'customer',
         'currency_type_id',
         'purchase_order',

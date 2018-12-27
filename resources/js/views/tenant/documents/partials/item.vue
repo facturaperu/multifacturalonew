@@ -139,10 +139,12 @@
 <script>
 
     import itemForm from '../../items/form.vue'
+    import {formDocumentItem} from '../../../../mixins/functions'
 
     export default {
         props: ['showDialog', 'operationTypeId'],
         components: {itemForm},
+        mixins: [formDocumentItem],
         data() {
             return {
                 titleDialog: 'Agregar Producto o Servicio',
@@ -238,18 +240,20 @@
                 this.form.currency_type_symbol = this.item.currency_type.symbol
             },
             clickAddItem() {
-                let item_description = this.item.description
+//                let item_description = this.item.description
                 let affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
 
                 let row = {
                     item_id: this.item.id,
-                    item_description: item_description,
+                    item_description: this.item.description,
+                    item: this.item,
                     currency_type_id: this.item.currency_type_id,
                     unit_type_id: this.item.unit_type_id,
                     quantity: this.form.quantity,
                     unit_value: 0,
                     affectation_igv_type_id: affectation_igv_type.id,
                     affectation_igv_type_description: affectation_igv_type.description,
+                    affectation_igv_type: affectation_igv_type,
                     total_base_igv: 0,
                     percentage_igv: 18,
                     total_igv: 0,
@@ -273,85 +277,10 @@
                     discounts: [],
                 };
 
-                let percentage_igv = 18
-
-                if (row.affectation_igv_type_id !== '10') {
-                    percentage_igv = 0
-                }
-
-                //row.unit_price = parseFloat(this.form.unit_price)
-                let unit_value = row.unit_price / (1 + percentage_igv / 100)
-
-                //row.unit_value = _.round(_unit_value, 2)
-//                _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-
-//                if (this.item.has_isc) {
-//                    row.percentage_isc = parseFloat(this.item.percentage_isc)
-//                    row.suggested_price = parseFloat(this.item.suggested_price)
-//                    row.system_isc_type_id = this.item.system_isc_type_id
-//
-//                    let _unit_value_isc = 0
-//                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-//
-//                    if (this.item.system_isc_type_id === '01') {
-//                        _unit_value /= (1 + row.percentage_isc / 100)
-//                        _unit_value_isc = _unit_value * row.percentage_isc / 100
-//                        //row.unit_value = _unit_value /_unit_value_isc
-//                    }
-//                    if (this.item.system_isc_type_id === '02') {
-//                        //_unit_value = _unit_value
-//                    }
-//                    if (this.item.system_isc_type_id === '03') {
-//                        _unit_value_isc = row.suggested_price * row.percentage_isc / 100
-//                        row.unit_value = _unit_value - _unit_value_isc
-//                    }
-//
-//                    row.total_isc = _unit_value_isc * row.quantity
-//
-//                } else {
-//                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-//                }
-                row.unit_value = _.round(unit_value, 2)
-
-                let total_value_partial = unit_value * row.quantity
-                let discount_base = 0
-                let discount_no_base = 0
-                this.form.discounts.forEach((discount) => {
-                    let discount_type = _.find(this.discounts, {'id': discount.discount_type_id})
-                    if (discount_type.base) {
-                        discount_base += _.round(total_value_partial * discount.percentage / 100, 2)
-                        console.log('total base:'+discount_base)
-                    } else {
-                        discount_no_base += _.round(total_value_partial * discount.percentage / 100, 2)
-                        console.log('total no base:'+discount_no_base)
-                    }
-                })
-
-                let total_isc = 0
-                let total_other_taxes = 0
-
-                let total_discount = discount_base + discount_no_base
-                let total_value = total_value_partial - total_discount
-                let total_base_igv = total_value_partial - discount_base + total_isc
-                let total_igv  = total_base_igv * percentage_igv / 100
-                let total_taxes = total_igv + total_isc + total_other_taxes
-                let total = total_value + total_igv + total_isc
-
-                row.total_value = _.round(_total_value_partial - row.total_discount, 2)
-                row.total_base_igv = _.round(_total_value_partial - _discount_base + row.total_isc, 2)
-                row.total_igv =  _.round(row.total_base_igv * _percentage_igv / 100, 2)
-                row.total_taxes = row.total_igv + row.total_isc + row.total_other_taxes
-                row.total = row.total_value + row.total_igv + row.total_isc
-
-                if (affectation_igv_type.free) {
-                    row.price_type_id = '02'
-                    row.total = 0
-                }
-
-                row.total_discount =
+                this.calculateRowItem(row)
 
                 this.initForm()
-                this.$emit('add', row)
+                this.$emit('add', this.row)
             },
             reloadDataItems(item_id) {
                 this.$http.get(`/${this.resource}/table/items`).then((response) => {

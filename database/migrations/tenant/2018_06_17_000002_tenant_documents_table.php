@@ -17,6 +17,7 @@ class TenantDocumentsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->uuid('external_id');
+            $table->unsignedInteger('establishment_id');
             $table->json('establishment');
             $table->char('soap_type_id', 2);
             $table->char('state_type_id', 2);
@@ -27,6 +28,7 @@ class TenantDocumentsTable extends Migration
             $table->integer('number');
             $table->date('date_of_issue');
             $table->time('time_of_issue');
+            $table->unsignedInteger('customer_id');
             $table->json('customer');
             $table->char('currency_type_id', 3);
             $table->string('purchase_order')->nullable();
@@ -66,6 +68,8 @@ class TenantDocumentsTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('establishment_id')->references('id')->on('establishments');
+            $table->foreign('customer_id')->references('id')->on('customers');
             $table->foreign('soap_type_id')->references('id')->on('soap_types');
             $table->foreign('state_type_id')->references('id')->on('state_types');
             $table->foreign('group_id')->references('id')->on('groups');

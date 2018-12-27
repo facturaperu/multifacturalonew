@@ -215,9 +215,7 @@
                     this.company = response.data.company
                     this.establishments = response.data.establishments
                     this.all_series = response.data.series
-
                     this.form.soap_type_id = this.company.soap_type_id
-
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
                     this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
@@ -289,7 +287,7 @@
                 this.filterSeries()
             },
             changeDocumentType() {
-                this.form.group_id = (this.form.document_type_id === '01000001')?'01':'02'
+                this.form.group_id = (this.form.document_type_id === '01')?'01':'02'
                 this.filterSeries()
             },
             changeDateOfIssue() {
@@ -346,6 +344,9 @@
 //            },
             changeCurrencyType() {
                 this.form.currency_type = _.find(this.currency_types, {'id': this.form.currency_type_id})
+                this.form.items.forEach((row) => {
+
+                });
                 //this.currency_symbol = (this.form.currency_type_code === 'PEN')?'S/':'$'
             },
 //            changeRow(index) {

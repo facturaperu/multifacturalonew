@@ -14,6 +14,7 @@ class Detail extends ModelTenant
 
     protected $fillable = [
         'document_id',
+        'item_id',
         'item',
         'quantity',
         'unit_value',

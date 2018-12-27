@@ -27400,7 +27400,8 @@ module.exports = Component.exports
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return functions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return functions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formDocumentItem; });
 var functions = {
     data: function data() {
         return {
@@ -27489,6 +27490,98 @@ var functions = {
                     _this3.loading_search_customer = false;
                 });
             });
+        }
+    }
+};
+
+var formDocumentItem = {
+    data: function data() {
+        return {
+            row: {}
+        };
+    },
+
+    methods: {
+        calculateRowItem: function calculateRowItem(row) {
+            var _this4 = this;
+
+            var percentage_igv = 18;
+
+            if (row.affectation_igv_type_id !== '10') {
+                percentage_igv = 0;
+            }
+
+            //row.unit_price = parseFloat(this.form.unit_price)
+            var unit_value = row.unit_price / (1 + percentage_igv / 100);
+
+            //row.unit_value = _.round(_unit_value, 2)
+            //                _unit_value = row.unit_price / (1 + _percentage_igv / 100)
+
+            //                if (this.item.has_isc) {
+            //                    row.percentage_isc = parseFloat(this.item.percentage_isc)
+            //                    row.suggested_price = parseFloat(this.item.suggested_price)
+            //                    row.system_isc_type_id = this.item.system_isc_type_id
+            //
+            //                    let _unit_value_isc = 0
+            //                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
+            //
+            //                    if (this.item.system_isc_type_id === '01') {
+            //                        _unit_value /= (1 + row.percentage_isc / 100)
+            //                        _unit_value_isc = _unit_value * row.percentage_isc / 100
+            //                        //row.unit_value = _unit_value /_unit_value_isc
+            //                    }
+            //                    if (this.item.system_isc_type_id === '02') {
+            //                        //_unit_value = _unit_value
+            //                    }
+            //                    if (this.item.system_isc_type_id === '03') {
+            //                        _unit_value_isc = row.suggested_price * row.percentage_isc / 100
+            //                        row.unit_value = _unit_value - _unit_value_isc
+            //                    }
+            //
+            //                    row.total_isc = _unit_value_isc * row.quantity
+            //
+            //                } else {
+            //                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
+            //                }
+            row.unit_value = _.round(unit_value, 2);
+
+            var total_value_partial = unit_value * row.quantity;
+            var discount_base = 0;
+            var discount_no_base = 0;
+            this.form.discounts.forEach(function (discount) {
+                var discount_type = _.find(_this4.discounts, { 'id': discount.discount_type_id });
+                if (discount_type.base) {
+                    discount_base += _.round(total_value_partial * discount.percentage / 100, 2);
+                    console.log('total base:' + discount_base);
+                } else {
+                    discount_no_base += _.round(total_value_partial * discount.percentage / 100, 2);
+                    console.log('total no base:' + discount_no_base);
+                }
+            });
+
+            var total_isc = 0;
+            var total_other_taxes = 0;
+
+            var total_discount = discount_base + discount_no_base;
+            var total_value = total_value_partial - total_discount;
+            var total_base_igv = total_value_partial - discount_base + total_isc;
+            var total_igv = total_base_igv * percentage_igv / 100;
+            var total_taxes = total_igv + total_isc + total_other_taxes;
+            var total = total_value + total_taxes;
+
+            row.total_discount = _.round(total_discount, 2);
+            row.total_value = _.round(total_value, 2);
+            row.total_base_igv = _.round(total_base_igv, 2);
+            row.total_igv = _.round(total_igv, 2);
+            row.total_taxes = _.round(total_taxes, 2);
+            row.total = _.round(total, 2);
+
+            if (row.affectation_igv_type.free) {
+                row.price_type_id = '02';
+                row.total = 0;
+            }
+
+            this.row = row;
         }
     }
 };
@@ -118188,7 +118281,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_functions__["a" /* functions */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_functions__["b" /* functions */]],
     props: ['showDialog', 'recordId', 'external'],
     data: function data() {
         return {
@@ -120842,7 +120935,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_functions__["a" /* functions */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_functions__["b" /* functions */]],
     components: { InvoiceFormItem: __WEBPACK_IMPORTED_MODULE_0__partials_item_vue___default.a, CustomerForm: __WEBPACK_IMPORTED_MODULE_1__customers_form_vue___default.a, DocumentOptions: __WEBPACK_IMPORTED_MODULE_2__documents_partials_options_vue___default.a },
     data: function data() {
         return {
@@ -120879,9 +120972,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             _this.company = response.data.company;
             _this.establishments = response.data.establishments;
             _this.all_series = response.data.series;
-
             _this.form.soap_type_id = _this.company.soap_type_id;
-
             _this.form.currency_type_id = _this.currency_types.length > 0 ? _this.currency_types[0].id : null;
             _this.form.establishment_id = _this.establishments.length > 0 ? _this.establishments[0].id : null;
             _this.form.document_type_id = _this.document_types.length > 0 ? _this.document_types[0].id : null;
@@ -120954,7 +121045,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.filterSeries();
         },
         changeDocumentType: function changeDocumentType() {
-            this.form.group_id = this.form.document_type_id === '01000001' ? '01' : '02';
+            this.form.group_id = this.form.document_type_id === '01' ? '01' : '02';
             this.filterSeries();
         },
         changeDateOfIssue: function changeDateOfIssue() {
@@ -121013,6 +121104,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         //            },
         changeCurrencyType: function changeCurrencyType() {
             this.form.currency_type = _.find(this.currency_types, { 'id': this.form.currency_type_id });
+            this.form.items.forEach(function (row) {});
             //this.currency_symbol = (this.form.currency_type_code === 'PEN')?'S/':'$'
         },
 
@@ -121169,6 +121261,7 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__items_form_vue__ = __webpack_require__(211);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__items_form_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__items_form_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_functions__ = __webpack_require__(34);
 //
 //
 //
@@ -121307,6 +121400,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -121314,6 +121408,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['showDialog', 'operationTypeId'],
     components: { itemForm: __WEBPACK_IMPORTED_MODULE_0__items_form_vue___default.a },
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_functions__["a" /* formDocumentItem */]],
     data: function data() {
         return {
             titleDialog: 'Agregar Producto o Servicio',
@@ -121413,20 +121508,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.form.currency_type_symbol = this.item.currency_type.symbol;
         },
         clickAddItem: function clickAddItem() {
-            var _this2 = this;
-
-            var item_description = this.item.description;
+            //                let item_description = this.item.description
             var affectation_igv_type = _.find(this.affectation_igv_types, { 'id': this.form.affectation_igv_type_id });
 
             var row = {
                 item_id: this.item.id,
-                item_description: item_description,
+                item_description: this.item.description,
+                item: this.item,
                 currency_type_id: this.item.currency_type_id,
                 unit_type_id: this.item.unit_type_id,
                 quantity: this.form.quantity,
                 unit_value: 0,
                 affectation_igv_type_id: affectation_igv_type.id,
                 affectation_igv_type_description: affectation_igv_type.description,
+                affectation_igv_type: affectation_igv_type,
                 total_base_igv: 0,
                 percentage_igv: 18,
                 total_igv: 0,
@@ -121450,91 +121545,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 discounts: []
             };
 
-            var percentage_igv = 18;
+            this.calculateRowItem(row);
 
-            if (row.affectation_igv_type_id !== '10') {
-                percentage_igv = 0;
-            }
-
-            //row.unit_price = parseFloat(this.form.unit_price)
-            var unit_value = row.unit_price / (1 + percentage_igv / 100);
-
-            //row.unit_value = _.round(_unit_value, 2)
-            //                _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-
-            //                if (this.item.has_isc) {
-            //                    row.percentage_isc = parseFloat(this.item.percentage_isc)
-            //                    row.suggested_price = parseFloat(this.item.suggested_price)
-            //                    row.system_isc_type_id = this.item.system_isc_type_id
-            //
-            //                    let _unit_value_isc = 0
-            //                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-            //
-            //                    if (this.item.system_isc_type_id === '01') {
-            //                        _unit_value /= (1 + row.percentage_isc / 100)
-            //                        _unit_value_isc = _unit_value * row.percentage_isc / 100
-            //                        //row.unit_value = _unit_value /_unit_value_isc
-            //                    }
-            //                    if (this.item.system_isc_type_id === '02') {
-            //                        //_unit_value = _unit_value
-            //                    }
-            //                    if (this.item.system_isc_type_id === '03') {
-            //                        _unit_value_isc = row.suggested_price * row.percentage_isc / 100
-            //                        row.unit_value = _unit_value - _unit_value_isc
-            //                    }
-            //
-            //                    row.total_isc = _unit_value_isc * row.quantity
-            //
-            //                } else {
-            //                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-            //                }
-            row.unit_value = _.round(unit_value, 2);
-
-            var total_value_partial = unit_value * row.quantity;
-            var discount_base = 0;
-            var discount_no_base = 0;
-            this.form.discounts.forEach(function (discount) {
-                var discount_type = _.find(_this2.discounts, { 'id': discount.discount_type_id });
-                if (discount_type.base) {
-                    discount_base += _.round(total_value_partial * discount.percentage / 100, 2);
-                    console.log('total base:' + discount_base);
-                } else {
-                    discount_no_base += _.round(total_value_partial * discount.percentage / 100, 2);
-                    console.log('total no base:' + discount_no_base);
-                }
-            });
-
-            var total_isc = 0;
-            var total_other_taxes = 0;
-
-            var total_discount = discount_base + discount_no_base;
-            var total_value = total_value_partial - total_discount;
-            var total_base_igv = total_value_partial - discount_base + total_isc;
-            var total_igv = total_base_igv * percentage_igv / 100;
-            var total_taxes = total_igv + total_isc + total_other_taxes;
-            var total = total_value + total_igv + total_isc;
-
-            row.total_value = _.round(_total_value_partial - row.total_discount, 2);
-            row.total_base_igv = _.round(_total_value_partial - _discount_base + row.total_isc, 2);
-            row.total_igv = _.round(row.total_base_igv * _percentage_igv / 100, 2);
-            row.total_taxes = row.total_igv + row.total_isc + row.total_other_taxes;
-            row.total = row.total_value + row.total_igv + row.total_isc;
-
-            if (affectation_igv_type.free) {
-                row.price_type_id = '02';
-                row.total = 0;
-            }
-
-            row.total_discount = this.initForm();
-            this.$emit('add', row);
+            this.initForm();
+            this.$emit('add', this.row);
         },
         reloadDataItems: function reloadDataItems(item_id) {
-            var _this3 = this;
+            var _this2 = this;
 
             this.$http.get('/' + this.resource + '/table/items').then(function (response) {
-                _this3.items = response.data;
-                _this3.form.item_id = item_id;
-                _this3.changeItem();
+                _this2.items = response.data;
+                _this2.form.item_id = item_id;
+                _this2.changeItem();
             });
         }
     }
@@ -129958,7 +129980,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_functions__["a" /* functions */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_functions__["b" /* functions */]],
     components: { ExchangeRatesForm: __WEBPACK_IMPORTED_MODULE_0__form_vue___default.a },
     data: function data() {
         return {
@@ -130103,7 +130125,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_functions__["a" /* functions */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_functions__["b" /* functions */]],
     props: ['showDialog'],
     data: function data() {
         return {
