@@ -70,8 +70,8 @@ class DocumentController extends Controller
         $company = Company::active();
         $establishments = Establishment::all();
         $series = Series::all();
-        $discounts = ChargeDiscountType::w;
-        $charges = [];
+        $discounts = ChargeDiscountType::whereDiscounts()->get();
+        $charges = ChargeDiscountType::whereCharges()->get();
 
         return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
                        'currency_types', 'customers', 'company', 'establishments',

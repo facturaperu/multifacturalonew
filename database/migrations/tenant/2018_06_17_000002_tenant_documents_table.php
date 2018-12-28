@@ -32,9 +32,10 @@ class TenantDocumentsTable extends Migration
             $table->json('customer');
             $table->char('currency_type_id', 3);
             $table->string('purchase_order')->nullable();
+            $table->decimal('exchange_rate_sale', 12, 2);
             $table->decimal('total_prepayment', 12, 2)->default(0);
-            $table->decimal('total_discount', 12, 2)->default(0);
             $table->decimal('total_charge', 12, 2)->default(0);
+            $table->decimal('total_discount', 12, 2)->default(0);
             $table->decimal('total_exportation', 12, 2)->default(0);
             $table->decimal('total_free', 12, 2)->default(0);
             $table->decimal('total_taxed', 12, 2)->default(0);

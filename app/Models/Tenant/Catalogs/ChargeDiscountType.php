@@ -7,12 +7,12 @@ class ChargeDiscountType extends ModelCatalog
     public $incrementing = false;
     public $timestamps = false;
 
-    public function scopeWhereCharge($query)
+    public function scopeWhereCharges($query)
     {
         return $query->where('type', 'charge');
     }
 
-    public function scopeWhereDiscount($query)
+    public function scopeWhereDiscounts($query)
     {
         return $query->where('type', 'discount');
     }

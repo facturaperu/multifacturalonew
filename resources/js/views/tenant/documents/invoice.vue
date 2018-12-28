@@ -178,11 +178,11 @@
     import InvoiceFormItem from './partials/item.vue'
     import CustomerForm from '../customers/form.vue'
     import DocumentOptions from '../documents/partials/options.vue'
-    import {functions} from '../../../mixins/functions'
+    import {functions, exchangeRate} from '../../../mixins/functions'
     import {calculateRowItem} from '../../../helpers/functions'
 
     export default {
-        mixins: [functions],
+        mixins: [functions, exchangeRate],
         components: {InvoiceFormItem, CustomerForm, DocumentOptions},
         data() {
             return {
@@ -220,54 +220,104 @@
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
                     this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
-                    this.changeCurrencyType()
+                    this.changeDateOfIssue()
                     this.changeDocumentType()
+                    this.changeCurrencyType()
                 })
             this.$eventHub.$on('reloadDataCustomers', (customer_id) => {
                 this.reloadDataCustomers(customer_id)
             })
         },
         methods: {
+
+            // $table->unsignedInteger('establishment_id');
+            // $table->json('establishment');
+            // $table->char('soap_type_id', 2);
+            // $table->char('state_type_id', 2);
+            // $table->string('ubl_version');
+            // $table->char('group_id', 2);
+            // $table->char('document_type_id', 2);
+            // $table->char('series', 4);
+            // $table->integer('number');
+            // $table->date('date_of_issue');
+            // $table->time('time_of_issue');
+            // $table->unsignedInteger('customer_id');
+            // $table->json('customer');
+            // $table->char('currency_type_id', 3);
+            // $table->string('purchase_order')->nullable();
+            // $table->decimal('exchange_rate_sale', 12, 2);
+            // $table->decimal('total_prepayment', 12, 2)->default(0);
+            // $table->decimal('total_discount', 12, 2)->default(0);
+            // $table->decimal('total_charge', 12, 2)->default(0);
+            // $table->decimal('total_exportation', 12, 2)->default(0);
+            // $table->decimal('total_free', 12, 2)->default(0);
+            // $table->decimal('total_taxed', 12, 2)->default(0);
+            // $table->decimal('total_unaffected', 12, 2)->default(0);
+            // $table->decimal('total_exonerated', 12, 2)->default(0);
+            // $table->decimal('total_igv', 12, 2)->default(0);
+            // $table->decimal('total_base_isc', 12, 2)->default(0);
+            // $table->decimal('total_isc', 12, 2)->default(0);
+            // $table->decimal('total_base_other_taxes', 12, 2)->default(0);
+            // $table->decimal('total_other_taxes', 12, 2)->default(0);
+            // $table->decimal('total_taxes', 12, 2)->default(0);
+            // $table->decimal('total_value', 12, 2)->default(0);
+            // $table->decimal('total', 12, 2);
             initForm() { 
                 this.errors = {}
                 this.form = {
                     id: null,
                     external_id: '-',
                     establishment_id: null,
-                    state_type_id: '01',
+                    establishment: null,
                     soap_type_id: null,
-                    ubl_version: 'v21',
+                    state_type_id: '01',
+                    ubl_version: null,
                     group_id: '01',
                     document_type_id: null,
                     series: null,
                     number: '#',
                     date_of_issue: moment().format('YYYY-MM-DD'),
                     time_of_issue: moment().format('HH:mm:ss'),
-                    date_of_due: moment().format('YYYY-MM-DD'),
-                    exchange_rate_date: null,
-                    exchange_rate_sale: 0,
-                    currency_type_id: null,
-                    currency_type: null,
                     customer_id: null,
-                    items: [],
+                    customer: null,
+                    currency_type_id: null,
+                    purchase_order: null,
+                    // exchange_rate_date: null,
+                    exchange_rate_sale: 0,
+                    total_prepayment: 0,
+                    total_charge: 0,
+                    total_discount: 0,
+                    // currency_type: null,
+
                     total_exportation: 0,
+                    total_free: 0,
                     total_taxed: 0,
                     total_unaffected: 0,
                     total_exonerated: 0,
                     total_igv: 0,
+                    total_base_isc: 0,
                     total_isc: 0,
+                    total_base_other_taxes: 0,
                     total_other_taxes: 0,
-                    total_other_charges: 0,
-                    total_discount: 0,
+                    total_taxes: 0,
                     total_value: 0,
                     total: 0,
+
                     operation_type_code: '01',
-                    base_global_discount: 0,
-                    percentage_global_discount: 0,
-                    total_global_discount: 0,
-                    total_free: 0,
-                    total_prepayment: 0,
-                    purchase_order: null,
+                    date_of_due: moment().format('YYYY-MM-DD'),
+                    items: [],
+
+                // $table->json('charges')->nullable();
+                // $table->json('discounts')->nullable();
+                // $table->json('prepayments')->nullable();
+                // $table->json('guides')->nullable();
+                // $table->json('related')->nullable();
+                // $table->json('perception')->nullable();
+                // $table->json('detraction')->nullable();
+                // $table->json('legends')->nullable();
+                    charges: null,
+                    discounts: null,
+                    guides: null,
                     optional: {
                         observations: null,
                         method_payment:null, 
@@ -275,7 +325,7 @@
                         box_number:null,
                         format_pdf:'a4',
                     },
-                    filename: '-' ,
+                    // filename: '-' ,
                 }
             }, 
             resetForm() {
@@ -293,8 +343,9 @@
             },
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
-                this.form.exchange_rate_date = this.form.date_of_issue
-                this.searchExchangeRateByDate()
+                //this.exchange_rate_date = this.form.date_of_issue
+                this.form.exchange_rate_sale = this.searchExchangeRateByDate(this.form.date_of_issue)
+                // this.form.exchange_rate_sale = this.exchange_rate_sale
             },
             filterSeries() {
                 this.form.series = null
