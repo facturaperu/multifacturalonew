@@ -77,10 +77,10 @@
                             </div>
                         </div>
                         <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.exchange_rate_sell}">
+                            <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
                                 <label class="control-label">Tipo de cambio</label>
-                                <el-input v-model="form.exchange_rate_sell"></el-input>
-                                <small class="form-control-feedback" v-if="errors.exchange_rate_sell" v-text="errors.exchange_rate_sell[0]"></small>
+                                <el-input v-model="form.exchange_rate_sale"></el-input>
+                                <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
                             </div>
                         </div>
                         <div class="col-lg-2">
@@ -160,6 +160,8 @@
 
         <invoice-form-item :showDialog.sync="showDialogAddItem"
                            :operation-type-id="form.operation_type_code"
+                           :currency-type-id-active="form.currency_type_id"
+                           :exchange-rate-sale="form.exchange_rate_sale"
                            @add="addRow"></invoice-form-item>
 
         <customer-form :showDialog.sync="showDialogNewCustomer"
@@ -177,6 +179,7 @@
     import CustomerForm from '../customers/form.vue'
     import DocumentOptions from '../documents/partials/options.vue'
     import {functions} from '../../../mixins/functions'
+    import {calculateRowItem} from '../../../helpers/functions'
 
     export default {
         mixins: [functions],
@@ -194,7 +197,6 @@
                 currency_types: [],
                 discounts: [],
                 charges: [],
-                items: [],
                 customers: [],
                 company: null,
                 establishments: [],
@@ -210,7 +212,6 @@
                 .then(response => {
                     this.document_types = response.data.document_types_invoice
                     this.currency_types = response.data.currency_types
-                    this.items = response.data.items
                     this.customers = response.data.customers
                     this.company = response.data.company
                     this.establishments = response.data.establishments
@@ -244,7 +245,7 @@
                     time_of_issue: moment().format('HH:mm:ss'),
                     date_of_due: moment().format('YYYY-MM-DD'),
                     exchange_rate_date: null,
-                    exchange_rate_sell: null,
+                    exchange_rate_sale: 0,
                     currency_type_id: null,
                     currency_type: null,
                     customer_id: null,
@@ -260,7 +261,7 @@
                     total_discount: 0,
                     total_value: 0,
                     total: 0,
-                    operation_type_code: '0101',
+                    operation_type_code: '01',
                     base_global_discount: 0,
                     percentage_global_discount: 0,
                     total_global_discount: 0,
@@ -305,81 +306,19 @@
                 this.form.items.push(row)
                 this.calculateTotal()
             },
-//            clickAddItem() {
-//                this.form.items.push({
-//                    item_id: null,
-//                    item_description: null,
-//                    unit_type_code: null,
-//                    carriage_plate: null,
-//                    quantity: 0,
-//                    unit_value: 0,
-//                    price_type_code: '01',
-//                    unit_price: 0,
-//                    affectation_igv_type_code: '10',
-//                    total_igv: 0,
-//                    percentage_igv: 18,
-//                    system_isc_type_code: null,
-//                    total_isc: 0,
-//                    charge_type_code: null,
-//                    charge_percentage: 0,
-//                    total_charge: 0,
-//                    discount_type_code: null,
-//                    discount_percentage: 0,
-//                    total_discount: 0,
-//                    total_value: 0,
-//                    total: 0,
-//                })
-//
-//            },
-            clickRemoveItem(index) { 
+            clickRemoveItem(index) {
                 this.form.items.splice(index, 1)
                 this.calculateTotal()  
             },
-//            changeItem(index) {
-//                let item = _.find(this.items, {id: this.form.items[index].item_id})
-//                this.form.items[index].item_description = item.description
-//                this.form.items[index].unit_price = parseFloat(item.unit_price)
-//                this.form.items[index].unit_type_code = item.unit_type.code
-//                this.calculateRowTotal(index)
-//            },
             changeCurrencyType() {
                 this.form.currency_type = _.find(this.currency_types, {'id': this.form.currency_type_id})
+                let items = []
                 this.form.items.forEach((row) => {
-
+                    items.push(calculateRowItem(row, this.form.currency_type_id, this.form.exchange_rate_sale))
                 });
-                //this.currency_symbol = (this.form.currency_type_code === 'PEN')?'S/':'$'
+                this.form.items = items
+                this.calculateTotal()
             },
-//            changeRow(index) {
-//                this.calculateRowTotal(index)
-//            },
-//            calculateRowTotal(index) {
-//                let unit_price = parseFloat(this.form.items[index].unit_price)
-//                let quantity = parseFloat(this.form.items[index].quantity)
-//
-//                let unit_value = 0
-//                let total = 0
-//                let total_igv = 0
-//                let total_value = 0
-//
-//                if (this.form.items[index].affectation_igv_type_code === '10') {
-//                    unit_value = _.round(unit_price / 1.18, 2)
-//                    total = _.round(unit_price * quantity, 2)
-//                    total_igv = _.round(total - (_.round(total /1.18, 2)), 2)
-//                    total_value = _.round(total /1.18, 2)
-//                }
-//                if (this.form.items[index].affectation_igv_type_code === '20') {
-//                    unit_value = _.round(unit_price, 2)
-//                    total = _.round(unit_price * quantity, 2)
-//                    total_igv = 0
-//                    total_value = total
-//                }
-//
-//                this.form.items[index].unit_value = unit_value
-//                this.form.items[index].total_value = total_value
-//                this.form.items[index].total_igv = total_igv
-//                this.form.items[index].total = total
-//                this.calculateTotal()
-//            },
             calculateTotal() {
                 let total_taxed = 0
                 let total_exonerated = 0

@@ -34,8 +34,8 @@
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.unit_price}">
                             <label class="control-label">Precio Unitario</label>
-                            <el-input v-model="form.unit_price">
-                                <template slot="prepend">{{ form.currency_type_symbol }}</template>
+                            <el-input v-model="form.unit_price" v-if="form.item.currency_type">
+                                <template slot="prepend">{{ form.item.currency_type.symbol }}</template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
@@ -142,7 +142,7 @@
     import {calculateRowItem} from '../../../../helpers/functions'
 
     export default {
-        props: ['showDialog', 'operationTypeId'],
+        props: ['showDialog', 'operationTypeId', 'currencyTypeIdActive', 'exchangeRateSale'],
         components: {itemForm},
         // mixins: [formDocumentItem],
         data() {
@@ -152,7 +152,6 @@
                 showDialogNewItem: false,
                 errors: {},
                 form: {},
-                item: {},
 //                categories: [],
 //                all_items: [],
                 items: [],
@@ -184,7 +183,9 @@
                 this.form = {
 //                    category_id: [1],
                     item_id: null,
+                    item: {},
                     affectation_igv_type_id: '10',
+                    affectation_igv_type: {},
                     has_isc: false,
                     system_isc_type_id: null,
                     percentage_isc: 0,
@@ -193,7 +194,7 @@
                     unit_price: 0,
                     charges: [],
                     discounts: [],
-                    currency_type_symbol: null,
+//                    currency_type_id: null,
                 }
             },
             clickAddDiscount() {
@@ -235,49 +236,15 @@
 //                });
 //            },
             changeItem() {
-                this.item = _.find(this.items, {'id': this.form.item_id})
-                this.form.unit_price = this.item.unit_price
-                this.form.currency_type_symbol = this.item.currency_type.symbol
+                this.form.item = _.find(this.items, {'id': this.form.item_id})
+                this.form.unit_price = this.form.item.unit_price
+//                this.form.currency_type_symbol = this.item.currency_type.symbol
             },
             clickAddItem() {
-//                let item_description = this.item.description
-                let affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
+                this.form.item.unit_price = this.form.unit_price
+                this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
 
-                let row = {
-                    item_id: this.item.id,
-                    item_description: this.item.description,
-                    item: this.item,
-                    currency_type_id: this.item.currency_type_id,
-                    unit_type_id: this.item.unit_type_id,
-                    quantity: this.form.quantity,
-                    unit_value: 0,
-                    affectation_igv_type_id: affectation_igv_type.id,
-                    affectation_igv_type_description: affectation_igv_type.description,
-                    affectation_igv_type: affectation_igv_type,
-                    total_base_igv: 0,
-                    percentage_igv: 18,
-                    total_igv: 0,
-                    system_isc_type_id: null,
-                    total_base_isc: 0,
-                    percentage_isc: 0,
-                    total_isc: 0,
-                    total_base_other_taxes: 0,
-                    percentage_other_taxes: 0,
-                    total_other_taxes: 0,
-                    total_taxes: 0,
-                    price_type_id: '01',
-                    unit_price: parseFloat(this.form.unit_price),
-                    total_value: 0,
-                    total: 0,
-
-                    total_discount: 0,
-                    total_charge: 0,
-                    attributes: [],
-                    charges: this.form.charges,
-                    discounts: this.form.discounts,
-                };
-
-                this.row = calculateRowItem(row)
+                this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale)
                 // this.calculateRowItem(row)
 
                 this.initForm()

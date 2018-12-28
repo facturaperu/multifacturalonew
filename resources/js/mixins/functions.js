@@ -39,9 +39,9 @@ export const functions = {
                     .then(response => {
                         let res = response.data
                         if (res.success) {
-                            this.form.exchange_rate_sell = res.data.sell
+                            this.form.exchange_rate_sale = res.data.sell
                         } else {
-                            this.form.exchange_rate_sell = 0
+                            this.form.exchange_rate_sale = 0
                             this.$message.error(res.message)
                         }
                         resolve()

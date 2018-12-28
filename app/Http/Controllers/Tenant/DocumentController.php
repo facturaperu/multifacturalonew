@@ -65,11 +65,8 @@ class DocumentController extends Controller
         $note_credit_types = NoteCreditType::listActivesAndOrderByDescription();
         $note_debit_types = NoteDebitType::listActivesAndOrderByDescription();
         $currency_types = CurrencyType::listActivesAndOrderByDescription();
-//        $affectation_igv_types = AffectationType::all();
         $customers = $this->table('customers');
-        $items = $this->table('items');
         $company = Company::active();
-//        $establishment = Establishment::first();
         $establishments = Establishment::all();
         $series = Series::all();
 
