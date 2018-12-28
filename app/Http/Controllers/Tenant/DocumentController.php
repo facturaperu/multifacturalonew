@@ -9,6 +9,7 @@ use App\Http\Resources\Tenant\DocumentCollection;
 use App\Http\Resources\Tenant\DocumentResource;
 use App\Mail\Tenant\DocumentEmail;
 use App\Models\Tenant\Catalogs\AffectationIgvType;
+use App\Models\Tenant\Catalogs\ChargeDiscountType;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Catalogs\NoteCreditType;
@@ -69,10 +70,12 @@ class DocumentController extends Controller
         $company = Company::active();
         $establishments = Establishment::all();
         $series = Series::all();
+        $discounts = ChargeDiscountType::w;
+        $charges = [];
 
         return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
-                       'currency_types', 'customers', 'items', 'company', 'establishments',
-                       'series');
+                       'currency_types', 'customers', 'company', 'establishments',
+                       'series', 'discounts', 'charges');
     }
 
     public function item_tables()
