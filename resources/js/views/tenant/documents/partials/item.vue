@@ -139,12 +139,12 @@
 <script>
 
     import itemForm from '../../items/form.vue'
-    import {formDocumentItem} from '../../../../mixins/functions'
+    import {calculateRowItem} from '../../../../helpers/functions'
 
     export default {
         props: ['showDialog', 'operationTypeId'],
         components: {itemForm},
-        mixins: [formDocumentItem],
+        // mixins: [formDocumentItem],
         data() {
             return {
                 titleDialog: 'Agregar Producto o Servicio',
@@ -273,11 +273,12 @@
                     total_discount: 0,
                     total_charge: 0,
                     attributes: [],
-                    charges: [],
-                    discounts: [],
+                    charges: this.form.charges,
+                    discounts: this.form.discounts,
                 };
 
-                this.calculateRowItem(row)
+                this.row = calculateRowItem(row)
+                // this.calculateRowItem(row)
 
                 this.initForm()
                 this.$emit('add', this.row)
