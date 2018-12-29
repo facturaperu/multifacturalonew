@@ -69,7 +69,7 @@
                 {
                     "codigo": "47",
                     "descripcion": "Recargo por extras",
-                    "porcentaje": 0.1,
+                    "factor": 0.1,
                     "monto": 10,
                     "base": 100
                 }
@@ -78,7 +78,7 @@
                 {
                     "codigo": "00",
                     "descripcion": "Descuentos Scotiabank",
-                    "porcentaje": 0.20,
+                    "factor": 0.20,
                     "monto": 20,
                     "base": 100
                 }

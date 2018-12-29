@@ -44,11 +44,11 @@ class CustomerController extends Controller
 
     public function tables()
     {
-        $countries = Country::listActivesAndOrderByDescription();
-        $departments = Department::listActivesAndOrderByDescription();
-        $provinces = Province::listActivesAndOrderByDescription();
-        $districts = District::listActivesAndOrderByDescription();
-        $identity_document_types = IdentityDocumentType::listActivesAndOrderByDescription();
+        $countries = Country::whereActive()->orderByDescription()->get();
+        $departments = Department::whereActive()->orderByDescription()->get();
+        $provinces = Province::whereActive()->orderByDescription()->get();
+        $districts = District::whereActive()->orderByDescription()->get();
+        $identity_document_types = IdentityDocumentType::whereActive()->orderByDescription()->get();
 
         return compact('countries', 'departments', 'provinces', 'districts', 'identity_document_types');
     }

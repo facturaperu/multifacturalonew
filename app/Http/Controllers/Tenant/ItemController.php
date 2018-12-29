@@ -41,9 +41,9 @@ class ItemController extends Controller
 
     public function tables()
     {
-        $unit_types = UnitType::listActivesAndOrderByDescription();
-        $currency_types = CurrencyType::listActivesAndOrderByDescription();
-        $system_isc_types = SystemIscType::listActivesAndOrderByDescription();
+        $unit_types = UnitType::whereActive()->orderByDescription()->get();
+        $currency_types = CurrencyType::whereActive()->orderByDescription()->get();
+        $system_isc_types = SystemIscType::whereActive()->orderByDescription()->get();
 
         return compact('unit_types', 'currency_types', 'system_isc_types');
     }

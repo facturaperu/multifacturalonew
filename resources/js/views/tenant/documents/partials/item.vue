@@ -34,95 +34,79 @@
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.unit_price}">
                             <label class="control-label">Precio Unitario</label>
-                            <el-input v-model="form.unit_price" v-if="form.item.currency_type">
-                                <template slot="prepend">{{ form.item.currency_type.symbol }}</template>
+                            <el-input v-model="form.unit_price">
+                                <template slot="prepend" v-if="form.item.currency_type">{{ form.item.currency_type.symbol }}</template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-6"></div>
-                    <!--<div class="col-md-2">-->
-                        <!--<div class="form-group" :class="{'has-danger': errors.has_isc}">-->
-                            <!--<label class="control-label d-block">¿Tiene ISC?</label>-->
-                            <!--<el-switch-->
-                                    <!--v-model="form.has_isc"-->
-                                    <!--active-text="Si"-->
-                                    <!--inactive-text="No"-->
-                                    <!--@change="changeHasIsc">-->
-                            <!--</el-switch>-->
-                            <!--<small class="form-control-feedback" v-if="errors.has_isc" v-text="errors.has_isc[0]"></small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<template v-if="form.has_isc">-->
-                        <!--<div class="col-md-6">-->
-                            <!--<div class="form-group" :class="{'has-danger': errors.system_isc_type_id}">-->
-                                <!--<label class="control-label">Sistema Isc</label>-->
-                                <!--<el-select v-model="form.system_isc_type_id" filterable>-->
-                                    <!--<el-option v-for="option in system_isc_types" :key="option.id" :value="option.id" :label="option.description"></el-option>-->
-                                <!--</el-select>-->
-                                <!--<small class="form-control-feedback" v-if="errors.system_isc_type_id" v-text="errors.system_isc_type_id[0]"></small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2">-->
-                            <!--<div class="form-group" :class="{'has-danger': errors.percentage_isc}">-->
-                                <!--<label class="control-label">Porcentaje Isc</label>-->
-                                <!--<el-input v-model="form.percentage_isc"></el-input>-->
-                                <!--<small class="form-control-feedback" v-if="errors.percentage_isc" v-text="errors.percentage_isc[0]"></small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2">-->
-                            <!--<div class="form-group" :class="{'has-danger': errors.suggested_price}">-->
-                                <!--<label class="control-label">Precio sugerido</label>-->
-                                <!--<el-input v-model="form.suggested_price"></el-input>-->
-                                <!--<small class="form-control-feedback" v-if="errors.suggested_price" v-text="errors.suggested_price[0]"></small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</template>-->
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-6" v-if="discounts.length > 0">
-                                <label class="control-label">
-                                    Descuentos
-                                    <a href="#" @click.prevent="clickAddDiscount">[+ Agregar]</a>
-                                </label>
-                                <table class="table">
-                                    <tr v-for="(row, index) in form.discounts">
-                                        <td>
-                                            <el-select v-model="row.discount_type_id" @change="changeDiscountType(index)">
-                                                <el-option v-for="option in discounts" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                            </el-select>
-                                        </td>
-                                        <td>
-                                            <el-input v-model="row.percentage"></el-input>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger" @click.prevent="clickRemoveDiscount(index)">x</button>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="col-md-6" v-if="charges.length > 0">
-                                <label class="control-label">
-                                    Cargos
-                                    <a href="#" @click.prevent="clickAddCharge">[+ Agregar]</a>
-                                </label>
-                                <table class="table">
-                                    <tr v-for="(row, index) in form.charges">
-                                        <td>
-                                            <el-select v-model="row.charge_type_id" @change="changeChargeType(index)">
-                                                <el-option v-for="option in charges" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                            </el-select>
-                                        </td>
-                                        <td>
-                                            <el-input v-model="row.percentage"></el-input>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger" @click.prevent="clickRemoveCharge(index)">x</button>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="col-md-12" v-if="discounts.length > 0">
+                        <label class="control-label">
+                            Descuentos
+                            <a href="#" @click.prevent="clickAddDiscount">[+ Agregar]</a>
+                        </label>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Porcentaje</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(row, index) in form.discounts">
+                                <td>
+                                    <el-select v-model="row.discount_type_id" @change="changeDiscountType(index)">
+                                        <el-option v-for="option in discounts" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                    </el-select>
+                                </td>
+                                <td>
+                                    <el-input v-model="row.description"></el-input>
+                                </td>
+                                <td>
+                                    <el-input v-model="row.percentage"></el-input>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" @click.prevent="clickRemoveDiscount(index)">x</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12" v-if="charges.length > 0">
+                        <label class="control-label">
+                            Cargos
+                            <a href="#" @click.prevent="clickAddCharge">[+ Agregar]</a>
+                        </label>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Porcentaje</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(row, index) in form.charges">
+                                <td>
+                                    <el-select v-model="row.charge_type_id" @change="changeChargeType(index)">
+                                        <el-option v-for="option in charges" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                    </el-select>
+                                </td>
+                                <td>
+                                    <el-input v-model="row.description"></el-input>
+                                </td>
+                                <td>
+                                    <el-input v-model="row.percentage"></el-input>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" @click.prevent="clickRemoveCharge(index)">x</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -194,13 +178,17 @@
                     unit_price: 0,
                     charges: [],
                     discounts: [],
-//                    currency_type_id: null,
                 }
             },
             clickAddDiscount() {
                 this.form.discounts.push({
                     discount_type_id: null,
-                    percentage: 0
+                    discount_type: null,
+                    description: null,
+                    percentage: 0,
+                    factor: 0,
+                    amount: 0,
+                    base: 0
                 })
             },
             clickRemoveDiscount(index) {
@@ -208,13 +196,17 @@
             },
             changeDiscountType(index) {
                 let discount_type_id = this.form.discounts[index].discount_type_id
-                let discount_type = _.find(this.discounts, {id: discount_type_id})
-                this.form.discounts[index].percentage = discount_type.percentage
+                this.form.discounts[index].discount_type = _.find(this.discounts, {id: discount_type_id})
             },
             clickAddCharge() {
                 this.form.charges.push({
                     charge_type_id: null,
-                    percentage: 0
+                    charge_type: null,
+                    description: null,
+                    percentage: 0,
+                    factor: 0,
+                    amount: 0,
+                    base: 0
                 })
             },
             clickRemoveCharge(index) {
@@ -222,8 +214,7 @@
             },
             changeChargeType(index) {
                 let charge_type_id = this.form.charges[index].charge_type_id
-                let charge_type = _.find(this.charges, {id: charge_type_id})
-                this.form.charges[index].percentage = charge_type.percentage
+                this.form.charges[index].charge_type = _.find(this.charges, {id: charge_type_id})
             },
             close() {
                 this.initForm()
@@ -238,14 +229,12 @@
             changeItem() {
                 this.form.item = _.find(this.items, {'id': this.form.item_id})
                 this.form.unit_price = this.form.item.unit_price
-//                this.form.currency_type_symbol = this.item.currency_type.symbol
             },
             clickAddItem() {
                 this.form.item.unit_price = this.form.unit_price
                 this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
 
                 this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale)
-                // this.calculateRowItem(row)
 
                 this.initForm()
                 this.$emit('add', this.row)

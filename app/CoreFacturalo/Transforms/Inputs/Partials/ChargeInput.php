@@ -12,14 +12,14 @@ class ChargeInput
             {
                 $code = $row['codigo'];
                 $description = $row['descripcion'];
-                $percentage = $row['porcentaje'];
+                $factor = $row['factor'];
                 $amount = $row['monto'];
                 $base = $row['base'];
 
                 $charges[] = [
                     'code' => $code,
                     'description' => $description,
-                    'percentage' => $percentage,
+                    'factor' => $factor,
                     'amount' => $amount,
                     'base' => $base,
                 ];

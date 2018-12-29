@@ -5,10 +5,13 @@ use App\Models\Tenant\ModelTenant;
 
 class ModelCatalog extends ModelTenant
 {
-    public static function listActivesAndOrderByDescription()
+    public function scopeWhereActive($query, $active = true)
     {
-        return static::where('active', true)
-                        ->orderBy('description')
-                        ->get();
+        return $query->where('active', $active);
+    }
+
+    public function scopeOrderByDescription($query)
+    {
+        return $query->orderBy('description');
     }
 }

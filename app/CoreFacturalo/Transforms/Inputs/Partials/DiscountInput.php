@@ -11,14 +11,14 @@ class DiscountInput
             foreach ($inputs['descuentos'] as $row) {
                 $code = $row['codigo'];
                 $description = $row['descripcion'];
-                $percentage = $row['porcentaje'];
+                $factor = $row['factor'];
                 $amount = $row['monto'];
                 $base = $row['base'];
 
                 $discounts[] = [
                     'code' => $code,
                     'description' => $description,
-                    'percentage' => $percentage,
+                    'factor' => $factor,
                     'amount' => $amount,
                     'base' => $base,
                 ];

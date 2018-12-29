@@ -117,7 +117,10 @@
                                         <th>Descripcición</th>
                                         <th class="text-center">Unidad</th>
                                         <th class="text-right">Cantidad</th>
+                                        <th class="text-center"></th>
                                         <th class="text-right">Precio Unitario</th>
+                                        <th class="text-right">Descuento</th>
+                                        <th class="text-right">Cargo</th>
                                         <th class="text-right">Total</th>
                                         <th></th>
                                     </tr>
@@ -128,8 +131,11 @@
                                         <td>{{ row.item_description }}<br/><small>{{ row.affectation_igv_type_description }}</small></td>
                                         <td class="text-center">{{ row.unit_type_id }}</td>
                                         <td class="text-right">{{ row.quantity }}</td>
-                                        <td class="text-right">{{ form.currency_type.symbol }} {{ row.unit_price }}</td>
-                                        <td class="text-right">{{ form.currency_type.symbol }} {{ row.total }}</td>
+                                        <td class="text-center">{{ form.currency_type.symbol }}</td>
+                                        <td class="text-right">{{ row.unit_price }}</td>
+                                        <td class="text-right">{{ row.total_discount }}</td>
+                                        <td class="text-right">{{ row.total_charge }}</td>
+                                        <td class="text-right">{{ row.total }}</td>
                                         <td class="text-right">
                                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickRemoveItem(index)">x</button>
                                         </td>
@@ -320,6 +326,8 @@
                 this.calculateTotal()
             },
             calculateTotal() {
+                let total_discount = 0
+                let total_charge = 0
                 let total_taxed = 0
                 let total_exonerated = 0
                 let total_unaffected = 0
@@ -327,6 +335,9 @@
                 let total_igv = 0
                 let total = 0
                 this.form.items.forEach((row) => {
+                    total_discount += parseFloat(row.total_discount)
+                    total_charge += parseFloat(row.total_charge)
+
                     if (row.affectation_igv_type_id === '10') {
                         total_taxed += parseFloat(row.total_value)
                     }
@@ -339,9 +350,11 @@
                     if (['10', '20', '30'].indexOf(row.affectation_igv_type_id) < 0) {
                         total_free += parseFloat(row.total_value)
                     }
+
                     total_igv += parseFloat(row.total_igv)
                     total += parseFloat(row.total)
                 });
+
                 this.form.total_taxed = _.round(total_taxed, 2)
                 this.form.total_exonerated = _.round(total_exonerated, 2)
                 this.form.total_unaffected = _.round(total_unaffected, 2)

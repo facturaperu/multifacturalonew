@@ -89,30 +89,56 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     row.unit_value = _.round(unit_value, 2)
 
     let total_value_partial = unit_value * row.quantity
+
+    /* Discounts */
     let discount_base = 0
     let discount_no_base = 0
-    // row.discounts.forEach((discount) => {
-    //     let discount_type = _.find(this.discounts, {'id': discount.discount_type_id})
-    //     if (discount_type.base) {
-    //         discount_base += _.round(total_value_partial * discount.percentage / 100, 2)
-    //         console.log('total base:'+discount_base)
-    //     } else {
-    //         discount_no_base += _.round(total_value_partial * discount.percentage / 100, 2)
-    //         console.log('total no base:'+discount_no_base)
-    //     }
-    // })
+    row.discounts.forEach((discount, index) => {
+        discount.percentage = parseFloat(discount.percentage)
+        discount.factor = discount.percentage / 100
+        discount.base = _.round(total_value_partial, 2)
+        discount.amount = _.round(discount.base * discount.factor, 2)
+        if (discount.discount_type.base) {
+            discount_base += discount.amount
+        } else {
+            discount_no_base += discount.amount
+        }
+        row.discounts.splice(index, discount)
+    })
+    // console.log('total base discount:'+discount_base)
+    // console.log('total no base discount:'+discount_no_base)
+
+    /* Charges */
+    let charge_base = 0
+    let charge_no_base = 0
+    row.charges.forEach((charge, index) => {
+        charge.percentage = parseFloat(charge.percentage)
+        charge.factor = charge.percentage / 100
+        charge.base = _.round(total_value_partial, 2)
+        charge.amount = _.round(charge.base * charge.factor, 2)
+        if (charge.charge_type.base) {
+            charge_base += charge.amount
+        } else {
+            charge_no_base += charge.amount
+        }
+        row.charges.splice(index, charge)
+    })
+    console.log('total base charge:'+charge_base)
+    console.log('total no base charge:'+charge_no_base)
 
     let total_isc = 0
     let total_other_taxes = 0
 
     let total_discount = discount_base + discount_no_base
-    let total_value = total_value_partial - total_discount
+    let total_charge = charge_base + charge_no_base
+    let total_value = total_value_partial - total_discount + total_charge
     let total_base_igv = total_value_partial - discount_base + total_isc
     let total_igv  = total_base_igv * percentage_igv / 100
     let total_taxes = total_igv + total_isc + total_other_taxes
     let total = total_value + total_taxes
 
     row.total_discount = _.round(total_discount, 2)
+    row.total_charge = _.round(total_charge, 2)
     row.total_value = _.round(total_value, 2)
     row.total_base_igv = _.round(total_base_igv, 2)
     row.total_igv =  _.round(total_igv, 2)

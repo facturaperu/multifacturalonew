@@ -63,37 +63,32 @@ class DocumentController extends Controller
     {
         $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();
         $document_types_note = DocumentType::whereIn('id', ['07', '08'])->get();
-        $note_credit_types = NoteCreditType::listActivesAndOrderByDescription();
-        $note_debit_types = NoteDebitType::listActivesAndOrderByDescription();
-        $currency_types = CurrencyType::listActivesAndOrderByDescription();
-        $customers = $this->table('customers');
+        $note_credit_types = NoteCreditType::whereActive()->orderByDescription()->get();
+        $note_debit_types = NoteDebitType::whereActive()->orderByDescription()->get();
+        $currency_types = CurrencyType::whereActive()->orderByDescription()->get();
         $company = Company::active();
         $establishments = Establishment::all();
         $series = Series::all();
-        $discounts = ChargeDiscountType::w;
-        $charges = [];
+        $customers = $this->table('customers');
+        $discounts = ChargeDiscountType::whereType('discount')->whereLevel('global')->get();
+        $charges = ChargeDiscountType::whereType('charge')->whereLevel('global')->get();
 
         return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
-                       'currency_types', 'customers', 'company', 'establishments',
-                       'series', 'discounts', 'charges');
+                       'currency_types', 'company', 'establishments', 'series', 'customers', 'discounts', 'charges');
     }
 
     public function item_tables()
     {
         $items = $this->table('items');
-        $affectation_igv_types = AffectationIgvType::listActivesAndOrderByDescription();
-        $system_isc_types = SystemIscType::listActivesAndOrderByDescription();
-        $price_types = PriceType::listActivesAndOrderByDescription();
-        $unit_types = [];//Code::byCatalog('03');
+        $affectation_igv_types = AffectationIgvType::whereActive()->orderByDescription()->get();
+        $system_isc_types = SystemIscType::whereActive()->orderByDescription()->get();
+        $price_types = PriceType::whereActive()->orderByDescription()->get();
         $categories = [];//Category::cascade();
-        $discounts = []; //ChargeDiscount::whereIn('level', ['item', 'both'])
-                           //         ->where('type', 'discount')
-                             //       ->get();
-        $charges = [];// ChargeDiscount::whereIn('level', ['item', 'both'])
-                        //        ->where('type', 'charge')
-                          //      ->get();
+        $discounts = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
+        $charges = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
 
-        return compact('items', 'unit_types', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types', 'discounts', 'charges');
+        return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types',
+                       'discounts', 'charges');
     }
 
     public function table($table)

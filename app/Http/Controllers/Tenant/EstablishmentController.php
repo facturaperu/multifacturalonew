@@ -20,10 +20,10 @@ class EstablishmentController extends Controller
 
     public function tables()
     {
-        $countries = Country::listActivesAndOrderByDescription();
-        $departments = Department::listActivesAndOrderByDescription();
-        $provinces = Province::listActivesAndOrderByDescription();
-        $districts = District::listActivesAndOrderByDescription();
+        $countries = Country::whereActive()->orderByDescription()->get();
+        $departments = Department::whereActive()->orderByDescription()->get();
+        $provinces = Province::whereActive()->orderByDescription()->get();
+        $districts = District::whereActive()->orderByDescription()->get();
 
         return compact('countries', 'departments', 'provinces', 'districts');
     }
