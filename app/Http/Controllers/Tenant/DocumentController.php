@@ -73,6 +73,7 @@ class DocumentController extends Controller
         $discounts = ChargeDiscountType::whereType('discount')->whereLevel('global')->get();
         $charges = ChargeDiscountType::whereType('charge')->whereLevel('global')->get();
 
+
         return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
                        'currency_types', 'company', 'establishments', 'series', 'customers', 'discounts', 'charges');
     }

@@ -27400,8 +27400,14 @@ module.exports = Component.exports
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return functions; });
-/* unused harmony export formDocumentItem */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return functions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return exchangeRate; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 var functions = {
     data: function data() {
         return {
@@ -27436,153 +27442,85 @@ var functions = {
                 });
             });
         },
-        searchExchangeRateByDate: function searchExchangeRateByDate() {
+        searchCustomerByNumber: function searchCustomerByNumber() {
             var _this2 = this;
 
             return new Promise(function (resolve) {
-                _this2.loading_search_exchange_rate = true;
-                _this2.$http.post('/services/search_exchange_rate', _this2.form).then(function (response) {
+                _this2.loading_search_customer = true;
+                var identity_document_type_name = '';
+                if (_this2.form.identity_document_type_id === '6') {
+                    identity_document_type_name = 'ruc';
+                }
+                if (_this2.form.identity_document_type_id === '1') {
+                    identity_document_type_name = 'dni';
+                }
+                _this2.$http.get('/services/' + identity_document_type_name + '/' + _this2.form.number).then(function (response) {
+                    console.log(response.data);
                     var res = response.data;
                     if (res.success) {
-                        _this2.form.exchange_rate_sale = res.data.sell;
+                        _this2.form.name = res.data.name;
+                        _this2.form.trade_name = res.data.trade_name;
+                        _this2.form.address = res.data.address;
+                        _this2.form.department_id = res.data.department_id;
+                        _this2.form.province_id = res.data.province_id;
+                        _this2.form.district_id = res.data.district_id;
+                        _this2.form.phone = res.data.phone;
                     } else {
-                        _this2.form.exchange_rate_sale = 0;
                         _this2.$message.error(res.message);
                     }
                     resolve();
                 }).catch(function (error) {
                     console.log(error.response);
                 }).then(function () {
-                    _this2.loading_search_exchange_rate = false;
-                });
-            });
-        },
-        searchCustomerByNumber: function searchCustomerByNumber() {
-            var _this3 = this;
-
-            return new Promise(function (resolve) {
-                _this3.loading_search_customer = true;
-                var identity_document_type_name = '';
-                if (_this3.form.identity_document_type_id === '6') {
-                    identity_document_type_name = 'ruc';
-                }
-                if (_this3.form.identity_document_type_id === '1') {
-                    identity_document_type_name = 'dni';
-                }
-                _this3.$http.get('/services/' + identity_document_type_name + '/' + _this3.form.number).then(function (response) {
-                    console.log(response.data);
-                    var res = response.data;
-                    if (res.success) {
-                        _this3.form.name = res.data.name;
-                        _this3.form.trade_name = res.data.trade_name;
-                        _this3.form.address = res.data.address;
-                        _this3.form.department_id = res.data.department_id;
-                        _this3.form.province_id = res.data.province_id;
-                        _this3.form.district_id = res.data.district_id;
-                        _this3.form.phone = res.data.phone;
-                    } else {
-                        _this3.$message.error(res.message);
-                    }
-                    resolve();
-                }).catch(function (error) {
-                    console.log(error.response);
-                }).then(function () {
-                    _this3.loading_search_customer = false;
+                    _this2.loading_search_customer = false;
                 });
             });
         }
     }
 };
 
-var formDocumentItem = {
-    data: function data() {
-        return {
-            row: {}
-        };
-    },
-
+var exchangeRate = {
     methods: {
-        calculateRowItem: function calculateRowItem(row) {
-            var _this4 = this;
+        searchExchangeRateByDate: function () {
+            var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(exchange_rate_date) {
+                var response;
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _context.next = 2;
+                                return this.$http.post('/services/search_exchange_rate', {
+                                    exchange_rate_date: exchange_rate_date
+                                });
 
-            var percentage_igv = 18;
+                            case 2:
+                                response = _context.sent;
 
-            if (row.affectation_igv_type_id !== '10') {
-                percentage_igv = 0;
+                                if (!response.data.success) {
+                                    _context.next = 7;
+                                    break;
+                                }
+
+                                return _context.abrupt('return', response.data.sell);
+
+                            case 7:
+                                this.$message.error(response.data.message);
+                                return _context.abrupt('return', 0);
+
+                            case 9:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function searchExchangeRateByDate(_x) {
+                return _ref.apply(this, arguments);
             }
 
-            //row.unit_price = parseFloat(this.form.unit_price)
-            var unit_value = row.unit_price / (1 + percentage_igv / 100);
-
-            //row.unit_value = _.round(_unit_value, 2)
-            //                _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-
-            //                if (this.item.has_isc) {
-            //                    row.percentage_isc = parseFloat(this.item.percentage_isc)
-            //                    row.suggested_price = parseFloat(this.item.suggested_price)
-            //                    row.system_isc_type_id = this.item.system_isc_type_id
-            //
-            //                    let _unit_value_isc = 0
-            //                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-            //
-            //                    if (this.item.system_isc_type_id === '01') {
-            //                        _unit_value /= (1 + row.percentage_isc / 100)
-            //                        _unit_value_isc = _unit_value * row.percentage_isc / 100
-            //                        //row.unit_value = _unit_value /_unit_value_isc
-            //                    }
-            //                    if (this.item.system_isc_type_id === '02') {
-            //                        //_unit_value = _unit_value
-            //                    }
-            //                    if (this.item.system_isc_type_id === '03') {
-            //                        _unit_value_isc = row.suggested_price * row.percentage_isc / 100
-            //                        row.unit_value = _unit_value - _unit_value_isc
-            //                    }
-            //
-            //                    row.total_isc = _unit_value_isc * row.quantity
-            //
-            //                } else {
-            //                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-            //                }
-            row.unit_value = _.round(unit_value, 2);
-
-            var total_value_partial = unit_value * row.quantity;
-            var discount_base = 0;
-            var discount_no_base = 0;
-            this.form.discounts.forEach(function (discount) {
-                var discount_type = _.find(_this4.discounts, { 'id': discount.discount_type_id });
-                if (discount_type.base) {
-                    discount_base += _.round(total_value_partial * discount.percentage / 100, 2);
-                    console.log('total base:' + discount_base);
-                } else {
-                    discount_no_base += _.round(total_value_partial * discount.percentage / 100, 2);
-                    console.log('total no base:' + discount_no_base);
-                }
-            });
-
-            var total_isc = 0;
-            var total_other_taxes = 0;
-
-            var total_discount = discount_base + discount_no_base;
-            var total_value = total_value_partial - total_discount;
-            var total_base_igv = total_value_partial - discount_base + total_isc;
-            var total_igv = total_base_igv * percentage_igv / 100;
-            var total_taxes = total_igv + total_isc + total_other_taxes;
-            var total = total_value + total_taxes;
-
-            row.total_discount = _.round(total_discount, 2);
-            row.total_value = _.round(total_value, 2);
-            row.total_base_igv = _.round(total_base_igv, 2);
-            row.total_igv = _.round(total_igv, 2);
-            row.total_taxes = _.round(total_taxes, 2);
-            row.total = _.round(total, 2);
-
-            if (row.affectation_igv_type.free) {
-                row.price_type_id = '02';
-                row.total = 0;
-            }
-
-            this.row = row;
-        }
+            return searchExchangeRateByDate;
+        }()
     }
 };
 
@@ -45701,16 +45639,48 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         unit_price = _.round(unit_price * exchange_rate_sale, 2);
     }
 
+    // $table->increments('id');
+    // $table->unsignedInteger('document_id');
+    // $table->unsignedInteger('item_id');
+    // $table->json('item');
+    // $table->integer('quantity');
+    // $table->decimal('unit_value', 12, 2);
+    //
+    // $table->char('affectation_igv_type_id', 2);
+    // $table->decimal('total_base_igv', 12, 2);
+    // $table->decimal('percentage_igv', 12, 2);
+    // $table->decimal('total_igv', 12, 2);
+    //
+    // $table->char('system_isc_type_id', 2)->nullable();
+    // $table->decimal('total_base_isc', 12, 2)->default(0);
+    // $table->decimal('percentage_isc', 12, 2)->default(0);
+    // $table->decimal('total_isc', 12, 2)->default(0);
+    //
+    // $table->decimal('total_base_other_taxes', 12, 2)->default(0);
+    // $table->decimal('percentage_other_taxes', 12, 2)->default(0);
+    // $table->decimal('total_other_taxes', 12, 2)->default(0);
+    // $table->decimal('total_taxes', 12, 2);
+    //
+    // $table->char('price_type_id', 2);
+    // $table->decimal('unit_price', 12, 2);
+    //
+    // $table->decimal('total_value', 12, 2);
+    // $table->decimal('total', 12, 2);
+    //
+    // $table->json('attributes')->nullable();
+    // $table->json('charges')->nullable();
+    // $table->json('discounts')->nullable();
+
     var row = {
         item_id: row_old.item.id,
         item_description: row_old.item.description,
         item: row_old.item,
         currency_type_id: currency_type_id_new,
-        unit_type_id: row_old.item.unit_type_id,
+        //unit_type_id: row_old.item.unit_type_id,
         quantity: row_old.quantity,
         unit_value: 0,
         affectation_igv_type_id: row_old.affectation_igv_type.id,
-        affectation_igv_type_description: row_old.affectation_igv_type.description,
+        //affectation_igv_type_description: row_old.affectation_igv_type.description,
         affectation_igv_type: row_old.affectation_igv_type,
         total_base_igv: 0,
         percentage_igv: 18,
@@ -45726,11 +45696,10 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         price_type_id: '01',
         unit_price: unit_price,
         total_value: 0,
-        total: 0,
-
         total_discount: 0,
         total_charge: 0,
-        attributes: [],
+        total: 0,
+        attributes: row_old.attributes,
         charges: row_old.charges,
         discounts: row_old.discounts
     };
@@ -45824,6 +45793,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     var total_taxes = total_igv + total_isc + total_other_taxes;
     var total = total_value + total_taxes;
 
+    row.total_charge = _.round(total_charge, 2);
     row.total_discount = _.round(total_discount, 2);
     row.total_charge = _.round(total_charge, 2);
     row.total_value = _.round(total_value, 2);
@@ -118442,7 +118412,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_functions__["a" /* functions */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_functions__["b" /* functions */]],
     props: ['showDialog', 'recordId', 'external'],
     data: function data() {
         return {
@@ -121106,7 +121076,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_functions__["a" /* functions */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_functions__["b" /* functions */], __WEBPACK_IMPORTED_MODULE_3__mixins_functions__["a" /* exchangeRate */]],
     components: { InvoiceFormItem: __WEBPACK_IMPORTED_MODULE_0__partials_item_vue___default.a, CustomerForm: __WEBPACK_IMPORTED_MODULE_1__customers_form_vue___default.a, DocumentOptions: __WEBPACK_IMPORTED_MODULE_2__documents_partials_options_vue___default.a },
     data: function data() {
         return {
@@ -121145,8 +121115,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             _this.form.currency_type_id = _this.currency_types.length > 0 ? _this.currency_types[0].id : null;
             _this.form.establishment_id = _this.establishments.length > 0 ? _this.establishments[0].id : null;
             _this.form.document_type_id = _this.document_types.length > 0 ? _this.document_types[0].id : null;
-            _this.changeCurrencyType();
+            _this.changeDateOfIssue();
             _this.changeDocumentType();
+            _this.changeCurrencyType();
         });
         this.$eventHub.$on('reloadDataCustomers', function (customer_id) {
             _this.reloadDataCustomers(customer_id);
@@ -121154,54 +121125,103 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+
+        // $table->unsignedInteger('establishment_id');
+        // $table->json('establishment');
+        // $table->char('soap_type_id', 2);
+        // $table->char('state_type_id', 2);
+        // $table->string('ubl_version');
+        // $table->char('group_id', 2);
+        // $table->char('document_type_id', 2);
+        // $table->char('series', 4);
+        // $table->integer('number');
+        // $table->date('date_of_issue');
+        // $table->time('time_of_issue');
+        // $table->unsignedInteger('customer_id');
+        // $table->json('customer');
+        // $table->char('currency_type_id', 3);
+        // $table->string('purchase_order')->nullable();
+        // $table->decimal('exchange_rate_sale', 12, 2);
+        // $table->decimal('total_prepayment', 12, 2)->default(0);
+        // $table->decimal('total_discount', 12, 2)->default(0);
+        // $table->decimal('total_charge', 12, 2)->default(0);
+        // $table->decimal('total_exportation', 12, 2)->default(0);
+        // $table->decimal('total_free', 12, 2)->default(0);
+        // $table->decimal('total_taxed', 12, 2)->default(0);
+        // $table->decimal('total_unaffected', 12, 2)->default(0);
+        // $table->decimal('total_exonerated', 12, 2)->default(0);
+        // $table->decimal('total_igv', 12, 2)->default(0);
+        // $table->decimal('total_base_isc', 12, 2)->default(0);
+        // $table->decimal('total_isc', 12, 2)->default(0);
+        // $table->decimal('total_base_other_taxes', 12, 2)->default(0);
+        // $table->decimal('total_other_taxes', 12, 2)->default(0);
+        // $table->decimal('total_taxes', 12, 2)->default(0);
+        // $table->decimal('total_value', 12, 2)->default(0);
+        // $table->decimal('total', 12, 2);
         initForm: function initForm() {
             this.errors = {};
             this.form = {
                 id: null,
                 external_id: '-',
                 establishment_id: null,
-                state_type_id: '01',
+                establishment: null,
                 soap_type_id: null,
-                ubl_version: 'v21',
+                state_type_id: '01',
+                ubl_version: null,
                 group_id: '01',
                 document_type_id: null,
                 series: null,
                 number: '#',
                 date_of_issue: moment().format('YYYY-MM-DD'),
                 time_of_issue: moment().format('HH:mm:ss'),
-                date_of_due: moment().format('YYYY-MM-DD'),
-                exchange_rate_date: null,
-                exchange_rate_sale: 0,
-                currency_type_id: null,
-                currency_type: null,
                 customer_id: null,
-                items: [],
+                customer: null,
+                currency_type_id: null,
+                purchase_order: null,
+                // exchange_rate_date: null,
+                exchange_rate_sale: 0,
+                total_prepayment: 0,
+                total_charge: 0,
+                total_discount: 0,
+                // currency_type: null,
+
                 total_exportation: 0,
+                total_free: 0,
                 total_taxed: 0,
                 total_unaffected: 0,
                 total_exonerated: 0,
                 total_igv: 0,
+                total_base_isc: 0,
                 total_isc: 0,
+                total_base_other_taxes: 0,
                 total_other_taxes: 0,
-                total_other_charges: 0,
-                total_discount: 0,
+                total_taxes: 0,
                 total_value: 0,
                 total: 0,
+
                 operation_type_code: '01',
-                base_global_discount: 0,
-                percentage_global_discount: 0,
-                total_global_discount: 0,
-                total_free: 0,
-                total_prepayment: 0,
-                purchase_order: null,
+                date_of_due: moment().format('YYYY-MM-DD'),
+                items: [],
+
+                // $table->json('charges')->nullable();
+                // $table->json('discounts')->nullable();
+                // $table->json('prepayments')->nullable();
+                // $table->json('guides')->nullable();
+                // $table->json('related')->nullable();
+                // $table->json('perception')->nullable();
+                // $table->json('detraction')->nullable();
+                // $table->json('legends')->nullable();
+                charges: null,
+                discounts: null,
+                guides: null,
                 optional: {
                     observations: null,
                     method_payment: null,
                     salesman: null,
                     box_number: null,
                     format_pdf: 'a4'
-                },
-                filename: '-'
+                }
+                // filename: '-' ,
             };
         },
         resetForm: function resetForm() {
@@ -121219,8 +121239,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         changeDateOfIssue: function changeDateOfIssue() {
             this.form.date_of_due = this.form.date_of_issue;
-            this.form.exchange_rate_date = this.form.date_of_issue;
-            this.searchExchangeRateByDate();
+            //this.exchange_rate_date = this.form.date_of_issue
+            this.form.exchange_rate_sale = this.searchExchangeRateByDate(this.form.date_of_issue);
+            // this.form.exchange_rate_sale = this.exchange_rate_sale
         },
         filterSeries: function filterSeries() {
             this.form.series = null;
@@ -130118,7 +130139,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_functions__["a" /* functions */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_functions__["b" /* functions */]],
     components: { ExchangeRatesForm: __WEBPACK_IMPORTED_MODULE_0__form_vue___default.a },
     data: function data() {
         return {
@@ -130263,7 +130284,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_functions__["a" /* functions */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_functions__["b" /* functions */]],
     props: ['showDialog'],
     data: function data() {
         return {

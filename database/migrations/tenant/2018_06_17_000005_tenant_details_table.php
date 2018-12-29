@@ -41,6 +41,8 @@ class TenantDetailsTable extends Migration
             $table->decimal('unit_price', 12, 2);
 
             $table->decimal('total_value', 12, 2);
+            $table->decimal('total_charge', 12, 2)->default(0);
+            $table->decimal('total_discount', 12, 2)->default(0);
             $table->decimal('total', 12, 2);
 
             $table->json('attributes')->nullable();

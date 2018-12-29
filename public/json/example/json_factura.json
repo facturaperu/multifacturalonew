@@ -1,16 +1,62 @@
 {
-    "serie_documento": "F001",
-    "numero_documento": "#",
-    "fecha_de_emision": "2018-10-09",
-    "hora_de_emision": "10:11:11",
-    "codigo_tipo_operacion": "0101",
-    "codigo_tipo_documento":"01",
-    "codigo_tipo_moneda": "PEN",
-    "fecha_de_vencimiento":"2018-08-30",
-    "numero_orden_de_compra": "0045467898",
-    "datos_del_emisor": {
-        "codigo_del_domicilio_fiscal": "0000"
+  "serie_documento": "F205",
+  "numero_documento": "7780",
+  "fecha_de_emision": "2018-12-28",
+  "hora_de_emision": "14:18:57",
+  "codigo_tipo_operacion": "0101",
+  "codigo_tipo_documento": "01",
+  "codigo_tipo_moneda": "USD",
+  "fecha_de_vencimiento": "2018-12-28",
+  "numero_orden_de_compra": "0045467898",
+  "datos_del_emisor": {
+    "codigo_pais": "PE",
+    "ubigeo": "150133",
+    "direccion": "Av. Los Heroes 459 - San Juan de Miraflores",
+    "correo_electronico": "info@steelsasociados.com",
+    "telefono": "445-7854",
+    "codigo_del_domicilio_fiscal": "0000"
+  },
+  "datos_del_cliente_o_receptor": {
+    "codigo_tipo_documento_identidad": "6",
+    "numero_documento": "20542506572",
+    "apellidos_y_nombres_o_razon_social": "MULTISERVICIOS GENERALES D amperx D SAC",
+    "codigo_pais": "PE",
+    "ubigeo": "150101",
+    "direccion": "MZA. B LOTE. 4 URB. SANTA CLARA ATE VITARTE LIMA",
+    "correo_electronico": "hetorrsan@hotmail.com",
+    "telefono": ""
+  },
+  "totales": {
+    "total_exportacion": 0.00,
+    "total_operaciones_gravadas": 1098.31,
+    "total_operaciones_inafectas": 0.00,
+    "total_operaciones_exoneradas": 0.00,
+    "total_operaciones_gratuitas": 0.00,
+    "total_igv": 197.69,
+    "total_impuestos": 18.00,
+    "total_valor": 1098.31,
+    "total_venta": 1296
+  },
+  "items": [
+    {
+      "codigo_interno": "10700060",
+      "descripcion": "LLANTA 11 R22.5 16PR HH301 HIFLY",
+      "codigo_producto_sunat": "1111111",
+      "codigo_producto_gsl": "1111111",
+      "unidad_de_medida": "NIU",
+      "cantidad": 4,
+      "valor_unitario": 136.44,
+      "codigo_tipo_precio": "01",
+      "precio_unitario": 161,
+      "codigo_tipo_afectacion_igv": "10",
+      "total_base_igv": 545.76,
+      "porcentaje_igv": 18,
+      "total_igv": 98.24,
+      "total_impuestos": 98.24,
+      "total_valor_item": 545.76,
+      "total_item": 644
     },
+<<<<<<< HEAD
     "datos_del_cliente_o_receptor":{
         "codigo_tipo_documento_identidad": "6",
         "numero_documento": "10414711225",
@@ -172,5 +218,34 @@
     },
     "acciones": {
         "enviar_email": true
+=======
+    {
+      "codigo_interno": "09100001",
+      "descripcion": "LLANTA 11 R22.5 16PR 146/143M TB877 ANTYRE",
+      "codigo_producto_sunat": "1111111",
+      "codigo_producto_gsl": "1111111",
+      "unidad_de_medida": "NIU",
+      "cantidad": 4,
+      "valor_unitario": 138.14,
+      "codigo_tipo_precio": "01",
+      "precio_unitario": 163,
+      "codigo_tipo_afectacion_igv": "10",
+      "total_base_igv": 552.54,
+      "porcentaje_igv": 18,
+      "total_igv": 99.46,
+      "total_impuestos": 99.46,
+      "total_valor_item": 552.54,
+      "total_item": 652
+>>>>>>> 09e3a9d460167283bdb7f4265b5734adec936547
     }
+  ],
+  "extras": {
+    "forma_de_pago": "Efectivo",
+    "observaciones": "probando",
+    "vendedor": "Juan",
+    "caja": "Caja 1"
+  },
+  "acciones": {
+    "enviar_xml_firmado": true
+  }
 }
