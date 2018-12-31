@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
+use App\CoreFacturalo\Documents\VoidedBuilder;
+use App\CoreFacturalo\Facturalo;
+use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\DocumentEmailRequest;
 use App\Http\Requests\Tenant\DocumentRequest;
@@ -14,6 +17,7 @@ use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Catalogs\NoteCreditType;
 use App\Models\Tenant\Catalogs\NoteDebitType;
+use App\Models\Tenant\Catalogs\OperationType;
 use App\Models\Tenant\Catalogs\PriceType;
 use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\Company;
@@ -30,7 +34,12 @@ use Throwable;
 
 class DocumentController extends Controller
 {
-//    use StorageDocument;
+    use StorageDocument;
+
+    public function __construct()
+    {
+        $this->middleware('transform.input:document,true', ['only' => ['store']]);
+    }
 
     public function index()
     {
@@ -48,10 +57,9 @@ class DocumentController extends Controller
     public function records(Request $request)
     {
         $records = Document::where($request->column, 'like', "%{$request->value}%")
-                            ->orderBy('series')
-                            ->orderBy('number', 'desc');
+                            ->latest();
 
-        return new DocumentCollection($records->paginate(env('ITEMS_PER_PAGE', 5)));
+        return new DocumentCollection($records->paginate(env('ITEMS_PER_PAGE', 20)));
     }
 
     public function create()
@@ -66,29 +74,31 @@ class DocumentController extends Controller
         $note_credit_types = NoteCreditType::whereActive()->orderByDescription()->get();
         $note_debit_types = NoteDebitType::whereActive()->orderByDescription()->get();
         $currency_types = CurrencyType::whereActive()->orderByDescription()->get();
-        $company = Company::active();
+        $operation_types = OperationType::whereActive()->orderById()->get();
+//        $company = Company::active();
         $establishments = Establishment::all();
         $series = Series::all();
         $customers = $this->table('customers');
         $discounts = ChargeDiscountType::whereType('discount')->whereLevel('global')->get();
         $charges = ChargeDiscountType::whereType('charge')->whereLevel('global')->get();
 
-
         return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
-                       'currency_types', 'company', 'establishments', 'series', 'customers', 'discounts', 'charges');
+                       'currency_types', 'operation_types', 'company', 'establishments', 'series', 'customers',
+                       'discounts', 'charges');
     }
 
     public function item_tables()
     {
         $items = $this->table('items');
-        $affectation_igv_types = AffectationIgvType::whereActive()->orderByDescription()->get();
+        $operation_types = OperationType::whereActive()->orderById()->get();
+        $affectation_igv_types = AffectationIgvType::whereActive()->orderById()->get();
         $system_isc_types = SystemIscType::whereActive()->orderByDescription()->get();
         $price_types = PriceType::whereActive()->orderByDescription()->get();
         $categories = [];//Category::cascade();
         $discounts = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charges = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
 
-        return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types',
+        return compact('items', 'categories', 'operation_types', 'affectation_igv_types', 'system_isc_types', 'price_types',
                        'discounts', 'charges');
     }
 
@@ -116,101 +126,49 @@ class DocumentController extends Controller
 
     public function record($id)
     {
-        $record = new DocumentResource(Document::with(['customer'])->findOrFail($id));
+        $record = new DocumentResource(Document::findOrFail($id));
 
         return $record;
     }
 
-    public function store(DocumentRequest $request)
+    public function store(Request $request)
     {
-        $document_type_id = ($request->has('document'))?$request->input('document.document_type_id'):
-                                                        $request->input('document_type_id');
-        try {
-            $document = DB::connection('tenant')->transaction(function () use ($request, $document_type_id) {
-                if (in_array($document_type_id, ['01', '03'])) {
-                    $builder = new InvoiceBuilder();
-                } elseif ($document_type_id === '07') {
-                    $builder = new NoteCreditBuilder();
-                } else {
-                    $builder = new NoteDebitBuilder();
-                }
-                $builder->save($request->all());
-                //            $xmlBuilder = new XmlBuilder();
-                //            $xmlBuilder->createXMLSigned($builder);
-                $document = $builder->getDocument();
+        $facturalo = new Facturalo(Company::active());
+        $facturalo->setInputs($request->all());
 
-                return $document;
-            });
+        DB::connection('tenant')->transaction(function () use($facturalo) {
+            $facturalo->save();
+            $facturalo->createXmlAndSign();
+            $facturalo->createPdf();
+        });
+        $document = $facturalo->getDocument();
 
-            return [
-                'success' => true,
-                'data' => [
-                    'id' => $document->id,
-                    'number' => $document->number_full,
-                    'hash' => $document->hash,
-                    'qr' => $document->qr,
-                    'filename' => $document->filename,
-                    'external_id' => $document->external_id,
-                    'number_to_letter' => $document->number_to_letter,
-                    'link_xml' => $document->download_xml,
-                    'link_pdf' => $document->download_pdf,
-                    'link_cdr' => $document->download_cdr,
-                ]
-            ];
+        $send = ($document->group_id === '01')?true:false;
+        //$send = $send && $request->input('actions.send_xml_signed');
+        $res = ($send)?$facturalo->sendXml($facturalo->getXmlSigned()):[];
 
-        } catch (Throwable $e) {
-            return [
-                'success' => false,
-                'message' => $e->getMessage()
-            ];
-        }
-//        $document = DB::connection('tenant')->transaction(function () use($request) {
-//            $document_type_code = ($request->has('document'))?$request->input('document.document_type_code'):
-//                                                              $request->input('document_type_code');
-//            switch ($document_type_code) {
-//                case '01':
-//                case '03':
-//                    $builder = new InvoiceBuilder();
-//                    break;
-//                case '07':
-//                    $builder = new NoteCreditBuilder();
-//                    break;
-//                case '08':
-//                    $builder = new NoteDebitBuilder();
-//                    break;
-//                default:
-//                    throw new Exception('Tipo de documento ingresado es inválido');
-//            }
-//
-//            $builder->save($request->all());
-//            $xmlBuilder = new XmlBuilder();
-//            $xmlBuilder->createXMLSigned($builder);
-//            $document = $builder->getDocument();
-//
-//            return $document;
-//        });
-//
-//        return [
-//            'success' => true,
-//            'data' => [
-//                'id' => $document->id,
-//                'number' => $document->number_full,
-//                'hash' => $document->hash,
-//                'qr' => $document->qr,
-//                'filename' => $document->filename,
-//                'external_id' => $document->external_id,
-//                'number_to_letter' => $document->number_to_letter,
-//                'link_xml' => $document->download_xml,
-//                'link_pdf' => $document->download_pdf,
-//                'link_cdr' => $document->download_cdr,
-//            ]
-//        ];
+
+        return [
+            'success' => true,
+            'data' => [
+                'id' => $document->id,
+                'number' => $document->number_full,
+            ],
+            'links' => [
+                'xml' => $document->download_external_xml,
+                'pdf' => $document->download_external_pdf,
+                'cdr' => ($send)?$document->download_external_cdr:'',
+            ],
+            'response' => $res
+        ];
     }
 
     public function downloadExternal($type, $external_id)
     {
         $document = Document::where('external_id', $external_id)->first();
-
+        if(!$document) {
+            throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
+        }
         return $this->download($type, $document);
     }
 
@@ -219,33 +177,27 @@ class DocumentController extends Controller
         switch ($type) {
             case 'pdf':
                 $folder = 'pdf';
-                $extension = 'pdf';
-                $filename = $document->filename;
                 break;
             case 'xml':
                 $folder = 'signed';
-                $extension = 'xml';
-                $filename = $document->filename;
                 break;
             case 'cdr':
                 $folder = 'cdr';
-                $extension = 'xml';
-                $filename = 'R-'.$document->filename;
                 break;
             default:
                 throw new Exception('Tipo de archivo a descargar es inválido');
         }
 
-        return $this->downloadStorage($folder, $filename, $extension);
+        return $this->downloadStorage($document->filename, $folder);
     }
 
     public function to_print($id)
     {
         $document = Document::find($id);
-        $pathToFile = public_path('downloads'.DIRECTORY_SEPARATOR.$document->filename.'.pdf');
-        file_put_contents($pathToFile, $this->getStorage('pdf', $document->filename, 'pdf'));
+        $temp = tempnam(sys_get_temp_dir(), 'pdf');
+        file_put_contents($temp, $this->getStorage($document->filename, 'pdf'));
 
-        return response()->file($pathToFile);
+        return response()->file($temp);
     }
 
     public function voided(DocumentVoidedRequest $request)
@@ -253,7 +205,7 @@ class DocumentController extends Controller
         DB::connection('tenant')->transaction(function () use($request) {
             $document = Document::find($request->input('id'));
             $document->state_type_id = '13';
-            $document->voided_description = $request->input('voided_description');
+            //$document->voided_description = $request->input('voided_description');
             $document->save();
 
             if ($document->group_id === '01') {
@@ -277,8 +229,8 @@ class DocumentController extends Controller
 
     public function email(DocumentEmailRequest $request)
     {
-        $company = Company::first();
-        $document = Document::with(['customer'])->find($request->input('id'));
+        $company = Company::active();
+        $document = Document::find($request->input('id'));
         $customer_email = $request->input('customer_email');
 
         Mail::to($customer_email)->send(new DocumentEmail($company, $document));

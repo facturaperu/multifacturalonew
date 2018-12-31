@@ -20,7 +20,7 @@ class TenantNotesTable extends Migration
             $table->enum('note_type', ['credit', 'debit']);
             $table->char('note_credit_type_id', 2)->nullable();
             $table->char('note_debit_type_id', 2)->nullable();
-            $table->string('description');
+            $table->string('note_description');
             $table->unsignedInteger('affected_document_id');
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');

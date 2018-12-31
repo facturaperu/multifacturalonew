@@ -54,7 +54,7 @@ class DocumentCollection extends ResourceCollection
                 }
             }
 
-            if (in_array($row->document_type_code, ['07', '08'])) {
+            if (in_array($row->document_type_id, ['07', '08'])) {
                 $btn_note = false;
                 $affected_document = $row->note->affected_document_series.'-'.$row->note->affected_document_number;
             }
@@ -62,6 +62,29 @@ class DocumentCollection extends ResourceCollection
             if ($row->group_id === '01') {
                 if ($row->state_type_id === '01') {
                     $btn_resend = true;
+                }
+            }
+
+            $has_xml = true;
+            $has_pdf = true;
+            $has_cdr = true;
+
+            if($row->group_id === '02') {
+                $has_cdr = false;
+            }
+
+            $btn_resend = false;
+            if($row->group_id === '01' && $has_cdr === false) {
+                $btn_resend = true;
+            }
+
+            $btn_voided = false;
+            $btn_note = false;
+            if($row->group_id === '01' && $has_cdr === true) {
+                if (in_array($row->document_type_id, ['07', '08'])) {
+                    $btn_note = false;
+                } else {
+                    $btn_note = true;
                 }
             }
 
@@ -73,6 +96,9 @@ class DocumentCollection extends ResourceCollection
                 'number' => $row->number_full,
                 'customer_name' => $row->customer->name,
                 'customer_number' => $row->customer->identity_document_type->description.' '.$row->customer->number,
+                'total_exportation' => $row->total_exportation,
+                'total_free' => $row->total_free,
+                'total_unaffected' => $row->total_unaffected,
                 'total_exonerated' => $row->total_exonerated,
                 'total_taxed' => $row->total_taxed,
                 'total_igv' => $row->total_igv,
@@ -80,15 +106,15 @@ class DocumentCollection extends ResourceCollection
                 'state_type_id' => $row->state_type_id,
                 'state_type_description' => $row->state_type->description,
                 'document_type_description' => $row->document_type_description,
-                'has_xml' => $row->has_xml,
-                'has_pdf' => $row->has_pdf,
-                'has_cdr' => $row->has_cdr,
-                'download_xml' => $row->download_xml,
-                'download_pdf' => $row->download_pdf,
-                'download_cdr' => $row->download_cdr,
+                'has_xml' => $has_xml,
+                'has_pdf' => $has_pdf,
+                'has_cdr' => $has_cdr,
+                'download_xml' => $row->download_external_xml,
+                'download_pdf' => $row->download_external_pdf,
+                'download_cdr' => $row->download_external_cdr,
                 'btn_voided' => $btn_voided,
-                'btn_ticket' => $btn_ticket,
                 'btn_note' => $btn_note,
+                'btn_ticket' => $btn_ticket,
                 'btn_resend' => $btn_resend,
                 'voided' => $voided,
                 'affected_document' => $affected_document,

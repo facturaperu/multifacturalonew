@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Helpers\Functions;
+namespace App\CoreFacturalo\Templates;
 
 class FunctionTribute
 {

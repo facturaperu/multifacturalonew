@@ -2,7 +2,7 @@
 
 namespace App\Mail\Tenant;
 
-use App\Core\Helpers\StorageDocument;
+use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -29,8 +29,8 @@ class DocumentEmail extends Mailable
      */
     public function build()
     {
-        $pdf = $this->getStorage('pdf', $this->document->filename, 'pdf');
-        $xml = $this->getStorage('signed', $this->document->filename);
+        $pdf = $this->getStorage($this->document->filename, 'pdf');
+        $xml = $this->getStorage($this->document->filename, 'signed');
 
         return $this->subject('Envio de Comprobante de Pago Electrónico')
                     ->from(env('MAIL_USERNAME'), 'Comprobante electrónico')

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @close="close">
+    <el-dialog :title="titleDialog" :visible="showDialog" @open="create" @close="close">
         <form autocomplete="off" @submit.prevent="clickAddItem">
             <div class="form-body">
                 <div class="row">
@@ -139,6 +139,8 @@
 //                categories: [],
 //                all_items: [],
                 items: [],
+                operation_types: [],
+                all_affectation_igv_types: [],
                 affectation_igv_types: [],
                 system_isc_types: [],
                 discounts: [],
@@ -151,7 +153,8 @@
             this.$http.get(`/${this.resource}/item/tables`).then(response => {
 //                this.categories = response.categories
                 this.items = response.data.items
-                this.affectation_igv_types = response.data.affectation_igv_types
+                this.operation_types = response.data.operation_types
+                this.all_affectation_igv_types = response.data.affectation_igv_types
                 this.system_isc_types = response.data.system_isc_types
                 this.discounts = response.data.discounts
                 this.charges = response.data.charges
@@ -168,7 +171,7 @@
 //                    category_id: [1],
                     item_id: null,
                     item: {},
-                    affectation_igv_type_id: '10',
+                    affectation_igv_type_id: null,
                     affectation_igv_type: {},
                     has_isc: false,
                     system_isc_type_id: null,
@@ -179,6 +182,11 @@
                     charges: [],
                     discounts: [],
                 }
+            },
+            create() {
+                let operation_type = _.find(this.operation_types, {id: this.operationTypeId})
+                this.affectation_igv_types = _.filter(this.all_affectation_igv_types, {exportation: operation_type.exportation})
+                this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
             },
             clickAddDiscount() {
                 this.form.discounts.push({

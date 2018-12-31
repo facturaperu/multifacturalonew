@@ -1,9 +1,8 @@
 @php
-    $note = $document->note;
     $establishment = $document->establishment;
     $customer = $document->customer;
     $details = $document->details;
-    $optional = $document->optional;
+    $document_base = $document->note;
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
     $document_type_description_array = [
         '01' => 'FACTURA',
@@ -17,6 +16,26 @@
         '1' => 'DNI',
         '6' => 'RUC',
     ];
+
+
+    //$note = $document->note;
+    //$establishment = $document->establishment;
+    //$customer = $document->customer;
+    //$details = $document->details;
+    //$optional = $document->optional;
+    //$document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
+    //$document_type_description_array = [
+    //    '01' => 'FACTURA',
+    //    '03' => 'BOLETA DE VENTA',
+    //    '07' => 'NOTA DE CREDITO',
+    //    '08' => 'NOTA DE DEBITO',
+    //];
+    //$identity_document_type_description_array = [
+    //    '-' => 'S/D',
+    //    '0' => 'S/D',
+    //    '1' => 'DNI',
+    //    '6' => 'RUC',
+    //];
     //$document_type_description = $document_type_description_array[$document->document_type_code];
     //$currency = \App\Models\Tenant\Catalogs\Code::byCatalogAndCode('02', $document->currency_type->description);
 @endphp
@@ -237,9 +256,9 @@
                 <tbody>
                 <tr>
                     <td width="20%">Documento Afectado:</td>
-                    <td width="20%">{{ $note->affected_document->series }}-{{ $note->affected_document->number }}</td>
+                    <td width="20%">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
                     <td width="25%" class="text-right">Tipo de nota:</td>
-                    <td width="35%">{{ ($note->note_type === 'credit')?$note->note_credit_type->description:$note->note_debit_type->description}}</td>
+                    <td width="35%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -251,7 +270,7 @@
                 <tbody>
                 <tr>
                     <td width="20%">Descripción:</td>
-                    <td width="80%" class="text-left">{{ $note->description }}</td>
+                    <td width="80%" class="text-left">{{ $document_base->note_description }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -274,7 +293,7 @@
             <td class="text-center">{{ $row->quantity }}</td>
             <td>{{ $row->item->unit_type_id }}</td>
             <td>
-                {!! $row->item->description !!}
+                {!! $row->item_description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
                         <br/>{!! $attr->name !!} : {{ $attr->value }}
@@ -319,24 +338,42 @@
         <td width="65%">
             <table class="voucher-totals-right">
                 <tbody>
+                @if($document->total_exportation > 0)
+                    <tr>
+                        <td class="text-right font-lg font-bold" width="70%">OP. EXPORTACIÓN: {{ $document->currency_type->symbol }}</td>
+                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_exportation, 2) }}</td>
+                    </tr>
+                @endif
+                @if($document->total_free > 0)
+                    <tr>
+                        <td class="text-right font-lg font-bold" width="70%">OP. GRATUITAS: {{ $document->currency_type->symbol }}</td>
+                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_free, 2) }}</td>
+                    </tr>
+                @endif
+                @if($document->total_unaffected > 0)
+                    <tr>
+                        <td class="text-right font-lg font-bold" width="70%">OP. INAFECTAS: {{ $document->currency_type->symbol }}</td>
+                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_unaffected, 2) }}</td>
+                    </tr>
+                @endif
                 @if($document->total_exonerated > 0)
                     <tr>
-                        <td class="text-right font-lg font-bold" width="70%">Operaciones Exoneradas: {{ $document->currency_type->description }}</td>
+                        <td class="text-right font-lg font-bold" width="70%">OP. EXONERADAS: {{ $document->currency_type->symbol }}</td>
                         <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_exonerated, 2) }}</td>
                     </tr>
                 @endif
                 @if($document->total_taxed > 0)
                     <tr>
-                        <td class="text-right font-lg font-bold" width="70%">Operaciones Gravadas: {{ $document->currency_type->description }}</td>
+                        <td class="text-right font-lg font-bold" width="70%">OP. GRAVADAS: {{ $document->currency_type->symbol }}</td>
                         <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_taxed, 2) }}</td>
                     </tr>
                 @endif
                 <tr>
-                    <td class="text-right font-lg font-bold" width="70%">IGV: {{ $document->currency_type->description }}</td>
+                    <td class="text-right font-lg font-bold" width="70%">IGV: {{ $document->currency_type->symbol }}</td>
                     <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_igv, 2) }}</td>
                 </tr>
                 <tr>
-                    <td class="text-right font-lg font-bold" width="70%">IMPORTE TOTAL: {{ $document->currency_type->description }}</td>
+                    <td class="text-right font-lg font-bold" width="70%">TOTAL A PAGAR: {{ $document->currency_type->symbol }}</td>
                     <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total, 2) }}</td>
                 </tr>
                 </tbody>

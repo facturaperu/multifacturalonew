@@ -22,7 +22,7 @@
 
 <script>
     export default {
-        props: ['showDialog', 'recordId', 'showClose', 'urlContinue'],
+        props: ['showDialog', 'recordId'],
         data() {
             return {
                 titleDialog: null,
@@ -79,42 +79,6 @@
                 this.$emit('update:showDialog', false)
                 this.initForm()
             },
-//            clickPrint(){
-//                window.open(`/${this.resource}/to_print/${this.form.id}`, '_blank');
-//            },
-//            clickDownload() {
-//                window.open(this.form.download_pdf, '_blank');
-//            },
-//            clickSendEmail() {
-//                this.loading = true
-//                post(`/${this.resource}/email`, {
-//                    customer_email: this.form.customer_email,
-//                    id: this.form.id
-//                })
-//                    .then(response => {
-//                        if (response.success) {
-//                            this.$message.success('El correo fue enviado satisfactoriamente')
-//                        } else {
-//                            this.$message.error('Error al enviar el correo')
-//                        }
-//                    })
-//                    .catch(error => {
-//                        console.log(error)
-//                    })
-//                    .then(() => {
-//                        this.loading = false
-//                    })
-//            },
-//            clickFinalize() {
-//                location.href = `/${this.resource}`
-//            },
-//            clickNewDocument() {
-//                this.clickClose()
-//            },
-//            clickClose() {
-//                this.$emit('update:showDialog', false)
-//                this.initForm()
-//            },
         }
     }
 </script>

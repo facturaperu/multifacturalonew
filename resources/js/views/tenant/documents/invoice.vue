@@ -8,6 +8,15 @@
                 <div class="form-body">
                     <div class="row">
                         <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.operation_type_id}">
+                                <label class="control-label">Tipo Operación</label>
+                                <el-select v-model="form.operation_type_id" @change="changeOperationType">
+                                    <el-option v-for="option in operation_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                </el-select>
+                                <small class="form-control-feedback" v-if="errors.operation_type_id" v-text="errors.operation_type_id[0]"></small>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.establishment_id}">
                                 <label class="control-label">Establecimiento</label>
                                 <el-select v-model="form.establishment_id" @change="changeEstablishment">
@@ -31,7 +40,7 @@
                                 <el-select v-model="form.series_id">
                                     <el-option v-for="option in series" :key="option.id" :value="option.id" :label="option.number"></el-option>
                                 </el-select>
-                                <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.series_id" v-text="errors.series_id[0]"></small>
                             </div>
                         </div>
                         <div class="col-lg-2">
@@ -114,10 +123,9 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Descripcición</th>
+                                        <th>Descripción</th>
                                         <th class="text-center">Unidad</th>
                                         <th class="text-right">Cantidad</th>
-                                        <th class="text-center"></th>
                                         <th class="text-right">Precio Unitario</th>
                                         <th class="text-right">Descuento</th>
                                         <th class="text-right">Cargo</th>
@@ -128,14 +136,13 @@
                                     <tbody>
                                     <tr v-for="(row, index) in form.items">
                                         <td>{{ index + 1 }}</td>
-                                        <td>{{ row.item_description }}<br/><small>{{ row.affectation_igv_type_description }}</small></td>
-                                        <td class="text-center">{{ row.unit_type_id }}</td>
+                                        <td>{{ row.item_description }}<br/><small>{{ row.affectation_igv_type.description }}</small></td>
+                                        <td class="text-center">{{ row.item.unit_type_id }}</td>
                                         <td class="text-right">{{ row.quantity }}</td>
-                                        <td class="text-center">{{ form.currency_type.symbol }}</td>
-                                        <td class="text-right">{{ row.unit_price }}</td>
-                                        <td class="text-right">{{ row.total_discount }}</td>
-                                        <td class="text-right">{{ row.total_charge }}</td>
-                                        <td class="text-right">{{ row.total }}</td>
+                                        <td class="text-right">{{ currency_type.symbol }} {{ row.unit_price }}</td>
+                                        <td class="text-right">{{ currency_type.symbol }} {{ row.total_discount }}</td>
+                                        <td class="text-right">{{ currency_type.symbol }} {{ row.total_charge }}</td>
+                                        <td class="text-right">{{ currency_type.symbol }} {{ row.total }}</td>
                                         <td class="text-right">
                                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickRemoveItem(index)">x</button>
                                         </td>
@@ -145,15 +152,13 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <p class="text-right" v-if="form.total_free > 0">OP.GRATUITAS: {{ form.currency_type.symbol }} {{ form.total_free }}</p>
-                            <p class="text-right" v-if="form.total_unaffected > 0">OP.INAFECTAS: {{ form.currency_type.symbol }} {{ form.total_unaffected }}</p>
-                            <p class="text-right" v-if="form.total_exonerated > 0">OP.EXONERADAS: {{ form.currency_type.symbol }} {{ form.total_exonerated }}</p>
-                            <p class="text-right" v-if="form.total_taxed > 0">OP.GRAVADA: {{ form.currency_type.symbol }} {{ form.total_taxed }}</p>
-                            <p class="text-right" v-if="form.total_igv > 0">IGV: {{ form.currency_type.symbol }} {{ form.total_igv }}</p>
-                            <template v-if="form.total > 0">
-                                <hr>
-                                <h3 class="text-right"><b>TOTAL A PAGAR: </b>{{ form.currency_type.symbol }} {{ form.total }}</h3>
-                            </template>
+                            <p class="text-right" v-if="form.total_exportation > 0">OP.EXPORTACIÓN: {{ currency_type.symbol }} {{ form.total_exportation }}</p>
+                            <p class="text-right" v-if="form.total_free > 0">OP.GRATUITAS: {{ currency_type.symbol }} {{ form.total_free }}</p>
+                            <p class="text-right" v-if="form.total_unaffected > 0">OP.INAFECTAS: {{ currency_type.symbol }} {{ form.total_unaffected }}</p>
+                            <p class="text-right" v-if="form.total_exonerated > 0">OP.EXONERADAS: {{ currency_type.symbol }} {{ form.total_exonerated }}</p>
+                            <p class="text-right" v-if="form.total_taxed > 0">OP.GRAVADA: {{ currency_type.symbol }} {{ form.total_taxed }}</p>
+                            <p class="text-right" v-if="form.total_igv > 0">IGV: {{ currency_type.symbol }} {{ form.total_igv }}</p>
+                            <h3 class="text-right" v-if="form.total > 0"><b>TOTAL A PAGAR: </b>{{ currency_type.symbol }} {{ form.total }}</h3>
                         </div>
                     </div>
                 </div>
@@ -164,11 +169,11 @@
             </form>
         </div>
 
-        <invoice-form-item :showDialog.sync="showDialogAddItem"
-                           :operation-type-id="form.operation_type_code"
+        <document-form-item :showDialog.sync="showDialogAddItem"
+                           :operation-type-id="form.operation_type_id"
                            :currency-type-id-active="form.currency_type_id"
                            :exchange-rate-sale="form.exchange_rate_sale"
-                           @add="addRow"></invoice-form-item>
+                           @add="addRow"></document-form-item>
 
         <customer-form :showDialog.sync="showDialogNewCustomer"
                        :external="true"></customer-form>
@@ -181,15 +186,15 @@
 
 <script>
 
-    import InvoiceFormItem from './partials/item.vue'
+    import DocumentFormItem from './partials/item.vue'
     import CustomerForm from '../customers/form.vue'
     import DocumentOptions from '../documents/partials/options.vue'
     import {functions, exchangeRate} from '../../../mixins/functions'
     import {calculateRowItem} from '../../../helpers/functions'
 
     export default {
+        components: {DocumentFormItem, CustomerForm, DocumentOptions},
         mixins: [functions, exchangeRate],
-        components: {InvoiceFormItem, CustomerForm, DocumentOptions},
         data() {
             return {
                 resource: 'documents',
@@ -205,10 +210,11 @@
                 charges: [],
                 customers: [],
                 company: null,
+                operation_types: [],
                 establishments: [],
                 all_series: [],
                 series: [],
-                currency_symbol: 'S/',
+                currency_type: {},
                 documentNewId: null
             }
         },
@@ -218,14 +224,19 @@
                 .then(response => {
                     this.document_types = response.data.document_types_invoice
                     this.currency_types = response.data.currency_types
-                    this.customers = response.data.customers
-                    this.company = response.data.company
                     this.establishments = response.data.establishments
+                    this.operation_types = response.data.operation_types
                     this.all_series = response.data.series
-                    this.form.soap_type_id = this.company.soap_type_id
+                    this.customers = response.data.customers
+                    this.discounts = response.data.discounts
+                    this.charges = response.data.charges
+
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
                     this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
+                    this.form.operation_type_id = (this.operation_types.length > 0)?this.operation_types[0].id:null
+
+                    this.changeEstablishment()
                     this.changeDateOfIssue()
                     this.changeDocumentType()
                     this.changeCurrencyType()
@@ -235,66 +246,22 @@
             })
         },
         methods: {
-
-            // $table->unsignedInteger('establishment_id');
-            // $table->json('establishment');
-            // $table->char('soap_type_id', 2);
-            // $table->char('state_type_id', 2);
-            // $table->string('ubl_version');
-            // $table->char('group_id', 2);
-            // $table->char('document_type_id', 2);
-            // $table->char('series', 4);
-            // $table->integer('number');
-            // $table->date('date_of_issue');
-            // $table->time('time_of_issue');
-            // $table->unsignedInteger('customer_id');
-            // $table->json('customer');
-            // $table->char('currency_type_id', 3);
-            // $table->string('purchase_order')->nullable();
-            // $table->decimal('exchange_rate_sale', 12, 2);
-            // $table->decimal('total_prepayment', 12, 2)->default(0);
-            // $table->decimal('total_discount', 12, 2)->default(0);
-            // $table->decimal('total_charge', 12, 2)->default(0);
-            // $table->decimal('total_exportation', 12, 2)->default(0);
-            // $table->decimal('total_free', 12, 2)->default(0);
-            // $table->decimal('total_taxed', 12, 2)->default(0);
-            // $table->decimal('total_unaffected', 12, 2)->default(0);
-            // $table->decimal('total_exonerated', 12, 2)->default(0);
-            // $table->decimal('total_igv', 12, 2)->default(0);
-            // $table->decimal('total_base_isc', 12, 2)->default(0);
-            // $table->decimal('total_isc', 12, 2)->default(0);
-            // $table->decimal('total_base_other_taxes', 12, 2)->default(0);
-            // $table->decimal('total_other_taxes', 12, 2)->default(0);
-            // $table->decimal('total_taxes', 12, 2)->default(0);
-            // $table->decimal('total_value', 12, 2)->default(0);
-            // $table->decimal('total', 12, 2);
-            initForm() { 
+            initForm() {
                 this.errors = {}
                 this.form = {
-                    id: null,
-                    external_id: '-',
                     establishment_id: null,
-                    establishment: null,
-                    soap_type_id: null,
-                    state_type_id: '01',
-                    ubl_version: null,
-                    group_id: '01',
                     document_type_id: null,
-                    series: null,
+                    series_id: null,
                     number: '#',
                     date_of_issue: moment().format('YYYY-MM-DD'),
                     time_of_issue: moment().format('HH:mm:ss'),
                     customer_id: null,
-                    customer: null,
                     currency_type_id: null,
                     purchase_order: null,
-                    // exchange_rate_date: null,
                     exchange_rate_sale: 0,
                     total_prepayment: 0,
                     total_charge: 0,
                     total_discount: 0,
-                    // currency_type: null,
-
                     total_exportation: 0,
                     total_free: 0,
                     total_taxed: 0,
@@ -308,37 +275,34 @@
                     total_taxes: 0,
                     total_value: 0,
                     total: 0,
-
-                    operation_type_code: '01',
+                    operation_type_id: null,
                     date_of_due: moment().format('YYYY-MM-DD'),
                     items: [],
-
-                // $table->json('charges')->nullable();
-                // $table->json('discounts')->nullable();
-                // $table->json('prepayments')->nullable();
-                // $table->json('guides')->nullable();
-                // $table->json('related')->nullable();
-                // $table->json('perception')->nullable();
-                // $table->json('detraction')->nullable();
-                // $table->json('legends')->nullable();
-                    charges: null,
-                    discounts: null,
-                    guides: null,
+                    charges: [],
+                    discounts: [],
+                    guides: [],
                     optional: {
                         observations: null,
                         method_payment:null, 
                         salesman:null,
                         box_number:null,
                         format_pdf:'a4',
-                    },
-                    // filename: '-' ,
+                    }
                 }
-            }, 
+            },
             resetForm() {
                 this.initForm()
-                this.form.soap_type_id = this.company.soap_type_id
-                this.form.establishment_id = this.establishment.id
+                this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
+                this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
+                this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
+                this.form.operation_type_id = (this.operation_types.length > 0)?this.operation_types[0].id:null
+                this.changeEstablishment()
                 this.changeDocumentType()
+                this.changeDateOfIssue()
+                this.changeCurrencyType()
+            },
+            changeOperationType() {
+
             },
             changeEstablishment() {
                 this.filterSeries()
@@ -349,15 +313,15 @@
             },
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
-                //this.exchange_rate_date = this.form.date_of_issue
-                this.form.exchange_rate_sale = this.searchExchangeRateByDate(this.form.date_of_issue)
-                // this.form.exchange_rate_sale = this.exchange_rate_sale
+                this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
+                    this.form.exchange_rate_sale = response
+                })
             },
             filterSeries() {
-                this.form.series = null
+                this.form.series_id = null
                 this.series = _.filter(this.all_series, {'establishment_id': this.form.establishment_id,
                                                          'document_type_id': this.form.document_type_id})
-                this.form.series_id = (this.series.length > 0)?this.series[0].number:null
+                this.form.series_id = (this.series.length > 0)?this.series[0].id:null
             },
             addRow(row) {
                 this.form.items.push(row)
@@ -368,7 +332,7 @@
                 this.calculateTotal()  
             },
             changeCurrencyType() {
-                this.form.currency_type = _.find(this.currency_types, {'id': this.form.currency_type_id})
+                this.currency_type = _.find(this.currency_types, {'id': this.form.currency_type_id})
                 let items = []
                 this.form.items.forEach((row) => {
                     items.push(calculateRowItem(row, this.form.currency_type_id, this.form.exchange_rate_sale))
@@ -379,11 +343,13 @@
             calculateTotal() {
                 let total_discount = 0
                 let total_charge = 0
+                let total_exportation = 0
                 let total_taxed = 0
                 let total_exonerated = 0
                 let total_unaffected = 0
                 let total_free = 0
                 let total_igv = 0
+                let total_value = 0
                 let total = 0
                 this.form.items.forEach((row) => {
                     total_discount += parseFloat(row.total_discount)
@@ -398,26 +364,33 @@
                     if (row.affectation_igv_type_id === '30') {
                         total_unaffected += parseFloat(row.total_value)
                     }
-                    if (['10', '20', '30'].indexOf(row.affectation_igv_type_id) < 0) {
+                    if (row.affectation_igv_type_id === '40') {
+                        total_exportation += parseFloat(row.total_value)
+                    }
+                    if (['10', '20', '30', '40'].indexOf(row.affectation_igv_type_id) < 0) {
                         total_free += parseFloat(row.total_value)
                     }
 
+                    total_value += parseFloat(row.total_value)
                     total_igv += parseFloat(row.total_igv)
                     total += parseFloat(row.total)
                 });
 
+                this.form.total_exportation = _.round(total_exportation, 2)
                 this.form.total_taxed = _.round(total_taxed, 2)
                 this.form.total_exonerated = _.round(total_exonerated, 2)
                 this.form.total_unaffected = _.round(total_unaffected, 2)
                 this.form.total_free = _.round(total_free, 2)
                 this.form.total_igv = _.round(total_igv, 2)
-                //this.form.total_value = _.round(total_taxed, 2)
+                this.form.total_value = _.round(total_value, 2)
+                this.form.total_taxes = _.round(total_igv, 2)
                 this.form.total = _.round(total, 2)
              },
             submit() {
                 this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form)
                     .then(response => {
+                        console.log(response)
                         if (response.data.success) {
                             this.resetForm()
                             this.documentNewId = response.data.data.id

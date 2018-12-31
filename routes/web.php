@@ -1,44 +1,9 @@
 <?php
 
-//Route::domain(env('APP_URL_BASE'))->group(function() {
-//
-//    Route::get('login', 'System\LoginController@showLoginForm')->name('login');
-//    Route::post('login', 'System\LoginController@login');
-//    Route::post('logout', 'System\LoginController@logout')->name('logout');
-//
-//    Route::middleware('auth:admin')->group(function() {
-////        Route::get('/', function () {
-////            return view('system.dashboard');
-////        });
-//        Route::get('dashboard', 'System\HomeController@index')->name('system.dashboard');
-//        Route::get('clients', 'System\ClientController@index');
-//        Route::get('clients/records', 'System\ClientController@records');
-//        Route::get('clients/create', 'System\ClientController@create');
-////        Route::resource('clients', 'System\ClientController');
-//
-//        //Clients
-//        Route::get('clients', 'System\ClientController@index')->name('clients.index');
-//        Route::get('clients/create', 'System\ClientController@create')->name('clients.create');
-//        Route::get('clients/tables', 'System\ClientController@tables');
-//        Route::get('clients/record', 'System\ClientController@record');
-//        Route::get('clients/records', 'System\ClientController@records');
-//        Route::post('clients', 'System\ClientController@store');
-//    });
-//});
-
-//public function search($document_type_code, $series, $number, $date_of_issue, $total = null)
-//
-//    \App\Core\Services\Extras\ValidateCpe::
-
 $hostname = app(Hyn\Tenancy\Contracts\CurrentHostname::class);
 
 if ($hostname) {
     Route::domain($hostname->fqdn)->group(function() {
-
-        Route::get('cpe', function () {
-            $cpe = new \App\Core\Services\Extras\ValidateCpe();
-            $cpe->search('01', 'F001', 1, '2018-12-20');
-        });
 
         Auth::routes();
 

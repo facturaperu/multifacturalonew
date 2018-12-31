@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -48,7 +49,7 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
     {
@@ -60,6 +61,9 @@ class Handler extends ExceptionHandler
         }
         if($exception instanceof AuthorizationException) {
             return $this->errorResponse('No posee permisos para ejecutar esta acción', 403, $exception);
+        }
+        if ($exception instanceof ValidationException) {
+            return $this->convertValidationExceptionToResponse($exception, $request);
         }
         if($exception instanceof NotFoundHttpException) {
             return $this->errorResponse('No se encontró la URL especificada', 404, $exception);
@@ -76,6 +80,20 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $exception);
+    }
+
+    protected function convertValidationExceptionToResponse(ValidationException $e, $request)
+    {
+        $errors = $e->validator->errors()->getMessages();
+
+        if ($this->isFrontend($request)) {
+            return $request->ajax()? response()->json($errors, 422):redirect()
+                ->back()
+                ->withInput($request->input())
+                ->withErrors($errors);
+        }
+
+        return $this->errorResponse($errors, 422, $e);
     }
 
     private function isFrontend(Request $request)

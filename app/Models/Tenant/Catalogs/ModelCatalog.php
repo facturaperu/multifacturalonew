@@ -14,4 +14,9 @@ class ModelCatalog extends ModelTenant
     {
         return $query->orderBy('description');
     }
+
+    public function scopeOrderById($query)
+    {
+        return $query->orderBy('id');
+    }
 }

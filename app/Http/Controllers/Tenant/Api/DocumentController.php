@@ -11,7 +11,7 @@ class DocumentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('transform.input:document', ['only' => ['store']]);
+        $this->middleware('transform.input:document,false', ['only' => ['store']]);
     }
 
     public function store(Request $request)
@@ -33,7 +33,10 @@ class DocumentController extends Controller
             $facturalo->createPdf();
         });
 
-        $res = $facturalo->sendXml($facturalo->getXmlSigned());
+        $send = ($request->input('document.group_id') === '01')?true:false;
+        $send = $send && $request->input('actions.send_xml_signed');
+        $res = ($send)?$facturalo->sendXml($facturalo->getXmlSigned()):[];
+
         $document = $facturalo->getDocument();
         return [
             'success' => true,
@@ -48,7 +51,7 @@ class DocumentController extends Controller
             'links' => [
                 'xml' => $document->download_external_xml,
                 'pdf' => $document->download_external_pdf,
-                'cdr' => $document->download_external_cdr,
+                'cdr' => ($send)?$document->download_external_cdr:'',
             ],
             'response' => $res
         ];

@@ -4,23 +4,35 @@ namespace App\CoreFacturalo\Transforms\Inputs\Partials;
 
 class PerceptionInput
 {
-    public static function transform($inputs)
+    public static function transform($inputs, $isWeb)
     {
-        if(key_exists('percepcion', $inputs)) {
-            $perception = $inputs['percepcion'];
+        if($isWeb) {
+            $perception = array_key_exists('perception', $inputs)?$inputs['perception']:null;
+        } else {
+            $perception = array_key_exists('percepcion', $inputs)?$inputs['percepcion']:null;
+        }
 
+        if(is_null($perception)) {
+            return null;
+        }
+
+        if($isWeb) {
+            $code = $perception['code'];
+            $percentage = $perception['percentage'];
+            $base = $perception['base'];
+            $amount = $perception['amount'];
+        } else {
             $code = $perception['codigo'];
             $percentage = $perception['porcentaje'];
             $amount = $perception['monto'];
             $base = $perception['base'];
-
-            return [
-                'code' => $code,
-                'percentage' => $percentage,
-                'amount' => $amount,
-                'base' => $base,
-            ];
         }
-        return null;
+
+        return [
+            'code' => $code,
+            'base' => $base,
+            'percentage' => $percentage,
+            'amount' => $amount
+        ];
     }
 }

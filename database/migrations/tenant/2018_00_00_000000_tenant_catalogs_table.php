@@ -41,29 +41,30 @@ class TenantCatalogsTable extends Migration
         Schema::create('affectation_igv_types', function (Blueprint $table) {
             $table->char('id', 2)->index();
             $table->string('description');
-            $table->boolean('active');
+            $table->boolean('exportation');
             $table->boolean('free');
+            $table->boolean('active');
         });
 
         DB::table('affectation_igv_types')->insert([
-            ['id' => '10', 'description' => 'Gravado - Operación Onerosa',                  'free' => false, 'active' => true],
-            ['id' => '11', 'description' => 'Gravado – Retiro por premio',                  'free' => true,  'active' => true],
-            ['id' => '12', 'description' => 'Gravado – Retiro por donación',                'free' => true,  'active' => true],
-            ['id' => '13', 'description' => 'Gravado – Retiro',                             'free' => true,  'active' => true],
-            ['id' => '14', 'description' => 'Gravado – Retiro por publicidad',              'free' => true,  'active' => true],
-            ['id' => '15', 'description' => 'Gravado – Bonificaciones',                     'free' => true,  'active' => true],
-            ['id' => '16', 'description' => 'Gravado – Retiro por entrega a trabajadores',  'free' => true,  'active' => true],
-            ['id' => '17', 'description' => 'Gravado – IVAP',                               'free' => true,  'active' => false],
-            ['id' => '20', 'description' => 'Exonerado - Operación Onerosa',                'free' => false, 'active' => true],
-            ['id' => '21', 'description' => 'Exonerado – Transferencia Gratuita',           'free' => true,  'active' => true],
-            ['id' => '30', 'description' => 'Inafecto - Operación Onerosa',                 'free' => false, 'active' => true],
-            ['id' => '31', 'description' => 'Inafecto – Retiro por Bonificación',           'free' => true,  'active' => true],
-            ['id' => '32', 'description' => 'Inafecto – Retiro',                            'free' => true,  'active' => true],
-            ['id' => '33', 'description' => 'Inafecto – Retiro por Muestras Médicas',       'free' => true,  'active' => true],
-            ['id' => '34', 'description' => 'Inafecto - Retiro por Convenio Colectivo',     'free' => true,  'active' => true],
-            ['id' => '35', 'description' => 'Inafecto – Retiro por premio',                 'free' => true,  'active' => true],
-            ['id' => '36', 'description' => 'Inafecto - Retiro por publicidad',             'free' => true,  'active' => true],
-            ['id' => '40', 'description' => 'Exportación de bienes o servicios',            'free' => false, 'active' => true],
+            ['id' => '10', 'description' => 'Gravado - Operación Onerosa',                  'exportation' => false, 'free' => false, 'active' => true],
+            ['id' => '11', 'description' => 'Gravado – Retiro por premio',                  'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '12', 'description' => 'Gravado – Retiro por donación',                'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '13', 'description' => 'Gravado – Retiro',                             'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '14', 'description' => 'Gravado – Retiro por publicidad',              'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '15', 'description' => 'Gravado – Bonificaciones',                     'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '16', 'description' => 'Gravado – Retiro por entrega a trabajadores',  'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '17', 'description' => 'Gravado – IVAP',                               'exportation' => false, 'free' => true,  'active' => false],
+            ['id' => '20', 'description' => 'Exonerado - Operación Onerosa',                'exportation' => false, 'free' => false, 'active' => true],
+            ['id' => '21', 'description' => 'Exonerado – Transferencia Gratuita',           'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '30', 'description' => 'Inafecto - Operación Onerosa',                 'exportation' => false, 'free' => false, 'active' => true],
+            ['id' => '31', 'description' => 'Inafecto – Retiro por Bonificación',           'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '32', 'description' => 'Inafecto – Retiro',                            'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '33', 'description' => 'Inafecto – Retiro por Muestras Médicas',       'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '34', 'description' => 'Inafecto - Retiro por Convenio Colectivo',     'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '35', 'description' => 'Inafecto – Retiro por premio',                 'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '36', 'description' => 'Inafecto - Retiro por publicidad',             'exportation' => false, 'free' => true,  'active' => true],
+            ['id' => '40', 'description' => 'Exportación de bienes o servicios',            'exportation' => true,  'free' => false, 'active' => true],
         ]);
 
         Schema::create('system_isc_types', function (Blueprint $table) {
@@ -200,42 +201,43 @@ class TenantCatalogsTable extends Migration
         Schema::create('operation_types', function (Blueprint $table) {
             $table->string('id', 4)->index();
             $table->string('description');
+            $table->boolean('exportation');
             $table->boolean('active');
         });
 
         DB::table('operation_types')->insert([
-            ['id' => '0101', 'description' => 'Venta interna',                                                  'active' => true],
-            ['id' => '0102', 'description' => 'Venta Interna – Anticipos',                                      'active' => false],
-            ['id' => '0103', 'description' => 'Venta interna - Itinerante',                                     'active' => false],
-            ['id' => '0110', 'description' => 'Venta Interna - Sustenta Traslado de Mercadería - Remitente ',   'active' => false],
-            ['id' => '0111', 'description' => 'Venta Interna - Sustenta Traslado de Mercadería-Transportista',  'active' => false],
-            ['id' => '0112', 'description' => 'Venta Interna - Sustenta Gastos Deducibles Persona Natural',     'active' => false],
-            ['id' => '0120', 'description' => 'Venta Interna - Sujeta al IVAP',                                 'active' => false],
-            ['id' => '0121', 'description' => 'Venta Interna - Sujeta al FISE',                                 'active' => false],
-            ['id' => '0122', 'description' => 'Venta Interna - Sujeta a otros impuestos',                       'active' => false],
-            ['id' => '0130', 'description' => 'Venta Interna - Realizadas al Estado',                           'active' => false],
-            ['id' => '0200', 'description' => 'Exportación de Bienes',                                          'active' => false],
+            ['id' => '0101', 'description' => 'Venta interna',                                                  'exportation' => false, 'active' => true],
+            ['id' => '0102', 'description' => 'Venta Interna – Anticipos',                                      'exportation' => false, 'active' => false],
+            ['id' => '0103', 'description' => 'Venta interna - Itinerante',                                     'exportation' => false, 'active' => false],
+            ['id' => '0110', 'description' => 'Venta Interna - Sustenta Traslado de Mercadería - Remitente ',   'exportation' => false, 'active' => false],
+            ['id' => '0111', 'description' => 'Venta Interna - Sustenta Traslado de Mercadería-Transportista',  'exportation' => false, 'active' => false],
+            ['id' => '0112', 'description' => 'Venta Interna - Sustenta Gastos Deducibles Persona Natural',     'exportation' => false, 'active' => false],
+            ['id' => '0120', 'description' => 'Venta Interna - Sujeta al IVAP',                                 'exportation' => false, 'active' => false],
+            ['id' => '0121', 'description' => 'Venta Interna - Sujeta al FISE',                                 'exportation' => false, 'active' => false],
+            ['id' => '0122', 'description' => 'Venta Interna - Sujeta a otros impuestos',                       'exportation' => false, 'active' => false],
+            ['id' => '0130', 'description' => 'Venta Interna - Realizadas al Estado',                           'exportation' => false, 'active' => false],
+            ['id' => '0200', 'description' => 'Exportación de Bienes',                                          'exportation' => true,  'active' => true],
             ['id' => '0201', 'description' => 'Exportación de Servicios – Prestación servicios
-                                               realizados íntegramente en el país',                             'active' => false],
+                                               realizados íntegramente en el país',                             'exportation' => true,  'active' => false],
             ['id' => '0202', 'description' => 'Exportación de Servicios – Prestación de
-                                               servicios de hospedaje No Domiciliado',                          'active' => false],
-            ['id' => '0203', 'description' => 'Exportación de Servicios – Transporte de navieras',              'active' => false],
+                                               servicios de hospedaje No Domiciliado',                          'exportation' => true,  'active' => false],
+            ['id' => '0203', 'description' => 'Exportación de Servicios – Transporte de navieras',              'exportation' => true,  'active' => false],
             ['id' => '0204', 'description' => 'Exportación de Servicios – Servicios a naves
-                                              y aeronaves de bandera extranjera',                               'active' => false],
+                                              y aeronaves de bandera extranjera',                               'exportation' => true,  'active' => false],
             ['id' => '0205', 'description' => 'Exportación de Servicios - Servicios que
-                                               conformen un Paquete Turístico',                                 'active' => false],
+                                               conformen un Paquete Turístico',                                 'exportation' => true,  'active' => false],
             ['id' => '0206', 'description' => 'Exportación de Servicios – Servicios
-                                               complementarios al transporte de carga',                         'active' => false],
+                                               complementarios al transporte de carga',                         'exportation' => true,  'active' => false],
             ['id' => '0207', 'description' => 'Exportación de Servicios – Suministro
-                                               de energía eléctrica a favor de sujetos domiciliados en ZED',    'active' => false],
+                                               de energía eléctrica a favor de sujetos domiciliados en ZED',    'exportation' => true,  'active' => false],
             ['id' => '0208', 'description' => 'Exportación de Servicios – Prestación
-                                               servicios realizados parcialmente en el extranjero',             'active' => false],
+                                               servicios realizados parcialmente en el extranjero',             'exportation' => true,  'active' => false],
             ['id' => '0301', 'description' => 'Operaciones con Carta de porte aéreo
-                                               (emitidas en el ámbito nacional)',                               'active' => false],
-            ['id' => '0302', 'description' => 'Operaciones de Transporte ferroviario de pasajeros',             'active' => false],
-            ['id' => '0303', 'description' => 'Operaciones de Pago de regalía petrolera',                       'active' => false],
-            ['id' => '1001', 'description' => 'Operación Sujeta a Detracción',                                  'active' => false],
-            ['id' => '1002', 'description' => 'Operación Sujeta a Detracción- Recursos Hidrobiológicos',        'active' => false],
+                                               (emitidas en el ámbito nacional)',                               'exportation' => false, 'active' => false],
+            ['id' => '0302', 'description' => 'Operaciones de Transporte ferroviario de pasajeros',             'exportation' => false, 'active' => false],
+            ['id' => '0303', 'description' => 'Operaciones de Pago de regalía petrolera',                       'exportation' => false, 'active' => false],
+            ['id' => '1001', 'description' => 'Operación Sujeta a Detracción',                                  'exportation' => false, 'active' => false],
+            ['id' => '1002', 'description' => 'Operación Sujeta a Detracción- Recursos Hidrobiológicos',        'exportation' => false, 'active' => false],
         ]);
 
         Schema::create('process_types', function (Blueprint $table) {

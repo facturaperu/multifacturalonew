@@ -18,6 +18,9 @@
                         <th>Cliente</th>
                         <th>Número</th>
                         <th>Estado</th>
+                        <th class="text-right">T.Exportación</th>
+                        <th class="text-right">T.Gratuita</th>
+                        <th class="text-right">T.Inafecta</th>
                         <th class="text-right">T.Exonerado</th>
                         <th class="text-right">T.Gravado</th>
                         <th class="text-right">T.Igv</th>
@@ -35,6 +38,9 @@
                             <small v-if="row.affected_document" v-text="row.affected_document"></small>
                         </td>
                         <td>{{ row.state_type_description }}</td>
+                        <td class="text-right">{{ row.total_exportation }}</td>
+                        <td class="text-right">{{ row.total_free }}</td>
+                        <td class="text-right">{{ row.total_unaffected }}</td>
                         <td class="text-right">{{ row.total_exonerated }}</td>
                         <td class="text-right">{{ row.total_taxed }}</td>
                         <td class="text-right">{{ row.total_igv }}</td>
@@ -68,11 +74,10 @@
                             <a :href="`/${resource}/note/${row.id}`" class="btn waves-effect waves-light btn-xs btn-warning"
                                v-if="row.btn_note">Nota</a>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
-                                    @click.prevent="clickOptions(row.id)"
-                                    v-if="row.btn_note">Opciones</button>
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
                                     @click.prevent="clickResend(row.id)"
                                     v-if="row.btn_resend">Reenviar</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickOptions(row.id)">Opciones</button>
                         </td>
                     </tr>
                 </data-table>

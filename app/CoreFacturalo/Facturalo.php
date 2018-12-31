@@ -157,7 +157,7 @@ class Facturalo
 
     public function uploadFile($file_content, $file_type)
     {
-        $this->uploadStorage($this->document->filename, $file_content, $file_type, $this->company->number);
+        $this->uploadStorage($this->document->filename, $file_content, $file_type);
     }
 
     public function getDocument()

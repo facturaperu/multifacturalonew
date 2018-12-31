@@ -18,6 +18,7 @@ class TenantDetailsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('document_id');
             $table->unsignedInteger('item_id');
+            $table->text('item_description');
             $table->json('item');
             $table->integer('quantity');
             $table->decimal('unit_value', 12, 2);
@@ -46,8 +47,8 @@ class TenantDetailsTable extends Migration
             $table->decimal('total', 12, 2);
 
             $table->json('attributes')->nullable();
-            $table->json('charges')->nullable();
             $table->json('discounts')->nullable();
+            $table->json('charges')->nullable();
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->foreign('item_id')->references('id')->on('items');

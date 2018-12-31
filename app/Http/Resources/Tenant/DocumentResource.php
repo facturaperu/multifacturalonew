@@ -18,7 +18,7 @@ class DocumentResource extends JsonResource
             'id' => $this->id,
             'number' => $this->number_full,
             'customer_email' => $this->customer->email,
-            'download_pdf' => $this->download_pdf,
+            'download_pdf' => $this->download_external_pdf,
         ];
     }
 }

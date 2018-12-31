@@ -399,20 +399,20 @@
             @endif
         </cac:TaxTotal>
         <cac:Item>
-            <cbc:Description><![CDATA[{{ $detail->item->description }}]]></cbc:Description>
-            @if($detail->internal_id)
+            <cbc:Description><![CDATA[{{ $detail->item_description }}]]></cbc:Description>
+            @if($detail->item->internal_id)
             <cac:SellersItemIdentification>
-                <cbc:ID>{{ $detail->internal_id }}</cbc:ID>
+                <cbc:ID>{{ $detail->item->internal_id }}</cbc:ID>
             </cac:SellersItemIdentification>
             @endif
-            @if($detail->item_code)
+            @if($detail->item->item_code)
             <cac:CommodityClassification>
-                <cbc:ItemClassificationCode>{{ $detail->item_code }}</cbc:ItemClassificationCode>
+                <cbc:ItemClassificationCode>{{ $detail->item->item_code }}</cbc:ItemClassificationCode>
             </cac:CommodityClassification>
             @endif
-            @if($detail->item_code_gs1)
+            @if($detail->item->item_code_gs1)
             <cac:StandardItemIdentification>
-                <cbc:ID>{{ $detail->item_code_gs1 }}</cbc:ID>
+                <cbc:ID>{{ $detail->item->item_code_gs1 }}</cbc:ID>
             </cac:StandardItemIdentification>
             @endif
             @if($detail->attributes)

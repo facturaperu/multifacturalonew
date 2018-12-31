@@ -28,6 +28,7 @@ class Document extends ModelTenant
         'customer',
         'currency_type_id',
         'purchase_order',
+        'exchange_rate_sale',
         'total_prepayment',
         'total_discount',
         'total_charge',
@@ -235,33 +236,33 @@ class Document extends ModelTenant
         return $legend->value;
     }
 
-    public function getDownloadXmlAttribute()
-    {
-        return route('documents.download', ['type' => 'xml', 'document' => $this->id]);
-    }
-
-    public function getDownloadPdfAttribute()
-    {
-        return route('documents.download', ['type' => 'pdf', 'document' => $this->id]);
-    }
-
-    public function getDownloadCdrAttribute()
-    {
-        return route('documents.download', ['type' => 'cdr', 'document' => $this->id]);
-    }
+//    public function getDownloadXmlAttribute()
+//    {
+//        return route('documents.download', ['type' => 'xml', 'document' => $this->id]);
+//    }
+//
+//    public function getDownloadPdfAttribute()
+//    {
+//        return route('documents.download', ['type' => 'pdf', 'document' => $this->id]);
+//    }
+//
+//    public function getDownloadCdrAttribute()
+//    {
+//        return route('documents.download', ['type' => 'cdr', 'document' => $this->id]);
+//    }
 
     public function getDownloadExternalXmlAttribute()
     {
-        return route('documents.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+        return route('tenant.documents.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalPdfAttribute()
     {
-        return route('documents.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+        return route('tenant.documents.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalCdrAttribute()
     {
-        return route('documents.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
+        return route('tenant.documents.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }

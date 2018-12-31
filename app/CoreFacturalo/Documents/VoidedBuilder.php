@@ -2,7 +2,7 @@
 
 namespace App\CoreFacturalo\Documents;
 
-use App\Models\Voided;
+use App\Models\Tenant\Voided;
 
 class VoidedBuilder
 {

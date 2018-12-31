@@ -33,11 +33,11 @@
                             <i class="fas fa-users"></i><span>Clientes</span>
                         </a>
                     </li>
-                    <li class="{{ ($path[0] === 'summaries')?'nav-active':'' }}">
-                        <a class="nav-link" href="{{route('tenant.summaries.index')}}">
-                            <i class="fas fa-list"></i><span>Resúmenes</span>
-                        </a>
-                    </li>
+                    {{--<li class="{{ ($path[0] === 'summaries')?'nav-active':'' }}">--}}
+                        {{--<a class="nav-link" href="{{route('tenant.summaries.index')}}">--}}
+                            {{--<i class="fas fa-list"></i><span>Resúmenes</span>--}}
+                        {{--</a>--}}
+                    {{--</li>--}}
                     {{--<li class="{{ ($path[0] === 'voided')?'nav-active':'' }}">
                         <a class="nav-link" href="{{route('voided.index')}}">
                             <i class="fas fa-list"></i><span>Anulaciones</span>
@@ -53,16 +53,16 @@
                             <i class="fas fa-chart-line"></i><span>Reportes</span>
                         </a>
                     </li>
-                    <li class="{{ ($path[0] === 'perceptions')?'nav-active':'' }}">
-                        <a class="nav-link" href="{{route('tenant.perceptions.index')}}">
-                            <i class="fas fa-receipt"></i><span>Percepciones</span>
-                        </a>
-                    </li>
-                    <li class="{{ ($path[0] === 'retentions')?'nav-active':'' }}">
-                        <a class="nav-link" href="{{route('tenant.retentions.index')}}">
-                            <i class="fas fa-receipt"></i><span>Retenciones</span>
-                        </a>
-                    </li> 
+                    {{--<li class="{{ ($path[0] === 'perceptions')?'nav-active':'' }}">--}}
+                        {{--<a class="nav-link" href="{{route('tenant.perceptions.index')}}">--}}
+                            {{--<i class="fas fa-receipt"></i><span>Percepciones</span>--}}
+                        {{--</a>--}}
+                    {{--</li>--}}
+                    {{--<li class="{{ ($path[0] === 'retentions')?'nav-active':'' }}">--}}
+                        {{--<a class="nav-link" href="{{route('tenant.retentions.index')}}">--}}
+                            {{--<i class="fas fa-receipt"></i><span>Retenciones</span>--}}
+                        {{--</a>--}}
+                    {{--</li> --}}
                 </ul>
             </nav>
         </div>

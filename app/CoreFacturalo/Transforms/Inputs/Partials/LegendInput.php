@@ -2,30 +2,37 @@
 
 namespace App\CoreFacturalo\Transforms\Inputs\Partials;
 
-use App\CoreFacturalo\Helpers\Number\NumberLetter;
-
 class LegendInput
 {
-    public static function transform($inputs)
+    public static function transform($inputs, $isWeb)
     {
-        $legends = [];
-        if(key_exists('leyendas', $inputs)) {
-            foreach ($inputs['leyendas'] as $row)
-            {
-                $code = $row['codigo'];
-                $value = $row['valor'];
-                $legends[] = [
-                    'code' => $code,
-                    'value' => $value,
-                ];
-            }
+        if($isWeb) {
+            $legends = array_key_exists('legends', $inputs)?$inputs['legends']:null;
+        } else {
+            $legends = array_key_exists('leyendas', $inputs)?$inputs['leyendas']:null;
         }
 
-        $legends[] = [
-            'code' => 1000,
-            'value' => NumberLetter::convertToLetter($inputs['totales']['total_venta'])
-        ];
+        if(is_null($legends)) {
+            return null;
+        }
 
-        return $legends;
+        $transform_legends = [];
+        foreach ($legends as $row)
+        {
+            if($isWeb) {
+                $code = $row['code'];
+                $value = $row['value'];
+            } else {
+                $code = $row['codigo'];
+                $value = $row['valor'];
+            }
+
+            $transform_legends[] = [
+                'code' => $code,
+                'value' => $value,
+            ];
+        }
+
+        return $transform_legends;
     }
 }

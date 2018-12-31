@@ -78,7 +78,7 @@ export const exchangeRate = {
                 exchange_rate_date: exchange_rate_date
             })
             if (response.data.success) {
-                return response.data.sell
+                return response.data.data.sell
             } else {
                 this.$message.error(response.data.message)
                 return 0

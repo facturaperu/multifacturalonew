@@ -9,7 +9,8 @@ class Template
         if($template === 'credit' || $template === 'debit') {
             $template = 'note';
         }
-        return self::render('pdf.'.$template, $company, $document);
+        $template = 'pdf.'.$template.'_'.$document->optional->format_pdf;
+        return self::render($template, $company, $document);
     }
 
     public function xml($template, $company, $document)

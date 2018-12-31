@@ -26,7 +26,7 @@
     <cac:DiscrepancyResponse>
         <cbc:ReferenceID>{{ $note->affected_document->series.'-'.$note->affected_document->number }}</cbc:ReferenceID>
         <cbc:ResponseCode>{{ $note->note_credit_type_id }}</cbc:ResponseCode>
-        <cbc:Description>{{ $note->description }}</cbc:Description>
+        <cbc:Description>{{ $note->note_description }}</cbc:Description>
     </cac:DiscrepancyResponse>
     @if($document->purchase_order)
     <cac:OrderReference>
@@ -302,7 +302,7 @@
             @endif
         </cac:TaxTotal>
         <cac:Item>
-            <cbc:Description><![CDATA[{{ $detail->item->description }}]]></cbc:Description>
+            <cbc:Description><![CDATA[{{ $detail->item_description }}]]></cbc:Description>
             @if($detail->internal_id)
             <cac:SellersItemIdentification>
                 <cbc:ID>{{ $detail->internal_id }}</cbc:ID>

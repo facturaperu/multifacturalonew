@@ -16,24 +16,24 @@ class DocumentRequest extends FormRequest
     {
         $id = $this->input('id');
         return [
-            'customer_id' => [
+            'document.customer_id' => [
                 'required',
             ],
-            'establishment_id' => [
+            'document.establishment_id' => [
                 'required',
             ],
-            'series' => [
+            'document.series' => [
                 'required',
             ],
-            'date_of_issue' => [
+            'document.date_of_issue' => [
                 'required',
             ],
-            'note_type_code' => [
-                'required_if:document_type_code,"07", "08"',
-            ],
-            'description' => [
-                'required_if:document_type_code,"07", "08"',
-            ],
+//            'document_base.note_credit_or_debit_type_id' => [
+//                'required_if:document.document_type_id,"07", "08"',
+//            ],
+//            'document_base.note_description' => [
+//                'required_if:document.document_type_id,"07", "08"',
+//            ],
         ];
     }
 }

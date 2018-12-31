@@ -2,19 +2,29 @@
 
 namespace App\CoreFacturalo\Transforms\Inputs;
 
-use App\Models\Document;
+use App\Models\Tenant\Document;
 use Exception;
 
 class NoteInput
 {
-    public static function transform($inputs, $document)
+    public static function transform($inputs, $document, $isWeb)
     {
-        $affected_document = $inputs['documento_afectado'];
-        $affected_document_series = $affected_document['serie_documento'];
-        $affected_document_number = $affected_document['numero_documento'];
-        $affected_document_type_id = $affected_document['codigo_tipo_documento'];
-        $note_credit_or_debit_type_id = $inputs['codigo_tipo_nota'];
-        $description = $inputs['motivo_o_sustento_de_nota'];
+        if($isWeb) {
+            $aff_document_id = $inputs['affected_document_id'];
+            $note_credit_or_debit_type_id = $inputs['note_credit_or_debit_type_id'];
+            $note_description = $inputs['note_description'];
+
+            $aux_aff_document = Document::find($aff_document_id);
+        } else {
+            $aff_document = $inputs['documento_afectado'];
+            $aff_document_type_id = $aff_document['codigo_tipo_documento'];
+            $aff_document_series = $aff_document['serie_documento'];
+            $aff_document_number = $aff_document['numero_documento'];
+            $note_credit_or_debit_type_id = $inputs['codigo_tipo_nota'];
+            $note_description = $inputs['motivo_o_sustento_de_nota'];
+
+            $aux_aff_document = self::findAffectedDocument($document['soap_type_id'], $aff_document_type_id, $aff_document_series, $aff_document_number);
+        }
 
         if ($document['document_type_id'] === '07') {
             $note_type = 'credit';
@@ -28,32 +38,30 @@ class NoteInput
             $type = 'debit';
         }
 
-        $affected_document = self::findAffectedDocument($document['soap_type_id'], $affected_document_type_id, $affected_document_series, $affected_document_number);
-
         return [
             'type' => $type,
-            'group_id' => ($affected_document_type_id === '01')?'01':'02',
+            'group_id' => $aux_aff_document->group_id,
             'document_base' => [
                 'note_type' => $note_type,
                 'note_credit_type_id' => $note_credit_type_id,
                 'note_debit_type_id' => $note_debit_type_id,
-                'description' => $description,
-                'affected_document_id' => $affected_document->id
+                'note_description' => $note_description,
+                'affected_document_id' => $aux_aff_document->id,
             ]
         ];
     }
 
     private static function findAffectedDocument($soap_type_id, $document_type_id, $series, $number)
     {
-        $document = Document::where('soap_type_id', $soap_type_id)
-                            ->where('document_type_id', $document_type_id)
-                            ->where('series', $series)
-                            ->where('number', $number)
-                            ->first();
-        if(!$document) {
+        $doc = Document::where('soap_type_id', $soap_type_id)
+            ->where('document_type_id', $document_type_id)
+            ->where('series', $series)
+            ->where('number', $number)
+            ->first();
+        if(!$doc) {
             throw new Exception("El documento: {$series}-{$number} no se encuentra registrado.");
         }
 
-        return $document;
+        return $doc;
     }
 }

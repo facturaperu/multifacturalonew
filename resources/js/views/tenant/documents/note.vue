@@ -8,45 +8,45 @@
                 <div class="form-body">
                     <div class="row">
                         <div class="col-md-2">
-                            <div class="form-group" :class="{'has-danger': errors.document_type_code}">
+                            <div class="form-group" :class="{'has-danger': errors.document_type_id}">
                                 <label class="control-label">Tipo de comprobante</label>
-                                <el-select v-model="form.document_type_code" @change="changeDocumentType">
-                                    <el-option v-for="option in document_types" :key="option.code" :value="option.code" :label="option.description"></el-option>
+                                <el-select v-model="form.document_type_id" @change="changeDocumentType">
+                                    <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
-                                <small class="form-control-feedback" v-if="errors.document_type_code" v-text="errors.document_type_code[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group" :class="{'has-danger': errors.series}">
+                            <div class="form-group" :class="{'has-danger': errors.series_id}">
                                 <label class="control-label">Serie</label>
-                                <el-select v-model="form.series">
-                                    <el-option v-for="option in series" :key="option.number" :value="option.number" :label="option.number"></el-option>
+                                <el-select v-model="form.series_id">
+                                    <el-option v-for="option in series" :key="option.id" :value="option.id" :label="option.number"></el-option>
                                 </el-select>
-                                <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.series_id" v-text="errors.series_id[0]"></small>
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group" :class="{'has-danger': errors.note_type_code}">
-                                <template v-if="form.document_type_code === '08'">
+                            <div class="form-group" :class="{'has-danger': errors.note_credit_or_debit_type_id}">
+                                <template v-if="form.document_type_id === '08'">
                                     <label class="control-label">Tipo nota de débito</label>
-                                    <el-select v-model="form.note_type_code">
-                                        <el-option v-for="option in note_debit_types" :key="option.code" :value="option.code" :label="option.description"></el-option>
+                                    <el-select v-model="form.note_credit_or_debit_type_id">
+                                        <el-option v-for="option in note_debit_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
                                 </template>
                                 <template v-else>
                                     <label class="control-label">Tipo nota de crédito</label>
-                                    <el-select v-model="form.note_type_code">
-                                        <el-option v-for="option in note_credit_types" :key="option.code" :value="option.code" :label="option.description"></el-option>
+                                    <el-select v-model="form.note_credit_or_debit_type_id">
+                                        <el-option v-for="option in note_credit_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
                                 </template>
-                                <small class="form-control-feedback" v-if="errors.note_type_code" v-text="errors.note_type_code[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.note_credit_or_debit_type_id" v-text="errors.note_credit_or_debit_type_id[0]"></small>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6">
-                            <div class="form-group" :class="{'has-danger': errors.description}">
+                            <div class="form-group" :class="{'has-danger': errors.note_description}">
                                 <label class="control-label">Descripción</label>
-                                <el-input v-model="form.description"></el-input>
-                                <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
+                                <el-input v-model="form.note_description"></el-input>
+                                <small class="form-control-feedback" v-if="errors.note_description" v-text="errors.note_description[0]"></small>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-6">
@@ -70,24 +70,33 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group" :class="{'has-danger': errors.currency_type_code}">
+                            <div class="form-group" :class="{'has-danger': errors.currency_type_id}">
                                 <label class="control-label">Moneda</label>
-                                <el-select v-model="form.currency_type_code" @change="changeCurrencyType" :disabled="true">
-                                    <el-option v-for="option in currency_types" :key="option.code" :value="option.code" :label="option.description"></el-option>
+                                <el-select v-model="form.currency_type_id" :disabled="true">
+                                    <el-option v-for="option in currency_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
-                                <small class="form-control-feedback" v-if="errors.currency_type_code" v-text="errors.currency_type_code[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
                                 <label class="control-label">Fecha de emisión</label>
-                                <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
+                                <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false" @change="changeDateOfIssue"></el-date-picker>
                                 <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-2 d-flex align-items-end justify-content-end">
+                        <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
+                                <label class="control-label">Tipo de cambio</label>
+                                <el-input v-model="form.exchange_rate_sale"></el-input>
+                                <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2 col-md-6 d-flex align-items-end pt-2">
                             <div class="form-group">
-                                <button type="button" class="btn waves-effect waves-light btn-info" @click.prevent="addItem">+ Agregar Producto</button>
+                                <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Producto</button>
                             </div>
                         </div>
                     </div>
@@ -98,9 +107,12 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Descripcición</th>
-                                        <th class="text-right">Precio Unitario</th>
+                                        <th>Descripción</th>
+                                        <th class="text-center">Unidad</th>
                                         <th class="text-right">Cantidad</th>
+                                        <th class="text-right">Precio Unitario</th>
+                                        <th class="text-right">Descuento</th>
+                                        <th class="text-right">Cargo</th>
                                         <th class="text-right">Total</th>
                                         <th></th>
                                     </tr>
@@ -108,22 +120,15 @@
                                     <tbody>
                                     <tr v-for="(row, index) in form.items">
                                         <td>{{ index + 1 }}</td>
-                                        <td>
-                                            <el-select v-model="row.item_id" @change="changeItem(index)" filterable>
-                                                <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                            </el-select>
-                                        </td>
-                                        <td>
-                                            <el-input v-model="row.unit_price" @input="changeRow(index)" class="input-text-right"></el-input>
-                                        </td>
+                                        <td>{{ row.item_description }}<br/><small>{{ row.affectation_igv_type.description }}</small></td>
+                                        <td class="text-center">{{ row.item.unit_type_id }}</td>
+                                        <td class="text-right">{{ row.quantity }}</td>
+                                        <td class="text-right">{{ currency_type.symbol }} {{ row.unit_price }}</td>
+                                        <td class="text-right">{{ currency_type.symbol }} {{ row.total_discount }}</td>
+                                        <td class="text-right">{{ currency_type.symbol }} {{ row.total_charge }}</td>
+                                        <td class="text-right">{{ currency_type.symbol }} {{ row.total }}</td>
                                         <td class="text-right">
-                                            <el-input-number v-model="row.quantity" :min="1"   @change="changeRow(index)"></el-input-number>
-                                        </td>
-                                        <td class="text-right">
-                                            <span v-text="row.total"></span>
-                                        </td>
-                                        <td class="text-right">
-                                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="removeItem(index)">x</button>
+                                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickRemoveItem(index)">x</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -131,12 +136,13 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <p class="text-right" v-if="form.total_taxed > 0">Total Gravadas : {{ currency_symbol }} {{ form.total_taxed }}</p>
-                            <p class="text-right" v-if="form.total_igv > 0">Total Igv : {{ currency_symbol }} {{ form.total_igv }}</p>
-                            <template v-if="form.total > 0">
-                                <hr>
-                                <h3 class="text-right"><b>Total : </b>{{ currency_symbol }} {{ form.total }}</h3>
-                            </template>
+                            <p class="text-right" v-if="form.total_exportation > 0">OP.EXPORTACIÓN: {{ currency_type.symbol }} {{ form.total_exportation }}</p>
+                            <p class="text-right" v-if="form.total_free > 0">OP.GRATUITAS: {{ urrency_type.symbol }} {{ form.total_free }}</p>
+                            <p class="text-right" v-if="form.total_unaffected > 0">OP.INAFECTAS: {{ currency_type.symbol }} {{ form.total_unaffected }}</p>
+                            <p class="text-right" v-if="form.total_exonerated > 0">OP.EXONERADAS: {{ currency_type.symbol }} {{ form.total_exonerated }}</p>
+                            <p class="text-right" v-if="form.total_taxed > 0">OP.GRAVADA: {{ currency_type.symbol }} {{ form.total_taxed }}</p>
+                            <p class="text-right" v-if="form.total_igv > 0">IGV: {{ currency_type.symbol }} {{ form.total_igv }}</p>
+                            <h3 class="text-right" v-if="form.total > 0"><b>TOTAL A PAGAR: </b>{{ currency_type.symbol }} {{ form.total }}</h3>
                         </div>
                     </div>
                 </div>
@@ -147,6 +153,12 @@
             </form>
         </div>
 
+        <document-form-item :showDialog.sync="showDialogAddItem"
+                            :operation-type-id="form.operation_type_id"
+                            :currency-type-id-active="form.currency_type_id"
+                            :exchange-rate-sale="form.exchange_rate_sale"
+                            @add="addRow"></document-form-item>
+
         <document-options :showDialog.sync="showDialogOptions"
                           :recordId="documentNewId"
                           :showClose="false"></document-options>
@@ -155,48 +167,49 @@
 
 <script>
 
+    import DocumentFormItem from './partials/item.vue'
     import DocumentOptions from '../documents/partials/options.vue'
+    import {functions, exchangeRate} from '../../../mixins/functions'
 
     export default {
+        components: {DocumentFormItem, DocumentOptions},
+        mixins: [functions, exchangeRate],
         props: ['document'],
-        components: {DocumentOptions},
         data() {
             return {
+                showDialogAddItem: false,
                 showDialogOptions: false,
                 loading_submit: false,
                 resource: 'documents',
                 errors: {},
                 form: {},
                 document_types: [],
-                note_credit_types: [],
-                note_debit_types: [],
                 currency_types: [],
-                items: [],
                 customers: [],
-                company: null,
-                establishment: null,
                 all_series: [],
                 series: [],
-                currency_symbol: 'S/',
-                documentNewId: null
+                currency_type: {},
+                documentNewId: null,
+                note_credit_types: [],
+                note_debit_types: [],
             }
         },
         created() {
             this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
-                    this.countries = response.data.countries
                     this.document_types = response.data.document_types_note
+                    this.currency_types = response.data.currency_types
+                    this.all_series = response.data.series
+                    this.customers = response.data.customers
                     this.note_credit_types = response.data.note_credit_types
                     this.note_debit_types = response.data.note_debit_types
-                    this.currency_types = response.data.currency_types
-                    this.items = response.data.items
-                    this.customers = response.data.customers
-                    this.company = response.data.company
-                    this.establishment = response.data.establishment
-                    this.all_series = response.data.series
+
+                    this.currency_type = _.find(this.currency_types, {'id': this.form.currency_type_id})
+                    this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
 
                     this.changeDocumentType()
+                    this.changeDateOfIssue()
                 })
         },
         mounted() {
@@ -206,145 +219,124 @@
             initForm() {
                 this.errors = {}
                 this.form = {
-                    id: null,
-                    external_id: '-',
-                    state_type_id: '01',
-                    soap_type_id: this.document.soap_type_id,
-                    ubl_version: 'v21',
-                    group_id: this.document.group_id,
-                    document_type_code: '07',
-                    series: null,
+                    establishment_id: this.document.establishment_id,
+                    document_type_id: null,
+                    series_id: null,
                     number: '#',
                     date_of_issue: moment().format('YYYY-MM-DD'),
                     time_of_issue: moment().format('HH:mm:ss'),
-                    date_of_due: null,
-                    currency_type_code: this.document.currency_type_code,
                     customer_id: this.document.customer_id,
-                    establishment_id: this.document.establishment_id,
-                    items: this.document.details,
+                    currency_type_id: this.document.currency_type_id,
+                    exchange_rate_sale: 0,
+                    total_prepayment:this.document.total_prepayment,
+                    total_charge: this.document.total_charge,
+                    total_discount: this.document.total_discount,
                     total_exportation: this.document.total_exportation,
+                    total_free: this.document.total_free,
                     total_taxed: this.document.total_taxed,
                     total_unaffected: this.document.total_unaffected,
                     total_exonerated: this.document.total_exonerated,
                     total_igv: this.document.total_igv,
+                    total_base_isc: this.document.total_base_isc,
                     total_isc: this.document.total_isc,
+                    total_base_other_taxes: this.document.total_base_other_taxes,
                     total_other_taxes: this.document.total_other_taxes,
-                    total_other_charges: this.document.total_other_charges,
-                    total_discount: this.document.total_discount,
+                    total_taxes: this.document.total_taxes,
                     total_value: this.document.total_value,
                     total: this.document.total,
-                    note_type_code: null,
-                    description: null,
-                    affected_document_type_code: this.document.document_type_code,
-                    affected_document_series: this.document.series,
-                    affected_document_number: this.document.number,
-                    total_global_discount: this.document.invoice.total_global_discount,
-                    total_prepayment: this.document.invoice.total_prepayment,
-                    filename: '-',
+                    items: this.document.details,
+                    affected_document_id: this.document.id,
+                    note_credit_or_debit_type_id: null,
+                    note_description: null,
                     optional: {
                         observations: null,
-                        method_payment:null, 
+                        method_payment:null,
                         salesman:null,
                         box_number:null,
                         format_pdf: 'a4'
                     },
                 }
             },
-//            resetForm() {
-//                this.initForm()
-//                this.form.soap_type_id = this.company.soap_type_id
-//                this.form.establishment_id = this.establishment.id
-//            },
-            addItem() {
-                this.form.items.push({
-                    item_id: null,
-                    item_description: null,
-                    unit_type_code: null,
-                    carriage_plate: null,
-                    quantity: 0,
-                    unit_value: 0,
-                    price_type_code: '01',
-                    unit_price: 0,
-                    affectation_igv_type_code: '10',
-                    total_igv: 0,
-                    percentage_igv: 18,
-                    system_isc_type_code: null,
-                    total_isc: 0,
-                    charge_type_code: null,
-                    charge_percentage: 0,
-                    total_charge: 0,
-                    discount_type_code: null,
-                    discount_percentage: 0,
-                    total_discount: 0,
-                    total_value: 0,
-                    total: 0,
+            resetForm() {
+                this.initForm()
+                this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
+                this.changeDocumentType()
+                this.changeDateOfIssue()
+            },
+            changeDocumentType() {
+                this.form.note_credit_or_debit_type_id = null
+                this.form.series_id = null
+                let document_type = _.find(this.document_types, {id: this.form.document_type_id})
+                let firstChar = (this.document.group_id === '01')?'F':'B'
+                this.series = _.filter(this.all_series, (s) =>{
+                    return (s.document_type_id === document_type.id && s.number.substr(0, 1) === firstChar)
+                })
+                this.form.series_id = (this.series.length > 0)?this.series[0].id:null
+            },
+            changeDateOfIssue() {
+                this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
+                    this.form.exchange_rate_sale = response
                 })
             },
-            removeItem(index) {
+            addRow(row) {
+                this.form.items.push(row)
+                this.calculateTotal()
+            },
+            clickRemoveItem(index) {
                 this.form.items.splice(index, 1)
                 this.calculateTotal()
             },
-            changeItem(index) {
-                let item = _.find(this.items, {id: this.form.items[index].item_id})
-                this.form.items[index].item_description = item.description
-                this.form.items[index].unit_price = parseFloat(item.unit_price)
-                this.form.items[index].unit_type_code = item.unit_type.code
-                this.calculateRowTotal(index)
-            },
-            changeCurrencyType() {
-                this.currency_symbol = (this.form.currency_type_code === 'PE')?'S/':'$'
-            },
-            changeRow(index) {
-                this.calculateRowTotal(index)
-            },
-            calculateRowTotal(index) {
-                let unit_price = parseFloat(this.form.items[index].unit_price)
-                let quantity = parseFloat(this.form.items[index].quantity)
-                let unit_value = _.round(unit_price / 1.18, 2)
-                let total = _.round(unit_price * quantity, 2)
-                let total_igv = _.round(total - (_.round(total /1.18, 2)), 2)
-                let total_value = _.round(total /1.18, 2)
-
-                this.form.items[index].unit_value = unit_value
-                this.form.items[index].total_value = total_value
-                this.form.items[index].total_igv = total_igv
-                this.form.items[index].total = total
-                this.calculateTotal()
-            },
             calculateTotal() {
+                let total_discount = 0
+                let total_charge = 0
+                let total_exportation = 0
                 let total_taxed = 0
+                let total_exonerated = 0
+                let total_unaffected = 0
+                let total_free = 0
                 let total_igv = 0
+                let total_value = 0
                 let total = 0
                 this.form.items.forEach((row) => {
-                    total_taxed += parseFloat(row.total_value)
+                    total_discount += parseFloat(row.total_discount)
+                    total_charge += parseFloat(row.total_charge)
+
+                    if (row.affectation_igv_type_id === '10') {
+                        total_taxed += parseFloat(row.total_value)
+                    }
+                    if (row.affectation_igv_type_id === '20') {
+                        total_exonerated += parseFloat(row.total_value)
+                    }
+                    if (row.affectation_igv_type_id === '30') {
+                        total_unaffected += parseFloat(row.total_value)
+                    }
+                    if (row.affectation_igv_type_id === '40') {
+                        total_exportation += parseFloat(row.total_value)
+                    }
+                    if (['10', '20', '30', '40'].indexOf(row.affectation_igv_type_id) < 0) {
+                        total_free += parseFloat(row.total_value)
+                    }
+
+                    total_value += parseFloat(row.total_value)
                     total_igv += parseFloat(row.total_igv)
                     total += parseFloat(row.total)
                 });
+
+                this.form.total_exportation = _.round(total_exportation, 2)
                 this.form.total_taxed = _.round(total_taxed, 2)
+                this.form.total_exonerated = _.round(total_exonerated, 2)
+                this.form.total_unaffected = _.round(total_unaffected, 2)
+                this.form.total_free = _.round(total_free, 2)
                 this.form.total_igv = _.round(total_igv, 2)
-                this.form.total_value = _.round(total_taxed, 2)
+                this.form.total_value = _.round(total_value, 2)
                 this.form.total = _.round(total, 2)
-            },
-            changeDocumentType() {
-                this.form.note_type_code = null
-                this.form.series = null
-                let document_type = _.find(this.document_types, {'code': this.form.document_type_code})
-                let firstChar = (this.form.group_id === '01')?'F':'B'
-                this.series = _.filter(this.all_series, (s) =>{
-                    console.log(s)
-                    console.log(s.number.substr(0, 1))
-                    return (s.document_type_id === document_type.id && s.number.substr(0, 1) === firstChar)
-                })
-                //this.form.group_id = (this.form.document_type_code === '01')?'01':'02'
-                this.form.series = (this.series.length > 0)?this.series[0].number:null
             },
             submit() {
                 this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form)
                     .then(response => {
                         if (response.data.success) {
-                            this.initForm()
-                            this.changeDocumentType()
+                            this.resetForm()
                             this.documentNewId = response.data.data.id
                             this.showDialogOptions = true
                         } else {

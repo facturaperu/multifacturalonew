@@ -21,6 +21,12 @@ trait StorageDocument
         return Storage::disk('tenant')->download($this->folder.DIRECTORY_SEPARATOR.$this->filename);
     }
 
+    public function getStorage($filename, $file_type, $root = null)
+    {
+        $this->setData($filename, $file_type, $root);
+        return Storage::disk('tenant')->get($this->folder.DIRECTORY_SEPARATOR.$this->filename);
+    }
+
     private function setData($filename, $file_type, $root)
     {
         $extension = 'xml';

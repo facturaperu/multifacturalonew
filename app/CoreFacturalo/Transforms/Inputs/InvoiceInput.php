@@ -4,10 +4,15 @@ namespace App\CoreFacturalo\Transforms\Inputs;
 
 class InvoiceInput
 {
-    public static function transform($inputs, $document)
+    public static function transform($inputs, $document, $isWeb)
     {
-        $date_of_due = $inputs['fecha_de_vencimiento'];
-        $operation_type_id = $inputs['codigo_tipo_operacion'];
+        if($isWeb) {
+            $date_of_due = $inputs['date_of_due'];
+            $operation_type_id = $inputs['operation_type_id'];
+        } else {
+            $date_of_due = $inputs['fecha_de_vencimiento'];
+            $operation_type_id = $inputs['codigo_tipo_operacion'];
+        }
 
         return [
             'type' => 'invoice',

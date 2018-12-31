@@ -15,7 +15,7 @@ class Note extends ModelTenant
         'note_type',
         'note_credit_type_id',
         'note_debit_type_id',
-        'description',
+        'note_description',
         'affected_document_id',
     ];
 

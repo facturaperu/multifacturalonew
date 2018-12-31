@@ -3,7 +3,6 @@
     $customer = $document->customer;
     $details = $document->details;
     $document_base = $document->invoice;
-    //$optional = $document->optional;
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
     $document_type_description_array = [
         '01' => 'FACTURA',
@@ -17,7 +16,6 @@
         '1' => 'DNI',
         '6' => 'RUC',
     ];
-    //$document_type_description = $document_type_description_array[$document->document_type_code];
 @endphp
 <html>
 <head>
@@ -244,7 +242,7 @@
             <td class="text-center">{{ $row->quantity }}</td>
             <td>{{ $row->item->unit_type_id }}</td>
             <td>
-                {!! $row->item->description !!}
+                {!! $row->item_description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
                         <br/>{!! $attr->name !!} : {{ $attr->value }}
@@ -281,6 +279,12 @@
         <td width="65%">
             <table class="voucher-totals-right">
                 <tbody>
+                @if($document->total_exportation > 0)
+                    <tr>
+                        <td class="text-right font-lg font-bold" width="70%">OP. EXPORTACIÓN: {{ $document->currency_type->symbol }}</td>
+                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_exportation, 2) }}</td>
+                    </tr>
+                @endif
                 @if($document->total_free > 0)
                     <tr>
                         <td class="text-right font-lg font-bold" width="70%">OP. GRATUITAS: {{ $document->currency_type->symbol }}</td>

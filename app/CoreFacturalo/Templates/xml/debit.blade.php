@@ -302,7 +302,7 @@
                 @endif
             </cac:TaxTotal>
             <cac:Item>
-                <cbc:Description><![CDATA[{{ $detail->item->description }}]]></cbc:Description>
+                <cbc:Description><![CDATA[{{ $detail->item_description }}]]></cbc:Description>
                 @if($detail->internal_id)
                 <cac:SellersItemIdentification>
                     <cbc:ID>{{ $detail->internal_id }}</cbc:ID>

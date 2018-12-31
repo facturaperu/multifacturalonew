@@ -2,59 +2,49 @@
 
 namespace App\CoreFacturalo\Transforms\Inputs\Partials;
 
-use App\Models\Catalogs\Country;
-use App\Models\Catalogs\Department;
-use App\Models\Catalogs\District;
-use App\Models\Catalogs\Province;
+use App\Models\Tenant\Establishment;
 
 class EstablishmentInput
 {
-    public static function transform($inputs)
+    public static function transform($inputs, $isWeb)
     {
-        $establishment = $inputs['datos_del_emisor'];
-
-        $country_id = $establishment['codigo_pais'];
-        $district_id = $establishment['ubigeo'];
-        $urbanization = array_key_exists('urbanizacion', $establishment)?$establishment['urbanizacion']:null;
-        $address = $establishment['direccion'];
-        $email = $establishment['correo_electronico'];
-        $telephone = $establishment['telefono'];
-        $code = $establishment['codigo_del_domicilio_fiscal'];
-
-        $department_id = null;
-        $province_id = null;
-
-        if ($district_id) {
-            $province_id = substr($district_id, 0 ,4);
-            $department_id = substr($district_id, 0 ,2);
+        if($isWeb) {
+            $establishment = Establishment::find($inputs['establishment_id']);
+        } else {
+            $establishment_inputs = $inputs['datos_del_emisor'];
+            $code = $establishment_inputs['codigo_del_domicilio_fiscal'];
+            $establishment = Establishment::where('code', $code)->first();
         }
 
         return [
-            'country_id' => $country_id,
-            'country' => [
-                'id' => $country_id,
-                'description' => Country::find($country_id)->description,
-            ],
-            'department_id' => $department_id,
-            'department' => [
-                'id' => $department_id,
-                'description' => Department::find($department_id)->description,
-            ],
-            'province_id' => $province_id,
-            'province' => [
-                'id' => $province_id,
-                'description' => Province::find($province_id)->description,
-            ],
-            'district_id' => $district_id,
-            'district' => [
-                'id' => $district_id,
-                'description' => District::find($district_id)->description,
-            ],
-            'urbanization' => $urbanization,
-            'address' => $address,
-            'email' => $email,
-            'telephone' => $telephone,
-            'code' => $code,
+            'establishment_id' => $establishment->id,
+            'establishment' => [
+                'country_id' => $establishment->country_id,
+                'country' => [
+                    'id' => $establishment->country_id,
+                    'description' => $establishment->country->description,
+                ],
+                'department_id' => $establishment->department_id,
+                'department' => [
+                    'id' => $establishment->department_id,
+                    'description' => $establishment->department->description,
+                ],
+                'province_id' => $establishment->province_id,
+                'province' => [
+                    'id' => $establishment->province_id,
+                    'description' => $establishment->province->description,
+                ],
+                'district_id' => $establishment->district_id,
+                'district' => [
+                    'id' => $establishment->district_id,
+                    'description' => $establishment->district->description,
+                ],
+                'urbanization' => $establishment->urbanization,
+                'address' => $establishment->address,
+                'email' => $establishment->email,
+                'telephone' => $establishment->telephone,
+                'code' => $establishment->code,
+            ]
         ];
     }
 }

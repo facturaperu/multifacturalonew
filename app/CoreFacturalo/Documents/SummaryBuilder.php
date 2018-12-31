@@ -2,7 +2,7 @@
 
 namespace App\CoreFacturalo\Documents;
 
-use App\Models\Summary;
+use App\Models\Tenant\Summary;
 
 class SummaryBuilder
 {

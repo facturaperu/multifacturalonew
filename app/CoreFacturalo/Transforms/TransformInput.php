@@ -16,29 +16,31 @@ class TransformInput
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     * @param  $type
+     * @param  $isWeb
      * @return mixed
      */
-    public function handle($request, Closure $next, $type)
+    public function handle($request, Closure $next, $type, $isWeb)
     {
         if($type === 'document') {
-            $originalAttributes = $this->originalAttributeDocument($request->all());
+            $originalAttributes = $this->originalAttributeDocument($request->all(), $isWeb);
         } elseif ($type === 'summary') {
-            $originalAttributes = $this->originalAttributeSummary($request->all());
+            $originalAttributes = $this->originalAttributeSummary($request->all(), $isWeb);
         } else {
-            $originalAttributes = $this->originalAttributeVoided($request->all());
+            $originalAttributes = $this->originalAttributeVoided($request->all(), $isWeb);
         }
         $request->replace($originalAttributes);
         return $next($request);
     }
 
-    private function originalAttributeDocument($inputs)
+    private function originalAttributeDocument($inputs, $isWeb)
     {
-        $aux_document = DocumentInput::transform($inputs);
+        $aux_document = DocumentInput::transform($inputs, $isWeb);
         $document = $aux_document['document'];
-        if (in_array($document['document_type_id'], ['01', '03'])) {
-            $aux_document_base = InvoiceInput::transform($inputs, $document);
+        if(in_array($document['document_type_id'], ['01', '03'])) {
+            $aux_document_base = InvoiceInput::transform($inputs, $document, $isWeb);
         } else {
-            $aux_document_base = NoteInput::transform($inputs, $document);
+            $aux_document_base = NoteInput::transform($inputs, $document, $isWeb);
         }
         $document['group_id'] = $aux_document_base['group_id'];
 
@@ -53,7 +55,7 @@ class TransformInput
         return $original_attributes;
     }
 
-    private function originalAttributeSummary($inputs)
+    private function originalAttributeSummary($inputs, $isWeb)
     {
         $summary = SummaryInput::transform($inputs);
 
@@ -65,7 +67,7 @@ class TransformInput
         return $original_attributes;
     }
 
-    private function originalAttributeVoided($inputs)
+    private function originalAttributeVoided($inputs, $isWeb)
     {
         $summary = VoidedInput::transform($inputs);
 

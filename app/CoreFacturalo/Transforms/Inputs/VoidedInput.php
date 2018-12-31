@@ -2,9 +2,9 @@
 
 namespace App\CoreFacturalo\Transforms\Inputs;
 
-use App\Models\Company;
-use App\Models\Document;
-use App\Models\Voided;
+use App\Models\Tenant\Company;
+use App\Models\Tenant\Document;
+use App\Models\Tenant\Voided;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Str;

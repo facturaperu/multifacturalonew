@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="titleDialog" :visible.sync="showDialog" @open="create" width="30%"
+    <el-dialog :title="titleDialog" :visible="showDialog" @open="create" width="30%"
                :close-on-click-modal="false"
                :close-on-press-escape="false"
                :show-close="false">
@@ -38,7 +38,7 @@
 <script>
 
     export default {
-        props: ['showDialog', 'recordId', 'showClose', 'urlContinue'],
+        props: ['showDialog', 'recordId', 'showClose'],
         data() {
             return {
                 titleDialog: null,
