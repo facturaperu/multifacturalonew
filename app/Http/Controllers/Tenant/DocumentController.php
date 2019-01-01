@@ -75,7 +75,6 @@ class DocumentController extends Controller
         $note_debit_types = NoteDebitType::whereActive()->orderByDescription()->get();
         $currency_types = CurrencyType::whereActive()->orderByDescription()->get();
         $operation_types = OperationType::whereActive()->orderById()->get();
-//        $company = Company::active();
         $establishments = Establishment::all();
         $series = Series::all();
         $customers = $this->table('customers');
@@ -83,7 +82,7 @@ class DocumentController extends Controller
         $charges = ChargeDiscountType::whereType('charge')->whereLevel('global')->get();
 
         return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
-                       'currency_types', 'operation_types', 'company', 'establishments', 'series', 'customers',
+                       'currency_types', 'operation_types', 'establishments', 'series', 'customers',
                        'discounts', 'charges');
     }
 

@@ -76,6 +76,7 @@ class ClientController extends Controller
             'identity_document_type_id' => '6',
             'number' => $request->input('number'),
             'name' => $request->input('name'),
+            'trade_name' => $request->input('name'),
             'soap_type_id' => '01'
         ]);
 
@@ -89,6 +90,15 @@ class ClientController extends Controller
             'email' => $request->input('email'),
             'telephone' => '-',
             'code' => '0000'
+        ]);
+
+        DB::connection('tenant')->table('series')->insert([
+            ['establishment_id' => 1, 'document_type_id' => '01', 'number' => 'F001'],
+            ['establishment_id' => 1, 'document_type_id' => '03', 'number' => 'B001'],
+            ['establishment_id' => 1, 'document_type_id' => '07', 'number' => 'FC01'],
+            ['establishment_id' => 1, 'document_type_id' => '07', 'number' => 'BC001'],
+            ['establishment_id' => 1, 'document_type_id' => '08', 'number' => 'FD01'],
+            ['establishment_id' => 1, 'document_type_id' => '08', 'number' => 'BD01'],
         ]);
 
         DB::connection('tenant')->table('users')->insert([

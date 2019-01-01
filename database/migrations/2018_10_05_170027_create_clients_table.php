@@ -22,8 +22,6 @@ class CreateClientsTable extends Migration
             $table->string('token');
             $table->timestamps();
 
-//            $table->softDeletes();
-
             $table->foreign('hostname_id')->references('id')->on('hostnames')->onDelete('cascade');
         });
     }
