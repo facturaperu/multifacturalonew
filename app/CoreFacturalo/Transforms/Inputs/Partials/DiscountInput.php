@@ -20,7 +20,7 @@ class DiscountInput
         foreach ($discounts as $row)
         {
             if($isWeb) {
-                $code = $row['code'];
+                $code = $row['discount_type_id'];
                 $description = $row['description'];
                 $factor = $row['factor'];
                 $amount = $row['amount'];

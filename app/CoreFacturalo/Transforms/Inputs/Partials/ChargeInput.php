@@ -20,7 +20,7 @@ class ChargeInput
         foreach ($charges as $row)
         {
             if($isWeb) {
-                $code = $row['code'];
+                $code = $row['charge_type_id'];
                 $description = $row['description'];
                 $factor = $row['factor'];
                 $amount = $row['amount'];
