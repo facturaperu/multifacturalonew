@@ -10,7 +10,7 @@
                                 <a href="#" @click.prevent="showDialogNewItem = true">[+ Nuevo]</a>
                             </label>
                             <el-select v-model="form.item_id" @change="changeItem" filterable>
-                                <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.full_description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.item_id" v-text="errors.item_id[0]"></small>
                         </div>
@@ -35,7 +35,7 @@
                         <div class="form-group" :class="{'has-danger': errors.unit_price}">
                             <label class="control-label">Precio Unitario</label>
                             <el-input v-model="form.unit_price">
-                                <template slot="prepend" v-if="form.item.currency_type">{{ form.item.currency_type.symbol }}</template>
+                                <template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
@@ -183,10 +183,13 @@
                     discounts: [],
                 }
             },
+            initializeFields() {
+                this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
+            },
             create() {
                 let operation_type = _.find(this.operation_types, {id: this.operationTypeId})
                 this.affectation_igv_types = _.filter(this.all_affectation_igv_types, {exportation: operation_type.exportation})
-                this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
+                this.initializeFields()
             },
             clickAddDiscount() {
                 this.form.discounts.push({
@@ -228,12 +231,6 @@
                 this.initForm()
                 this.$emit('update:showDialog', false)
             },
-//            filterItems() {
-//                this.form.item_id = null
-//                this.items = this.all_items.filter((f) => {
-//                    return f.category_id === _.last(this.form.category_id)
-//                });
-//            },
             changeItem() {
                 this.form.item = _.find(this.items, {'id': this.form.item_id})
                 this.form.unit_price = this.form.item.unit_price
@@ -241,10 +238,9 @@
             clickAddItem() {
                 this.form.item.unit_price = this.form.unit_price
                 this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
-
                 this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale)
-
                 this.initForm()
+                this.initializeFields()
                 this.$emit('add', this.row)
             },
             reloadDataItems(item_id) {

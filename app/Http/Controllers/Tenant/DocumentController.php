@@ -104,7 +104,7 @@ class DocumentController extends Controller
     public function table($table)
     {
         if ($table === 'customers') {
-            $customers = Customer::with(['identity_document_type'])->orderBy('name')->get()->transform(function($row) {
+            $customers = Customer::orderBy('name')->get()->transform(function($row) {
                 return [
                     'id' => $row->id,
                     'description' => $row->number.' - '.$row->name,
@@ -117,7 +117,18 @@ class DocumentController extends Controller
             return $customers;
         }
         if ($table === 'items') {
-            return Item::with(['unit_type'])->orderBy('description')->get();
+            $items = Item::orderBy('description')->get()->transform(function($row) {
+                $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
+                return [
+                    'id' => $row->id,
+                    'full_description' => $full_description,
+                    'description' => $row->description,
+                    'currency_type_id' => $row->currency_type_id,
+                    'currency_type_symbol' => $row->currency_type->symbol,
+                    'unit_price' => $row->unit_price
+                ];
+            });
+            return $items;
         }
 
         return [];
