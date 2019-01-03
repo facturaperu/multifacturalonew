@@ -15,6 +15,7 @@ class ValidateCpe
 {
     const URL_CONSULT = 'http://www.sunat.gob.pe/ol-ti-itconsvalicpe/ConsValiCpe.htm';
     const URL_CAPTCHA = 'http://www.sunat.gob.pe/ol-ti-itconsvalicpe/captcha?accion=image';
+
     protected $company;
     protected $client;
     protected $document_type_code = [
