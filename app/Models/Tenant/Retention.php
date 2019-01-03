@@ -2,14 +2,12 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\CurrencyType;
-use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Catalogs\RetentionType;
 
 class Retention extends ModelTenant
 {
-    protected $with = ['user', 'establishment', 'soap_type', 'state_type', 'document_type', 'series',
-                       'customer', 'currency_type', 'system_code_retention', 'details'];
+    protected $with = ['user', 'establishment', 'soap_type', 'state_type', 'series',
+                       'retention_type', 'documents'];
 
     protected $fillable = [
         'user_id',
@@ -18,15 +16,13 @@ class Retention extends ModelTenant
         'soap_type_id',
         'state_type_id',
         'ubl_version',
-        'document_type_id',
         'series_id',
         'number',
         'date_of_issue',
-        'customer_id',
-        'currency_type_id',
+        'time_of_issue',
+        'supplier',
+        'retention_type_id',
         'observation',
-        'system_code_retention_id',
-        'percent',
         'total_retention',
         'total',
 
@@ -61,24 +57,19 @@ class Retention extends ModelTenant
         return $this->belongsTo(StateType::class);
     }
 
-    public function document_type()
-    {
-        return $this->belongsTo(DocumentType::class);
-    }
-
     public function series()
     {
         return $this->belongsTo(Series::class);
     }
 
-    public function customer()
+    public function getSupplierAttribute($value)
     {
-        return $this->belongsTo(Customer::class);
+        return (is_null($value))?null:(object) json_decode($value);
     }
 
-    public function currency_type()
+    public function setSupplierAttribute($value)
     {
-        return $this->belongsTo(CurrencyType::class);
+        $this->attributes['supplier'] = (is_null($value))?null:json_encode($value);
     }
 
     public function retention_type()
@@ -86,9 +77,9 @@ class Retention extends ModelTenant
         return $this->belongsTo(RetentionType::class);
     }
 
-    public function details()
+    public function documents()
     {
-        return $this->hasMany(RetentionDetail::class);
+        return $this->hasMany(RetentionDocument::class);
     }
 
 }

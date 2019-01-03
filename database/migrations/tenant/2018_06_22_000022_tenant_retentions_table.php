@@ -21,15 +21,14 @@ class TenantRetentionsTable extends Migration
             $table->char('soap_type_id', 2);
             $table->char('state_type_id', 2);
             $table->string('ubl_version');
-            $table->char('document_type_id', 2);
             $table->unsignedInteger('series_id');
             $table->integer('number');
             $table->date('date_of_issue');
-            $table->unsignedInteger('customer_id');
-            $table->char('currency_type_id', 3);
-            $table->text('observation');
+            $table->time('time_of_issue');
+            $table->json('supplier');
+
             $table->char('retention_type_id', 2);
-            $table->decimal('percent', 10, 2);
+            $table->text('observation');
             $table->decimal('total_retention', 10, 2);
             $table->decimal('total', 10, 2);
 

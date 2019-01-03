@@ -5,22 +5,24 @@ namespace App\Models\Tenant;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
 
-class RetentionDetail extends ModelTenant
+class RetentionDocument extends ModelTenant
 {
     public $timestamps = false;
     protected $with = ['document_type', 'currency_type'];
     protected $fillable = [
         'retention_id',
         'document_type_id',
+        'series',
         'number',
         'date_of_issue',
-        'date_of_retention',
         'currency_type_id',
         'total_document',
-        'total_retention',
-        'total',
-        'exchange',
         'payments',
+        'exchange',
+        'date_of_retention',
+        'total_retention',
+        'total_to_pay',
+        'total_pay',
     ];
 
     protected $casts = [
@@ -30,12 +32,22 @@ class RetentionDetail extends ModelTenant
 
     public function getPaymentsAttribute($value)
     {
-        return (object)json_decode($value);
+        return (is_null($value))?null:(object) json_decode($value);
     }
 
     public function setPaymentsAttribute($value)
     {
-        $this->attributes['payments'] = json_encode($value);
+        $this->attributes['payments'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getExchangeAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setExchangeAttribute($value)
+    {
+        $this->attributes['exchange'] = (is_null($value))?null:json_encode($value);
     }
 
     public function document_type()
