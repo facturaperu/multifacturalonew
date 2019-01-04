@@ -13,6 +13,7 @@ use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Retention;
 use App\Models\Tenant\RetentionDetail;
+use App\Models\Tenant\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,6 @@ class RetentionController extends Controller
     public function columns()
     {
         return [
-            'id' => 'Código',
             'number' => 'Número'
         ];
     }
@@ -48,30 +48,29 @@ class RetentionController extends Controller
     public function tables()
     {
         $user_id = Auth::id();
-        $currency_types = CurrencyType::all();
-        $customers = $this->table('customers');
-        $items = $this->table('items');
-        $company = Company::with(['identity_document_type'])->first();
         $establishments = Establishment::all();
-        $document_types = DocumentType::all();
+//        $currency_types = CurrencyType::all();
+        $suppliers = $this->table('suppliers');
+//        $items = $this->table('items');
+        $document_types = DocumentType::whereIn('id', ['20'])->get();
         $series = Series::all();
 
-        return compact('user_id', 'currency_types', 'customers', 'items', 'company', 'establishments','document_types', 'series');
+        return compact('user_id', 'establishments', 'suppliers', 'document_types', 'series');
     }
 
-    public function item_tables()
-    {
-        $items = $this->table('items');
-        $currency_types = CurrencyType::all();
-        $document_types = DocumentType::all();
-
-        return compact('items', 'currency_types', 'document_types');
-    }
+//    public function item_tables()
+//    {
+//        $items = $this->table('items');
+//        $currency_types = CurrencyType::all();
+//        $document_types = DocumentType::all();
+//
+//        return compact('items', 'currency_types', 'document_types');
+//    }
 
     public function table($table)
     {
-        if ($table === 'customers') {
-            $customers = Customer::with(['identity_document_type'])->orderBy('name')->get()->transform(function($row) {
+        if ($table === 'suppliers') {
+            $suppliers = Supplier::orderBy('name')->get()->transform(function($row) {
                 return [
                     'id' => $row->id,
                     'description' => $row->number.' - '.$row->name,
@@ -81,11 +80,11 @@ class RetentionController extends Controller
                     'identity_document_type_code' => $row->identity_document_type->code
                 ];
             });
-            return $customers;
+            return $suppliers;
         }
-        if ($table === 'items') {
-            return RetentionDetail::all();
-        }
+//        if ($table === 'items') {
+//            return RetentionDetail::all();
+//        }
 
         return [];
     }
@@ -97,23 +96,23 @@ class RetentionController extends Controller
         return $record;
     }
 
-    public function setNumber($data)
-    {
-        $number = $data['number'];
-        $series_id = $data['series_id'];
-        $document_type_id = $data['document_type_id'];
-        $soap_type_id = $data['soap_type_id'];
-        if ($data['number'] === '#') {
-            $document = Retention::select('number')
-                                    ->where('series_id', $series_id)
-                                    ->where('document_type_id', $document_type_id)
-                                    ->where('soap_type_id', $soap_type_id)
-                                    ->orderBy('number', 'desc')
-                                    ->first();
-             $number = ($document)?(int)$document->number+1:1;
-        }
-        return $number;
-    }
+//    public function setNumber($data)
+//    {
+//        $number = $data['number'];
+//        $series_id = $data['series_id'];
+//        $document_type_id = $data['document_type_id'];
+//        $soap_type_id = $data['soap_type_id'];
+//        if ($data['number'] === '#') {
+//            $document = Retention::select('number')
+//                                    ->where('series_id', $series_id)
+//                                    ->where('document_type_id', $document_type_id)
+//                                    ->where('soap_type_id', $soap_type_id)
+//                                    ->orderBy('number', 'desc')
+//                                    ->first();
+//             $number = ($document)?(int)$document->number+1:1;
+//        }
+//        return $number;
+//    }
 
     public function store(RetentionRequest $request)
     {
@@ -132,14 +131,14 @@ class RetentionController extends Controller
         ];
     }
 
-    public function destroy($id)
-    {
-        $record = Retention::findOrFail($id);
-        $record->delete();
-
-        return [
-            'success' => true,
-            'message' => 'Retención eliminada con éxito'
-        ];
-    }
+//    public function destroy($id)
+//    {
+//        $record = Retention::findOrFail($id);
+//        $record->delete();
+//
+//        return [
+//            'success' => true,
+//            'message' => 'Retención eliminada con éxito'
+//        ];
+//    }
 }

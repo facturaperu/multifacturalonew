@@ -16,16 +16,16 @@
                                 <small class="form-control-feedback" v-if="errors.establishment_id" v-text="errors.establishment_id[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.document_type_id}">
-                                <label class="control-label">Tipo de comprobante</label>
-                                <el-select v-model="form.document_type_id" @change="changeDocumentType">
-                                    <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
+                        <!--<div class="col-lg-2">-->
+                            <!--<div class="form-group" :class="{'has-danger': errors.document_type_id}">-->
+                                <!--<label class="control-label">Tipo de comprobante</label>-->
+                                <!--<el-select v-model="form.document_type_id" @change="changeDocumentType">-->
+                                    <!--<el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>-->
+                                <!--</el-select>-->
+                                <!--<small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-lg-2">-->
                             <div class="form-group" :class="{'has-danger': errors.series_id}">
                                 <label class="control-label">Serie</label>
                                 <el-select v-model="form.series_id">
@@ -34,15 +34,15 @@
                                 <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.currency_type_id}">
-                                <label class="control-label">Moneda</label>
-                                <el-select v-model="form.currency_type_id" @change="changeCurrencyType">
-                                    <el-option v-for="option in currency_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
-                            </div>
-                        </div>
+                        <!--<div class="col-lg-2">-->
+                            <!--<div class="form-group" :class="{'has-danger': errors.currency_type_id}">-->
+                                <!--<label class="control-label">Moneda</label>-->
+                                <!--<el-select v-model="form.currency_type_id" @change="changeCurrencyType">-->
+                                    <!--<el-option v-for="option in currency_types" :key="option.id" :value="option.id" :label="option.description"></el-option>-->
+                                <!--</el-select>-->
+                                <!--<small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>-->
+                            <!--</div>-->
+                        <!--</div>-->
                         <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
                                 <label class="control-label">Fecha de emisión</label>
@@ -51,15 +51,15 @@
                             </div>
                         </div>
                         <div class="col-lg-4">
-                            <div class="form-group" :class="{'has-danger': errors.customer_id}">
+                            <div class="form-group" :class="{'has-danger': errors.supplier_id}">
                                 <label class="control-label">
-                                    Cliente
-                                    <a href="#" @click.prevent="showDialogNewCustomer = true">[+ Nuevo]</a>
+                                    Proveedor
+                                    <a href="#" @click.prevent="showDialogNewSupplier = true">[+ Nuevo]</a>
                                 </label>
-                                <el-select v-model="form.customer_id" filterable>
-                                    <el-option v-for="option in customers" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                <el-select v-model="form.supplier_id" filterable>
+                                    <el-option v-for="option in suppliers" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
-                                <small class="form-control-feedback" v-if="errors.customer_id" v-text="errors.customer_id[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.supplier_id" v-text="errors.supplier_id[0]"></small>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6">
@@ -73,7 +73,7 @@
                     <div class="row">
                         <div class="col-lg-2 col-md-6 d-flex align-items-end pt-2">
                             <div class="form-group">
-                                <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Detalle</button>
+                                <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddDocument = true">+ Agregar Documento</button>
                             </div>
                         </div>
                     </div>
@@ -137,30 +137,30 @@
 
 <script>
 
-    import RetentionFormItem from './partials/item.vue'
+    import RetentionFormDocument from './partials/item.vue'
     import CustomerForm from '../customers/form.vue'
 
     export default {
-        components: {RetentionFormItem, CustomerForm},
+        components: {RetentionFormDocument, CustomerForm},
         data() {
             return {
                 resource: 'retentions',
-                showDialogAddItem: false,
+                showDialogAddDocument: false,
                 showDialogNewCustomer: false,
                 loading_submit: false,
                 errors: {},
                 form: {}, 
                 document_types: [],
-                currency_types: [],
-                discounts: [],
-                charges: [],
-                items: [],
-                customers: [],
-                company: null,
+//                currency_types: [],
+//                discounts: [],
+//                charges: [],
+//                items: [],
+                suppliers: [],
+//                company: null,
                 establishments: [],
                 all_series: [],
                 series: [],
-                currency_symbol: 'S/',
+//                currency_symbol: 'S/',
             }
         },
         created() {
@@ -168,17 +168,17 @@
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.document_types = response.data.document_types
-                    this.currency_types = response.data.currency_types
-                    this.items = response.data.items
-                    this.customers = response.data.customers
-                    this.company = response.data.company
+//                    this.currency_types = response.data.currency_types
+//                    this.items = response.data.items
+                    this.suppliers = response.data.suppliers
+//                    this.company = response.data.company
                     this.establishments = response.data.establishments
                     this.all_series = response.data.series
-                    this.form.user_id = response.data.user_id
-                    this.form.soap_type_id = this.company.soap_type_id
-                    this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
+//                    this.form.user_id = response.data.user_id
+//                    this.form.soap_type_id = this.company.soap_type_id
+//                    this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
-                    this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
+                    this.form.document_type_id = '20'
                     this.changeDocumentType()
                 })
             this.$eventHub.$on('reloadDataCustomers', () => {

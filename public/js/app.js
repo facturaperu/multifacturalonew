@@ -130841,9 +130841,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 
 
@@ -130906,24 +130903,14 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("td", [
-                        _vm._v(_vm._s(row.customer_name)),
+                        _vm._v(_vm._s(row.supplier_name)),
                         _c("br"),
                         _c("small", {
-                          domProps: { textContent: _vm._s(row.customer_number) }
+                          domProps: { textContent: _vm._s(row.supplier_number) }
                         })
                       ]),
                       _vm._v(" "),
-                      _c("td", [
-                        _vm._v(_vm._s(row.number)),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("small", {
-                          domProps: {
-                            textContent: _vm._s(row.document_type_description)
-                          }
-                        }),
-                        _c("br")
-                      ]),
+                      _c("td", [_vm._v(_vm._s(row.number_full))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(row.state_type_description))]),
                       _vm._v(" "),
@@ -130935,39 +130922,7 @@ var render = function() {
                         _vm._v(_vm._s(row.total))
                       ]),
                       _vm._v(" "),
-                      _c("td", { staticClass: "text-right" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "btn waves-effect waves-light btn-xs btn-info",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                _vm.clickCreate(row.id)
-                              }
-                            }
-                          },
-                          [_vm._v("Editar")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "btn waves-effect waves-light btn-xs btn-danger",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                _vm.clickDelete(row.id)
-                              }
-                            }
-                          },
-                          [_vm._v("Eliminar")]
-                        )
-                      ])
+                      _c("td", { staticClass: "text-right" })
                     ])
                   }
                 }
@@ -130981,11 +130936,9 @@ var render = function() {
                   _vm._v("Fecha Emisión")
                 ]),
                 _vm._v(" "),
-                _c("th", [_vm._v("Cliente")]),
+                _c("th", [_vm._v("Proveedor")]),
                 _vm._v(" "),
                 _c("th", [_vm._v("Número")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Estado")]),
                 _vm._v(" "),
                 _c("th", { staticClass: "text-right" }, [
                   _vm._v("T.Retención")
@@ -131233,26 +131186,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: { RetentionFormItem: __WEBPACK_IMPORTED_MODULE_0__partials_item_vue___default.a, CustomerForm: __WEBPACK_IMPORTED_MODULE_1__customers_form_vue___default.a },
+    components: { RetentionFormDocument: __WEBPACK_IMPORTED_MODULE_0__partials_item_vue___default.a, CustomerForm: __WEBPACK_IMPORTED_MODULE_1__customers_form_vue___default.a },
     data: function data() {
         return {
             resource: 'retentions',
-            showDialogAddItem: false,
+            showDialogAddDocument: false,
             showDialogNewCustomer: false,
             loading_submit: false,
             errors: {},
             form: {},
             document_types: [],
-            currency_types: [],
-            discounts: [],
-            charges: [],
-            items: [],
+            //                currency_types: [],
+            //                discounts: [],
+            //                charges: [],
+            //                items: [],
             customers: [],
-            company: null,
+            //                company: null,
             establishments: [],
             all_series: [],
-            series: [],
-            currency_symbol: 'S/'
+            series: []
+            //                currency_symbol: 'S/',
         };
     },
     created: function created() {
@@ -131995,600 +131948,7 @@ if (false) {
 /* 450 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "card mb-0 pt-2 pt-md-0" },
-    [
-      _vm._m(0),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c(
-          "form",
-          {
-            attrs: { autocomplete: "off" },
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.submit($event)
-              }
-            }
-          },
-          [
-            _c("div", { staticClass: "form-body" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-lg-2" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "form-group",
-                      class: { "has-danger": _vm.errors.establishment_id }
-                    },
-                    [
-                      _c("label", { staticClass: "control-label" }, [
-                        _vm._v("Establecimiento")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "el-select",
-                        {
-                          on: { change: _vm.changeEstablishment },
-                          model: {
-                            value: _vm.form.establishment_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "establishment_id", $$v)
-                            },
-                            expression: "form.establishment_id"
-                          }
-                        },
-                        _vm._l(_vm.establishments, function(option) {
-                          return _c("el-option", {
-                            key: option.id,
-                            attrs: {
-                              value: option.id,
-                              label: option.description
-                            }
-                          })
-                        })
-                      ),
-                      _vm._v(" "),
-                      _vm.errors.establishment_id
-                        ? _c("small", {
-                            staticClass: "form-control-feedback",
-                            domProps: {
-                              textContent: _vm._s(
-                                _vm.errors.establishment_id[0]
-                              )
-                            }
-                          })
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-lg-2" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "form-group",
-                      class: { "has-danger": _vm.errors.document_type_id }
-                    },
-                    [
-                      _c("label", { staticClass: "control-label" }, [
-                        _vm._v("Tipo de comprobante")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "el-select",
-                        {
-                          on: { change: _vm.changeDocumentType },
-                          model: {
-                            value: _vm.form.document_type_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "document_type_id", $$v)
-                            },
-                            expression: "form.document_type_id"
-                          }
-                        },
-                        _vm._l(_vm.document_types, function(option) {
-                          return _c("el-option", {
-                            key: option.id,
-                            attrs: {
-                              value: option.id,
-                              label: option.description
-                            }
-                          })
-                        })
-                      ),
-                      _vm._v(" "),
-                      _vm.errors.document_type_id
-                        ? _c("small", {
-                            staticClass: "form-control-feedback",
-                            domProps: {
-                              textContent: _vm._s(
-                                _vm.errors.document_type_id[0]
-                              )
-                            }
-                          })
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-lg-2" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "form-group",
-                      class: { "has-danger": _vm.errors.series_id }
-                    },
-                    [
-                      _c("label", { staticClass: "control-label" }, [
-                        _vm._v("Serie")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "el-select",
-                        {
-                          model: {
-                            value: _vm.form.series_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "series_id", $$v)
-                            },
-                            expression: "form.series_id"
-                          }
-                        },
-                        _vm._l(_vm.series, function(option) {
-                          return _c("el-option", {
-                            key: option.id,
-                            attrs: { value: option.id, label: option.number }
-                          })
-                        })
-                      ),
-                      _vm._v(" "),
-                      _vm.errors.series
-                        ? _c("small", {
-                            staticClass: "form-control-feedback",
-                            domProps: {
-                              textContent: _vm._s(_vm.errors.series[0])
-                            }
-                          })
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-lg-2" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "form-group",
-                      class: { "has-danger": _vm.errors.currency_type_id }
-                    },
-                    [
-                      _c("label", { staticClass: "control-label" }, [
-                        _vm._v("Moneda")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "el-select",
-                        {
-                          on: { change: _vm.changeCurrencyType },
-                          model: {
-                            value: _vm.form.currency_type_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "currency_type_id", $$v)
-                            },
-                            expression: "form.currency_type_id"
-                          }
-                        },
-                        _vm._l(_vm.currency_types, function(option) {
-                          return _c("el-option", {
-                            key: option.id,
-                            attrs: {
-                              value: option.id,
-                              label: option.description
-                            }
-                          })
-                        })
-                      ),
-                      _vm._v(" "),
-                      _vm.errors.currency_type_id
-                        ? _c("small", {
-                            staticClass: "form-control-feedback",
-                            domProps: {
-                              textContent: _vm._s(
-                                _vm.errors.currency_type_id[0]
-                              )
-                            }
-                          })
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-lg-2" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "form-group",
-                      class: { "has-danger": _vm.errors.date_of_issue }
-                    },
-                    [
-                      _c("label", { staticClass: "control-label" }, [
-                        _vm._v("Fecha de emisión")
-                      ]),
-                      _vm._v(" "),
-                      _c("el-date-picker", {
-                        attrs: {
-                          type: "date",
-                          "value-format": "yyyy-MM-dd",
-                          clearable: false
-                        },
-                        model: {
-                          value: _vm.form.date_of_issue,
-                          callback: function($$v) {
-                            _vm.$set(_vm.form, "date_of_issue", $$v)
-                          },
-                          expression: "form.date_of_issue"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm.errors.date_of_issue
-                        ? _c("small", {
-                            staticClass: "form-control-feedback",
-                            domProps: {
-                              textContent: _vm._s(_vm.errors.date_of_issue[0])
-                            }
-                          })
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-lg-4" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "form-group",
-                      class: { "has-danger": _vm.errors.customer_id }
-                    },
-                    [
-                      _c("label", { staticClass: "control-label" }, [
-                        _vm._v(
-                          "\n                                Cliente\n                                "
-                        ),
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                _vm.showDialogNewCustomer = true
-                              }
-                            }
-                          },
-                          [_vm._v("[+ Nuevo]")]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { filterable: "" },
-                          model: {
-                            value: _vm.form.customer_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "customer_id", $$v)
-                            },
-                            expression: "form.customer_id"
-                          }
-                        },
-                        _vm._l(_vm.customers, function(option) {
-                          return _c("el-option", {
-                            key: option.id,
-                            attrs: {
-                              value: option.id,
-                              label: option.description
-                            }
-                          })
-                        })
-                      ),
-                      _vm._v(" "),
-                      _vm.errors.customer_id
-                        ? _c("small", {
-                            staticClass: "form-control-feedback",
-                            domProps: {
-                              textContent: _vm._s(_vm.errors.customer_id[0])
-                            }
-                          })
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-lg-4 col-md-6" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "form-group",
-                      class: { "has-danger": _vm.errors.observation }
-                    },
-                    [
-                      _c("label", { staticClass: "control-label" }, [
-                        _vm._v("Observaciones")
-                      ]),
-                      _vm._v(" "),
-                      _c("el-input", {
-                        attrs: { type: "textarea", autosize: "" },
-                        model: {
-                          value: _vm.form.observation,
-                          callback: function($$v) {
-                            _vm.$set(_vm.form, "observation", $$v)
-                          },
-                          expression: "form.observation"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm.errors.observation
-                        ? _c("small", {
-                            staticClass: "form-control-feedback",
-                            domProps: {
-                              textContent: _vm._s(_vm.errors.observation[0])
-                            }
-                          })
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "col-lg-2 col-md-6 d-flex align-items-end pt-2"
-                  },
-                  [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "btn waves-effect waves-light btn-primary",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              _vm.showDialogAddItem = true
-                            }
-                          }
-                        },
-                        [_vm._v("+ Agregar Detalle")]
-                      )
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _vm.form.items.length > 0
-                ? _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-md-12" }, [
-                      _c("div", { staticClass: "table-responsive" }, [
-                        _c("table", { staticClass: "table" }, [
-                          _vm._m(1),
-                          _vm._v(" "),
-                          _c(
-                            "tbody",
-                            _vm._l(_vm.form.items, function(row, index) {
-                              return _c("tr", [
-                                _c("td", [_vm._v(_vm._s(index + 1))]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("span", {
-                                    domProps: {
-                                      textContent: _vm._s(row.document_type_id)
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("span", {
-                                    domProps: {
-                                      textContent: _vm._s(row.date_of_issue)
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("span", {
-                                    domProps: {
-                                      textContent: _vm._s(row.date_of_retention)
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("span", {
-                                    domProps: {
-                                      textContent: _vm._s(row.currency_type_id)
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("td", { staticClass: "text-right" }, [
-                                  _c("span", {
-                                    domProps: { textContent: _vm._s(row.total) }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("td", { staticClass: "text-right" }, [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "btn waves-effect waves-light btn-xs btn-danger",
-                                      attrs: { type: "button" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          _vm.clickRemoveItem(index)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("x")]
-                                  )
-                                ])
-                              ])
-                            })
-                          )
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-md-12" },
-                      [
-                        _vm.form.total_retention > 0
-                          ? _c("p", { staticClass: "text-right" }, [
-                              _vm._v(
-                                "Total Retención : " +
-                                  _vm._s(_vm.currency_symbol) +
-                                  " " +
-                                  _vm._s(_vm.form.total_retention)
-                              )
-                            ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.form.total > 0
-                          ? [
-                              _c("hr"),
-                              _vm._v(" "),
-                              _c("h3", { staticClass: "text-right" }, [
-                                _c("b", [_vm._v("Total : ")]),
-                                _vm._v(
-                                  _vm._s(_vm.currency_symbol) +
-                                    " " +
-                                    _vm._s(_vm.form.total)
-                                )
-                              ])
-                            ]
-                          : _vm._e()
-                      ],
-                      2
-                    )
-                  ])
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-actions text-right mt-4" },
-              [
-                _c(
-                  "el-button",
-                  {
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        _vm.close()
-                      }
-                    }
-                  },
-                  [_vm._v("Cancelar")]
-                ),
-                _vm._v(" "),
-                _vm.form.items.length > 0 && _vm.form.total > 0
-                  ? _c(
-                      "el-button",
-                      {
-                        attrs: {
-                          type: "primary",
-                          "native-type": "submit",
-                          loading: _vm.loading_submit
-                        }
-                      },
-                      [_vm._v("Generar")]
-                    )
-                  : _vm._e()
-              ],
-              1
-            )
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c("retention-form-item", {
-        attrs: {
-          showDialog: _vm.showDialogAddItem,
-          "operation-type-id": _vm.form.operation_type_code
-        },
-        on: {
-          "update:showDialog": function($event) {
-            _vm.showDialogAddItem = $event
-          },
-          add: _vm.addItem
-        }
-      }),
-      _vm._v(" "),
-      _c("customer-form", {
-        attrs: { showDialog: _vm.showDialogNewCustomer, external: true },
-        on: {
-          "update:showDialog": function($event) {
-            _vm.showDialogNewCustomer = $event
-          }
-        }
-      })
-    ],
-    1
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header bg-info" }, [
-      _c("h3", { staticClass: "my-0" }, [_vm._v("Nueva Retención")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("#")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Tipo de comprobante")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Fecha de emisión")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Fecha de retención")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Moneda")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-right" }, [_vm._v("Total")]),
-        _vm._v(" "),
-        _c("th")
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+module.exports={render:function(){},staticRenderFns:[]}
 if (false) {
   module.hot.accept()
   if (module.hot.data) {

@@ -63,11 +63,11 @@
                             {{--<i class="fas fa-receipt"></i><span>Percepciones</span>--}}
                         {{--</a>--}}
                     {{--</li>--}}
-                    {{--<li class="{{ ($path[0] === 'retentions')?'nav-active':'' }}">--}}
-                        {{--<a class="nav-link" href="{{route('tenant.retentions.index')}}">--}}
-                            {{--<i class="fas fa-receipt"></i><span>Retenciones</span>--}}
-                        {{--</a>--}}
-                    {{--</li> --}}
+                    <li class="{{ ($path[0] === 'retentions')?'nav-active':'' }}">
+                        <a class="nav-link" href="{{route('tenant.retentions.index')}}">
+                            <i class="fas fa-receipt"></i><span>Retenciones</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

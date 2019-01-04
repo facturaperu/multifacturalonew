@@ -93,4 +93,8 @@ class Retention extends ModelTenant
         return $this->hasMany(RetentionDocument::class);
     }
 
+    public function getNumberFullAttribute()
+    {
+        return $this->series.'-'.$this->number;
+    }
 }
