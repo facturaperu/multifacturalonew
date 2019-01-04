@@ -137,8 +137,8 @@
                 this.$http.get(`/${this.resource}/send_xml/${document_id}`)
                     .then(response => {
                         if (response.data.success) {
-                            this.$message.success('Se reenvio el archivo xml correctamente')
-                            this.getData()
+                            this.$message.success(response.data.message)
+                            this.$eventHub.$emit('reloadData')
                         } else {
                             this.$message.error('Error al reenviar el archivo xml')
                         }

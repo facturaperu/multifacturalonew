@@ -21,7 +21,6 @@ class ItemController extends Controller
     public function columns()
     {
         return [
-            'id' => 'Código',
             'description' => 'Descripción'
         ];
     }

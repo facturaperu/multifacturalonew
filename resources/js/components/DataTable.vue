@@ -59,7 +59,7 @@
         data () {
             return {
                 search: {
-                    column: 'id',
+                    column: null,
                     value: null
                 },
                 columns: [],
@@ -73,13 +73,13 @@
             this.$eventHub.$on('reloadData', () => {
                 this.getRecords()
             })
-
-            this.$http.get(`${this.resource}/columns`).then((response) => {
-                this.columns = response.data
-            });
         },
-        mounted () {
-            this.getRecords()
+        async mounted () {
+            await this.$http.get(`${this.resource}/columns`).then((response) => {
+                this.columns = response.data
+                this.search.column = _.head(Object.keys(this.columns))
+            });
+            await this.getRecords()
         },
         methods: {
             customIndex(index) {

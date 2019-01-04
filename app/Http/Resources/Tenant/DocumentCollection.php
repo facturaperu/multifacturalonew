@@ -67,7 +67,7 @@ class DocumentCollection extends ResourceCollection
 
             $has_xml = true;
             $has_pdf = true;
-            $has_cdr = true;
+            $has_cdr = (bool) $row->has_cdr;
 
             if($row->group_id === '02') {
                 $has_cdr = false;

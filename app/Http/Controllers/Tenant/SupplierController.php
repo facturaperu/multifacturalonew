@@ -6,18 +6,18 @@ use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
-use App\Models\Tenant\Customer;
+use App\Models\Tenant\Supplier;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Tenant\CustomerRequest;
-use App\Http\Resources\Tenant\CustomerCollection;
-use App\Http\Resources\Tenant\CustomerResource;
+use App\Http\Requests\Tenant\SupplierRequest;
+use App\Http\Resources\Tenant\SupplierCollection;
+use App\Http\Resources\Tenant\SupplierResource;
 use Illuminate\Http\Request;
 
-class CustomerController extends Controller
+class SupplierController extends Controller
 {
     public function index()
     {
-        return view('tenant.customers.index');
+        return view('tenant.suppliers.index');
     }
 
     public function columns()
@@ -30,15 +30,15 @@ class CustomerController extends Controller
 
     public function records(Request $request)
     {
-        $records = Customer::where($request->column, 'like', "%{$request->value}%")
+        $records = Supplier::where($request->column, 'like', "%{$request->value}%")
                             ->orderBy('name');
 
-        return new CustomerCollection($records->paginate(env('ITEMS_PER_PAGE',20)));
+        return new SupplierCollection($records->paginate(env('ITEMS_PER_PAGE',20)));
     }
 
     public function create()
     {
-        return view('tenant.customers.form');
+        return view('tenant.suppliers.form');
     }
 
     public function tables()
@@ -54,33 +54,33 @@ class CustomerController extends Controller
 
     public function record($id)
     {
-        $record = new CustomerResource(Customer::findOrFail($id));
+        $record = new SupplierResource(Supplier::findOrFail($id));
 
         return $record;
     }
 
-    public function store(CustomerRequest $request)
+    public function store(SupplierRequest $request)
     {
         $id = $request->input('id');
-        $customer = Customer::firstOrNew(['id' => $id]);
-        $customer->fill($request->all());
-        $customer->save();
+        $supplier = Supplier::firstOrNew(['id' => $id]);
+        $supplier->fill($request->all());
+        $supplier->save();
 
         return [
             'success' => true,
-            'message' => ($id)?'Cliente editado con éxito':'Cliente registrado con éxito',
-            'id' => $customer->id
+            'message' => ($id)?'Proveedor editado con éxito':'Cliente registrado con éxito',
+            'id' => $supplier->id
         ];
     }
 
     public function destroy($id)
     {
-        $customer = Customer::findOrFail($id);
-        $customer->delete();
+        $supplier = Supplier::findOrFail($id);
+        $supplier->delete();
 
         return [
             'success' => true,
-            'message' => 'Cliente eliminado con éxito'
+            'message' => 'Proveedor eliminado con éxito'
         ];
     }
 }

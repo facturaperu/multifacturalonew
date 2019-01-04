@@ -24,6 +24,8 @@ class TransformInput
     {
         if($type === 'document') {
             $originalAttributes = $this->originalAttributeDocument($request->all(), $isWeb);
+        } elseif($type === 'retention') {
+            $originalAttributes = $this->originalAttributeRetention($request->all(), $isWeb);
         } elseif ($type === 'summary') {
             $originalAttributes = $this->originalAttributeSummary($request->all(), $isWeb);
         } else {
@@ -74,6 +76,17 @@ class TransformInput
         $original_attributes = [
             'type' => 'voided',
             'voided' => $summary,
+            'success' => true
+        ];
+        return $original_attributes;
+    }
+
+    private function originalAttributeRetention($inputs, $isWeb)
+    {
+        $retention = RetentionInput::transform($inputs);
+        $original_attributes = [
+            'type' => 'voided',
+            'retention' => $retention,
             'success' => true
         ];
         return $original_attributes;

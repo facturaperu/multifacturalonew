@@ -22,7 +22,7 @@ class RetentionDocument extends ModelTenant
         'date_of_retention',
         'total_retention',
         'total_to_pay',
-        'total_pay',
+        'total_payment',
     ];
 
     protected $casts = [

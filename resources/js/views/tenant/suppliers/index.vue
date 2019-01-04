@@ -3,7 +3,7 @@
         <div class="page-header pr-0">
             <h2><a href="/dashboard"><i class="fas fa-tachometer-alt"></i></a></h2>
             <ol class="breadcrumbs">
-                <li class="active"><span>Clientes</span></li>
+                <li class="active"><span>Proveedores</span></li>
             </ol>
             <div class="right-wrapper pull-right">
                 <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
@@ -11,7 +11,7 @@
         </div>
         <div class="card mb-0">
             <div class="card-header bg-info">
-                <h3 class="my-0">Listado de clientes</h3>
+                <h3 class="my-0">Listado de proveedores</h3>
             </div>
             <div class="card-body">
                 <data-table :resource="resource">
@@ -32,26 +32,25 @@
                     </tr>
                 </data-table>
             </div>
-
-            <customers-form :showDialog.sync="showDialog"
-                            :recordId="recordId"></customers-form>
+            <suppliers-form :showDialog.sync="showDialog"
+                            :recordId="recordId"></suppliers-form>
         </div>
     </div>
 </template>
 
 <script>
 
-    import CustomersForm from './form.vue'
+    import SuppliersForm from './form.vue'
     import DataTable from '../../../components/DataTable.vue'
     import {deletable} from '../../../mixins/deletable'
 
     export default {
         mixins: [deletable],
-        components: {CustomersForm, DataTable},
+        components: {SuppliersForm, DataTable},
         data() {
             return {
                 showDialog: false,
-                resource: 'customers',
+                resource: 'suppliers',
                 recordId: null,
             }
         },

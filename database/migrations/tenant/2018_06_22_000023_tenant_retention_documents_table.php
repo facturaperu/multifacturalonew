@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TenantRetentionDetailsTable extends Migration
+class TenantRetentionDocumentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -27,7 +27,7 @@ class TenantRetentionDetailsTable extends Migration
             $table->date('date_of_retention');
             $table->decimal('total_retention', 10, 2);
             $table->decimal('total_to_pay', 10, 2);
-            $table->decimal('total_pay', 10, 2);
+            $table->decimal('total_payment', 10, 2);
 
             $table->foreign('retention_id')->references('id')->on('retentions')->onDelete('cascade');
             $table->foreign('document_type_id')->references('id')->on('document_types');
@@ -42,6 +42,6 @@ class TenantRetentionDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('retention_details');
+        Schema::dropIfExists('retention_documents');
     }
 }

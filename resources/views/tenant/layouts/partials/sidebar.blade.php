@@ -33,6 +33,11 @@
                             <i class="fas fa-users"></i><span>Clientes</span>
                         </a>
                     </li>
+                    <li class="{{ ($path[0] === 'suppliers')?'nav-active':'' }}">
+                        <a class="nav-link" href="{{route('tenant.suppliers.index')}}">
+                            <i class="fas fa-users"></i><span>Proveedores</span>
+                        </a>
+                    </li>
                     {{--<li class="{{ ($path[0] === 'summaries')?'nav-active':'' }}">--}}
                         {{--<a class="nav-link" href="{{route('tenant.summaries.index')}}">--}}
                             {{--<i class="fas fa-list"></i><span>Resúmenes</span>--}}

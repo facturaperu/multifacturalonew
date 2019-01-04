@@ -17,7 +17,7 @@
                             <label class="control-label">Número</label>
                             <el-input v-model="form.number" :maxlength="maxLength">
                                 <template v-if="form.identity_document_type_id === '6' || form.identity_document_type_id === '1'">
-                                    <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchCustomer"></el-button>
+                                    <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchSupplier"></el-button>
                                 </template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
@@ -123,7 +123,7 @@
             return {
                 loading_submit: false,
                 titleDialog: null,
-                resource: 'customers',
+                resource: 'suppliers',
                 errors: {},
                 form: {},
                 countries: [],
@@ -192,7 +192,7 @@
                         if (response.data.success) {
                             this.$message.success(response.data.message)
                             if (this.external) {
-                                this.$eventHub.$emit('reloadDataCustomers', response.data.id)
+                                this.$eventHub.$emit('reloadDataSuppliers', response.data.id)
                             } else {
                                 this.$eventHub.$emit('reloadData')
                             }
@@ -235,8 +235,8 @@
                     return f.province_id === this.form.province_id
                 })
             },
-            searchCustomer() {
-                this.searchCustomerByNumber().then(() => {
+            searchSupplier() {
+                this.searchSupplierByNumber().then(() => {
                     this.filterProvinces()
                     this.filterDistricts()
                 })

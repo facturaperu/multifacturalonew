@@ -21,6 +21,7 @@ use App\Models\Tenant\Catalogs\OperationType;
 use App\Models\Tenant\Catalogs\PriceType;
 use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\Company;
+use App\Models\Tenant\Configuration;
 use App\Models\Tenant\Customer;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Establishment;
@@ -154,9 +155,16 @@ class DocumentController extends Controller
         $document = $facturalo->getDocument();
 
         $send = ($document->group_id === '01')?true:false;
-        //$send = $send && $request->input('actions.send_xml_signed');
+
+        $configuration = Configuration::first();
+
+        $send = $send && (bool)$configuration->send_auto;
         $res = ($send)?$facturalo->sendXml($facturalo->getXmlSigned()):[];
 
+        if($send) {
+            $document->has_cdr = true;
+            $document->save();
+        }
 
         return [
             'success' => true,
@@ -252,13 +260,17 @@ class DocumentController extends Controller
 
     public function send_xml($document_id)
     {
+        $facturalo = new Facturalo(Company::active());
         $document = Document::find($document_id);
+        $facturalo->setDocument($document);
+        $res = $facturalo->loadAndSendXml();
 
-        $xmlBuilder = new XmlBuilder();
-        $res = $xmlBuilder->sendXmlCdr($document);
+        $document->has_cdr = true;
+        $document->save();
 
         return [
-            'success' => $res
+            'success' => true,
+            'message' => $res['description'],
         ];
     }
 }

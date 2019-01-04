@@ -29,11 +29,13 @@ Vue.prototype.$http = Axios
 Vue.component('tenant-companies-form', require('./views/tenant/companies/form.vue'));
 Vue.component('tenant-certificates-index', require('./views/tenant/certificates/index.vue'));
 Vue.component('tenant-certificates-form', require('./views/tenant/certificates/form.vue'));
-Vue.component('tenant-establishments-form', require('./views/tenant/establishments/form.vue'));
+Vue.component('tenant-configurations-form', require('./views/tenant/configurations/form.vue'));
+// Vue.component('tenant-establishments-form', require('./views/tenant/establishments/form.vue'));
 // Vue.component('tenant-series-form', require('./views/tenant/series/form.vue'));
 Vue.component('tenant-bank_accounts-index', require('./views/tenant/bank_accounts/index.vue'));
 Vue.component('tenant-items-index', require('./views/tenant/items/index.vue'));
 Vue.component('tenant-customers-index', require('./views/tenant/customers/index.vue'));
+Vue.component('tenant-suppliers-index', require('./views/tenant/suppliers/index.vue'));
 Vue.component('tenant-users-form', require('./views/tenant/users/form.vue'));
 Vue.component('tenant-documents-index', require('./views/tenant/documents/index.vue'));
 Vue.component('tenant-documents-invoice', require('./views/tenant/documents/invoice.vue'));

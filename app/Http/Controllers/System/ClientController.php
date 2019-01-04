@@ -80,6 +80,10 @@ class ClientController extends Controller
             'soap_type_id' => '01'
         ]);
 
+        DB::connection('tenant')->table('configurations')->insert([
+            'send_auto' => true,
+        ]);
+
         DB::connection('tenant')->table('establishments')->insert([
             'description' => 'Oficina Principal',
             'country_id' => 'PE',

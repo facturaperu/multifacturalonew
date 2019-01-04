@@ -91,6 +91,12 @@ class Facturalo
         return $xmlUnsigned;
     }
 
+    public function loadAndSendXml()
+    {
+        $content = $this->getStorage($this->document->filename, 'signed');
+        return $this->sendXml($content);
+    }
+
     public function signXml($content)
     {
         $this->signer->setCertificateFromFile($this->pathCertificate);

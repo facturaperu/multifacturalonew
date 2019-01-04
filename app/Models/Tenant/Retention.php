@@ -6,12 +6,13 @@ use App\Models\Tenant\Catalogs\RetentionType;
 
 class Retention extends ModelTenant
 {
-    protected $with = ['user', 'establishment', 'soap_type', 'state_type', 'series',
+    protected $with = ['user', 'soap_type', 'state_type', 'series',
                        'retention_type', 'documents'];
 
     protected $fillable = [
         'user_id',
         'establishment_id',
+        'establishment',
         'external_id',
         'soap_type_id',
         'state_type_id',
@@ -20,12 +21,12 @@ class Retention extends ModelTenant
         'number',
         'date_of_issue',
         'time_of_issue',
+        'supplier_id',
         'supplier',
         'retention_type_id',
         'observation',
         'total_retention',
         'total',
-
         'filename',
         'hash',
         'has_xml',
@@ -36,6 +37,26 @@ class Retention extends ModelTenant
     protected $casts = [
         'date_of_issue' => 'date',
     ];
+
+    public function getEstablishmentAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setEstablishmentAttribute($value)
+    {
+        $this->attributes['establishment'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getSupplierAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setSupplierAttribute($value)
+    {
+        $this->attributes['supplier'] = (is_null($value))?null:json_encode($value);
+    }
 
     public function user()
     {
@@ -60,16 +81,6 @@ class Retention extends ModelTenant
     public function series()
     {
         return $this->belongsTo(Series::class);
-    }
-
-    public function getSupplierAttribute($value)
-    {
-        return (is_null($value))?null:(object) json_decode($value);
-    }
-
-    public function setSupplierAttribute($value)
-    {
-        $this->attributes['supplier'] = (is_null($value))?null:json_encode($value);
     }
 
     public function retention_type()

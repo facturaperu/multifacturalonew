@@ -2,7 +2,7 @@ export const functions = {
     data() {
         return {
             loading_search_exchange_rate: false,
-            loading_search_customer: false
+            loading_search: false
         }
     },
     methods: {
@@ -35,7 +35,7 @@ export const functions = {
 
         searchCustomerByNumber() {
             return new Promise((resolve) => {
-                this.loading_search_customer = true
+                this.loading_search = true
                 let identity_document_type_name = ''
                 if (this.form.identity_document_type_id === '6') {
                     identity_document_type_name = 'ruc'
@@ -64,7 +64,7 @@ export const functions = {
                         console.log(error.response)
                     })
                     .then(() => {
-                        this.loading_search_customer = false
+                        this.loading_search = false
                     })
             })
         }

@@ -25,6 +25,11 @@ if ($hostname) {
             Route::post('companies', 'Tenant\CompanyController@store');
             Route::post('companies/uploads', 'Tenant\CompanyController@uploadFile');
 
+            //Configurations
+            Route::get('configurations/create', 'Tenant\ConfigurationController@create')->name('tenant.configurations.create');
+            Route::get('configurations/record', 'Tenant\ConfigurationController@record');
+            Route::post('configurations', 'Tenant\ConfigurationController@store');
+
             //Certificates
             Route::get('certificates/record', 'Tenant\CertificateController@record');
             Route::post('certificates/uploads', 'Tenant\CertificateController@uploadFile');
@@ -88,6 +93,15 @@ if ($hostname) {
             Route::get('customers/record/{item}', 'Tenant\CustomerController@record');
             Route::post('customers', 'Tenant\CustomerController@store');
             Route::delete('customers/{customer}', 'Tenant\CustomerController@destroy');
+
+            //Suppliers
+            Route::get('suppliers', 'Tenant\SupplierController@index')->name('tenant.suppliers.index');
+            Route::get('suppliers/columns', 'Tenant\SupplierController@columns');
+            Route::get('suppliers/records', 'Tenant\SupplierController@records');
+            Route::get('suppliers/tables', 'Tenant\SupplierController@tables');
+            Route::get('suppliers/record/{item}', 'Tenant\SupplierController@record');
+            Route::post('suppliers', 'Tenant\SupplierController@store');
+            Route::delete('suppliers/{supplier}', 'Tenant\SupplierController@destroy');
 
             //Documents
             Route::get('documents', 'Tenant\DocumentController@index')->name('tenant.documents.index');
