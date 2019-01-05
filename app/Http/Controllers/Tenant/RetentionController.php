@@ -52,20 +52,18 @@ class RetentionController extends Controller
 //        $currency_types = CurrencyType::all();
         $suppliers = $this->table('suppliers');
 //        $items = $this->table('items');
-        $document_types = DocumentType::whereIn('id', ['20'])->get();
         $series = Series::all();
 
         return compact('user_id', 'establishments', 'suppliers', 'document_types', 'series');
     }
 
-//    public function item_tables()
-//    {
-//        $items = $this->table('items');
-//        $currency_types = CurrencyType::all();
-//        $document_types = DocumentType::all();
-//
-//        return compact('items', 'currency_types', 'document_types');
-//    }
+    public function document_tables()
+    {
+        $currency_types = CurrencyType::all();
+        $document_types = DocumentType::whereIn('id', ['01', '03'])->get();
+
+        return compact('currency_types', 'document_types');
+    }
 
     public function table($table)
     {
@@ -82,9 +80,6 @@ class RetentionController extends Controller
             });
             return $suppliers;
         }
-//        if ($table === 'items') {
-//            return RetentionDetail::all();
-//        }
 
         return [];
     }

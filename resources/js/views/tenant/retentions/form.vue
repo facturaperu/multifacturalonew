@@ -25,7 +25,7 @@
                                 <!--<small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>-->
                             <!--</div>-->
                         <!--</div>-->
-                        <!--<div class="col-lg-2">-->
+                        <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.series_id}">
                                 <label class="control-label">Serie</label>
                                 <el-select v-model="form.series_id">
@@ -126,31 +126,31 @@
             </form>
         </div>
 
-        <retention-form-item :showDialog.sync="showDialogAddItem"
+        <retention-form-document :showDialog.sync="showDialogAddDocument"
                            :operation-type-id="form.operation_type_code"
-                           @add="addItem"></retention-form-item>
+                           @add="addItem"></retention-form-document>
 
-        <customer-form :showDialog.sync="showDialogNewCustomer"
-                       :external="true"></customer-form>
+        <supplier-form :showDialog.sync="showDialogNewSupplier"
+                       :external="true"></supplier-form>
     </div>
 </template>
 
 <script>
 
-    import RetentionFormDocument from './partials/item.vue'
-    import CustomerForm from '../customers/form.vue'
+    import RetentionFormDocument from './partials/document.vue'
+    import SupplierForm from '../suppliers/form.vue'
 
     export default {
-        components: {RetentionFormDocument, CustomerForm},
+        components: {RetentionFormDocument, SupplierForm},
         data() {
             return {
                 resource: 'retentions',
                 showDialogAddDocument: false,
-                showDialogNewCustomer: false,
+                showDialogNewSupplier: false,
                 loading_submit: false,
                 errors: {},
                 form: {}, 
-                document_types: [],
+                // document_types: [],
 //                currency_types: [],
 //                discounts: [],
 //                charges: [],
@@ -167,7 +167,7 @@
             this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
-                    this.document_types = response.data.document_types
+                    // this.document_types = response.data.document_types
 //                    this.currency_types = response.data.currency_types
 //                    this.items = response.data.items
                     this.suppliers = response.data.suppliers
@@ -181,8 +181,8 @@
                     this.form.document_type_id = '20'
                     this.changeDocumentType()
                 })
-            this.$eventHub.$on('reloadDataCustomers', () => {
-                this.reloadDataCustomers()
+            this.$eventHub.$on('reloadDataSuppliers', (supplier_id) => {
+                this.reloadDataSuppliers(supplier_id)
             })
         },
         methods: {
@@ -200,7 +200,7 @@
                     series_id: null,
                     number: '#',
                     date_of_issue: moment().format('YYYY-MM-DD'),
-                    customer_id: null,
+                    supplier_id: null,
                     currency_type_id: null,
                     observation: null,
                     system_code_retention_id: '23000001',
@@ -273,9 +273,10 @@
             close() {
                 location.href = '/retentions'
             },
-            reloadDataCustomers() {
-                this.$http.get(`/${this.resource}/table/customers`).then((response) => {
-                    this.customers = response.data
+            reloadDataSuppliers(supplier_id) {
+                this.$http.get(`/${this.resource}/table/suppliers`).then((response) => {
+                    this.suppliers = response.data
+                    this.form.supplier_id = supplier_id
                 })
             },
         }

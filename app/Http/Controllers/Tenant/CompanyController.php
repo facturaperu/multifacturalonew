@@ -25,11 +25,7 @@ class CompanyController extends Controller
     public function record()
     {
         $company = Company::active();
-        if ($company) {
-            $record = new CompanyResource($company);
-        } else {
-            $record = null;
-        }
+        $record = new CompanyResource($company);
 
         return $record;
     }
@@ -37,7 +33,7 @@ class CompanyController extends Controller
     public function store(CompanyRequest $request)
     {
         $id = $request->input('id');
-        $company = Company::firstOrNew(['id' => $id]);
+        $company = Company::find($id);
         $company->fill($request->all());
         $company->save();
 

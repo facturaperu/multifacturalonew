@@ -132,7 +132,18 @@ if ($hostname) {
             Route::get('voided/download/{type}/{voided}', 'Tenant\VoidedController@download')->name('tenant.voided.download');
             Route::get('voided/ticket/{voided_id}/{group_id}', 'Tenant\VoidedController@ticket');
 
-            
+            //Retentions
+            Route::get('retentions', 'Tenant\RetentionController@index')->name('tenant.retentions.index');
+            Route::get('retentions/columns', 'Tenant\RetentionController@columns');
+            Route::get('retentions/records', 'Tenant\RetentionController@records');
+            Route::get('retentions/create', 'Tenant\RetentionController@create')->name('tenant.retentions.create');
+            Route::get('retentions/tables', 'Tenant\RetentionController@tables');
+            Route::get('retentions/record/{retention}', 'Tenant\RetentionController@record');
+            Route::post('retentions', 'Tenant\RetentionController@store');
+            Route::delete('retentions/{retention}', 'Tenant\RetentionController@destroy');
+            Route::get('retentions/document/tables', 'Tenant\RetentionController@document_tables');
+            Route::get('retentions/table/{table}', 'Tenant\RetentionController@table');
+
             Route::get('reports', 'Tenant\ReportController@index')->name('tenant.reports.index');
             Route::post('reports/search', 'Tenant\ReportController@search')->name('tenant.search');
             Route::post('reports/pdf', 'Tenant\ReportController@pdf')->name('tenant.report_pdf');
@@ -180,16 +191,7 @@ if ($hostname) {
             Route::post('currency_types', 'Tenant\CurrencyTypeController@store');
             Route::delete('currency_types/{currency_type}', 'Tenant\CurrencyTypeController@destroy');
 
-            //Retentions
-            Route::get('retentions', 'Tenant\RetentionController@index')->name('tenant.retentions.index');
-            Route::get('retentions/columns', 'Tenant\RetentionController@columns');
-            Route::get('retentions/records', 'Tenant\RetentionController@records');
-            Route::get('retentions/create', 'Tenant\RetentionController@create')->name('tenant.retentions.create');
-            Route::get('retentions/tables', 'Tenant\RetentionController@tables');
-            Route::get('retentions/record/{retention}', 'Tenant\RetentionController@record');
-            Route::post('retentions', 'Tenant\RetentionController@store');
-            Route::delete('retentions/{retention}', 'Tenant\RetentionController@destroy');
-            Route::get('retentions/item/tables', 'Tenant\RetentionController@item_tables');
+
 
             //Perceptions
             Route::get('perceptions', 'Tenant\PerceptionController@index')->name('tenant.perceptions.index');
