@@ -5,14 +5,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\RetentionRequest;
 use App\Http\Resources\Tenant\RetentionCollection;
 use App\Http\Resources\Tenant\RetentionResource;
-use App\Models\Tenant\Customer;
-use App\Models\Tenant\Company;
+use App\Models\Tenant\Catalogs\RetentionType;
 use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Series;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Retention;
-use App\Models\Tenant\RetentionDetail;
 use App\Models\Tenant\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,12 +47,13 @@ class RetentionController extends Controller
     {
         $user_id = Auth::id();
         $establishments = Establishment::all();
+        $retention_types = RetentionType::whereActive()->orderByDescription()->get();
 //        $currency_types = CurrencyType::all();
         $suppliers = $this->table('suppliers');
 //        $items = $this->table('items');
         $series = Series::all();
 
-        return compact('user_id', 'establishments', 'suppliers', 'document_types', 'series');
+        return compact('user_id', 'establishments', 'suppliers', 'retention_types', 'document_types', 'series');
     }
 
     public function document_tables()

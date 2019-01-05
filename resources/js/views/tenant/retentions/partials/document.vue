@@ -6,7 +6,7 @@
                     <div class="col-lg-3">
                         <div class="form-group" :class="{'has-danger': errors.document_type_id}">
                             <label class="control-label">Tipo de comprobante</label>
-                            <el-select v-model="form.document_type_id" @change="changeDocumentType">
+                            <el-select v-model="form.document_type_id">
                                 <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
@@ -29,7 +29,11 @@
                     <div class="col-lg-3">
                         <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
                             <label class="control-label">Fecha de emisión</label>
-                            <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
+                            <el-date-picker v-model="form.date_of_issue"
+                                            type="date"
+                                            value-format="yyyy-MM-dd"
+                                            :clearable="false"
+                                            @change="changeDateOfIssue"></el-date-picker>
                             <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
                         </div>
                     </div>
@@ -45,7 +49,7 @@
                     <div class="col-lg-3">
                         <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
                             <label class="control-label">Tipo de cambio</label>
-                            <el-input v-model="form.exchange_rate_sale"></el-input>
+                            <el-input v-model="form.exchange_rate_sale" @input="changeExchangeRateSale"></el-input>
                             <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
                         </div>
                     </div>
@@ -85,6 +89,51 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-2 col-md-6 d-flex align-items-end pt-2">
+                        <div class="form-group">
+                            <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="clickAddPayment">+ Agregar Pago</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Fecha de Pago</th>
+                                    <th>Moneda</th>
+                                    <th class="text-right">Total</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(row, index) in form.payments">
+                                    <td>{{ index + 1 }}</td>
+                                    <td><el-date-picker v-model="row.date_of_payment"
+                                                        type="date"
+                                                        value-format="yyyy-MM-dd"
+                                                        :clearable="false"></el-date-picker>
+                                    </td>
+                                    <td>
+                                        <el-select v-model="row.currency_type_id" @change="changeCurrencyType">
+                                            <el-option v-for="option in currency_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                        </el-select>
+                                    </td>
+                                    <td class="text-right">
+                                        <el-input v-model="row.total_payment"></el-input>
+                                    </td>
+                                    <td class="text-right">
+                                        <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickRemovePayment(index)">x</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="form-actions text-right pt-2">
                 <el-button @click.prevent="close()">Cerrar</el-button>
@@ -96,8 +145,11 @@
 
 <script>
 
+    import {exchangeRate} from '../../../../mixins/functions'
+
     export default {
         props: ['showDialog'],
+        mixins: [exchangeRate],
         data() {
             return {
                 titleDialog: '',
@@ -130,28 +182,56 @@
                     total_to_pay: 0,
                     total_payment: 0,
                     exchange_rate_sale: 0,
-                    exchange_rate: {},
+                    exchange_rate: {
+                        currency_type_id_source: null,
+                        currency_type_id_target: 'PEN',
+                        factor: 1,
+                        date_of_exchange_rate: null,
+                    },
                     payments: [],
                 }
             },
             create() {
                 this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                 this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
+                this.changeDateOfIssue()
+                this.changeCurrencyType()
             },
-            close() {
-                this.initForm()
-                this.$emit('update:showDialog', false)
+            clickAddPayment() {
+                this.form.payments.push({
+                    date_of_payment: this.form.date_of_issue,
+                    currency_type_id: this.form.currency_type_id,
+                    total_payment: this.form.total_payment
+                })
+            },
+            clickRemovePayment() {
+                this.form.payments.splice(index, 1)
+            },
+            changeDateOfIssue() {
+                this.form.exchange_rate.date_of_exchange_rate = this.form.date_of_issue
+                this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
+                    this.form.exchange_rate_sale = parseFloat(response)
+                })
+            },
+            changeCurrencyType() {
+                this.form.exchange_rate.currency_type_id_source = this.form.currency_type_id
+                this.changeExchangeRateSale()
+            },
+            changeExchangeRateSale() {
+                if(this.form.exchange_rate.currency_type_id_source === this.form.exchange_rate.currency_type_id_target) {
+                    this.form.exchange_rate.factor = 1
+                } else {
+                    this.form.exchange_rate.factor = (this.form.exchange_rate_sale === '')?0:this.form.exchange_rate_sale
+                }
             },
             clickAddItem() {
                 this.$emit('add', this.form)
                 this.initForm()
                 this.$emit('update:showDialog', false)
             },
-            changeDocumentType() {
-                this.form.group_id = (this.form.document_type_id === '01000001')?'01':'02'
-            },
-            changeCurrencyType() {
-                this.currency_symbol = (this.form.currency_type_code === 'PEN')?'S/':'$'
+            close() {
+                this.initForm()
+                this.$emit('update:showDialog', false)
             },
         }
     }

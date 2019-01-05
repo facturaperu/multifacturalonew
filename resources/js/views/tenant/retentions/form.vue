@@ -62,6 +62,15 @@
                                 <small class="form-control-feedback" v-if="errors.supplier_id" v-text="errors.supplier_id[0]"></small>
                             </div>
                         </div>
+                        <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.retention_type_id}">
+                                <label class="control-label">Tipo de retención</label>
+                                <el-select v-model="form.retention_type_id">
+                                    <el-option v-for="option in retention_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                </el-select>
+                                <small class="form-control-feedback" v-if="errors.retention_type_id" v-text="errors.retention_type_id[0]"></small>
+                            </div>
+                        </div>
                         <div class="col-lg-4 col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.observation}">
                                 <label class="control-label">Observaciones</label>
@@ -160,6 +169,7 @@
                 establishments: [],
                 all_series: [],
                 series: [],
+                retention_types: [],
 //                currency_symbol: 'S/',
             }
         },
@@ -167,17 +177,19 @@
             this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
-                    // this.document_types = response.data.document_types
+
 //                    this.currency_types = response.data.currency_types
 //                    this.items = response.data.items
                     this.suppliers = response.data.suppliers
 //                    this.company = response.data.company
                     this.establishments = response.data.establishments
                     this.all_series = response.data.series
+                    this.retention_types = response.data.retention_types
 //                    this.form.user_id = response.data.user_id
 //                    this.form.soap_type_id = this.company.soap_type_id
 //                    this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
+                    this.form.retention_type_id = (this.retention_types.length > 0)?this.retention_types[0].id:null
                     this.form.document_type_id = '20'
                     this.changeDocumentType()
                 })
@@ -203,7 +215,7 @@
                     supplier_id: null,
                     currency_type_id: null,
                     observation: null,
-                    system_code_retention_id: '23000001',
+                    retention_type_id: null,
                     percent: 0,
                     total_retention: 0,
                     total: 0,
