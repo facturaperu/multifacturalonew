@@ -131200,7 +131200,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //                discounts: [],
             //                charges: [],
             //                items: [],
-            customers: [],
+            suppliers: [],
             //                company: null,
             establishments: [],
             all_series: [],
@@ -131214,17 +131214,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.initForm();
         this.$http.get('/' + this.resource + '/tables').then(function (response) {
             _this.document_types = response.data.document_types;
-            _this.currency_types = response.data.currency_types;
-            _this.items = response.data.items;
-            _this.customers = response.data.customers;
-            _this.company = response.data.company;
+            //                    this.currency_types = response.data.currency_types
+            //                    this.items = response.data.items
+            _this.suppliers = response.data.suppliers;
+            //                    this.company = response.data.company
             _this.establishments = response.data.establishments;
             _this.all_series = response.data.series;
-            _this.form.user_id = response.data.user_id;
-            _this.form.soap_type_id = _this.company.soap_type_id;
-            _this.form.currency_type_id = _this.currency_types.length > 0 ? _this.currency_types[0].id : null;
+            //                    this.form.user_id = response.data.user_id
+            //                    this.form.soap_type_id = this.company.soap_type_id
+            //                    this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
             _this.form.establishment_id = _this.establishments.length > 0 ? _this.establishments[0].id : null;
-            _this.form.document_type_id = _this.document_types.length > 0 ? _this.document_types[0].id : null;
+            _this.form.document_type_id = '20';
             _this.changeDocumentType();
         });
         this.$eventHub.$on('reloadDataCustomers', function () {
