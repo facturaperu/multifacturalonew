@@ -6,7 +6,6 @@ class Voided extends ModelTenant
 {
     protected $table = 'voided';
     protected $with = ['user', 'soap_type', 'state_type', 'details'];
-    protected $appends = ['type'];
 
     protected $fillable = [
         'user_id',
@@ -46,11 +45,6 @@ class Voided extends ModelTenant
     public function details()
     {
         return $this->hasMany(VoidedDetail::class);
-    }
-
-    public function getTypeAttribute()
-    {
-        return 'voided';
     }
 
     public function getDownloadExternalXmlAttribute()

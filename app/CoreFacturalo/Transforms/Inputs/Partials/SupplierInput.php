@@ -12,7 +12,7 @@ class SupplierInput
         if($isWeb) {
             $supplier = self::findSupplier($inputs['supplier_id']);
         } else {
-            $supplier_inputs = $inputs['proveedor'];
+            $supplier_inputs = $inputs['datos_del_proveedor'];
             $identity_document_type_id = $supplier_inputs['codigo_tipo_documento_identidad'];
             $number = $supplier_inputs['numero_documento'];
             $name = $supplier_inputs['apellidos_y_nombres_o_razon_social'];
@@ -45,8 +45,8 @@ class SupplierInput
         }
 
         return [
-            'customer_id' => $supplier->id,
-            'customer' => [
+            'supplier_id' => $supplier->id,
+            'supplier' => [
                 'identity_document_type_id' => $supplier->identity_document_type_id,
                 'identity_document_type' => [
                     'id' => $supplier->identity_document_type_id,

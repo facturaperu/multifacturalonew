@@ -2,12 +2,10 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\CoreFacturalo\Documents\VoidedBuilder;
-use App\CoreFacturalo\Facturalo;
-use App\CoreFacturalo\FacturaloDocument;
+use App\CoreFacturalo\Facturalo\FacturaloDocument;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\DocumentEmailRequest;
-use App\Http\Requests\Tenant\DocumentRequest;
 use App\Http\Requests\Tenant\DocumentVoidedRequest;
 use App\Http\Resources\Tenant\DocumentCollection;
 use App\Http\Resources\Tenant\DocumentResource;
@@ -32,7 +30,6 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
-use Throwable;
 
 class DocumentController extends Controller
 {
@@ -40,7 +37,7 @@ class DocumentController extends Controller
 
     public function __construct()
     {
-        $this->middleware('transform.input:document,true', ['only' => ['store']]);
+        $this->middleware('transform.input:document,web', ['only' => ['store']]);
     }
 
     public function index()

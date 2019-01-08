@@ -5,6 +5,7 @@ namespace App\CoreFacturalo\Transforms;
 use App\CoreFacturalo\Transforms\Inputs\DocumentInput;
 use App\CoreFacturalo\Transforms\Inputs\InvoiceInput;
 use App\CoreFacturalo\Transforms\Inputs\NoteInput;
+use App\CoreFacturalo\Transforms\Inputs\RetentionInput;
 use App\CoreFacturalo\Transforms\Inputs\SummaryInput;
 use App\CoreFacturalo\Transforms\Inputs\VoidedInput;
 use Closure;
@@ -17,11 +18,12 @@ class TransformInput
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @param  $type
-     * @param  $isWeb
+     * @param  $apiOrWeb
      * @return mixed
      */
-    public function handle($request, Closure $next, $type, $isWeb)
+    public function handle($request, Closure $next, $type, $apiOrWeb)
     {
+        $isWeb = ($apiOrWeb === 'api')?false:true;
         if($type === 'document') {
             $originalAttributes = $this->originalAttributeDocument($request->all(), $isWeb);
         } elseif($type === 'retention') {
@@ -73,12 +75,8 @@ class TransformInput
 
     private function originalAttributeRetention($inputs, $isWeb)
     {
-        $retention = RetentionInput::transform($inputs);
-        $original_attributes = [
-            'type' => 'voided',
-            'retention' => $retention,
-            'success' => true
-        ];
+        $original_attributes = RetentionInput::transform($inputs, $isWeb);
+
         return $original_attributes;
     }
 }

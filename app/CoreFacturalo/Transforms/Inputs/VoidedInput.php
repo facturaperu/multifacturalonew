@@ -29,7 +29,11 @@ class VoidedInput
 
         $company = Company::active();
         $soap_type_id = $company->soap_type_id;
-        $date_of_issue = Carbon::parse($date_of_reference)->addDay(1)->format('Y-m-d');
+        $date_of_issue = Carbon::now()->format('Y-m-d'); ///Carbon::parse($date_of_reference)->addDay(1)->format('Y-m-d');
+
+//        if(Carbon::now()->format('Y-m-d') < $date_of_issue) {
+//            $date_of_issue = $date_of_reference;
+//        }
 
         if(!$isWeb) {
             $documents = self::verifyDocuments($soap_type_id, $date_of_reference, $documents);

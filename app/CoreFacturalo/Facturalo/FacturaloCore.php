@@ -1,13 +1,15 @@
 <?php
 
-namespace App\CoreFacturalo;
+namespace App\CoreFacturalo\Facturalo;
 
 use App\CoreFacturalo\Documents\InvoiceBuilder;
 use App\CoreFacturalo\Documents\NoteBuilder;
+use App\CoreFacturalo\Documents\RetentionBuilder;
 use App\CoreFacturalo\Documents\SummaryBuilder;
 use App\CoreFacturalo\Documents\VoidedBuilder;
 use App\CoreFacturalo\Helpers\Xml\XmlFormat;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
+use App\CoreFacturalo\Templates\Template;
 use App\CoreFacturalo\WS\Client\WsClient;
 use App\CoreFacturalo\WS\Services\BillSender;
 use App\CoreFacturalo\WS\Services\SummarySender;
@@ -144,7 +146,7 @@ class FacturaloCore
         if($this->company->soap_type_id === '01') {
             $this->soapUsername = '20000000000MODDATOS';
             $this->soapPassword = 'moddatos';
-            $this->pathCertificate = __DIR__.DIRECTORY_SEPARATOR.'WS'.DIRECTORY_SEPARATOR.'Signed'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'certificate.pem';
+            $this->pathCertificate = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'WS'.DIRECTORY_SEPARATOR.'Signed'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'certificate.pem');
             $this->endpoint = SunatEndpoints::FE_BETA;
         } else {
             $this->soapUsername = $this->company->soap_username;
@@ -169,6 +171,9 @@ class FacturaloCore
                 break;
             case 'voided':
                 $builder = new VoidedBuilder();
+                break;
+            case 'retention':
+                $builder = new RetentionBuilder();
                 break;
             default:
                 $builder = new InvoiceBuilder();

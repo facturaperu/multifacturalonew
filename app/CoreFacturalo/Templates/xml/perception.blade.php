@@ -33,8 +33,8 @@
         </cac:DigitalSignatureAttachment>
     </cac:Signature>
     <cbc:ID>{{ $document->series }}-{{ $document->number }}</cbc:ID>
-    <cbc:IssueDate>{{ $document->date_of_issue->format('Y-m-d') }}</cbc:IssueDate>
-    <cbc:IssueTime>{{ $document->time_of_issue->format('H:i:s') }}</cbc:IssueTime>
+    <cbc:IssueDate>{{ $document->date_of_issue }}</cbc:IssueDate>
+    <cbc:IssueTime>{{ $document->time_of_issue }}</cbc:IssueTime>
     <cac:AgentParty>
         <cac:PartyIdentification>
             <cbc:ID schemeID="6">{{ $company->number }}</cbc:ID>

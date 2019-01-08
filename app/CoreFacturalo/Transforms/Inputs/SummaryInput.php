@@ -27,19 +27,22 @@ class SummaryInput
 
         $company = Company::active();
         $soap_type_id = $company->soap_type_id;
-        $date_of_issue = Carbon::parse($date_of_reference)->addDay(1)->format('Y-m-d');
+//        $date_of_issue = Carbon::parse($date_of_reference)->addDay(1)->format('Y-m-d');
+        $date_of_issue = Carbon::now()->format('Y-m-d');
         $identifier = self::identifier($soap_type_id, $date_of_issue);
         $filename = self::filename($identifier);
 
         if(!$isWeb) {
-            if ($process_type_id === '1') {
+            if (in_array($process_type_id, ['1', '2'])) {
                 $documents = self::findDocuments($soap_type_id, $date_of_reference);
-            } elseif ($process_type_id === '3') {
+            } else {
                 $documents = self::verifyDocuments($soap_type_id, $date_of_reference, $documents);
             }
+        } else {
+            if (in_array($process_type_id, ['1', '2'])) {
+                $documents = self::idDocuments($documents);
+            }
         }
-
-        //$documents = self::idDocuments($documents);
 
         return [
             'type' => 'summary',
@@ -95,31 +98,26 @@ class SummaryInput
         return $documents;
     }
 
-//    private static function idDocuments($documents)
-//    {
-//        $ids = [];
-//        foreach ($documents as $doc)
-//        {
-//            $ids[] = [
-//                'document_id' => is_array($doc)?$doc['id']:$doc->id
-//            ];
-//        }
-//
-//        return $ids;
-//    }
+    private static function idDocuments($documents)
+    {
+        $ids = [];
+        foreach ($documents as $doc)
+        {
+            $ids[] = [
+                'document_id' => is_array($doc)?$doc['id']:$doc->id
+            ];
+        }
+
+        return $ids;
+    }
 
     private static function verifyDocuments($soap_type_id, $date_of_reference, $documents)
     {
         $aux_documents = [];
         foreach ($documents as $doc)
         {
-//            if($isWeb) {
-//                $external_id = $doc['external_id'];
-//                $description = $doc['description'];
-//            } else {
-                $external_id = $doc['external_id'];
-                $description = $doc['motivo_anulacion'];
-//            }
+            $external_id = $doc['external_id'];
+            $description = $doc['motivo_anulacion'];
 
             $document = Document::where('soap_type_id', $soap_type_id)
                                 ->where('external_id', $external_id)

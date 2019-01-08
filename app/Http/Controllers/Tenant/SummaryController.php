@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
-use App\CoreFacturalo\FacturaloSummary;
+use App\CoreFacturalo\Facturalo\FacturaloSummary;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\SummaryDocumentsRequest;
@@ -20,7 +20,7 @@ class SummaryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('transform.input:summary,true', ['only' => ['store']]);
+        $this->middleware('transform.input:summary,web', ['only' => ['store']]);
     }
 
     public function index()

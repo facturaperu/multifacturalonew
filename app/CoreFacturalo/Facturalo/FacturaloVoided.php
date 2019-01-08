@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo;
+namespace App\CoreFacturalo\Facturalo;
 
 use App\CoreFacturalo\WS\Services\ExtService;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;

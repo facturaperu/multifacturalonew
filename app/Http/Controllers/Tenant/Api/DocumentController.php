@@ -11,7 +11,7 @@ class DocumentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('transform.input:document,false', ['only' => ['store']]);
+        $this->middleware('transform.input:document,api', ['only' => ['store']]);
     }
 
     public function store(Request $request)

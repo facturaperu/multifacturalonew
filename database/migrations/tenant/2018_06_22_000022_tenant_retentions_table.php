@@ -34,6 +34,9 @@ class TenantRetentionsTable extends Migration
             $table->decimal('total_retention', 10, 2);
             $table->decimal('total', 10, 2);
 
+            $table->json('legends')->nullable();
+            $table->json('optional')->nullable();
+
             $table->string('filename')->nullable();
             $table->string('hash')->nullable();
             $table->boolean('has_xml')->default(false);

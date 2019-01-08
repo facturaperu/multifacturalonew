@@ -1,27 +1,10 @@
 @php
     $establishment = $document->establishment;
-    $customer = $document->customer;
-    $details = $document->details;
-    $document_base = $document->invoice;
-    //$optional = $document->optional;
-    $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
-    $document_type_description_array = [
-        '01' => 'FACTURA',
-        '03' => 'BOLETA DE VENTA',
-        '07' => 'NOTA DE CREDITO',
-        '08' => 'NOTA DE DEBITO',
-    ];
-    $identity_document_type_description_array = [
-        '-' => 'S/D',
-        '0' => 'S/D',
-        '1' => 'DNI',
-        '6' => 'RUC',
-    ];
-    //$document_type_description = $document_type_description_array[$document->document_type_code];
+    $supplier = $document->supplier;
 @endphp
 <html>
 <head>
-    <title>{{ $document_number }}</title>
+    <title>{{ $document->number_full }}</title>
     <style>
         html {
             font-family: sans-serif;
@@ -168,7 +151,7 @@
             <table class="voucher-company-right">
                 <tbody>
                 <tr><td class="text-center font-lg">{{ $document->document_type->description }}</td></tr>
-                <tr><td class="text-center font-xlg font-bold">{{ $document_number }}</td></tr>
+                <tr><td class="text-center font-xlg font-bold">{{ $document->number_full }}</td></tr>
                 </tbody>
             </table>
         </td>
@@ -180,49 +163,31 @@
             <table class="voucher-information-left">
                 <tbody>
                 <tr>
-                    <td width="50%">Fecha de emisión: </td>
-                    <td width="50%">{{ $document->date_of_issue->format('d/m/Y') }}</td>
-                </tr>
-                @if($document_base->date_of_due)
-                    <tr>
-                        <td width="50%">Fecha de vencimiento: </td>
-                        <td width="50%">{{ $document_base->date_of_due->format('d/m/Y') }}</td>
-                    </tr>
-                @endif
-                <tr>
-                    <td width="20%">Cliente:</td>
-                    <td width="80%">{{ $customer->name }}</td>
+                    <td width="20%">Señor(es):</td>
+                    <td width="80%">{{ $supplier->name }}</td>
                 </tr>
                 <tr>
-                    <td width="20%">{{ $customer->identity_document_type->description }}:</td>
-                    <td width="80%">{{ $customer->number }}</td>
+                    <td width="20%">{{ $supplier->identity_document_type->description }}:</td>
+                    <td width="80%">{{ $supplier->number }}</td>
                 </tr>
-                @if ($customer->address !== '')
-                    <tr>
-                        <td width="20%">Dirección:</td>
-                        <td width="80%">{{ $customer->address }}</td>
-                    </tr>
-                @endif
+                <tr>
+                    <td width="20%">Dirección:</td>
+                    <td width="80%">{{ $supplier->address }}</td>
+                </tr>
                 </tbody>
             </table>
         </td>
         <td width="45%">
             <table class="voucher-information-right">
                 <tbody>
-                @if ($document->purchase_order)
-                    <tr>
-                        <td width="50%">Orden de Compra: </td>
-                        <td width="50%">{{ $document->purchase_order }}</td>
-                    </tr>
-                @endif
-                @if ($document->guides)
-                    @foreach($document->guides as $guide)
-                        <tr>
-                            <td>{{ $guide->document_type_id }}</td>
-                            <td>{{ $guide->number }}</td>
-                        </tr>
-                    @endforeach
-                @endif
+                <tr>
+                    <td width="20%">Fecha de emisión: </td>
+                    <td width="80%">{{ $document->date_of_issue->format('d/m/Y') }}</td>
+                </tr>
+                <tr>
+                    <td width="20%">Moneda: </td>
+                    <td width="80%">{{ $document->currency_type_id }}</td>
+                </tr>
                 </tbody>
             </table>
         </td>

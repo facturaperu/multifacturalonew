@@ -2,13 +2,18 @@
 
 namespace App\CoreFacturalo\Documents;
 
-class RetentionBuilder extends DocumentBuilder
+use App\Models\Tenant\Retention;
+
+class RetentionBuilder
 {
     public function save($inputs)
     {
-        $document = $this->saveDocument($inputs['document']);
-        $document->invoice()->create($inputs['document_base']);
+        $data = $inputs['retention'];
+        $retention = Retention::create($data);
+        foreach ($data['documents'] as $row) {
+            $retention->documents()->create($row);
+        }
 
-        return $document;
+        return $retention;
     }
 }

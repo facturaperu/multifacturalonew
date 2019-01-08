@@ -25,6 +25,7 @@
                             <th>Estado</th>
                             <th>Ticket</th>
                             <th class="text-center">Descargas</th>
+                            <th class="text-right">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -34,16 +35,22 @@
                             <td class="text-center">{{ row.date_of_reference }}</td>
                             <td>{{ row.identifier }}</td>
                             <td>{{ row.state_type_description }}</td>
-                            <td>{{ row.ticket }} <button type="button" class="btn waves-effect waves-light btn-xs btn-warning"
-                                                         @click.prevent="clickTicket(row.id)"
-                                                         v-if="row.btn_ticket">Consultar</button></td>
+                            <td>{{ row.ticket }}</td>
                             <td class="text-center">
                                 <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
                                         @click.prevent="clickDownload(row.download_xml)"
                                         v-if="row.has_xml">XML</button>
                                 <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                        @click.prevent="clickDownload(row.download_pdf)"
+                                        v-if="row.has_pdf">XML</button>
+                                <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
                                         @click.prevent="clickDownload(row.download_cdr)"
                                         v-if="row.has_cdr">CDR</button>
+                            </td>
+                            <td class="text-right">
+                                <button type="button" class="btn waves-effect waves-light btn-xs btn-warning"
+                                        @click.prevent="clickTicket(row.id)"
+                                        v-if="row.btn_ticket">Consultar</button>
                             </td>
                         </tr>
                         </tbody>

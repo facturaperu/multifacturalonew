@@ -9,12 +9,12 @@ class OptionalInput
         if($isWeb) {
             $optional = array_key_exists('optional', $inputs)?$inputs['optional']:null;
         } else {
-            $optional = array_key_exists('extras', $inputs)?$inputs['extras']:null;
+            $optional = array_key_exists('extras', $inputs)?$inputs['extras']:[];
         }
 
-        if(is_null($optional)) {
-            return null;
-        }
+//        if(is_null($optional)) {
+//            return null;
+//        }
 
         if($isWeb) {
             $observations = $optional['observations'];
@@ -27,7 +27,7 @@ class OptionalInput
             $method_payment = array_key_exists('forma_de_pago', $optional)?$optional['forma_de_pago']:null;
             $salesman = array_key_exists('vendedor', $optional)?$optional['vendedor']:null;
             $box_number = array_key_exists('caja', $optional)?$optional['caja']:null;
-            $format_pdf = array_key_exists('formato_pdf', $optional)?$optional['formato_pdf']:null;
+            $format_pdf = array_key_exists('formato_pdf', $optional)?$optional['formato_pdf']:'a4';
         }
 
         return [

@@ -2,25 +2,13 @@
 
 namespace App\CoreFacturalo\Transforms\Inputs;
 
-use App\CoreFacturalo\Helpers\Number\NumberLetter;
-use App\CoreFacturalo\Transforms\FunctionInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\ActionInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\ChargeInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\CustomerInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\DetractionInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\DiscountInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\EstablishmentInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\ExchangeInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\GuideInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\ItemInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\LegendInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\OptionalInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\PaymentInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\PerceptionInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\PrepaymentInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\RelatedInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\SupplierInput;
-use App\Models\Tenant\Document;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Retention;
 use App\Models\Tenant\Series;
@@ -67,10 +55,12 @@ class RetentionInput
         $array_supplier = SupplierInput::transform($inputs, $isWeb);
         $documents = self::documentsTransform($inputs, $isWeb);
         $legends = LegendInput::transform($inputs, $isWeb);
+        $optional = OptionalInput::transform($inputs, $isWeb);
 
         self::validateSeries($series, $document_type_id, $array_establishment['establishment_id']);
 
         return [
+            'type' => 'retention',
             'actions' => ActionInput::transform($inputs, $isWeb),
             'retention' => [
                 'user_id' => auth()->id(),
@@ -81,6 +71,7 @@ class RetentionInput
                 'state_type_id' => '01',
                 'ubl_version' => '2.0',
                 'filename' => $filename,
+                'document_type_id' => $document_type_id,
                 'series' => $series,
                 'number' => $number,
                 'date_of_issue' => $date_of_issue,
@@ -92,7 +83,8 @@ class RetentionInput
                 'total_retention' => $total_retention,
                 'total' => $total,
                 'documents' => $documents,
-                'legends' => $legends
+                'legends' => $legends,
+                'optional' => $optional
             ]
         ];
     }
@@ -137,7 +129,7 @@ class RetentionInput
 
     private static function validateSeries($series_number, $document_type_id, $establishment_id)
     {
-        $series = Series::where('$establishment_id', $establishment_id)
+        $series = Series::where('establishment_id', $establishment_id)
             ->where('document_type_id', $document_type_id)
             ->where('number', $series_number)
             ->first();
@@ -174,8 +166,8 @@ class RetentionInput
                 $document_type_id = $row['document_type_id'];
                 $series = $row['series'];
                 $number = $row['number'];
-                $date_of_issue = $inputs['date_of_issue'];
-                $currency_type_id = $inputs['currency_type_id'];
+                $date_of_issue = $row['date_of_issue'];
+                $currency_type_id = $row['currency_type_id'];
                 $total_document = $row['total_document'];
                 $date_of_retention = $row['date_of_retention'];
                 $total_retention = $row['total_retention'];
@@ -185,11 +177,11 @@ class RetentionInput
                 $document_type_id = $row['codigo_tipo_documento'];
                 $series = $row['serie_documento'];
                 $number = $row['numero_documento'];
-                $date_of_issue = $inputs['fecha_de_emision'];
-                $currency_type_id = $inputs['codigo_tipo_moneda'];
+                $date_of_issue = $row['fecha_de_emision'];
+                $currency_type_id = $row['codigo_tipo_moneda'];
                 $total_document = $row['total_documento'];
                 $date_of_retention = $row['fecha_de_retencion'];
-                $total_retention = $row['total_retencion'];
+                $total_retention = $row['total_retenido'];
                 $total_to_pay = $row['total_a_pagar'];
                 $total_payment = $row['total_pagado'];
             }

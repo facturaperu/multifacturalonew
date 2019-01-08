@@ -34,7 +34,7 @@
     </cac:Signature>
     <cbc:ID>{{ $document->series }}-{{ $document->number }}</cbc:ID>
     <cbc:IssueDate>{{ $document->date_of_issue->format('Y-m-d') }}</cbc:IssueDate>
-    <cbc:IssueTime>{{ $document->time_of_issue->format('H:i:s') }}</cbc:IssueTime>
+    <cbc:IssueTime>{{ $document->time_of_issue }}</cbc:IssueTime>
     <cac:AgentParty>
         <cac:PartyIdentification>
             <cbc:ID schemeID="6">{{ $company->number }}</cbc:ID>
@@ -58,7 +58,7 @@
     </cac:AgentParty>
     <cac:ReceiverParty>
         <cac:PartyIdentification>
-            <cbc:ID schemeID="{{ $document->supplier->document_type_id }}">{{ $document->supplier->number }}</cbc:ID>
+            <cbc:ID schemeID="{{ $document->supplier->identity_document_type_id }}">{{ $document->supplier->number }}</cbc:ID>
         </cac:PartyIdentification>
         <cac:PartyLegalEntity>
             <cbc:RegistrationName><![CDATA[{{ $document->supplier->name }}]]></cbc:RegistrationName>
@@ -71,8 +71,7 @@
     @endif
     <cbc:TotalInvoiceAmount currencyID="PEN">{{ $document->total }}</cbc:TotalInvoiceAmount>
     <sac:SUNATTotalPaid currencyID="PEN">{{ $document->total_payment }}</sac:SUNATTotalPaid>
-    @foreach($document->details as $detail)
-    @php($doc = $detail->document)
+    @foreach($document->documents as $doc)
     <sac:SUNATRetentionDocumentReference>
         <cbc:ID schemeID="{{ $doc->document_type_id }}">{{ $doc->number_full }}</cbc:ID>
         <cbc:IssueDate>{{ $doc->date_of_issue->format('Y-m-d') }}</cbc:IssueDate>

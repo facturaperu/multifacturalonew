@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo;
+namespace App\CoreFacturalo\Templates;
 
 class Template
 {
@@ -20,7 +20,7 @@ class Template
 
     private function render($view, $company, $document)
     {
-        view()->addLocation(__DIR__.'/Templates');
+        view()->addLocation(__DIR__);
         return view($view, compact('company', 'document'))->render();
     }
 }

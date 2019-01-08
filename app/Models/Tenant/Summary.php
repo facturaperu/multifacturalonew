@@ -7,7 +7,6 @@ use App\Models\Tenant\Catalogs\ProcessType;
 class Summary extends ModelTenant
 {
     protected $with = ['user', 'soap_type', 'state_type', 'process_type', 'details'];
-    protected $appends = ['type'];
 
     protected $fillable = [
         'user_id',
@@ -53,11 +52,6 @@ class Summary extends ModelTenant
     public function details()
     {
         return $this->hasMany(SummaryDetail::class);
-    }
-
-    public function getTypeAttribute()
-    {
-        return 'summary';
     }
 
     public function getDownloadExternalXmlAttribute()

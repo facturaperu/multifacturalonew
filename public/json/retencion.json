@@ -1,5 +1,5 @@
 {
-  "serie_documento": "P001",
+  "serie_documento": "R001",
   "numero_documento": "#",
   "fecha_de_emision": "2018-10-09",
   "hora_de_emision": "10:11:11",
@@ -46,7 +46,7 @@
       "tipo_de_cambio": {
         "codigo_tipo_moneda_referencia": "PEN",
         "codigo_tipo_moneda_objetivo": "PEN",
-        "factor": 3.00,
+        "factor": 1,
         "fecha_tipo_de_cambio": "2018-10-09"
       },
       "fecha_de_retencion": "2018-10-09",

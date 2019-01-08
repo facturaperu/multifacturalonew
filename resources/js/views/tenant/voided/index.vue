@@ -14,19 +14,19 @@
                 <data-table :resource="resource">
                     <tr slot="heading">
                         <th>#</th>
-                        <th class="text-center">Fecha Emisión</th>
-                        <th>Comprobante</th>
-                        <th>Motivo de anulación</th>
+                        <th class="text-center">F.Emisión</th>
+                        <th class="text-center">F.E.Comprobante</th>
+                        <th>Identificador</th>
                         <th>Ticket</th>
                         <th>Estado</th>
                         <th class="text-center">Descargas</th>
                         <th class="text-right">Acciones</th>
                     <tr>
-                    <tr slot-scope="{ index, row }" :class="{'text-danger': (row.state_type_id === '11'), 'text-warning': (row.state_type_id === '13')}">
+                    <tr slot-scope="{ index, row }" :class="{'text-danger': (row.state_type_id === '05'), 'text-warning': (row.state_type_id === '03')}">
                         <td>{{ index }}</td>
                         <td class="text-center">{{ row.date_of_issue }}</td>
-                        <td>{{ row.document_type_description }} {{ row.number }}</td>
-                        <td>{{ row.voided_description }}</td>
+                        <td class="text-center">{{ row.date_of_reference }}</td>
+                        <td>{{ row.identifier }}</td>
                         <td>{{ row.ticket }}</td>
                         <td>{{ row.state_type_description }}</td>
                         <td class="text-center">
@@ -42,7 +42,7 @@
                         </td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
-                                    @click.prevent="clickTicket(row.id)"
+                                    @click.prevent="clickTicket(row.type, row.id)"
                                     v-if="row.btn_ticket">Consultar</button>
                         </td>
                     </tr>
@@ -69,14 +69,14 @@
         created() {
         },
         methods: {
-            clickTicket(id) {
-                this.$http.get(`/${this.resource}/ticket/${id}`)
+            clickTicket(type, id) {
+                this.$http.get(`/${type}/ticket/${id}`)
                     .then(response => {
                         if (response.data.success) {
                             this.$message.success(response.data.message)
                             this.$eventHub.$emit('reloadData')
                         } else {
-                            this.$message.error('Error al reenviar el archivo xml')
+                            this.$message.error(response.data.message)
                         }
                     })
                     .catch(error => {

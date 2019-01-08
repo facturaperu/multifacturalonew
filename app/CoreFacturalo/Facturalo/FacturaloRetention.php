@@ -1,18 +1,17 @@
 <?php
 
-namespace App\CoreFacturalo;
+namespace App\CoreFacturalo\Facturalo;
 
-use App\CoreFacturalo\Helpers\QrCode\QrCodeGenerate;
 use App\CoreFacturalo\Helpers\Xml\XmlHash;
 use Exception;
 
-class FacturaloDocument extends FacturaloCore
+class FacturaloRetention extends FacturaloCore
 {
     public function createXmlAndSign()
     {
         $this->createXmlUnsigned();
         $this->signXmlUnsigned();
-        $this->updateHashAndQr();
+        $this->updateHash();
     }
 
     public function sendXml()
@@ -34,12 +33,11 @@ class FacturaloDocument extends FacturaloCore
         }
     }
 
-    private function updateHashAndQr()
+    private function updateHash()
     {
         $hash = $this->getHash($this->xmlSigned);
         $this->document->update([
-            'hash' => $hash,
-            'qr' => $this->getQr($hash)
+            'hash' => $hash
         ]);
     }
 
@@ -54,26 +52,5 @@ class FacturaloDocument extends FacturaloCore
     {
         $helper = new XmlHash();
         return $helper->getHashSign($xmlContent);
-    }
-
-    private function getQr($hash)
-    {
-        $customer = $this->document->customer;
-        $text = join('|', [
-            $this->company->number,
-            $this->document->document_type_id,
-            $this->document->series,
-            $this->document->number,
-            $this->document->total_igv,
-            $this->document->total,
-            $this->document->date_of_issue->format('Y-m-d'),
-            $customer->identity_document_type_id,
-            $customer->number,
-            $hash
-        ]);
-
-        $qrCode = new QrCodeGenerate();
-        $qr = $qrCode->displayPNGBase64($text);
-        return $qr;
     }
 }
