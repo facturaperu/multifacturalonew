@@ -14,9 +14,6 @@ class SummaryRequest extends FormRequest
     public function rules()
     {
         return [
-            'date_of_issue' => [
-                'required'
-            ],
             'date_of_reference' => [
                 'required'
             ],

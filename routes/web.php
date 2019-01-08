@@ -11,6 +11,8 @@ if ($hostname) {
         Route::get('search/tables', 'Tenant\SearchController@tables');
         Route::post('search', 'Tenant\SearchController@store');
         Route::get('downloads/document/{type}/{external_id}', 'Tenant\DocumentController@downloadExternal')->name('tenant.documents.download_external');
+        Route::get('downloads/summary/{type}/{external_id}', 'Tenant\SummaryController@downloadExternal')->name('tenant.summaries.download_external');
+        Route::get('downloads/voided/{type}/{external_id}', 'Tenant\VoidedController@downloadExternal')->name('tenant.voided.download_external');
 
         Route::middleware('auth')->group(function() {
             Route::get('/', function () {
@@ -111,9 +113,9 @@ if ($hostname) {
             Route::get('documents/tables', 'Tenant\DocumentController@tables');
             Route::get('documents/record/{document}', 'Tenant\DocumentController@record');
             Route::post('documents', 'Tenant\DocumentController@store');
-            Route::post('documents/voided', 'Tenant\DocumentController@voided');
+//            Route::post('documents/voided', 'Tenant\DocumentController@voided');
             Route::get('documents/to_print/{document}', 'Tenant\DocumentController@to_print');
-            Route::get('documents/download/{type}/{document}', 'Tenant\DocumentController@download')->name('tenant.documents.download');
+//            Route::get('documents/download/{type}/{document}', 'Tenant\DocumentController@download')->name('tenant.documents.download');
             Route::get('documents/send_xml/{document}', 'Tenant\DocumentController@send_xml');
             Route::post('documents/email', 'Tenant\DocumentController@email');
             Route::get('documents/note/{document}', 'Tenant\NoteController@create');
@@ -125,14 +127,29 @@ if ($hostname) {
             Route::get('summaries/records', 'Tenant\SummaryController@records');
             Route::post('summaries/documents', 'Tenant\SummaryController@documents');
             Route::post('summaries', 'Tenant\SummaryController@store');
-            Route::get('summaries/download/{type}/{summary}', 'Tenant\SummaryController@download')->name('tenant.summaries.download');
             Route::get('summaries/ticket/{summary}', 'Tenant\SummaryController@ticket');
 
             //Voided
-            Route::get('voided/download/{type}/{voided}', 'Tenant\VoidedController@download')->name('tenant.voided.download');
-            Route::get('voided/ticket/{voided_id}/{group_id}', 'Tenant\VoidedController@ticket');
+            Route::get('voided', 'Tenant\VoidedController@index')->name('tenant.voided.index');
+            Route::get('voided/columns', 'Tenant\VoidedController@columns');
+            Route::get('voided/records', 'Tenant\VoidedController@records');
+            Route::post('voided', 'Tenant\VoidedController@store');
+//            Route::get('voided/download/{type}/{voided}', 'Tenant\VoidedController@download')->name('tenant.voided.download');
+            Route::get('voided/ticket/{voided}', 'Tenant\VoidedController@ticket');
+//            Route::get('voided/ticket/{voided_id}/{group_id}', 'Tenant\VoidedController@ticket');
 
-            
+            //Retentions
+            Route::get('retentions', 'Tenant\RetentionController@index')->name('tenant.retentions.index');
+            Route::get('retentions/columns', 'Tenant\RetentionController@columns');
+            Route::get('retentions/records', 'Tenant\RetentionController@records');
+            Route::get('retentions/create', 'Tenant\RetentionController@create')->name('tenant.retentions.create');
+            Route::get('retentions/tables', 'Tenant\RetentionController@tables');
+            Route::get('retentions/record/{retention}', 'Tenant\RetentionController@record');
+            Route::post('retentions', 'Tenant\RetentionController@store');
+            Route::delete('retentions/{retention}', 'Tenant\RetentionController@destroy');
+            Route::get('retentions/document/tables', 'Tenant\RetentionController@document_tables');
+            Route::get('retentions/table/{table}', 'Tenant\RetentionController@table');
+
             Route::get('reports', 'Tenant\ReportController@index')->name('tenant.reports.index');
             Route::post('reports/search', 'Tenant\ReportController@search')->name('tenant.search');
             Route::post('reports/pdf', 'Tenant\ReportController@pdf')->name('tenant.report_pdf');
@@ -180,16 +197,7 @@ if ($hostname) {
             Route::post('currency_types', 'Tenant\CurrencyTypeController@store');
             Route::delete('currency_types/{currency_type}', 'Tenant\CurrencyTypeController@destroy');
 
-            //Retentions
-            Route::get('retentions', 'Tenant\RetentionController@index')->name('tenant.retentions.index');
-            Route::get('retentions/columns', 'Tenant\RetentionController@columns');
-            Route::get('retentions/records', 'Tenant\RetentionController@records');
-            Route::get('retentions/create', 'Tenant\RetentionController@create')->name('tenant.retentions.create');
-            Route::get('retentions/tables', 'Tenant\RetentionController@tables');
-            Route::get('retentions/record/{retention}', 'Tenant\RetentionController@record');
-            Route::post('retentions', 'Tenant\RetentionController@store');
-            Route::delete('retentions/{retention}', 'Tenant\RetentionController@destroy');
-            Route::get('retentions/item/tables', 'Tenant\RetentionController@item_tables');
+
 
             //Perceptions
             Route::get('perceptions', 'Tenant\PerceptionController@index')->name('tenant.perceptions.index');

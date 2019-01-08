@@ -41,6 +41,7 @@ Vue.component('tenant-documents-index', require('./views/tenant/documents/index.
 Vue.component('tenant-documents-invoice', require('./views/tenant/documents/invoice.vue'));
 Vue.component('tenant-documents-note', require('./views/tenant/documents/note.vue'));
 Vue.component('tenant-summaries-index', require('./views/tenant/summaries/index.vue'));
+Vue.component('tenant-voided-index', require('./views/tenant/voided/index.vue'));
 Vue.component('tenant-search-index', require('./views/tenant/search/index.vue'));
 Vue.component('tenant-options-form', require('./views/tenant/options/form.vue'));
 Vue.component('tenant-unit_types-index', require('./views/tenant/unit_types/index.vue'));

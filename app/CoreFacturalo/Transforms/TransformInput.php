@@ -59,25 +59,15 @@ class TransformInput
 
     private function originalAttributeSummary($inputs, $isWeb)
     {
-        $summary = SummaryInput::transform($inputs);
+        $original_attributes = SummaryInput::transform($inputs, $isWeb);
 
-        $original_attributes = [
-            'type' => 'summary',
-            'summary' => $summary,
-            'success' => true
-        ];
         return $original_attributes;
     }
 
     private function originalAttributeVoided($inputs, $isWeb)
     {
-        $summary = VoidedInput::transform($inputs);
+        $original_attributes = VoidedInput::transform($inputs, $isWeb);
 
-        $original_attributes = [
-            'type' => 'voided',
-            'voided' => $summary,
-            'success' => true
-        ];
         return $original_attributes;
     }
 

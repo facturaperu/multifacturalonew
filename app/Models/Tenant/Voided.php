@@ -6,6 +6,7 @@ class Voided extends ModelTenant
 {
     protected $table = 'voided';
     protected $with = ['user', 'soap_type', 'state_type', 'details'];
+    protected $appends = ['type'];
 
     protected $fillable = [
         'user_id',
@@ -47,18 +48,23 @@ class Voided extends ModelTenant
         return $this->hasMany(VoidedDetail::class);
     }
 
+    public function getTypeAttribute()
+    {
+        return 'voided';
+    }
+
     public function getDownloadExternalXmlAttribute()
     {
-        return route('summaries.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+        return route('tenant.voided.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalPdfAttribute()
     {
-        return route('summaries.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+        return route('tenant.voided.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalCdrAttribute()
     {
-        return route('summaries.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
+        return route('tenant.voided.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }

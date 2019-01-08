@@ -114,10 +114,10 @@
 
 <script>
 
-    import {functions} from '../../../mixins/functions'
+    import {serviceNumber} from '../../../mixins/functions'
 
     export default {
-        mixins: [functions],
+        mixins: [serviceNumber],
         props: ['showDialog', 'recordId', 'external'],
         data() {
             return {
@@ -175,7 +175,7 @@
                 }
             },
             create() {
-                this.titleDialog = (this.recordId)? 'Editar Cliente':'Nuevo Cliente'
+                this.titleDialog = (this.recordId)? 'Editar Proveedor':'Nuevo Proveedor'
                 if (this.recordId) {
                     this.$http.get(`/${this.resource}/record/${this.recordId}`)
                         .then(response => {
@@ -216,30 +216,8 @@
                 this.$emit('update:showDialog', false)
                 this.initForm()
             },
-            filterProvince() {
-                this.form.province_id = null
-                this.form.district_id = null
-                this.filterProvinces()
-            },
-            filterProvinces() {
-                this.provinces = this.all_provinces.filter(f => {
-                    return f.department_id === this.form.department_id
-                })
-            },
-            filterDistrict() {
-                this.form.district_id = null
-                this.filterDistricts()
-            },
-            filterDistricts() {
-                this.districts = this.all_districts.filter(f => {
-                    return f.province_id === this.form.province_id
-                })
-            },
             searchSupplier() {
-                this.searchSupplierByNumber().then(() => {
-                    this.filterProvinces()
-                    this.filterDistricts()
-                })
+                this.searchServiceNumberByType()
             }
         }
     }

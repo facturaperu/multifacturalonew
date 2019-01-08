@@ -4,10 +4,10 @@
             <div class="form-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="form-group" :class="{'has-danger': errors.voided_description}">
+                        <div class="form-group" :class="{'has-danger': errors.description}">
                             <label class="control-label">Descripción del motivo de anulación</label>
-                            <el-input v-model="form.voided_description"></el-input>
-                            <small class="form-control-feedback" v-if="errors.voided_description" v-text="errors.voided_description[0]"></small>
+                            <el-input v-model="form.documents[0].description"></el-input>
+                            <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
                         </div>
                     </div>
                 </div>
@@ -27,9 +27,10 @@
             return {
                 titleDialog: null,
                 loading_submit: false,
-                resource: 'documents',
+                resource: null,
                 errors: {},
                 form: {},
+                group_id: null,
             }
         },
         created() {
@@ -37,24 +38,34 @@
         },
         methods: {
             initForm() {
-                this.errors = {}
+                this.loading_submit = false,
+                this.group_id = null,
+                this.errors = {},
                 this.form = {
-                    id: null,
-                    number: null,
-                    voided_description: null
+                    date_of_reference: null,
+                    process_type_id: '3',
+                    documents: [
+                        {
+                            document_id: null,
+                            description: null,
+                        }
+                    ]
                 }
             },
             create() {
-                this.$http.get(`/${this.resource}/record/${this.recordId}`)
+                this.$http.get(`/documents/record/${this.recordId}`)
                     .then(response => {
-                        this.form.id = response.data.data.id
-                        this.form.number = response.data.data.number
-                        this.titleDialog = 'Comprobante: '+this.form.number
+                        let document = response.data.data
+                        this.group_id = document.group_id
+                        this.form.date_of_reference = document.date_of_issue
+                        this.form.documents[0].document_id = document.id
+                        this.titleDialog = 'Comprobante: '+document.number
                     })
             },
             submit() {
                 this.loading_submit = true
-                this.$http.post(`/${this.resource}/voided`, this.form)
+                this.resource = (this.group_id === '01')?'voided':'summaries'
+                this.$http.post(`/${this.resource}`, this.form)
                     .then(response => {
                         if (response.data.success) {
                             this.$eventHub.$emit('reloadData')

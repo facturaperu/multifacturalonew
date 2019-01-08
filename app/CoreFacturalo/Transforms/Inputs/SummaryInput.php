@@ -11,26 +11,38 @@ use Illuminate\Support\Str;
 
 class SummaryInput
 {
-    public static function transform($inputs)
+    public static function transform($inputs, $isWeb)
     {
-        $soap_type_id = Company::getSoapTypeId();
-
-        $date_of_reference = $inputs['fecha_de_emision_de_documentos'];
-        $date_of_issue = date('Y-m-d');
-        $process_type_id = $inputs['codigo_tipo_proceso'];
-        $documents = array_key_exists('documentos', $inputs)?$inputs['documentos']:[];
-
-        $identifier = self::identifier($soap_type_id, $date_of_issue);
-        $filename = self::filename($identifier);
-        if ($process_type_id === '1') {
-            $documents = self::findDocuments($soap_type_id, $date_of_reference);
-        } elseif ($process_type_id === '3') {
-            $documents = self::verifyDocuments($soap_type_id, $date_of_reference, $documents);
+        if($isWeb) {
+            $date_of_reference = $inputs['date_of_reference'];
+            $process_type_id = $inputs['process_type_id'];
+            $documents = array_key_exists('documents', $inputs)?$inputs['documents']:[];
         } else {
-            throw new Exception("El código de tipo de proceso {$process_type_id} es inválido");
+            $date_of_reference = $inputs['fecha_de_emision_de_documentos'];
+            $process_type_id = $inputs['codigo_tipo_proceso'];
+            $documents = array_key_exists('documentos', $inputs)?$inputs['documentos']:[];
         }
 
+        self::validateProcessTypeId($process_type_id);
+
+        $company = Company::active();
+        $soap_type_id = $company->soap_type_id;
+        $date_of_issue = Carbon::parse($date_of_reference)->addDay(1)->format('Y-m-d');
+        $identifier = self::identifier($soap_type_id, $date_of_issue);
+        $filename = self::filename($identifier);
+
+        if(!$isWeb) {
+            if ($process_type_id === '1') {
+                $documents = self::findDocuments($soap_type_id, $date_of_reference);
+            } elseif ($process_type_id === '3') {
+                $documents = self::verifyDocuments($soap_type_id, $date_of_reference, $documents);
+            }
+        }
+
+        //$documents = self::idDocuments($documents);
+
         return [
+            'type' => 'summary',
             'user_id' => auth()->id(),
             'external_id' => Str::uuid(),
             'soap_type_id' => $soap_type_id,
@@ -41,7 +53,8 @@ class SummaryInput
             'date_of_reference' => $date_of_reference,
             'identifier' => $identifier,
             'filename' => $filename,
-            'documents' => $documents
+            'documents' => $documents,
+            'success' => true
         ];
     }
 
@@ -61,6 +74,13 @@ class SummaryInput
         return $company->number.'-'.$identifier;
     }
 
+    private static function validateProcessTypeId($process_type_id)
+    {
+        if(!in_array($process_type_id, ['1', '2', '3'], true)) {
+            throw new Exception("El código de tipo de proceso {$process_type_id} es inválido");
+        }
+    }
+
     private static function findDocuments($soap_type_id, $date_of_reference)
     {
         $documents = Document::where('soap_type_id', $soap_type_id)
@@ -71,24 +91,35 @@ class SummaryInput
         if(count($documents) === 0) {
             throw new Exception("No se encontraron documentos con la fecha {$date_of_reference}");
         }
-        $aux_documents = [];
-        foreach ($documents as $doc)
-        {
-            $aux_documents[] = [
-                'document_id' => $doc->id
-            ];
-        }
 
-        return $aux_documents;
+        return $documents;
     }
+
+//    private static function idDocuments($documents)
+//    {
+//        $ids = [];
+//        foreach ($documents as $doc)
+//        {
+//            $ids[] = [
+//                'document_id' => is_array($doc)?$doc['id']:$doc->id
+//            ];
+//        }
+//
+//        return $ids;
+//    }
 
     private static function verifyDocuments($soap_type_id, $date_of_reference, $documents)
     {
         $aux_documents = [];
         foreach ($documents as $doc)
         {
-            $external_id = $doc['external_id'];
-            $description = $doc['motivo_anulacion'];
+//            if($isWeb) {
+//                $external_id = $doc['external_id'];
+//                $description = $doc['description'];
+//            } else {
+                $external_id = $doc['external_id'];
+                $description = $doc['motivo_anulacion'];
+//            }
 
             $document = Document::where('soap_type_id', $soap_type_id)
                                 ->where('external_id', $external_id)

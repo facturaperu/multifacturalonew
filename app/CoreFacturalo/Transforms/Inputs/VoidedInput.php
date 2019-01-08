@@ -11,19 +11,35 @@ use Illuminate\Support\Str;
 
 class VoidedInput
 {
-    public static function transform($inputs)
+    public static function transform($inputs, $isWeb)
     {
-        $soap_type_id = Company::getSoapTypeId();
+        if($isWeb) {
+            $date_of_reference = $inputs['date_of_reference'];
+            $documents = $inputs['documents'];
+//                [
+//                [
+//                    'document_id' => $inputs['document_id'],
+//                    'description' => $inputs['description']
+//                ]
+//            ];
+        } else {
+            $date_of_reference = $inputs['fecha_de_emision_de_documentos'];
+            $documents = array_key_exists('documentos', $inputs)?$inputs['documentos']:[];
+        }
 
-        $date_of_reference = $inputs['fecha_de_emision_de_documentos'];
-        $date_of_issue = date('Y-m-d');
+        $company = Company::active();
+        $soap_type_id = $company->soap_type_id;
+        $date_of_issue = Carbon::parse($date_of_reference)->addDay(1)->format('Y-m-d');
 
-        $docs = array_key_exists('documentos', $inputs)?$inputs['documentos']:[];
-        $documents = self::verifyDocuments($soap_type_id, $date_of_reference, $docs);
+        if(!$isWeb) {
+            $documents = self::verifyDocuments($soap_type_id, $date_of_reference, $documents);
+        }
+//
         $identifier = self::identifier($soap_type_id, $date_of_issue);
         $filename = self::filename($identifier);
 
         return [
+            'type' => 'voided',
             'user_id' => auth()->id(),
             'external_id' => Str::uuid(),
             'soap_type_id' => $soap_type_id,
@@ -33,7 +49,8 @@ class VoidedInput
             'date_of_reference' => $date_of_reference,
             'identifier' => $identifier,
             'filename' => $filename,
-            'documents' => $documents
+            'documents' => $documents,
+            'success' => true
         ];
     }
 

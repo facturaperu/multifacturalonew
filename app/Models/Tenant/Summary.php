@@ -7,6 +7,7 @@ use App\Models\Tenant\Catalogs\ProcessType;
 class Summary extends ModelTenant
 {
     protected $with = ['user', 'soap_type', 'state_type', 'process_type', 'details'];
+    protected $appends = ['type'];
 
     protected $fillable = [
         'user_id',
@@ -54,18 +55,23 @@ class Summary extends ModelTenant
         return $this->hasMany(SummaryDetail::class);
     }
 
+    public function getTypeAttribute()
+    {
+        return 'summary';
+    }
+
     public function getDownloadExternalXmlAttribute()
     {
-        return route('summaries.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+        return route('tenant.summaries.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalPdfAttribute()
     {
-        return route('summaries.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+        return route('tenant.summaries.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalCdrAttribute()
     {
-        return route('summaries.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
+        return route('tenant.summaries.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }

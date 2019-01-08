@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\CoreFacturalo\Documents\VoidedBuilder;
 use App\CoreFacturalo\Facturalo;
+use App\CoreFacturalo\FacturaloDocument;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\DocumentEmailRequest;
@@ -50,7 +51,6 @@ class DocumentController extends Controller
     public function columns()
     {
         return [
-            'id' => 'Código',
             'number' => 'Número'
         ];
     }
@@ -144,7 +144,7 @@ class DocumentController extends Controller
 
     public function store(Request $request)
     {
-        $facturalo = new Facturalo(Company::active());
+        $facturalo = new FacturaloDocument();
         $facturalo->setInputs($request->all());
 
         DB::connection('tenant')->transaction(function () use($facturalo) {
@@ -159,12 +159,7 @@ class DocumentController extends Controller
         $configuration = Configuration::first();
 
         $send = $send && (bool)$configuration->send_auto;
-        $res = ($send)?$facturalo->sendXml($facturalo->getXmlSigned()):[];
-
-        if($send) {
-            $document->has_cdr = true;
-            $document->save();
-        }
+        $res = ($send)?$facturalo->sendXml():[];
 
         return [
             'success' => true,
@@ -260,13 +255,11 @@ class DocumentController extends Controller
 
     public function send_xml($document_id)
     {
-        $facturalo = new Facturalo(Company::active());
+        $facturalo = new FacturaloDocument();
         $document = Document::find($document_id);
         $facturalo->setDocument($document);
-        $res = $facturalo->loadAndSendXml();
-
-        $document->has_cdr = true;
-        $document->save();
+        $facturalo->loadXmlSigned();
+        $res = $facturalo->sendXml();
 
         return [
             'success' => true,

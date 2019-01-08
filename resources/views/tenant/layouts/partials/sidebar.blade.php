@@ -38,11 +38,16 @@
                             <i class="fas fa-users"></i><span>Proveedores</span>
                         </a>
                     </li>
-                    {{--<li class="{{ ($path[0] === 'summaries')?'nav-active':'' }}">--}}
-                        {{--<a class="nav-link" href="{{route('tenant.summaries.index')}}">--}}
-                            {{--<i class="fas fa-list"></i><span>Resúmenes</span>--}}
-                        {{--</a>--}}
-                    {{--</li>--}}
+                    <li class="{{ ($path[0] === 'summaries')?'nav-active':'' }}">
+                        <a class="nav-link" href="{{route('tenant.summaries.index')}}">
+                            <i class="fas fa-list"></i><span>Resúmenes</span>
+                        </a>
+                    </li>
+                    <li class="{{ ($path[0] === 'voided')?'nav-active':'' }}">
+                        <a class="nav-link" href="{{route('tenant.voided.index')}}">
+                            <i class="fas fa-list"></i><span>Anulaciones</span>
+                        </a>
+                    </li>
                     {{--<li class="{{ ($path[0] === 'voided')?'nav-active':'' }}">
                         <a class="nav-link" href="{{route('voided.index')}}">
                             <i class="fas fa-list"></i><span>Anulaciones</span>

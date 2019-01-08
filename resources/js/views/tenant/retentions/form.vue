@@ -25,7 +25,7 @@
                                 <!--<small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>-->
                             <!--</div>-->
                         <!--</div>-->
-                        <!--<div class="col-lg-2">-->
+                        <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.series_id}">
                                 <label class="control-label">Serie</label>
                                 <el-select v-model="form.series_id">
@@ -62,6 +62,15 @@
                                 <small class="form-control-feedback" v-if="errors.supplier_id" v-text="errors.supplier_id[0]"></small>
                             </div>
                         </div>
+                        <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.retention_type_id}">
+                                <label class="control-label">Tipo de retención</label>
+                                <el-select v-model="form.retention_type_id">
+                                    <el-option v-for="option in retention_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                </el-select>
+                                <small class="form-control-feedback" v-if="errors.retention_type_id" v-text="errors.retention_type_id[0]"></small>
+                            </div>
+                        </div>
                         <div class="col-lg-4 col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.observation}">
                                 <label class="control-label">Observaciones</label>
@@ -77,7 +86,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" v-if="form.items.length > 0">
+                    <div class="row" v-if="form.documents.length > 0">
                         <div class="col-md-12">
                             <div class="table-responsive">
                                 <table class="table">
@@ -93,7 +102,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="(row, index) in form.items">
+                                    <tr v-for="(row, index) in form.documents">
                                         <td>{{ index+1 }}</td>
                                         <td><span v-text="row.document_type_id"></span></td>
                                         <td><span v-text="row.date_of_issue"></span></td>
@@ -121,36 +130,36 @@
                 </div>
                 <div class="form-actions text-right mt-4">
                     <el-button @click.prevent="close()">Cancelar</el-button>
-                    <el-button type="primary" native-type="submit" :loading="loading_submit" v-if="form.items.length > 0 && form.total > 0">Generar</el-button>
+                    <el-button type="primary" native-type="submit" :loading="loading_submit" v-if="form.documents.length > 0 && form.total > 0">Generar</el-button>
                 </div>
             </form>
         </div>
 
-        <retention-form-item :showDialog.sync="showDialogAddItem"
-                           :operation-type-id="form.operation_type_code"
-                           @add="addItem"></retention-form-item>
+        <retention-form-document :showDialog.sync="showDialogAddDocument"
+                           :retention-type-id="form.retention_type_code"
+                           @add="addDocument"></retention-form-document>
 
-        <customer-form :showDialog.sync="showDialogNewCustomer"
-                       :external="true"></customer-form>
+        <supplier-form :showDialog.sync="showDialogNewSupplier"
+                       :external="true"></supplier-form>
     </div>
 </template>
 
 <script>
 
-    import RetentionFormDocument from './partials/item.vue'
-    import CustomerForm from '../customers/form.vue'
+    import RetentionFormDocument from './partials/document.vue'
+    import SupplierForm from '../suppliers/form.vue'
 
     export default {
-        components: {RetentionFormDocument, CustomerForm},
+        components: {RetentionFormDocument, SupplierForm},
         data() {
             return {
                 resource: 'retentions',
                 showDialogAddDocument: false,
-                showDialogNewCustomer: false,
+                showDialogNewSupplier: false,
                 loading_submit: false,
                 errors: {},
                 form: {}, 
-                document_types: [],
+                // document_types: [],
 //                currency_types: [],
 //                discounts: [],
 //                charges: [],
@@ -160,6 +169,7 @@
                 establishments: [],
                 all_series: [],
                 series: [],
+                retention_types: [],
 //                currency_symbol: 'S/',
             }
         },
@@ -167,22 +177,24 @@
             this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
-                    this.document_types = response.data.document_types
+
 //                    this.currency_types = response.data.currency_types
 //                    this.items = response.data.items
                     this.suppliers = response.data.suppliers
 //                    this.company = response.data.company
                     this.establishments = response.data.establishments
                     this.all_series = response.data.series
+                    this.retention_types = response.data.retention_types
 //                    this.form.user_id = response.data.user_id
 //                    this.form.soap_type_id = this.company.soap_type_id
 //                    this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
+                    this.form.retention_type_id = (this.retention_types.length > 0)?this.retention_types[0].id:null
                     this.form.document_type_id = '20'
                     this.changeDocumentType()
                 })
-            this.$eventHub.$on('reloadDataCustomers', () => {
-                this.reloadDataCustomers()
+            this.$eventHub.$on('reloadDataSuppliers', (supplier_id) => {
+                this.reloadDataSuppliers(supplier_id)
             })
         },
         methods: {
@@ -200,17 +212,17 @@
                     series_id: null,
                     number: '#',
                     date_of_issue: moment().format('YYYY-MM-DD'),
-                    customer_id: null,
+                    supplier_id: null,
                     currency_type_id: null,
                     observation: null,
-                    system_code_retention_id: '23000001',
+                    retention_type_id: null,
                     percent: 0,
                     total_retention: 0,
                     total: 0,
                     has_xml: 0,
                     has_pdf: 0,
                     has_cdr: 0,
-                    items: [],
+                    documents: [],
                 }
             }, 
             resetForm() {
@@ -231,12 +243,12 @@
                                                          'document_type_id': this.form.document_type_id})
                 this.form.series_id = (this.series.length > 0)?this.series[0].id:null
             },
-            addItem(row) {
-                this.form.items.push(row);
+            addDocument(row) {
+                this.form.documents.push(row);
                 this.calculateTotal()
             },
-            clickRemoveItem(index) { 
-                this.form.items.splice(index, 1)
+            clickRemoveDocument(index) {
+                this.form.documents.splice(index, 1)
                 this.calculateTotal()  
             },
             changeCurrencyType() {
@@ -273,9 +285,10 @@
             close() {
                 location.href = '/retentions'
             },
-            reloadDataCustomers() {
-                this.$http.get(`/${this.resource}/table/customers`).then((response) => {
-                    this.customers = response.data
+            reloadDataSuppliers(supplier_id) {
+                this.$http.get(`/${this.resource}/table/suppliers`).then((response) => {
+                    this.suppliers = response.data
+                    this.form.supplier_id = supplier_id
                 })
             },
         }

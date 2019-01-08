@@ -18,6 +18,7 @@
                         <th>Cliente</th>
                         <th>Número</th>
                         <th>Estado</th>
+                        <th class="text-center">Moneda</th>
                         <th class="text-right">T.Exportación</th>
                         <th class="text-right">T.Gratuita</th>
                         <th class="text-right">T.Inafecta</th>
@@ -26,10 +27,10 @@
                         <th class="text-right">T.Igv</th>
                         <th class="text-right">Total</th>
                         <th class="text-center">Descargas</th>
-                        <th class="text-center">Anulación</th>
+                        <!--<th class="text-center">Anulación</th>-->
                         <th class="text-right">Acciones</th>
                     <tr>
-                    <tr slot-scope="{ index, row }" :class="{'text-danger': (row.state_type_id === '11')}">
+                    <tr slot-scope="{ index, row }" :class="{'text-danger': (row.state_type_id === '11'), 'text-warning': (row.state_type_id === '13')}">
                         <td>{{ index }}</td>
                         <td class="text-center">{{ row.date_of_issue }}</td>
                         <td>{{ row.customer_name }}<br/><small v-text="row.customer_number"></small></td>
@@ -38,6 +39,7 @@
                             <small v-if="row.affected_document" v-text="row.affected_document"></small>
                         </td>
                         <td>{{ row.state_type_description }}</td>
+                        <td class="text-center">{{ row.currency_type_id }}</td>
                         <td class="text-right">{{ row.total_exportation }}</td>
                         <td class="text-right">{{ row.total_free }}</td>
                         <td class="text-right">{{ row.total_unaffected }}</td>
@@ -56,17 +58,17 @@
                                     @click.prevent="clickDownload(row.download_cdr)"
                                     v-if="row.has_cdr">CDR</button>
                         </td>
-                        <td class="text-center">
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
-                                    @click.prevent="clickDownload(row.download_xml_voided)"
-                                    v-if="row.has_xml_voided">XML</button>
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
-                                    @click.prevent="clickDownload(row.download_cdr_voided)"
-                                    v-if="row.has_cdr_voided">CDR</button>
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-warning"
-                                    @click.prevent="clickTicket(row.voided.id, row.group_id)"
-                                    v-if="row.btn_ticket">Consultar</button>
-                        </td>
+                        <!--<td class="text-center">-->
+                            <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-danger"-->
+                                    <!--@click.prevent="clickDownload(row.download_xml_voided)"-->
+                                    <!--v-if="row.has_xml_voided">XML</button>-->
+                            <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-danger"-->
+                                    <!--@click.prevent="clickDownload(row.download_cdr_voided)"-->
+                                    <!--v-if="row.has_cdr_voided">CDR</button>-->
+                            <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-warning"-->
+                                    <!--@click.prevent="clickTicket(row.voided.id, row.group_id)"-->
+                                    <!--v-if="row.btn_ticket">Consultar</button>-->
+                        <!--</td>-->
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
                                     @click.prevent="clickVoided(row.id)"
@@ -116,20 +118,20 @@
                 this.recordId = recordId
                 this.showDialogVoided = true
             },
-            clickTicket(voided_id, group_id) {
-                this.$http.get(`/voided/ticket/${voided_id}/${group_id}`)
-                    .then(response => {
-                        if (response.data.success) {
-                            this.$message.success(response.data.message)
-                            this.getData()
-                        } else {
-                            this.$message.error(response.data.message)
-                        }
-                    })
-                    .catch(error => {
-                        this.$message.error(error.response.data.message)
-                    })
-            },
+//            clickTicket(voided_id, group_id) {
+//                this.$http.get(`/voided/ticket/${voided_id}/${group_id}`)
+//                    .then(response => {
+//                        if (response.data.success) {
+//                            this.$message.success(response.data.message)
+//                            this.getData()
+//                        } else {
+//                            this.$message.error(response.data.message)
+//                        }
+//                    })
+//                    .catch(error => {
+//                        this.$message.error(error.response.data.message)
+//                    })
+//            },
             clickDownload(download) {
                 window.open(download, '_blank');
             },

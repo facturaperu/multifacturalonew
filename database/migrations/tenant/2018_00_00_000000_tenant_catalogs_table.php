@@ -104,14 +104,14 @@ class TenantCatalogsTable extends Migration
             ['id' => '16', 'description' => 'Boleto de viaje emitido por las empresas de transporte
                                              público interprovincial de pasajeros',                         'short' => null, 'active' => false],
             ['id' => '18', 'description' => 'Documentos emitidos por las afp',                              'short' => null, 'active' => false],
-            ['id' => '20', 'description' => 'Comprobante de retencion',                                     'short' => null, 'active' => false],
+            ['id' => '20', 'description' => 'COMPROBANTE DE RETENCIÓN',                                     'short' => null, 'active' => false],
             ['id' => '21', 'description' => 'Conocimiento de embarque por el servicio de transporte de
                                              carga marítima',                                               'short' => null, 'active' => false],
             ['id' => '24', 'description' => 'Certificado de pago de regalías emitidas por perupetro s.a.',  'short' => null, 'active' => false],
             ['id' => '31', 'description' => 'Guía de remisión transportista',                               'short' => null, 'active' => false],
             ['id' => '37', 'description' => 'Documentos que emitan los concesionarios del servicio de
                                              revisiones técnicas',                                          'short' => null, 'active' => false],
-            ['id' => '40', 'description' => 'Comprobante de percepción',                                    'short' => null, 'active' => false],
+            ['id' => '40', 'description' => 'COMPROBANTE DE PERCEPCIÓN',                                    'short' => null, 'active' => false],
             ['id' => '41', 'description' => 'Comprobante de percepción – venta interna
                                              (físico - formato impreso)',                                   'short' => null, 'active' => false],
             ['id' => '43', 'description' => 'Boleto de compañias de aviación transporte aéreo no regular',  'short' => null, 'active' => false],

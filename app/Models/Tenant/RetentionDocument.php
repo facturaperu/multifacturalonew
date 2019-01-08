@@ -18,7 +18,7 @@ class RetentionDocument extends ModelTenant
         'currency_type_id',
         'total_document',
         'payments',
-        'exchange',
+        'exchange_rate',
         'date_of_retention',
         'total_retention',
         'total_to_pay',
@@ -40,14 +40,14 @@ class RetentionDocument extends ModelTenant
         $this->attributes['payments'] = (is_null($value))?null:json_encode($value);
     }
 
-    public function getExchangeAttribute($value)
+    public function getExchangeRateAttribute($value)
     {
         return (is_null($value))?null:(object) json_decode($value);
     }
 
-    public function setExchangeAttribute($value)
+    public function setExchangeRateAttribute($value)
     {
-        $this->attributes['exchange'] = (is_null($value))?null:json_encode($value);
+        $this->attributes['exchange_rate'] = (is_null($value))?null:json_encode($value);
     }
 
     public function document_type()

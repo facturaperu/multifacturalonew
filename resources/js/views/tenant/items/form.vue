@@ -130,6 +130,7 @@
         },
         methods: {
             initForm() {
+                this.loading_submit = false,
                 this.errors = {}
                 this.form = {
                     id: null,

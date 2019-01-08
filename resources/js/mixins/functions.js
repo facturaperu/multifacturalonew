@@ -33,7 +33,7 @@ export const functions = {
             })
         },
 
-        searchCustomerByNumber() {
+        searchServiceNumber() {
             return new Promise((resolve) => {
                 this.loading_search = true
                 let identity_document_type_name = ''
@@ -83,6 +83,67 @@ export const exchangeRate = {
                 this.$message.error(response.data.message)
                 return 0
             }
+        }
+    }
+};
+
+export const serviceNumber = {
+    data() {
+        return {
+            loading_search: false
+        }
+    },
+    methods: {
+        filterProvince() {
+            this.form.province_id = null
+            this.form.district_id = null
+            this.filterProvinces()
+        },
+        filterProvinces() {
+            this.provinces = this.all_provinces.filter(f => {
+                return f.department_id === this.form.department_id
+            })
+        },
+        filterDistrict() {
+            this.form.district_id = null
+            this.filterDistricts()
+        },
+        filterDistricts() {
+            this.districts = this.all_districts.filter(f => {
+                return f.province_id === this.form.province_id
+            })
+        },
+        async searchServiceNumberByType() {
+            if(this.form.number === '') {
+                this.$message.error('Ingresar el número a buscar')
+                return
+            }
+            let identity_document_type_name = ''
+            if (this.form.identity_document_type_id === '6') {
+                identity_document_type_name = 'ruc'
+            }
+            if (this.form.identity_document_type_id === '1') {
+                identity_document_type_name = 'dni'
+            }
+            this.loading_search = true
+            let response = await this.$http.get(`/services/${identity_document_type_name}/${this.form.number}`)
+            if(response.data.success) {
+                let data = response.data.data
+                this.form.name = data.name
+                this.form.trade_name = data.trade_name
+                this.form.address = data.address
+                this.form.department_id = data.department_id
+                this.form.province_id = data.province_id
+                this.form.district_id = data.district_id
+                this.form.phone = data.phone
+
+                this.filterProvinces()
+                this.filterDistricts()
+
+            } else {
+                this.$message.error(response.data.message)
+            }
+            this.loading_search = false
         }
     }
 };
