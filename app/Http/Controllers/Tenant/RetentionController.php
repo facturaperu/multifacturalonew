@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
+use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\RetentionRequest;
 use App\Http\Resources\Tenant\RetentionCollection;
@@ -12,11 +13,14 @@ use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Retention;
 use App\Models\Tenant\Supplier;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RetentionController extends Controller
 {
+    use StorageDocument;
+
     public function index()
     {
         return view('tenant.retentions.index');
@@ -126,14 +130,27 @@ class RetentionController extends Controller
         ];
     }
 
-//    public function destroy($id)
-//    {
-//        $record = Retention::findOrFail($id);
-//        $record->delete();
-//
-//        return [
-//            'success' => true,
-//            'message' => 'Retención eliminada con éxito'
-//        ];
-//    }
+    public function downloadExternal($type, $external_id)
+    {
+        $retention = Retention::where('external_id', $external_id)->first();
+        if(!$retention) {
+            throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
+        }
+
+        switch ($type) {
+            case 'pdf':
+                $folder = 'pdf';
+                break;
+            case 'xml':
+                $folder = 'signed';
+                break;
+            case 'cdr':
+                $folder = 'cdr';
+                break;
+            default:
+                throw new Exception('Tipo de archivo a descargar es inválido');
+        }
+
+        return $this->downloadStorage($retention->filename, $folder);
+    }
 }

@@ -31,6 +31,7 @@ class TenantRetentionsTable extends Migration
             $table->json('supplier');
             $table->char('retention_type_id', 2);
             $table->text('observations');
+            $table->char('currency_type_id', 3);
             $table->decimal('total_retention', 10, 2);
             $table->decimal('total', 10, 2);
 
@@ -51,6 +52,7 @@ class TenantRetentionsTable extends Migration
             $table->foreign('document_type_id')->references('id')->on('document_types');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->foreign('retention_type_id')->references('id')->on('retention_types');
+            $table->foreign('currency_type_id')->references('id')->on('currency_types');
         });
     }
 

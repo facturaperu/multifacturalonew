@@ -4,10 +4,10 @@
   "fecha_de_emision": "2018-10-09",
   "hora_de_emision": "10:11:11",
   "codigo_tipo_documento": "20",
-  "emisor": {
+  "datos_del_emisor": {
     "codigo_del_domicilio_fiscal": "0000"
   },
-  "proveedor":{
+  "datos_del_proveedor":{
     "codigo_tipo_documento_identidad": "6",
     "numero_documento": "10414711225",
     "apellidos_y_nombres_o_razon_social": "EMPRESA XYZ S.A.",
@@ -19,7 +19,7 @@
     "telefono": "427-1148"
   },
   "codigo_tipo_retencion": "01",
-  "observacion": "",
+  "observaciones": "-",
   "totales": {
     "total_retenido": 30.00,
     "total_pagado": 1000.00

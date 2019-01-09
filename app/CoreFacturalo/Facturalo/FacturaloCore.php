@@ -35,10 +35,12 @@ class FacturaloCore
     protected $wsClient;
     protected $inputs;
     protected $company;
+    protected $isDemo;
     protected $type;
     protected $document;
     protected $xmlUnsigned;
     protected $xmlSigned;
+    protected $response = [];
     protected $pathCertificate;
     protected $soapUsername;
     protected $soapPassword;
@@ -47,9 +49,9 @@ class FacturaloCore
     public function __construct()
     {
         $this->company = Company::active();
+        $this->isDemo = ($this->company->soap_type_id === '01')?true:false;
         $this->signer = new XmlSigned();
         $this->wsClient = new WsClient();
-        $this->setDataSoapType();
     }
 
     public function setInputs($inputs)
@@ -98,6 +100,16 @@ class FacturaloCore
         return $this->xmlSigned;
     }
 
+    public function setResponse($response)
+    {
+        $this->response = $response;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
     public function createXmlUnsigned()
     {
         $template = new Template();
@@ -107,6 +119,7 @@ class FacturaloCore
 
     public function signXmlUnsigned()
     {
+        $this->setPathCertificate();
         $this->signer->setCertificateFromFile($this->pathCertificate);
         $this->xmlSigned = $this->signer->signXml($this->xmlUnsigned);
         $this->uploadFile($this->xmlSigned, 'signed');
@@ -119,6 +132,7 @@ class FacturaloCore
 
     public function senderXmlSigned()
     {
+        $this->setDataSoapType();
         $sender = in_array($this->type, ['summary', 'voided'])?new SummarySender():new BillSender();
         $sender->setClient($this->wsClient);
         $sender->setCodeProvider(new XmlErrorCodeProvider());
@@ -143,17 +157,7 @@ class FacturaloCore
 
     private function setDataSoapType()
     {
-        if($this->company->soap_type_id === '01') {
-            $this->soapUsername = '20000000000MODDATOS';
-            $this->soapPassword = 'moddatos';
-            $this->pathCertificate = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'WS'.DIRECTORY_SEPARATOR.'Signed'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'certificate.pem');
-            $this->endpoint = SunatEndpoints::FE_BETA;
-        } else {
-            $this->soapUsername = $this->company->soap_username;
-            $this->soapPassword = $this->company->soap_password;
-            $this->pathCertificate = storage_path('app'.DIRECTORY_SEPARATOR.'certificates'.$this->company->certificate);
-            $this->endpoint = SunatEndpoints::FE_PRODUCCION;
-        }
+        $this->setSoapCredentials();
 
         $this->wsClient->setCredentials($this->soapUsername, $this->soapPassword);
         $this->wsClient->setService($this->endpoint);
@@ -206,6 +210,35 @@ class FacturaloCore
             $doc->document->update([
                 'state_type_id' => $state_type_id
             ]);
+        }
+    }
+
+    private function setPathCertificate()
+    {
+        if($this->isDemo) {
+            $this->pathCertificate = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.
+                                              'WS'.DIRECTORY_SEPARATOR.
+                                              'Signed'.DIRECTORY_SEPARATOR.
+                                              'Resources'.DIRECTORY_SEPARATOR.
+                                              'certificate.pem');
+        } else {
+            $this->pathCertificate = storage_path('app'.DIRECTORY_SEPARATOR.
+                                                  'certificates'.$this->company->certificate);
+        }
+    }
+
+    private function setSoapCredentials()
+    {
+        $this->soapUsername = ($this->isDemo)?'20000000000MODDATOS':$this->company->soap_username;
+        $this->soapPassword = ($this->isDemo)?'moddatos':$this->company->soap_password;
+
+        switch ($this->type) {
+            case 'retention':
+                $this->endpoint = ($this->isDemo)?SunatEndpoints::RETENCION_BETA:SunatEndpoints::RETENCION_PRODUCCION;
+                break;
+            default:
+                $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA:SunatEndpoints::FE_PRODUCCION;
+                break;
         }
     }
 }

@@ -23,9 +23,10 @@ class RetentionController extends Controller
             $facturalo->save();
             $facturalo->createXmlAndSign();
             $facturalo->createPdf();
+            $facturalo->sendXml();
         });
         $document = $facturalo->getDocument();
-
+        $res = $facturalo->getResponse();
 //        $send = ($document->group_id === '01')?true:false;
 //
 //        $configuration = Configuration::first();
@@ -34,7 +35,7 @@ class RetentionController extends Controller
 //        $res = ($send)?$facturalo->sendXml():[];
         $send = true;
 
-        $res = $facturalo->sendXml();
+
         return [
             'success' => true,
             'data' => [

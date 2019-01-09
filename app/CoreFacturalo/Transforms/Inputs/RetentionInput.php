@@ -48,6 +48,7 @@ class RetentionInput
         $soap_type_id = $company->soap_type_id;
         $number = self::newNumber($soap_type_id, $document_type_id, $series, $number);
         $filename = self::filename($company, $document_type_id, $series, $number);
+        $currency_type_id = 'PEN';
 
         self::validateUniqueDocument($soap_type_id, $document_type_id, $series, $number);
 
@@ -80,6 +81,7 @@ class RetentionInput
                 'supplier' => $array_supplier['supplier'],
                 'retention_type_id' => $retention_type_id,
                 'observations' => $observations,
+                'currency_type_id' => $currency_type_id,
                 'total_retention' => $total_retention,
                 'total' => $total,
                 'documents' => $documents,

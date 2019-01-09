@@ -25,7 +25,8 @@ class FacturaloRetention extends FacturaloCore
             $cdrResponse = $res->getCdrResponse();
             $this->uploadFile($res->getCdrZip(), 'cdr');
             $this->updateHasPdfXmlCrd('cdr');
-            return [
+
+            $this->response = [
                 'code' => $cdrResponse->getCode(),
                 'description' => $cdrResponse->getDescription(),
                 'notes' => $cdrResponse->getNotes()

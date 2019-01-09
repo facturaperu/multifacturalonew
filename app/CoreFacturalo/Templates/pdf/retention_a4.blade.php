@@ -1,133 +1,15 @@
 @php
     $establishment = $document->establishment;
     $supplier = $document->supplier;
+    $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
 @endphp
 <html>
 <head>
     <title>{{ $document->number_full }}</title>
-    <style>
-        html {
-            font-family: sans-serif;
-            font-size: 12px;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .font-xsm {
-            font-size: 10px;
-        }
-        .font-sm {
-            font-size: 12px;
-        }
-        .font-lg {
-            font-size: 13px;
-        }
-        .font-xlg {
-            font-size: 16px;
-        }
-        .font-xxlg {
-            font-size: 22px;
-        }
-        .font-bold {
-            font-weight: bold;
-        }
-        table {
-            width: 100%;
-            border-spacing: 0;
-        }
-        .voucher-company-right {
-            border: 1px solid #333;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            margin-bottom: 10px;
-        }
-        .voucher-company-right tbody tr:first-child td {
-            padding-top: 10px;
-        }
-        .voucher-company-right tbody tr:last-child td {
-            padding-bottom: 10px;
-        }
-        .voucher-information {
-            border: 1px solid #333;
-        }
-        .voucher-information.top-note, .voucher-information.top-note tbody tr td {
-            border-top: 0;
-        }
-        .voucher-information tbody tr td {
-            padding-top: 5px;
-            padding-bottom: 5px;
-            vertical-align: top;
-        }
-        .voucher-information-left tbody tr td {
-            padding: 3px 10px;
-            vertical-align: top;
-        }
-        .voucher-information-right tbody tr td {
-            padding: 3px 10px;
-            vertical-align: top;
-        }
-        .voucher-details {
-        }
-        .voucher-details thead {
-            background-color: #f5f5f5;
-        }
-        .voucher-details thead tr th {
-            /*border-top: 1px solid #333;*/
-            /*border-bottom: 1px solid #333;*/
-            padding: 5px 10px;
-        }
-        .voucher-details thead tr th:first-child {
-            border-left: 1px solid #333;
-        }
-        .voucher-details thead tr th:last-child {
-            border-right: 1px solid #333;
-        }
-        .voucher-details tbody tr td {
-            /*border-bottom: 1px solid #333;*/
-        }
-        .voucher-details tbody tr td:first-child {
-            border-left: 1px solid #333;
-        }
-        .voucher-details tbody tr td:last-child {
-            border-right: 1px solid #333;
-        }
-        .voucher-details tbody tr td {
-            padding: 5px 10px;
-            vertical-align: middle;
-        }
-        .voucher-details tfoot tr td {
-            padding: 3px 10px;
-        }
-        .voucher-totals {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        .voucher-totals tbody tr td {
-            padding: 3px 10px;
-            vertical-align: top;
-        }
-        .voucher-footer {
-            margin-bottom: 30px;
-        }
-        .voucher-footer tbody tr td{
-            border-top: 1px solid #333;
-            padding: 3px 10px;
-        }
-        .company_logo {
-            min-width: 150px;
-            max-width: 100%;
-            height: auto;
-        }
-        .pt-1 {
-            padding-top: 1rem;
-        }
-    </style>
+    <link href="{{ $path_style }}" rel="stylesheet" />
 </head>
 <body>
-<table class="voucher-company">
+<table class="full-width">
     <tr>
         @if($company->logo)
             <td width="25%">
@@ -135,154 +17,112 @@
             </td>
         @endif
         <td width="100%">
-            <table class="voucher-company-left">
+            <table class="">
                 <tbody>
-                <tr><td class="text-left font-xxlg font-bold">{{ $company->name }}</td></tr>
-                <tr><td class="text-left font-xl font-bold">{{ 'RUC '.$company->number }}</td></tr>
+                <tr><td class="text-left font-xlg font-bold">{{ $company->name }}</td></tr>
                 @if($establishment)
-                    <tr><td class="text-left font-lg">{{ $establishment->address }}</td></tr>
-                    <tr><td class="text-left font-lg">{{ ($establishment->email != '-')? $establishment->email : '' }}</td></tr>
-                    <tr><td class="text-left font-lg font-bold">{{ ($establishment->telephone != '-')? $establishment->telephone : '' }}</td></tr>
+                    <tr><td class="text-left font-md">{{ $establishment->address }}</td></tr>
+                    <tr><td class="text-left font-md">{{ ($establishment->email != '-')? $establishment->email : '' }}</td></tr>
+                    <tr><td class="text-left font-md font-bold">{{ ($establishment->telephone != '-')? $establishment->telephone : '' }}</td></tr>
                 @endif
                 </tbody>
             </table>
         </td>
         <td width="30%">
-            <table class="voucher-company-right">
+            <table class="border-box">
+                <tr><td class="text-center font-lg  font-bold pt-20">{{ 'RUC '.$company->number }}</td></tr>
+                <tr><td class="text-center font-lg  font-bold">{{ $document->document_type->description }}</td></tr>
+                <tr><td class="text-center font-xlg font-bold pb-20">{{ $document->number_full }}</td></tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<table class="full-width">
+    <tr>
+        <td width="55%" class="align-top">
+            <table class="">
                 <tbody>
-                <tr><td class="text-center font-lg">{{ $document->document_type->description }}</td></tr>
-                <tr><td class="text-center font-xlg font-bold">{{ $document->number_full }}</td></tr>
+                <tr>
+                    <td width="30%">Señor(es):</td>
+                    <td width="70%">{{ $supplier->name }}</td>
+                </tr>
+                <tr>
+                    <td width="30%">{{ $supplier->identity_document_type->description }}:</td>
+                    <td width="70%">{{ $supplier->number }}</td>
+                </tr>
+                <tr>
+                    <td width="30%">Dirección:</td>
+                    <td width="70%">{{ $supplier->address }}</td>
+                </tr>
+                <tr>
+                    <td width="30%">Régimen de retención:</td>
+                    <td width="70%">{{ $document->retention_type->description }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+        <td width="45%" class="align-top">
+            <table class="">
+                <tbody>
+                <tr>
+                    <td width="40%">Fecha de emisión: </td>
+                    <td width="60%">{{ $document->date_of_issue->format('d/m/Y') }}</td>
+                </tr>
+                <tr>
+                    <td width="40%">Moneda: </td>
+                    <td width="60%">{{ $document->currency_type_id }}</td>
+                </tr>
                 </tbody>
             </table>
         </td>
     </tr>
 </table>
-<table class="voucher-information">
+<table class="full-width mt-10 mb-10">
+    <thead class="">
     <tr>
-        <td width="55%">
-            <table class="voucher-information-left">
-                <tbody>
-                <tr>
-                    <td width="20%">Señor(es):</td>
-                    <td width="80%">{{ $supplier->name }}</td>
-                </tr>
-                <tr>
-                    <td width="20%">{{ $supplier->identity_document_type->description }}:</td>
-                    <td width="80%">{{ $supplier->number }}</td>
-                </tr>
-                <tr>
-                    <td width="20%">Dirección:</td>
-                    <td width="80%">{{ $supplier->address }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-        <td width="45%">
-            <table class="voucher-information-right">
-                <tbody>
-                <tr>
-                    <td width="20%">Fecha de emisión: </td>
-                    <td width="80%">{{ $document->date_of_issue->format('d/m/Y') }}</td>
-                </tr>
-                <tr>
-                    <td width="20%">Moneda: </td>
-                    <td width="80%">{{ $document->currency_type_id }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-</table>
-<table class="voucher-details">
-    <thead>
-    <tr>
-        <th class="text-center" width="80px">CANT.</th>
-        <th width="60px">UNIDAD</th>
-        <th>DESCRIPCIÓN</th>
-        <th class="text-right" width="80px">P.UNIT</th>
-        <th class="text-right" width="80px">TOTAL</th>
+        <th class="border-top-bottom text-center">Tipo<br/>Comprobante</th>
+        <th class="border-top-bottom text-center">Número<br/>Comprobante</th>
+        <th class="border-top-bottom text-center">Fecha de<br/>Emisión</th>
+        <th class="border-top-bottom text-center">Moneda<br/>Comprobante</th>
+        <th class="border-top-bottom text-center">Total<br/>Comprobante</th>
+        <th class="border-top-bottom text-center">Tasa %</th>
+        <th class="border-top-bottom text-center">Importe<br/>Retención</th>
+        <th class="border-top-bottom text-center">Tipo<br/>Cambio</th>
     </tr>
     </thead>
     <tbody>
-    @foreach($details as $row)
+    @foreach($document->documents as $row)
         <tr>
-            <td class="text-center">{{ $row->quantity }}</td>
-            <td>{{ $row->item->unit_type_id }}</td>
-            <td>
-                {!! $row->item->description !!}
-                @if($row->attributes)
-                    @foreach($row->attributes as $attr)
-                        <br/>{!! $attr->name !!} : {{ $attr->value }}
-                    @endforeach
-                @endif
-            </td>
-            <td  class="text-right" >{{ number_format($row->unit_price, 2) }}</td>
-            <td class="text-right">{{ number_format($row->total, 2) }}</td>
+            <td class="text-center">{{ $row->document_type->short }}</td>
+            <td class="text-center">{{ $row->series }}-{{ $row->number }}</td>
+            <td class="text-center">{{ $row->date_of_issue->format('d/m/Y') }}</td>
+            <td class="text-center">{{ $row->currency_type_id }}</td>
+            <td class="text-right">{{ $row->total_document }}</td>
+            <td class="text-center">{{ $document->retention_type->percentage }}</td>
+            <td class="text-right">{{ $row->total_retention }}</td>
+            <td class="text-right">{{ $row->exchange_rate->factor }}</td>
         </tr>
     @endforeach
     </tbody>
-    <tfoot style="border-top: 1px solid #333;">
+    <tfoot>
     <tr>
-        <td colspan="5" class="font-lg font-bold"  style="padding-top: 2rem;">Son: {{ $document->number_to_letter }} {{ $document->currency_type->description }}</td>
+        <td class="border-top text-right" colspan="4">Totales({{ $document->currency_type->symbol }})</td>
+        <td class="border-top text-right">0.00</td>
+        <td class="border-top"></td>
+        <td class="border-top text-right">0.00</td>
+        <td class="border-top"></td>
     </tr>
     </tfoot>
 </table>
-<table class="voucher-totals">
-    <tbody>
+<table class="full-width">
     <tr>
-        <td width="35%">
-            <table class="voucher-totals-left">
-                {{--<tbody>--}}
-                <tr>
-                    <td class="text-center">
-                        <img class="qr_code" src="data:image/png;base64, {{ $document->qr }}" />
-                    </td>
-                </tr>
-                <tr><td class="text-center">Código Hash</td></tr>
-                <tr><td class="text-center">{{ $document->hash }}</td></tr>
-                {{--</tbody>--}}
-            </table>
-        </td>
-        <td width="65%">
-            <table class="voucher-totals-right">
-                <tbody>
-                @if($document->total_free > 0)
-                    <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. GRATUITAS: {{ $document->currency_type->symbol }}</td>
-                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_free, 2) }}</td>
-                    </tr>
-                @endif
-                @if($document->total_unaffected > 0)
-                    <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. INAFECTAS: {{ $document->currency_type->symbol }}</td>
-                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_unaffected, 2) }}</td>
-                    </tr>
-                @endif
-                @if($document->total_exonerated > 0)
-                    <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. EXONERADAS: {{ $document->currency_type->symbol }}</td>
-                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_exonerated, 2) }}</td>
-                    </tr>
-                @endif
-                @if($document->total_taxed > 0)
-                    <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. GRAVADAS: {{ $document->currency_type->symbol }}</td>
-                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_taxed, 2) }}</td>
-                    </tr>
-                @endif
-                <tr>
-                    <td class="text-right font-lg font-bold" width="70%">IGV: {{ $document->currency_type->symbol }}</td>
-                    <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_igv, 2) }}</td>
-                </tr>
-                <tr>
-                    <td class="text-right font-lg font-bold" width="70%">TOTAL A PAGAR: {{ $document->currency_type->symbol }}</td>
-                    <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total, 2) }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
+        <td>Código Hash: {{ $document->hash }}</td>
     </tr>
-    </tbody>
+    @foreach($document->legends as $row)
+    <tr>
+        <td class="font-bold">{{ $row->value }}</td>
+    </tr>
+    @endforeach
 </table>
 </body>
 </html>

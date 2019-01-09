@@ -29,7 +29,7 @@ class PaymentInput
                 $currency_type_id = $row['codigo_tipo_moneda'];
             }
 
-            $transform_prepayments[] = [
+            $transform_payments[] = [
                 'date_of_payment' => $date_of_payment,
                 'total_payment' => $total_payment,
                 'currency_type_id' => $currency_type_id

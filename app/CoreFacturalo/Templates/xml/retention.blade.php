@@ -65,37 +65,37 @@
         </cac:PartyLegalEntity>
     </cac:ReceiverParty>
     <sac:SUNATRetentionSystemCode>{{ $document->retention_type_id }}</sac:SUNATRetentionSystemCode>
-    <sac:SUNATRetentionPercent>{{ $document->percentage }}</sac:SUNATRetentionPercent>
-    @if($document->observation)
-        <cbc:Note><![CDATA[{{ $document->observation }}]]></cbc:Note>
+    <sac:SUNATRetentionPercent>{{ $document->retention_type->percentage }}</sac:SUNATRetentionPercent>
+    @if($document->observations)
+        <cbc:Note><![CDATA[{{ $document->observations }}]]></cbc:Note>
     @endif
     <cbc:TotalInvoiceAmount currencyID="PEN">{{ $document->total }}</cbc:TotalInvoiceAmount>
-    <sac:SUNATTotalPaid currencyID="PEN">{{ $document->total_payment }}</sac:SUNATTotalPaid>
+    <sac:SUNATTotalPaid currencyID="PEN">{{ $document->total_retention }}</sac:SUNATTotalPaid>
     @foreach($document->documents as $doc)
     <sac:SUNATRetentionDocumentReference>
-        <cbc:ID schemeID="{{ $doc->document_type_id }}">{{ $doc->number_full }}</cbc:ID>
+        <cbc:ID schemeID="{{ $doc->document_type_id }}">{{ $doc->series }}-{{ $doc->number }}</cbc:ID>
         <cbc:IssueDate>{{ $doc->date_of_issue->format('Y-m-d') }}</cbc:IssueDate>
-        <cbc:TotalInvoiceAmount currencyID="{{ $doc->currency_type_id }}">{{ $doc->total }}</cbc:TotalInvoiceAmount>
+        <cbc:TotalInvoiceAmount currencyID="{{ $doc->currency_type_id }}">{{ $doc->total_document }}</cbc:TotalInvoiceAmount>
         @if($doc->payments)
         @foreach($doc->payments as $payment)
         <cac:Payment>
             <cbc:ID>{{ $loop->iteration }}</cbc:ID>
-            <cbc:PaidAmount currencyID="{{ $payment->currency_type_id }}">{{ $payment->total }}</cbc:PaidAmount>
-            <cbc:PaidDate>{{ $payment->date_of_issue->format('Y-m-d') }}</cbc:PaidDate>
+            <cbc:PaidAmount currencyID="{{ $payment->currency_type_id }}">{{ $payment->total_payment }}</cbc:PaidAmount>
+            <cbc:PaidDate>{{ $payment->date_of_payment }}</cbc:PaidDate>
         </cac:Payment>
         @endforeach
         @endif
-        @if($doc->amount && $doc->payment && $doc->date_of_retention)
+        @if($doc->total_retention && $doc->total_payment && $doc->date_of_retention)
         <sac:SUNATRetentionInformation>
-            <sac:SUNATRetentionAmount currencyID="PEN">{{ $doc->amount }}</sac:SUNATRetentionAmount>
+            <sac:SUNATRetentionAmount currencyID="PEN">{{ $doc->total_retention }}</sac:SUNATRetentionAmount>
             <sac:SUNATRetentionDate>{{ $doc->date_of_retention->format('Y-m-d') }}</sac:SUNATRetentionDate>
-            <sac:SUNATNetTotalPaid currencyID="PEN">{{ $doc->payment }}</sac:SUNATNetTotalPaid>
+            <sac:SUNATNetTotalPaid currencyID="PEN">{{ $doc->total_payment }}</sac:SUNATNetTotalPaid>
             @if($doc->exchange_rate)
             <cac:ExchangeRate>
-                <cbc:SourceCurrencyCode>{{ $doc->exchange_rate->source_currency_type_id }}</cbc:SourceCurrencyCode>
-                <cbc:TargetCurrencyCode>{{ $doc->exchange_rate->target_currency_type_id }}</cbc:TargetCurrencyCode>
-                <cbc:CalculationRate>{{ $doc->exchange_rate->rate }}</cbc:CalculationRate>
-                <cbc:Date>{{ $doc->exchange_rate->date->format('Y-m-d') }}</cbc:Date>
+                <cbc:SourceCurrencyCode>{{ $doc->exchange_rate->currency_type_id_source }}</cbc:SourceCurrencyCode>
+                <cbc:TargetCurrencyCode>{{ $doc->exchange_rate->currency_type_id_target }}</cbc:TargetCurrencyCode>
+                <cbc:CalculationRate>{{ $doc->exchange_rate->factor }}</cbc:CalculationRate>
+                <cbc:Date>{{ $doc->exchange_rate->date_of_exchange_rate }}</cbc:Date>
             </cac:ExchangeRate>
             @endif
         </sac:SUNATRetentionInformation>

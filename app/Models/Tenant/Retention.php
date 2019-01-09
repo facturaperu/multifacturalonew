@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Catalogs\RetentionType;
 
@@ -27,6 +28,7 @@ class Retention extends ModelTenant
         'supplier',
         'retention_type_id',
         'observations',
+        'currency_type_id',
         'total_retention',
         'total',
 
@@ -120,6 +122,11 @@ class Retention extends ModelTenant
         return $this->belongsTo(RetentionType::class);
     }
 
+    public function currency_type()
+    {
+        return $this->belongsTo(CurrencyType::class);
+    }
+
     public function documents()
     {
         return $this->hasMany(RetentionDocument::class);
@@ -128,5 +135,20 @@ class Retention extends ModelTenant
     public function getNumberFullAttribute()
     {
         return $this->series.'-'.$this->number;
+    }
+
+    public function getDownloadExternalXmlAttribute()
+    {
+        return route('tenant.retentions.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+    }
+
+    public function getDownloadExternalPdfAttribute()
+    {
+        return route('tenant.retentions.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+    }
+
+    public function getDownloadExternalCdrAttribute()
+    {
+        return route('tenant.retentions.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }
