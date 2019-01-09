@@ -46,13 +46,13 @@ class ItemInput
                             'internal_id' => $row['codigo_interno']
                         ],
                         [
-                            'name' => $row['descripcion'],
+                            'description' => $row['descripcion'],
                             'item_type_id' => '01',
                             'item_code' => array_key_exists('codigo_producto_sunat', $row)?$row['codigo_producto_sunat']:null,
                             'item_code_gs1' => array_key_exists('codigo_producto_gsl', $row)?$row['codigo_producto_gsl']:null,
                             'unit_type_id' => strtoupper($row['unidad_de_medida']),
                             'currency_type_id' => $inputs['codigo_tipo_moneda'],
-                            'unit_price' => $inputs['precio_unitario'],
+                            'unit_price' => $row['precio_unitario'],
                         ]
                     );
                     $item_description = $row['descripcion'];

@@ -37,6 +37,7 @@ class FacturaloDocument extends FacturaloCore
     private function updateHashAndQr()
     {
         $hash = $this->getHash($this->xmlSigned);
+
         $this->document->update([
             'hash' => $hash,
             'qr' => $this->getQr($hash)
@@ -74,6 +75,7 @@ class FacturaloDocument extends FacturaloCore
 
         $qrCode = new QrCodeGenerate();
         $qr = $qrCode->displayPNGBase64($text);
+
         return $qr;
     }
 }

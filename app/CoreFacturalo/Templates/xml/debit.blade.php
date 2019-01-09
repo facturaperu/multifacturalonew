@@ -26,7 +26,7 @@
     <cac:DiscrepancyResponse>
         <cbc:ReferenceID>{{ $note->affected_document->series.'-'.$note->affected_document->number }}</cbc:ReferenceID>
         <cbc:ResponseCode>{{ $note->note_debit_type_id }}</cbc:ResponseCode>
-        <cbc:Description>{{ $note->description }}</cbc:Description>
+        <cbc:Description>{{ $note->note_description }}</cbc:Description>
     </cac:DiscrepancyResponse>
     @if($document->purchase_order)
     <cac:OrderReference>

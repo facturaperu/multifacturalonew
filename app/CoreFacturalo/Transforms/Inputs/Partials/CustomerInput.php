@@ -17,7 +17,7 @@ class CustomerInput
             $identity_document_type_id = $customer_inputs['codigo_tipo_documento_identidad'];
             $number = $customer_inputs['numero_documento'];
             $name = $customer_inputs['apellidos_y_nombres_o_razon_social'];
-            $trade_name = $customer_inputs['nombre_comercial'];
+            $trade_name = (array_key_exists('nombre_comercial', $customer_inputs))?$customer_inputs['nombre_comercial']:null;
             $country_id = (array_key_exists('codigo_pais', $customer_inputs))?$customer_inputs['codigo_pais']:'PE';
             $district_id = (array_key_exists('ubigeo', $customer_inputs))?$customer_inputs['ubigeo']:null;
             $province_id = ($district_id)?substr($district_id, 0 ,4):null;
