@@ -103,6 +103,7 @@ class ClientController extends Controller
             ['establishment_id' => 1, 'document_type_id' => '07', 'number' => 'BC001'],
             ['establishment_id' => 1, 'document_type_id' => '08', 'number' => 'FD01'],
             ['establishment_id' => 1, 'document_type_id' => '08', 'number' => 'BD01'],
+            ['establishment_id' => 1, 'document_type_id' => '20', 'number' => 'R001'],
         ]);
 
         DB::connection('tenant')->table('users')->insert([
