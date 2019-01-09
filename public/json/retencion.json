@@ -36,11 +36,6 @@
           "fecha_de_pago": "2018-10-09",
           "total_pago": 200.00,
           "codigo_tipo_moneda": "PEN"
-        },
-        {
-          "fecha_de_pago": "2018-10-08",
-          "total_pago": 200.00,
-          "codigo_tipo_moneda": "PEN"
         }
       ],
       "tipo_de_cambio": {
