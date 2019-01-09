@@ -36,10 +36,10 @@ class RetentionController extends Controller
     public function records(Request $request)
     {
         $records = Retention::where($request->column, 'like', "%{$request->value}%")
-                            ->orderBy('series_id')
+                            ->orderBy('series')
                             ->orderBy('number', 'desc');
 
-        return new RetentionCollection($records->paginate(env('ITEMS_PER_PAGE', 5)));
+        return new RetentionCollection($records->paginate(env('ITEMS_PER_PAGE', 20)));
     }
 
     public function create()

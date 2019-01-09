@@ -17,6 +17,7 @@
                         <th class="text-center">Fecha Emisión</th>
                         <th>Proveedor</th>
                         <th>Número</th>
+                        <th>Estado</th>
                         <th class="text-right">T.Retención</th>
                         <th class="text-right">Total</th>
                         <th class="text-right">Acciones</th>
@@ -25,7 +26,7 @@
                         <td>{{ index }}</td>
                         <td class="text-center">{{ row.date_of_issue }}</td>
                         <td>{{ row.supplier_name }}<br/><small v-text="row.supplier_number"></small></td>
-                        <td>{{ row.number_full }}</td>
+                        <td>{{ row.number }}</td>
                         <td>{{ row.state_type_description }}</td>
                         <td class="text-right">{{ row.total_retention }}</td>
                         <td class="text-right">{{ row.total }}</td>

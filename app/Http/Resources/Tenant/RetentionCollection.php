@@ -18,9 +18,9 @@ class RetentionCollection extends ResourceCollection
             return [
                 'id' => $row->id,
                 'date_of_issue' => $row->date_of_issue->format('Y-m-d'),
-                'customer_name' => $row->customer->name,
-                'customer_number' => $row->customer->number,
-                'number' => $row->number,
+                'supplier_name' => $row->supplier->name,
+                'supplier_number' => $row->supplier->number,
+                'number' => $row->number_full,
                 'document_type_description' => $row->document_type->description,
                 'state_type_description' => $row->state_type->description,
                 'total_retention' => $row->total_retention,
