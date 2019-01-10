@@ -13,7 +13,7 @@
     <tr>
         @if($company->logo)
             <td width="25%">
-                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo">
+                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="logo">
             </td>
         @endif
         <td width="100%">

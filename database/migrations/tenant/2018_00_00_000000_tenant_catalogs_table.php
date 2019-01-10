@@ -246,7 +246,6 @@ class TenantCatalogsTable extends Migration
             ['id' => '02', 'description' => 'Tasa 6%', 'percentage' => 6,   'active' =>true],
         ]);
 
-
         //51
         Schema::create('operation_types', function (Blueprint $table) {
             $table->string('id', 4)->index();
@@ -295,8 +294,6 @@ class TenantCatalogsTable extends Migration
             ['id' => '2001', 'description' => 'Operación Sujeta a Percepción',                                      'exportation' => false, 'active' => false],
         ]);
 
-
-
         Schema::create('charge_discount_types', function (Blueprint $table) {
             $table->char('id', 2)->index();
             $table->string('description');
@@ -315,10 +312,6 @@ class TenantCatalogsTable extends Migration
             ['id' => '46', 'description' => 'Recargo al consumo y/o propinas - Global',                              'base' => false, 'level' => 'global', 'type' => 'charge',   'active' =>true],
             ['id' => '47', 'description' => 'Cargos que afectan la base imponible del IGV - Item',                   'base' => true,  'level' => 'item',   'type' => 'charge',   'active' =>true],
         ]);
-
-
-
-
     }
     /**
      * Reverse the migrations.
