@@ -11,17 +11,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Client extends Model
 {
     use UsesSystemConnection;
-//    use SoftDeletes;
 
     protected $fillable = [
         'hostname_id',
         'number',
         'name',
         'email',
-        'token'
+        'token',
+        'locked'
     ];
-
-//    protected $dates = ['deleted_at'];
 
     public function hostname()
     {

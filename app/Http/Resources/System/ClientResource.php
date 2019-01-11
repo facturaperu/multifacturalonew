@@ -19,7 +19,7 @@ class ClientResource extends JsonResource
             'number' => $this->number,
             'name' => $this->name,
             'email' => $this->email,
-            'token' => $this->token,
+            'token' => $this->token
         ];
     }
 }

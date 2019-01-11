@@ -20,6 +20,7 @@ class CreateClientsTable extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('token');
+            $table->boolean('locked')->default(false);
             $table->timestamps();
 
             $table->foreign('hostname_id')->references('id')->on('hostnames')->onDelete('cascade');
