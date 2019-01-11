@@ -9,7 +9,7 @@ use App\Models\Tenant\Catalogs\UnitType;
 
 class Detail extends ModelTenant
 {
-    protected $with = ['unit_type', 'affectation_igv_type', 'system_isc_type', 'price_type'];
+    protected $with = ['affectation_igv_type', 'system_isc_type', 'price_type'];
     public $timestamps = false;
 
     protected $fillable = [
@@ -89,11 +89,6 @@ class Detail extends ModelTenant
     public function document()
     {
         return $this->belongsTo(Document::class);
-    }
-
-    public function unit_type()
-    {
-        return $this->belongsTo(UnitType::class);
     }
 
     public function affectation_igv_type()

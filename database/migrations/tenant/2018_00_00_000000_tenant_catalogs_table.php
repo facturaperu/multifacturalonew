@@ -14,6 +14,107 @@ class TenantCatalogsTable extends Migration
      */
     public function up()
     {
+        Schema::create('catalogs', function (Blueprint $table) {
+            $table->char('id', 2)->index();
+            $table->string('description');
+        });
+
+        DB::table('catalogs')->insert([
+            ['id' => '01', 'description' => 'Código de tipo de documento'],
+            ['id' => '02', 'description' => 'Código de tipo de monedas'],
+            ['id' => '03', 'description' => 'Código de tipo de unidad de medida comercial'],
+            ['id' => '04', 'description' => 'Código de país'],
+            ['id' => '05', 'description' => 'Código de tipos de tributos y otros conceptos'],
+            ['id' => '06', 'description' => 'Código de tipo de documento de identidad'],
+            ['id' => '07', 'description' => 'Código de tipo de afectación del IGV'],
+            ['id' => '08', 'description' => 'Código de tipos de sistema de cálculo del ISC'],
+            ['id' => '09', 'description' => 'Códigos de tipo de nota de crédito electrónica'],
+            ['id' => '10', 'description' => 'Códigos de tipo de nota de débito electrónica'],
+            ['id' => '11', 'description' => 'Códigos de tipo de valor de venta (Resumen diario de boletas y notas)'],
+            ['id' => '12', 'description' => 'Código de documentos relacionados tributarios'],
+            ['id' => '13', 'description' => 'Código de ubicación geográfica (UBIGEO)'],
+            ['id' => '14', 'description' => 'Código de otros conceptos tributarios'],
+            ['id' => '15', 'description' => 'Códigos de elementos adicionales en la factura y boleta electrónica'],
+            ['id' => '16', 'description' => 'Código de tipo de precio de venta unitario'],
+            ['id' => '17', 'description' => 'Código de tipo de operación'],
+            ['id' => '18', 'description' => 'Código de modalidad de transporte'],
+            ['id' => '19', 'description' => 'Código de estado del ítem (resumen diario)'],
+            ['id' => '20', 'description' => 'Código de motivo de traslado'],
+            ['id' => '21', 'description' => 'Código de documentos relacionados (sólo guía de remisión electrónica)'],
+            ['id' => '22', 'description' => 'Código de regimen de percepciones'],
+            ['id' => '23', 'description' => 'Código de regimen de retenciones'],
+            ['id' => '25', 'description' => 'Código de producto SUNAT'],
+            ['id' => '51', 'description' => 'Código de tipo de operación'],
+            ['id' => '52', 'description' => 'Códigos de leyendas'],
+            ['id' => '53', 'description' => 'Códigos de cargos o descuentos'],
+            ['id' => '54', 'description' => 'Códigos de bienes y servicios sujetos a detracciones'],
+            ['id' => '55', 'description' => 'Código de identificación del concepto tributario'],
+            ['id' => '59', 'description' => 'Medios de Pago'],
+        ]);
+
+        Schema::create('codes', function (Blueprint $table) {
+            $table->increments('id');
+            $table->char('catalog_id', 2);
+            $table->string('code');
+            $table->string('description');
+            $table->string('short')->nullable();
+            $table->string('symbol')->nullable();
+            $table->boolean('exportation')->nullable();
+            $table->boolean('free')->nullable();
+            $table->decimal('percentage', 2)->nullable();
+            $table->boolean('base')->nullable();
+            $table->enum('type', ['discount', 'charge'])->nullable();
+            $table->enum('level', ['item', 'global'])->nullable();
+            $table->boolean('active');
+        });
+
+        DB::table('codes')->insert([
+            ['catalog_id' => '01', 'code' => '01', 'description' => 'FACTURA ELECTRÓNICA',                           'short' => 'FT', 'active' => true],
+            ['catalog_id' => '01', 'code' => '03', 'description' => 'BOLETA DE VENTA ELECTRÓNICA',                   'short' => 'BV', 'active' => true],
+            ['catalog_id' => '01', 'code' => '07', 'description' => 'NOTA DE CRÉDITO',                               'short' => 'NC', 'active' => true],
+            ['catalog_id' => '01', 'code' => '08', 'description' => 'NOTA DE DÉBITO',                                'short' => 'ND', 'active' => true],
+            ['catalog_id' => '01', 'code' => '09', 'description' => 'Guia de remisión remitente',                    'short' => null, 'active' => true],
+            ['catalog_id' => '01', 'code' => '20', 'description' => 'COMPROBANTE DE RETENCIÓN ELECTRÓNICA',          'short' => null, 'active' => true],
+            ['catalog_id' => '01', 'code' => '31', 'description' => 'Guía de remisión transportista',                'short' => null, 'active' => true],
+            ['catalog_id' => '01', 'code' => '40', 'description' => 'COMPROBANTE DE PERCEPCIÓN ELECTRÓNICA',         'short' => null, 'active' => true],
+            ['catalog_id' => '01', 'code' => '71', 'description' => 'Guia de remisión remitente complementaria',     'short' => null, 'active' => false],
+            ['catalog_id' => '01', 'code' => '72', 'description' => 'Guia de remisión transportista complementaria', 'short' => null, 'active' => false],
+        ]);
+
+        DB::table('codes')->insert([
+            ['catalog_id' => '02', 'code' => 'PEN', 'description' => 'Soles',              'symbol' => 'S/', 'active' => true],
+            ['catalog_id' => '02', 'code' => 'USD', 'description' => 'Dólares Americanos', 'symbol' => '$',  'active' => true],
+        ]);
+
+        DB::table('codes')->insert([
+            ['catalog_id' => '03', 'code' => 'ZZ',  'description' => 'Servicio', 'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'BX',  'description' => 'Caja',     'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'GLL', 'description' => 'Galones',  'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'GRM', 'description' => 'Gramos',   'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'KGM', 'description' => 'Kilos',    'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'LTR', 'description' => 'Litros',   'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'MTR', 'description' => 'Metros',   'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'FOT', 'description' => 'Pies',     'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'INH', 'description' => 'Pulgadas', 'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'NIU', 'description' => 'Unidades', 'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'YRD', 'description' => 'Yardas',   'symbol' => null, 'active' => true],
+            ['catalog_id' => '03', 'code' => 'HUR', 'description' => 'Hora',     'symbol' => null, 'active' => true],
+        ]);
+
+        DB::table('codes')->insert([
+            ['catalog_id' => '06', 'code' => '0', 'description' => 'Doc.trib.no.dom.sin.ruc',                           'active' => true],
+            ['catalog_id' => '06', 'code' => '1', 'description' => 'DNI',                                               'active' => true],
+            ['catalog_id' => '06', 'code' => '4', 'description' => 'CE',                                                'active' => true],
+            ['catalog_id' => '06', 'code' => '6', 'description' => 'RUC',                                               'active' => true],
+            ['catalog_id' => '06', 'code' => '7', 'description' => 'Pasaporte',                                         'active' => true],
+            ['catalog_id' => '06', 'code' => 'A', 'description' => 'Ced. Diplomática de identidad',                     'active' => false],
+            ['catalog_id' => '06', 'code' => 'B', 'description' => 'Documento identidad país residencia-no.d',          'active' => false],
+            ['catalog_id' => '06', 'code' => 'C', 'description' => 'Tax Identification Number - TIN – Doc Trib PP.NN',  'active' => false],
+            ['catalog_id' => '06', 'code' => 'D', 'description' => 'Identification Number - IN – Doc Trib PP. JJ',      'active' => false],
+            ['catalog_id' => '06', 'code' => 'E', 'description' => 'TAM- Tarjeta Andina de Migración',                  'active' => false],
+        ]);
+
+
         Schema::create('document_types', function (Blueprint $table) {
             $table->char('id', 2)->index();
             $table->string('description');
@@ -218,6 +319,17 @@ class TenantCatalogsTable extends Migration
             ['id' => '2', 'description' => 'Modificar'],
             ['id' => '3', 'description' => 'Anulado'],
         ]);
+
+//        Código de documentos relacionados (sólo guía de remisión electrónica)
+//
+//
+//        01	Numeración DAM
+//        02	Número de orden de entrega
+//        03	Número SCOP
+//        04	Número de manifiesto de carga
+//        05	Número de constancia de detracción
+//        06	Otros
+
 
         //22
         Schema::create('perception_types', function (Blueprint $table) {

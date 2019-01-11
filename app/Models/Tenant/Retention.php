@@ -8,8 +8,8 @@ use App\Models\Tenant\Catalogs\RetentionType;
 
 class Retention extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'series',
-                       'retention_type', 'documents'];
+    protected $with = ['user', 'soap_type', 'state_type', 'document_type',
+                       'retention_type', 'currency_type', 'documents'];
 
     protected $fillable = [
         'user_id',
@@ -110,11 +110,6 @@ class Retention extends ModelTenant
     public function document_type()
     {
         return $this->belongsTo(DocumentType::class);
-    }
-
-    public function series()
-    {
-        return $this->belongsTo(Series::class);
     }
 
     public function retention_type()

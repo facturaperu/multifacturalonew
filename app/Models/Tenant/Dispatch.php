@@ -2,49 +2,11 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\DocumentType;
-use App\Models\Tenant\Catalogs\RetentionType;
 
 class Dispatch extends ModelTenant
 {
-//$table->increments('id');
-//$table->unsignedInteger('user_id');
-//$table->uuid('external_id');
-//$table->unsignedInteger('establishment_id');
-//$table->json('establishment');
-//$table->char('soap_type_id', 2);
-//$table->char('state_type_id', 2);
-//$table->string('ubl_version');
-//$table->char('document_type_id', 2);
-//$table->char('series', 4);
-//$table->integer('number');
-//$table->date('date_of_issue');
-//$table->time('time_of_issue');
-//$table->unsignedInteger('customer_id');
-//$table->json('customer');
-//$table->json('shipment');
-//
-//$table->json('legends')->nullable();
-//$table->json('optional')->nullable();
-//
-//$table->string('filename')->nullable();
-//$table->string('hash')->nullable();
-//$table->boolean('has_xml')->default(false);
-//$table->boolean('has_pdf')->default(false);
-//$table->boolean('has_cdr')->default(false);
-//$table->timestamps();
-//
-//$table->foreign('user_id')->references('id')->on('users');
-//$table->foreign('establishment_id')->references('id')->on('establishments');
-//$table->foreign('soap_type_id')->references('id')->on('soap_types');
-//$table->foreign('state_type_id')->references('id')->on('state_types');
-//$table->foreign('document_type_id')->references('id')->on('document_types');
-//$table->foreign('supplier_id')->references('id')->on('suppliers');
-
-
-    protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'series',
-                       'retention_type', 'documents'];
+    protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'details'];
 
     protected $fillable = [
         'user_id',
@@ -59,13 +21,10 @@ class Dispatch extends ModelTenant
         'number',
         'date_of_issue',
         'time_of_issue',
-        'supplier_id',
-        'supplier',
-        'retention_type_id',
+        'customer_id',
+        'customer',
+        'shipment',
         'observations',
-        'currency_type_id',
-        'total_retention',
-        'total',
 
         'legends',
         'optional',
@@ -92,14 +51,14 @@ class Dispatch extends ModelTenant
         $this->attributes['establishment'] = (is_null($value))?null:json_encode($value);
     }
 
-    public function getSupplierAttribute($value)
+    public function getCustomerAttribute($value)
     {
         return (is_null($value))?null:(object) json_decode($value);
     }
 
-    public function setSupplierAttribute($value)
+    public function setCustomerAttribute($value)
     {
-        $this->attributes['supplier'] = (is_null($value))?null:json_encode($value);
+        $this->attributes['customer'] = (is_null($value))?null:json_encode($value);
     }
 
     public function getLegendsAttribute($value)
@@ -147,24 +106,9 @@ class Dispatch extends ModelTenant
         return $this->belongsTo(DocumentType::class);
     }
 
-    public function series()
+    public function details()
     {
-        return $this->belongsTo(Series::class);
-    }
-
-    public function retention_type()
-    {
-        return $this->belongsTo(RetentionType::class);
-    }
-
-    public function currency_type()
-    {
-        return $this->belongsTo(CurrencyType::class);
-    }
-
-    public function documents()
-    {
-        return $this->hasMany(RetentionDocument::class);
+        return $this->hasMany(DispatchDetails::class);
     }
 
     public function getNumberFullAttribute()

@@ -30,6 +30,7 @@ class TenantDispatchesTable extends Migration
             $table->unsignedInteger('customer_id');
             $table->json('customer');
             $table->json('shipment');
+            $table->text('observations');
 
             $table->json('legends')->nullable();
             $table->json('optional')->nullable();
