@@ -18,14 +18,14 @@
     @if($document->observations)
     <cbc:Note><![CDATA[{{ $document->observations }}]]></cbc:Note>
     @endif
-    {% if doc.docBaja -%}
-    <cac:OrderReference>
-        <cbc:ID>{{ doc.docBaja.nroDoc }}</cbc:ID>
-        <cbc:OrderTypeCode listAgencyName="PE:SUNAT"
-                           listName="SUNAT:Identificador de Tipo de Documento"
-                           listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01">{{ doc.docBaja.tipoDoc }}</cbc:OrderTypeCode>
-    </cac:OrderReference>
-    {% endif -%}
+    {{--{% if doc.docBaja -%}--}}
+    {{--<cac:OrderReference>--}}
+        {{--<cbc:ID>{{ doc.docBaja.nroDoc }}</cbc:ID>--}}
+        {{--<cbc:OrderTypeCode listAgencyName="PE:SUNAT"--}}
+                           {{--listName="SUNAT:Identificador de Tipo de Documento"--}}
+                           {{--listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01">{{ doc.docBaja.tipoDoc }}</cbc:OrderTypeCode>--}}
+    {{--</cac:OrderReference>--}}
+    {{--{% endif -%}--}}
     @if($document->related)
     <cac:AdditionalDocumentReference>
         <cbc:ID>{{ $document->related->number }}</cbc:ID>
@@ -50,16 +50,16 @@
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:DeliveryCustomerParty>
-    {% if doc.tercero -%}
-    <cac:SellerSupplierParty>
-        <cbc:CustomerAssignedAccountID schemeID="{{ doc.tercero.tipoDoc }}">{{ doc.tercero.numDoc }}</cbc:CustomerAssignedAccountID>
-        <cac:Party>
-            <cac:PartyLegalEntity>
-                <cbc:RegistrationName><![CDATA[{{ doc.tercero.rznSocial|raw }}]]></cbc:RegistrationName>
-            </cac:PartyLegalEntity>
-        </cac:Party>
-    </cac:SellerSupplierParty>
-    {% endif -%}
+    {{--{% if doc.tercero -%}--}}
+    {{--<cac:SellerSupplierParty>--}}
+        {{--<cbc:CustomerAssignedAccountID schemeID="{{ doc.tercero.tipoDoc }}">{{ doc.tercero.numDoc }}</cbc:CustomerAssignedAccountID>--}}
+        {{--<cac:Party>--}}
+            {{--<cac:PartyLegalEntity>--}}
+                {{--<cbc:RegistrationName><![CDATA[{{ doc.tercero.rznSocial|raw }}]]></cbc:RegistrationName>--}}
+            {{--</cac:PartyLegalEntity>--}}
+        {{--</cac:Party>--}}
+    {{--</cac:SellerSupplierParty>--}}
+    {{--{% endif -%}--}}
     @php($shipment = $document->shipment)
     <cac:Shipment>
         <cbc:ID>1</cbc:ID>
