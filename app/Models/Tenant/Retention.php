@@ -8,8 +8,7 @@ use App\Models\Tenant\Catalogs\RetentionType;
 
 class Retention extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'document_type',
-                       'retention_type', 'currency_type', 'documents'];
+    protected $with = ['user', 'soap_type', 'state_type', 'documents'];
 
     protected $fillable = [
         'user_id',
@@ -19,16 +18,16 @@ class Retention extends ModelTenant
         'soap_type_id',
         'state_type_id',
         'ubl_version',
-        'document_type_id',
+        'document_type_code',
         'series',
         'number',
         'date_of_issue',
         'time_of_issue',
         'supplier_id',
         'supplier',
-        'retention_type_id',
+        'retention_type_code',
         'observations',
-        'currency_type_id',
+        'currency_type_code',
         'total_retention',
         'total',
 
@@ -107,20 +106,20 @@ class Retention extends ModelTenant
         return $this->belongsTo(StateType::class);
     }
 
-    public function document_type()
-    {
-        return $this->belongsTo(DocumentType::class);
-    }
-
-    public function retention_type()
-    {
-        return $this->belongsTo(RetentionType::class);
-    }
-
-    public function currency_type()
-    {
-        return $this->belongsTo(CurrencyType::class);
-    }
+//    public function document_type()
+//    {
+//        return $this->belongsTo(DocumentType::class);
+//    }
+//
+//    public function retention_type()
+//    {
+//        return $this->belongsTo(RetentionType::class);
+//    }
+//
+//    public function currency_type()
+//    {
+//        return $this->belongsTo(CurrencyType::class);
+//    }
 
     public function documents()
     {

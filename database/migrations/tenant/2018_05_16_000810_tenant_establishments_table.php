@@ -24,16 +24,12 @@ class TenantEstablishmentsTable extends Migration
             $table->string('email');
             $table->string('telephone');
             $table->string('code');
-            $table->unsignedInteger('created_by')->nullable();
-            $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
 
             $table->foreign('country_id')->references('id')->on('countries');
             $table->foreign('department_id')->references('id')->on('departments');
             $table->foreign('province_id')->references('id')->on('provinces');
             $table->foreign('district_id')->references('id')->on('districts');
-            $table->foreign('created_by')->references('id')->on('users');
-            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 

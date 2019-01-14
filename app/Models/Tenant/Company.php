@@ -22,7 +22,7 @@ class Company extends ModelTenant
 
     public function identity_document_type()
     {
-        return $this->belongsTo(IdentityDocumentType::class);
+        return $this->belongsTo(Code::class, 'identity_document_type_id');
     }
 
     public static function active()

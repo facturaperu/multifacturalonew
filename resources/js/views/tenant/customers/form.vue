@@ -16,7 +16,7 @@
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">Número</label>
                             <el-input v-model="form.number" :maxlength="maxLength">
-                                <template v-if="form.identity_document_type_id === '6' || form.identity_document_type_id === '1'">
+                                <template v-if="form.identity_document_type_id === '066' || form.identity_document_type_id === '061'">
                                     <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchCustomer"></el-button>
                                 </template>
                             </el-input>
@@ -148,10 +148,10 @@
         },
         computed: {
             maxLength: function () {
-                if (this.form.identity_document_type_id === '6') {
+                if (this.form.identity_document_type_id === '066') {
                     return 11
                 }
-                if (this.form.identity_document_type_id === '1') {
+                if (this.form.identity_document_type_id === '061') {
                     return 8
                 }
             }
@@ -161,7 +161,7 @@
                 this.errors = {}
                 this.form = {
                     id: null,
-                    identity_document_type_id: '6',
+                    identity_document_type_id: '066',
                     number: null,
                     name: null,
                     trade_name: null,

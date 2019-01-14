@@ -8,14 +8,14 @@ use App\Models\Tenant\Catalogs\DocumentType;
 class RetentionDocument extends ModelTenant
 {
     public $timestamps = false;
-    protected $with = ['document_type', 'currency_type'];
+    protected $with = [];
     protected $fillable = [
         'retention_id',
-        'document_type_id',
+        'document_type_code',
         'series',
         'number',
         'date_of_issue',
-        'currency_type_id',
+        'currency_type_code',
         'total_document',
         'payments',
         'exchange_rate',
@@ -50,13 +50,13 @@ class RetentionDocument extends ModelTenant
         $this->attributes['exchange_rate'] = (is_null($value))?null:json_encode($value);
     }
 
-    public function document_type()
-    {
-        return $this->belongsTo(DocumentType::class);
-    }
-
-    public function currency_type()
-    {
-        return $this->belongsTo(CurrencyType::class);
-    }
+//    public function document_type()
+//    {
+//        return $this->belongsTo(DocumentType::class);
+//    }
+//
+//    public function currency_type()
+//    {
+//        return $this->belongsTo(CurrencyType::class);
+//    }
 }

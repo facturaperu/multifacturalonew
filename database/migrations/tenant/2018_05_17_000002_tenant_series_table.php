@@ -16,12 +16,12 @@ class TenantSeriesTable extends Migration
         Schema::create('series', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('establishment_id');
-            $table->char('document_type_id', 2);
+            $table->string('document_type_id');
             $table->string('number');
             $table->timestamps();
 
             $table->foreign('establishment_id')->references('id')->on('establishments');
-            $table->foreign('document_type_id')->references('id')->on('document_types');
+            $table->foreign('document_type_id')->references('id')->on('codes');
         });
     }
 

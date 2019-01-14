@@ -19,12 +19,14 @@ use App\Models\Tenant\Catalogs\NoteDebitType;
 use App\Models\Tenant\Catalogs\OperationType;
 use App\Models\Tenant\Catalogs\PriceType;
 use App\Models\Tenant\Catalogs\SystemIscType;
+use App\Models\Tenant\Code;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Configuration;
 use App\Models\Tenant\Customer;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Item;
+use App\Models\Tenant\Person;
 use App\Models\Tenant\Series;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -67,42 +69,42 @@ class DocumentController extends Controller
 
     public function tables()
     {
-        $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();
-        $document_types_note = DocumentType::whereIn('id', ['07', '08'])->get();
-        $note_credit_types = NoteCreditType::whereActive()->orderByDescription()->get();
-        $note_debit_types = NoteDebitType::whereActive()->orderByDescription()->get();
-        $currency_types = CurrencyType::whereActive()->orderByDescription()->get();
-        $operation_types = OperationType::whereActive()->orderById()->get();
+        $customers = $this->table('customers');
         $establishments = Establishment::all();
         $series = Series::all();
-        $customers = $this->table('customers');
-        $discounts = ChargeDiscountType::whereType('discount')->whereLevel('global')->get();
-        $charges = ChargeDiscountType::whereType('charge')->whereLevel('global')->get();
+        $document_types_invoice = Code::whereCatalog('01')->whereCodes(['01', '03'])->get();
+        $document_types_note = Code::whereCatalog('01')->whereCodes(['07', '08'])->get();
+        $note_credit_types = Code::whereCatalog('09')->whereActive()->orderByDescription()->get();
+        $note_debit_types = Code::whereCatalog('10')->whereActive()->orderByDescription()->get();
+        $currency_types = Code::whereCatalog('02')->whereActive()->get();
+        $operation_types = Code::whereCatalog('51')->whereActive()->get();
+        $discounts = Code::whereCatalog('53')->whereType('discount')->whereLevel('global')->get();
+        $charges = Code::whereCatalog('53')->whereType('charge')->whereLevel('global')->get();
 
-        return compact('document_types_invoice', 'document_types_note', 'note_credit_types', 'note_debit_types',
-                       'currency_types', 'operation_types', 'establishments', 'series', 'customers',
+        return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
+                       'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
                        'discounts', 'charges');
     }
 
     public function item_tables()
     {
         $items = $this->table('items');
-        $operation_types = OperationType::whereActive()->orderById()->get();
-        $affectation_igv_types = AffectationIgvType::whereActive()->orderById()->get();
-        $system_isc_types = SystemIscType::whereActive()->orderByDescription()->get();
-        $price_types = PriceType::whereActive()->orderByDescription()->get();
         $categories = [];//Category::cascade();
-        $discounts = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
-        $charges = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
+        $affectation_igv_types = Code::whereCatalog('07')->whereActive()->get();
+        $system_isc_types = Code::whereCatalog('08')->whereActive()->get();
+        $price_types = Code::whereCatalog('16')->whereActive()->get();
+        $operation_types = Code::whereCatalog('51')->whereActive()->get();
+        $discounts = Code::whereCatalog('53')->whereType('discount')->whereLevel('item')->get();
+        $charges = Code::whereCatalog('53')->whereType('charge')->whereLevel('item')->get();
 
-        return compact('items', 'categories', 'operation_types', 'affectation_igv_types', 'system_isc_types', 'price_types',
-                       'discounts', 'charges');
+        return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types',
+                       'operation_types', 'discounts', 'charges');
     }
 
     public function table($table)
     {
         if ($table === 'customers') {
-            $customers = Customer::orderBy('name')->get()->transform(function($row) {
+            $customers = Person::whereType('customer')->orderBy('name')->get()->transform(function($row) {
                 return [
                     'id' => $row->id,
                     'description' => $row->number.' - '.$row->name,

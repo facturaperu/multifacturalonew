@@ -17,11 +17,11 @@ class TenantInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('document_id');
-            $table->char('operation_type_id', 4);
+            $table->string('operation_type_code');
             $table->date('date_of_due');
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
-            $table->foreign('operation_type_id')->references('id')->on('operation_types');
+//            $table->foreign('operation_type_id')->references('id')->on('operation_types');
         });
     }
 

@@ -6,14 +6,14 @@ use App\Models\Tenant\Catalogs\ProcessType;
 
 class Summary extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'process_type', 'details'];
+    protected $with = ['user', 'soap_type', 'state_type', 'documents'];
 
     protected $fillable = [
         'user_id',
         'external_id',
         'soap_type_id',
         'state_type_id',
-        'process_type_id',
+        'process_type_code',
         'ubl_version',
         'date_of_issue',
         'date_of_reference',
@@ -44,14 +44,14 @@ class Summary extends ModelTenant
         return $this->belongsTo(StateType::class);
     }
 
-    public function process_type()
-    {
-        return $this->belongsTo(ProcessType::class);
-    }
+//    public function process_type()
+//    {
+//        return $this->belongsTo(ProcessType::class);
+//    }
 
-    public function details()
+    public function documents()
     {
-        return $this->hasMany(SummaryDetail::class);
+        return $this->hasMany(SummaryDocument::class);
     }
 
     public function getDownloadExternalXmlAttribute()

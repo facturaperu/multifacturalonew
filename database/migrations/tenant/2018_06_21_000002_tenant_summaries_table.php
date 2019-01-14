@@ -19,7 +19,7 @@ class TenantSummariesTable extends Migration
             $table->uuid('external_id');
             $table->char('soap_type_id', 2);
             $table->char('state_type_id', 2);
-            $table->char('process_type_id', 1);
+            $table->string('process_type_code');
             $table->string('ubl_version');
             $table->date('date_of_issue');
             $table->date('date_of_reference');
@@ -32,7 +32,7 @@ class TenantSummariesTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('soap_type_id')->references('id')->on('soap_types');
-            $table->foreign('process_type_id')->references('id')->on('process_types');
+//            $table->foreign('process_type_id')->references('id')->on('process_types');
             $table->foreign('state_type_id')->references('id')->on('state_types');
         });
     }

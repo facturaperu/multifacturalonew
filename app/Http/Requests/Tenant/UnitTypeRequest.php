@@ -16,9 +16,9 @@ class UnitTypeRequest extends FormRequest
     {
         $id = $this->input('id');
         return [
-            'id' => [
+            'code' => [
                 'required',
-                Rule::unique('tenant.unit_types')->ignore($id),
+                Rule::unique('tenant.codes')->ignore($id),
             ],
             'description' => [
                 'required',

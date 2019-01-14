@@ -6,19 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\CurrencyTypeRequest;
 use App\Http\Resources\Tenant\CurrencyTypeCollection;
 use App\Http\Resources\Tenant\CurrencyTypeResource;
+use App\Models\Tenant\Code;
 
 class CurrencyTypeController extends Controller
 {
+    protected $catalog_id = '02';
+
     public function records()
     {
-        $records = CurrencyType::all();
+        $records = Code::whereCatalog($this->catalog_id)->get();
 
         return new CurrencyTypeCollection($records);
     }
 
     public function record($id)
     {
-        $record = new CurrencyTypeResource(CurrencyType::findOrFail($id));
+        $record = new CurrencyTypeResource(Code::findOrFail($id));
 
         return $record;
     }
@@ -26,8 +29,12 @@ class CurrencyTypeController extends Controller
     public function store(CurrencyTypeRequest $request)
     {
         $id = $request->input('id');
-        $currency_type = CurrencyType::firstOrNew(['id' => $id]);
+        $currency_type = Code::firstOrNew(['id' => $id]);
         $currency_type->fill($request->all());
+        if(!$id) {
+            $currency_type->catalog_id = $this->catalog_id;
+            $currency_type->id = $this->catalog_id.$currency_type->code;
+        }
         $currency_type->save();
 
         return [
@@ -38,7 +45,7 @@ class CurrencyTypeController extends Controller
 
     public function destroy($id)
     {
-        $currency_type = CurrencyType::findOrFail($id);
+        $currency_type = Code::findOrFail($id);
         $currency_type->delete();
 
         return [

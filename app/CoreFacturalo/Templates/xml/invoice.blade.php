@@ -152,18 +152,18 @@
         </cac:Party>
     </cac:AccountingCustomerParty>
     @if($document->detraction)
-        @php($detraction = $document->detraction)
-        <cac:PaymentMeans>
-            <cbc:PaymentMeansCode>{{ $detraction->payment_method_id }}</cbc:PaymentMeansCode>
-            <cac:PayeeFinancialAccount>
-                <cbc:ID>{{ $detraction->bank_account }}</cbc:ID>
-            </cac:PayeeFinancialAccount>
-        </cac:PaymentMeans>
-        <cac:PaymentTerms>
-            <cbc:PaymentMeansID>{{ $detraction->detraction_type_id }}</cbc:PaymentMeansID>
-            <cbc:PaymentPercent>{{ $detraction->percentage }}</cbc:PaymentPercent>
-            <cbc:Amount currencyID="PEN">{{ $detraction->amount }}</cbc:Amount>
-        </cac:PaymentTerms>
+    @php($detraction = $document->detraction)
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode>{{ $detraction->payment_method_id }}</cbc:PaymentMeansCode>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>{{ $detraction->bank_account }}</cbc:ID>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:PaymentTerms>
+        <cbc:PaymentMeansID>{{ $detraction->detraction_type_id }}</cbc:PaymentMeansID>
+        <cbc:PaymentPercent>{{ $detraction->percentage }}</cbc:PaymentPercent>
+        <cbc:Amount currencyID="PEN">{{ $detraction->amount }}</cbc:Amount>
+    </cac:PaymentTerms>
     @endif
     @if($document->perception)
     @php($perception = $document->perception)

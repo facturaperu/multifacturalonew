@@ -6,6 +6,7 @@ use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
+use App\Models\Tenant\Code;
 use App\Models\Tenant\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\CustomerRequest;
@@ -47,7 +48,7 @@ class CustomerController extends Controller
         $departments = Department::whereActive()->orderByDescription()->get();
         $provinces = Province::whereActive()->orderByDescription()->get();
         $districts = District::whereActive()->orderByDescription()->get();
-        $identity_document_types = IdentityDocumentType::whereActive()->orderByDescription()->get();
+        $identity_document_types = Code::whereCatalog('06')->whereActive()->get();
 
         return compact('countries', 'departments', 'provinces', 'districts', 'identity_document_types');
     }

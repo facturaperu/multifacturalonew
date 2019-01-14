@@ -15,7 +15,7 @@ class TenantCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('identity_document_type_id', 1);
+            $table->string('identity_document_type_id');
             $table->string('number');
             $table->string('name');
             $table->string('trade_name')->nullable();
@@ -28,7 +28,7 @@ class TenantCustomersTable extends Migration
             $table->string('telephone')->nullable();
             $table->timestamps();
 
-            $table->foreign('identity_document_type_id')->references('id')->on('identity_document_types');
+            $table->foreign('identity_document_type_id')->references('id')->on('codes');
             $table->foreign('country_id')->references('id')->on('countries');
             $table->foreign('department_id')->references('id')->on('departments');
             $table->foreign('province_id')->references('id')->on('provinces');

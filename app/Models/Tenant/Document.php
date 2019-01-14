@@ -7,8 +7,7 @@ use App\Models\Tenant\Catalogs\DocumentType;
 
 class Document extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'group', 'document_type',
-                       'currency_type', 'details', 'invoice', 'note'];
+    protected $with = ['user', 'soap_type', 'state_type', 'group', 'details', 'invoice', 'note'];
 
     protected $fillable = [
         'user_id',
@@ -19,14 +18,14 @@ class Document extends ModelTenant
         'state_type_id',
         'ubl_version',
         'group_id',
-        'document_type_id',
+        'document_type_code',
         'series',
         'number',
         'date_of_issue',
         'time_of_issue',
         'customer_id',
         'customer',
-        'currency_type_id',
+        'currency_type_code',
         'purchase_order',
         'exchange_rate_sale',
         'total_prepayment',
@@ -199,15 +198,15 @@ class Document extends ModelTenant
         return $this->belongsTo(Group::class);
     }
 
-    public function document_type()
-    {
-        return $this->belongsTo(DocumentType::class);
-    }
-
-    public function currency_type()
-    {
-        return $this->belongsTo(CurrencyType::class);
-    }
+//    public function document_type()
+//    {
+//        return $this->belongsTo(DocumentType::class);
+//    }
+//
+//    public function currency_type()
+//    {
+//        return $this->belongsTo(CurrencyType::class);
+//    }
 
     public function invoice()
     {
@@ -221,7 +220,7 @@ class Document extends ModelTenant
 
     public function details()
     {
-        return $this->hasMany(Detail::class);
+        return $this->hasMany(DocumentDetail::class);
     }
 
     public function getNumberFullAttribute()

@@ -106,6 +106,15 @@ if ($hostname) {
             Route::post('suppliers', 'Tenant\SupplierController@store');
             Route::delete('suppliers/{supplier}', 'Tenant\SupplierController@destroy');
 
+            //Persons
+            Route::get('persons/columns', 'Tenant\PersonController@columns');
+            Route::get('persons/tables', 'Tenant\PersonController@tables');
+            Route::get('persons/{type}', 'Tenant\PersonController@index')->name('tenant.persons.index');
+            Route::get('persons/{type}/records', 'Tenant\PersonController@records');
+            Route::get('persons/record/{person}', 'Tenant\PersonController@record');
+            Route::post('persons', 'Tenant\PersonController@store');
+            Route::delete('persons/{person}', 'Tenant\PersonController@destroy');
+
             //Documents
             Route::get('documents', 'Tenant\DocumentController@index')->name('tenant.documents.index');
             Route::get('documents/columns', 'Tenant\DocumentController@columns');

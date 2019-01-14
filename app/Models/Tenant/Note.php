@@ -7,14 +7,14 @@ use App\Models\Tenant\Catalogs\NoteDebitType;
 
 class Note extends ModelTenant
 {
-    protected $with = ['affected_document', 'note_credit_type', 'note_debit_type'];
+    protected $with = ['affected_document'];
     public $timestamps = false;
 
     protected $fillable = [
         'document_id',
         'note_type',
-        'note_credit_type_id',
-        'note_debit_type_id',
+        'note_credit_type_code',
+        'note_debit_type_code',
         'note_description',
         'affected_document_id',
     ];
@@ -29,13 +29,13 @@ class Note extends ModelTenant
         return $this->belongsTo(Document::class, 'affected_document_id');
     }
 
-    public function note_credit_type()
-    {
-        return $this->belongsTo(NoteCreditType::class);
-    }
-
-    public function note_debit_type()
-    {
-        return $this->belongsTo(NoteDebitType::class);
-    }
+//    public function note_credit_type()
+//    {
+//        return $this->belongsTo(NoteCreditType::class);
+//    }
+//
+//    public function note_debit_type()
+//    {
+//        return $this->belongsTo(NoteDebitType::class);
+//    }
 }

@@ -17,6 +17,7 @@ class CurrencyTypeCollection extends ResourceCollection
         return $this->collection->transform(function($row, $key) {
             return [
                 'id' => $row->id,
+                'code' => $row->code,
                 'description' => $row->description,
                 'symbol' => $row->symbol,
                 'active' => ($row->active)?'Si':'No',

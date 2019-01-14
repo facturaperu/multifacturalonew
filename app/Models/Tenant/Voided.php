@@ -5,7 +5,7 @@ namespace App\Models\Tenant;
 class Voided extends ModelTenant
 {
     protected $table = 'voided';
-    protected $with = ['user', 'soap_type', 'state_type', 'details'];
+    protected $with = ['user', 'soap_type', 'state_type', 'documents'];
 
     protected $fillable = [
         'user_id',
@@ -42,9 +42,9 @@ class Voided extends ModelTenant
         return $this->belongsTo(StateType::class);
     }
 
-    public function details()
+    public function documents()
     {
-        return $this->hasMany(VoidedDetail::class);
+        return $this->hasMany(VoidedDocument::class);
     }
 
     public function getDownloadExternalXmlAttribute()

@@ -34,6 +34,7 @@ Vue.component('tenant-configurations-form', require('./views/tenant/configuratio
 // Vue.component('tenant-series-form', require('./views/tenant/series/form.vue'));
 Vue.component('tenant-bank_accounts-index', require('./views/tenant/bank_accounts/index.vue'));
 Vue.component('tenant-items-index', require('./views/tenant/items/index.vue'));
+Vue.component('tenant-persons-index', require('./views/tenant/persons/index.vue'));
 Vue.component('tenant-customers-index', require('./views/tenant/customers/index.vue'));
 Vue.component('tenant-suppliers-index', require('./views/tenant/suppliers/index.vue'));
 Vue.component('tenant-users-form', require('./views/tenant/users/form.vue'));

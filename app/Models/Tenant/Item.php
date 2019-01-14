@@ -31,16 +31,16 @@ class Item extends ModelTenant
 
     public function unit_type()
     {
-        return $this->belongsTo(UnitType::class, 'unit_type_id');
+        return $this->belongsTo(Code::class, 'unit_type_id');
     }
 
     public function currency_type()
     {
-        return $this->belongsTo(CurrencyType::class);
+        return $this->belongsTo(Code::class, 'currency_type_id');
     }
 
     public function system_isc_type()
     {
-        return $this->belongsTo(SystemIscType::class);
+        return $this->belongsTo(Code::class, 'system_isc_type_id');
     }
 }

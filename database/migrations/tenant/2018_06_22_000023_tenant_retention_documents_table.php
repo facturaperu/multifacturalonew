@@ -16,11 +16,11 @@ class TenantRetentionDocumentsTable extends Migration
         Schema::create('retention_documents', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('retention_id');
-            $table->char('document_type_id', 2);
+            $table->string('document_type_code');
             $table->string('series');
             $table->string('number');
             $table->date('date_of_issue');
-            $table->char('currency_type_id', 3);
+            $table->string('currency_type_code');
             $table->decimal('total_document', 10, 2);
             $table->json('payments');
             $table->json('exchange_rate');
@@ -30,8 +30,8 @@ class TenantRetentionDocumentsTable extends Migration
             $table->decimal('total_payment', 10, 2);
 
             $table->foreign('retention_id')->references('id')->on('retentions')->onDelete('cascade');
-            $table->foreign('document_type_id')->references('id')->on('document_types');
-            $table->foreign('currency_type_id')->references('id')->on('currency_types');
+//            $table->foreign('document_type_id')->references('id')->on('document_types');
+//            $table->foreign('currency_type_id')->references('id')->on('currency_types');
         });
     }
 

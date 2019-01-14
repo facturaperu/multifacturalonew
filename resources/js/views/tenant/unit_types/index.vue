@@ -19,7 +19,7 @@
                     <tbody>
                     <tr v-for="(row, index) in records">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ row.id }}</td>
+                        <td>{{ row.code }}</td>
                         <td>{{ row.description }}</td>
                         <td>{{ row.symbol }}</td>
                         <td class="text-center">{{ row.active }}</td>

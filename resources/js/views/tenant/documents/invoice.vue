@@ -70,7 +70,7 @@
                             <div class="form-group" :class="{'has-danger': errors.customer_id}">
                                 <label class="control-label">
                                     Cliente
-                                    <a href="#" @click.prevent="showDialogNewCustomer = true">[+ Nuevo]</a>
+                                    <a href="#" @click.prevent="showDialogNewPerson = true">[+ Nuevo]</a>
                                 </label>
                                 <el-select v-model="form.customer_id" filterable>
                                     <el-option v-for="option in customers" :key="option.id" :value="option.id" :label="option.description"></el-option>
@@ -175,8 +175,9 @@
                            :exchange-rate-sale="form.exchange_rate_sale"
                            @add="addRow"></document-form-item>
 
-        <customer-form :showDialog.sync="showDialogNewCustomer"
-                       :external="true"></customer-form>
+        <person-form :showDialog.sync="showDialogNewPerson"
+                       type="customer"
+                       :external="true"></person-form>
 
         <document-options :showDialog.sync="showDialogOptions"
                           :recordId="documentNewId"
@@ -187,19 +188,19 @@
 <script>
 
     import DocumentFormItem from './partials/item.vue'
-    import CustomerForm from '../customers/form.vue'
+    import PersonForm from '../persons/form.vue'
     import DocumentOptions from '../documents/partials/options.vue'
     import {functions, exchangeRate} from '../../../mixins/functions'
     import {calculateRowItem} from '../../../helpers/functions'
 
     export default {
-        components: {DocumentFormItem, CustomerForm, DocumentOptions},
+        components: {DocumentFormItem, PersonForm, DocumentOptions},
         mixins: [functions, exchangeRate],
         data() {
             return {
                 resource: 'documents',
                 showDialogAddItem: false,
-                showDialogNewCustomer: false,
+                showDialogNewPerson: false,
                 showDialogOptions: false,
                 loading_submit: false,
                 errors: {},
@@ -241,7 +242,7 @@
                     this.changeDocumentType()
                     this.changeCurrencyType()
                 })
-            this.$eventHub.$on('reloadDataCustomers', (customer_id) => {
+            this.$eventHub.$on('reloadDataPersons', (customer_id) => {
                 this.reloadDataCustomers(customer_id)
             })
         },

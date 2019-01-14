@@ -54,7 +54,7 @@
 
     export default {
         props: {
-            resource: String,
+            resource: String
         },
         data () {
             return {
@@ -75,7 +75,8 @@
             })
         },
         async mounted () {
-            await this.$http.get(`${this.resource}/columns`).then((response) => {
+            let column_resource = _.split(this.resource, '/')
+            await this.$http.get(`/${_.head(column_resource)}/columns`).then((response) => {
                 this.columns = response.data
                 this.search.column = _.head(Object.keys(this.columns))
             });
@@ -86,7 +87,7 @@
                 return (this.pagination.per_page * (this.pagination.current_page - 1)) + index + 1
             },
             getRecords() {
-                return this.$http.get(`${this.resource}/records?${this.getQueryParameters()}`).then((response) => {
+                return this.$http.get(`/${this.resource}/records?${this.getQueryParameters()}`).then((response) => {
                     this.records = response.data.data
                     this.pagination = response.data.meta
                 });

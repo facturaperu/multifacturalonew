@@ -6,12 +6,12 @@ use App\Models\Tenant\Catalogs\OperationType;
 
 class Invoice extends ModelTenant
 {
-    protected $with = ['operation_type'];
+    protected $with = [];
     public $timestamps = false;
 
     protected $fillable = [
         'document_id',
-        'operation_type_id',
+        'operation_type_code',
         'date_of_due',
     ];
 
@@ -24,8 +24,8 @@ class Invoice extends ModelTenant
         return $this->hasOne(Document::class);
     }
 
-    public function operation_type()
-    {
-        return $this->belongsTo(OperationType::class);
-    }
+//    public function operation_type()
+//    {
+//        return $this->belongsTo(OperationType::class);
+//    }
 }
