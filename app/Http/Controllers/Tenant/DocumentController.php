@@ -10,7 +10,6 @@ use App\Http\Requests\Tenant\DocumentVoidedRequest;
 use App\Http\Resources\Tenant\DocumentCollection;
 use App\Http\Resources\Tenant\DocumentResource;
 use App\Mail\Tenant\DocumentEmail;
-use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Configuration;
 use App\Models\Tenant\Document;

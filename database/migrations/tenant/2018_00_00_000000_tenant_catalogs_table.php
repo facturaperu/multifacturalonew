@@ -14,43 +14,43 @@ class TenantCatalogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('catalogs', function (Blueprint $table) {
-            $table->char('id', 2)->index();
-            $table->string('description');
-        });
-
-        DB::table('catalogs')->insert([
-            ['id' => '01', 'description' => 'Código de tipo de documento'],
-            ['id' => '02', 'description' => 'Código de tipo de monedas'],
-            ['id' => '03', 'description' => 'Código de tipo de unidad de medida comercial'],
-            ['id' => '04', 'description' => 'Código de país'],
-            ['id' => '05', 'description' => 'Código de tipos de tributos y otros conceptos'],
-            ['id' => '06', 'description' => 'Código de tipo de documento de identidad'],
-            ['id' => '07', 'description' => 'Código de tipo de afectación del IGV'],
-            ['id' => '08', 'description' => 'Código de tipos de sistema de cálculo del ISC'],
-            ['id' => '09', 'description' => 'Códigos de tipo de nota de crédito electrónica'],
-            ['id' => '10', 'description' => 'Códigos de tipo de nota de débito electrónica'],
-            ['id' => '11', 'description' => 'Códigos de tipo de valor de venta (Resumen diario de boletas y notas)'],
-            ['id' => '12', 'description' => 'Código de documentos relacionados tributarios'],
-            ['id' => '13', 'description' => 'Código de ubicación geográfica (UBIGEO)'],
-            ['id' => '14', 'description' => 'Código de otros conceptos tributarios'],
-            ['id' => '15', 'description' => 'Códigos de elementos adicionales en la factura y boleta electrónica'],
-            ['id' => '16', 'description' => 'Código de tipo de precio de venta unitario'],
-            ['id' => '17', 'description' => 'Código de tipo de operación'],
-            ['id' => '18', 'description' => 'Código de modalidad de transporte'],
-            ['id' => '19', 'description' => 'Código de estado del ítem (resumen diario)'],
-            ['id' => '20', 'description' => 'Código de motivo de traslado'],
-            ['id' => '21', 'description' => 'Código de documentos relacionados (sólo guía de remisión electrónica)'],
-            ['id' => '22', 'description' => 'Código de regimen de percepciones'],
-            ['id' => '23', 'description' => 'Código de regimen de retenciones'],
-            ['id' => '25', 'description' => 'Código de producto SUNAT'],
-            ['id' => '51', 'description' => 'Código de tipo de operación'],
-            ['id' => '52', 'description' => 'Códigos de leyendas'],
-            ['id' => '53', 'description' => 'Códigos de cargos o descuentos'],
-            ['id' => '54', 'description' => 'Códigos de bienes y servicios sujetos a detracciones'],
-            ['id' => '55', 'description' => 'Código de identificación del concepto tributario'],
-            ['id' => '59', 'description' => 'Medios de Pago'],
-        ]);
+//        Schema::create('catalogs', function (Blueprint $table) {
+//            $table->char('id', 2)->index();
+//            $table->string('description');
+//        });
+//
+//        DB::table('catalogs')->insert([
+//            ['id' => '01', 'description' => 'Código de tipo de documento'],
+//            ['id' => '02', 'description' => 'Código de tipo de monedas'],
+//            ['id' => '03', 'description' => 'Código de tipo de unidad de medida comercial'],
+//            ['id' => '04', 'description' => 'Código de país'],
+//            ['id' => '05', 'description' => 'Código de tipos de tributos y otros conceptos'],
+//            ['id' => '06', 'description' => 'Código de tipo de documento de identidad'],
+//            ['id' => '07', 'description' => 'Código de tipo de afectación del IGV'],
+//            ['id' => '08', 'description' => 'Código de tipos de sistema de cálculo del ISC'],
+//            ['id' => '09', 'description' => 'Códigos de tipo de nota de crédito electrónica'],
+//            ['id' => '10', 'description' => 'Códigos de tipo de nota de débito electrónica'],
+//            ['id' => '11', 'description' => 'Códigos de tipo de valor de venta (Resumen diario de boletas y notas)'],
+//            ['id' => '12', 'description' => 'Código de documentos relacionados tributarios'],
+//            ['id' => '13', 'description' => 'Código de ubicación geográfica (UBIGEO)'],
+//            ['id' => '14', 'description' => 'Código de otros conceptos tributarios'],
+//            ['id' => '15', 'description' => 'Códigos de elementos adicionales en la factura y boleta electrónica'],
+//            ['id' => '16', 'description' => 'Código de tipo de precio de venta unitario'],
+//            ['id' => '17', 'description' => 'Código de tipo de operación'],
+//            ['id' => '18', 'description' => 'Código de modalidad de transporte'],
+//            ['id' => '19', 'description' => 'Código de estado del ítem (resumen diario)'],
+//            ['id' => '20', 'description' => 'Código de motivo de traslado'],
+//            ['id' => '21', 'description' => 'Código de documentos relacionados (sólo guía de remisión electrónica)'],
+//            ['id' => '22', 'description' => 'Código de regimen de percepciones'],
+//            ['id' => '23', 'description' => 'Código de regimen de retenciones'],
+//            ['id' => '25', 'description' => 'Código de producto SUNAT'],
+//            ['id' => '51', 'description' => 'Código de tipo de operación'],
+//            ['id' => '52', 'description' => 'Códigos de leyendas'],
+//            ['id' => '53', 'description' => 'Códigos de cargos o descuentos'],
+//            ['id' => '54', 'description' => 'Códigos de bienes y servicios sujetos a detracciones'],
+//            ['id' => '55', 'description' => 'Código de identificación del concepto tributario'],
+//            ['id' => '59', 'description' => 'Medios de Pago'],
+//        ]);
 
         /*
          ***************************************************************************************************************
@@ -831,7 +831,28 @@ class TenantCatalogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('codes');
-        Schema::dropIfExists('catalogs');
+        Schema::dropIfExists('cat_payment_method_types');
+        Schema::dropIfExists('cat_tribute_concept_types');
+        Schema::dropIfExists('cat_charge_discount_types');
+        Schema::dropIfExists('cat_legend_types');
+        Schema::dropIfExists('cat_operation_types');
+        Schema::dropIfExists('cat_retention_types');
+        Schema::dropIfExists('cat_perception_types');
+        Schema::dropIfExists('cat_related_documents_types');
+        Schema::dropIfExists('cat_transfer_reason_types');
+        Schema::dropIfExists('cat_summary_status_types');
+        Schema::dropIfExists('cat_transport_mode_types');
+        Schema::dropIfExists('cat_price_types');
+        Schema::dropIfExists('cat_other_tax_concept_types');
+        Schema::dropIfExists('cat_related_tax_document_types');
+        Schema::dropIfExists('cat_note_debit_types');
+        Schema::dropIfExists('cat_note_credit_types');
+        Schema::dropIfExists('cat_system_isc_types');
+        Schema::dropIfExists('cat_affectation_igv_types');
+        Schema::dropIfExists('cat_identity_document_types');
+        Schema::dropIfExists('cat_unit_types');
+        Schema::dropIfExists('cat_currency_types');
+        Schema::dropIfExists('cat_document_types');
+
     }
 }
