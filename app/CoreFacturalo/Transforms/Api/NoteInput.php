@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Inputs;
+namespace App\CoreFacturalo\Transforms\Api;
 
 use App\Models\Tenant\Document;
 use Exception;

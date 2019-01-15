@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Inputs\Partials;
+namespace App\CoreFacturalo\Transforms\Api\Partials;
 
 use App\Models\Tenant\Customer;
 use Exception;

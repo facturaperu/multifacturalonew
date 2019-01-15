@@ -1,23 +1,23 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Inputs\Partials;
+namespace App\CoreFacturalo\Transforms\Api\Partials;
 
-class PrepaymentInput
+class RelatedInput
 {
     public static function transform($inputs, $isWeb)
     {
         if($isWeb) {
-            $prepayments = array_key_exists('prepayments', $inputs)?$inputs['prepayments']:null;
+            $related = array_key_exists('related', $inputs)?$inputs['related']:null;
         } else {
-            $prepayments = array_key_exists('anticipos', $inputs)?$inputs['anticipos']:null;
+            $related = array_key_exists('documentos_relacionados', $inputs)?$inputs['documentos_relacionados']:null;
         }
 
-        if(is_null($prepayments)) {
+        if(is_null($related)) {
             return null;
         }
 
-        $transform_prepayments = [];
-        foreach ($prepayments as $row)
+        $transform_related = [];
+        foreach ($related as $row)
         {
             if($isWeb) {
                 $document_type_id = $row['document_type_id'];
@@ -29,13 +29,13 @@ class PrepaymentInput
                 $amount = $row['monto'];
             }
 
-            $transform_prepayments[] = [
+            $transform_related[] = [
                 'document_type_id' => $document_type_id,
                 'number' => $number,
                 'amount' => $amount
             ];
         }
 
-        return $transform_prepayments;
+        return $transform_related;
     }
 }

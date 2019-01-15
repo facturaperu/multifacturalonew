@@ -2,8 +2,8 @@
 
 namespace App\CoreFacturalo\Transforms;
 
-use App\CoreFacturalo\Transforms\Inputs\Web\Documents\SummaryInput;
-use App\CoreFacturalo\Transforms\Inputs\Web\Documents\VoidedInput;
+use App\CoreFacturalo\Transforms\Api\Web\Documents\SummaryInput;
+use App\CoreFacturalo\Transforms\Api\Web\Documents\VoidedInput;
 use App\CoreFacturalo\Transforms\Web\Documents\DocumentInput;
 use Closure;
 

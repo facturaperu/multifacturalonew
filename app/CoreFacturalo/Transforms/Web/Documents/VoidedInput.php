@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Inputs\Web\Documents;
+namespace App\CoreFacturalo\Transforms\Api\Web\Documents;
 
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Document;

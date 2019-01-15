@@ -10,6 +10,16 @@ use App\Http\Requests\Tenant\DocumentVoidedRequest;
 use App\Http\Resources\Tenant\DocumentCollection;
 use App\Http\Resources\Tenant\DocumentResource;
 use App\Mail\Tenant\DocumentEmail;
+use App\Models\Tenant\Catalogs\AffectationIgvType;
+use App\Models\Tenant\Catalogs\ChargeDiscountType;
+use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\DocumentType;
+use App\Models\Tenant\Catalogs\NoteCreditType;
+use App\Models\Tenant\Catalogs\NoteDebitType;
+use App\Models\Tenant\Catalogs\OperationType;
+use App\Models\Tenant\Catalogs\PriceType;
+use App\Models\Tenant\Catalogs\SystemIscType;
+use App\Models\Tenant\Catalogs\TributeConceptType;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Configuration;
 use App\Models\Tenant\Document;
@@ -21,6 +31,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use Nexmo\Account\Price;
 
 class DocumentController extends Controller
 {
@@ -61,33 +72,31 @@ class DocumentController extends Controller
         $customers = $this->table('customers');
         $establishments = Establishment::all();
         $series = Series::all();
-        $document_types_invoice = Code::whereCatalog('01')->whereCodes(['01', '03'])->get();
-        $document_types_note = Code::whereCatalog('01')->whereCodes(['07', '08'])->get();
-        $note_credit_types = Code::whereCatalog('09')->whereActive()->orderByDescription()->get();
-        $note_debit_types = Code::whereCatalog('10')->whereActive()->orderByDescription()->get();
-        $currency_types = Code::whereCatalog('02')->whereActive()->get();
-        $operation_types = Code::whereCatalog('51')->whereActive()->get();
-        $discounts = Code::whereCatalog('53')->whereType('discount')->whereLevel('global')->get();
-        $charges = Code::whereCatalog('53')->whereType('charge')->whereLevel('global')->get();
-        $attributes = Code::whereCatalog('55')->get();
-        
+        $document_types_invoice = DocumentType::whereIn(['01', '03'])->get();
+        $document_types_note = DocumentType::whereIn(['07', '08'])->get();
+        $note_credit_types = NoteCreditType::whereActive()->orderByDescription()->get();
+        $note_debit_types = NoteDebitType::whereActive()->orderByDescription()->get();
+        $currency_types = CurrencyType::whereActive()->get();
+        $operation_types = OperationType::whereActive()->get();
+        $discounts = ChargeDiscountType::whereType('discount')->whereLevel('global')->get();
+        $charges = ChargeDiscountType::whereType('charge')->whereLevel('global')->get();
 
         return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
                        'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
-                       'discounts', 'charges', 'attributes');
+                       'discounts', 'charges');
     }
 
     public function item_tables()
     {
         $items = $this->table('items');
         $categories = [];//Category::cascade();
-        $affectation_igv_types = Code::whereCatalog('07')->whereActive()->get();
-        $system_isc_types = Code::whereCatalog('08')->whereActive()->get();
-        $price_types = Code::whereCatalog('16')->whereActive()->get();
-        $operation_types = Code::whereCatalog('51')->whereActive()->get();
-        $discounts = Code::whereCatalog('53')->whereType('discount')->whereLevel('item')->get();
-        $charges = Code::whereCatalog('53')->whereType('charge')->whereLevel('item')->get();
-        $attributes = Code::whereCatalog('55')->get();
+        $affectation_igv_types = AffectationIgvType::whereActive()->get();
+        $system_isc_types = SystemIscType::whereActive()->get();
+        $price_types = PriceType::whereActive()->get();
+        $operation_types = OperationType::whereActive()->get();
+        $discounts = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
+        $charges = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
+        $attributes = TributeConceptType::whereActive()->orderByDescription()->get();
 
         return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types',
                        'operation_types', 'discounts', 'charges', 'attributes');

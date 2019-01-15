@@ -1,14 +1,14 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Inputs;
+namespace App\CoreFacturalo\Transforms\Api;
 
-use App\CoreFacturalo\Transforms\Inputs\Partials\ActionInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\EstablishmentInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\ExchangeInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\LegendInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\OptionalInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\PaymentInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\SupplierInput;
+use App\CoreFacturalo\Transforms\Api\Partials\ActionInput;
+use App\CoreFacturalo\Transforms\Api\Partials\EstablishmentInput;
+use App\CoreFacturalo\Transforms\Api\Partials\ExchangeInput;
+use App\CoreFacturalo\Transforms\Api\Partials\LegendInput;
+use App\CoreFacturalo\Transforms\Api\Partials\OptionalInput;
+use App\CoreFacturalo\Transforms\Api\Partials\PaymentInput;
+use App\CoreFacturalo\Transforms\Api\Partials\SupplierInput;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Retention;
 use App\Models\Tenant\Series;

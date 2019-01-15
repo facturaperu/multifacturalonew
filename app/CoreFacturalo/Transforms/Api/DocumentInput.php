@@ -1,23 +1,23 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Inputs;
+namespace App\CoreFacturalo\Transforms\Api;
 
 use App\CoreFacturalo\Helpers\Number\NumberLetter;
 use App\CoreFacturalo\Transforms\FunctionInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\ActionInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\ChargeInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\CustomerInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\DetractionInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\DiscountInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\EstablishmentInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\GuideInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\ItemInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\LegendInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\OptionalInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\PerceptionInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\PrepaymentInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\RelatedInput;
-use App\CoreFacturalo\Transforms\Inputs\Partials\ItemAttributeInput;
+use App\CoreFacturalo\Transforms\Api\Partials\ActionInput;
+use App\CoreFacturalo\Transforms\Api\Partials\ChargeInput;
+use App\CoreFacturalo\Transforms\Api\Partials\CustomerInput;
+use App\CoreFacturalo\Transforms\Api\Partials\DetractionInput;
+use App\CoreFacturalo\Transforms\Api\Partials\DiscountInput;
+use App\CoreFacturalo\Transforms\Api\Partials\EstablishmentInput;
+use App\CoreFacturalo\Transforms\Api\Partials\GuideInput;
+use App\CoreFacturalo\Transforms\Api\Partials\ItemInput;
+use App\CoreFacturalo\Transforms\Api\Partials\LegendInput;
+use App\CoreFacturalo\Transforms\Api\Partials\OptionalInput;
+use App\CoreFacturalo\Transforms\Api\Partials\PerceptionInput;
+use App\CoreFacturalo\Transforms\Api\Partials\PrepaymentInput;
+use App\CoreFacturalo\Transforms\Api\Partials\RelatedInput;
+use App\CoreFacturalo\Transforms\Api\Partials\ItemAttributeInput;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Series;

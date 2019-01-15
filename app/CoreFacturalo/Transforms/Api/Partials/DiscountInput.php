@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Inputs\Partials;
+namespace App\CoreFacturalo\Transforms\Api\Partials;
 
 class DiscountInput
 {

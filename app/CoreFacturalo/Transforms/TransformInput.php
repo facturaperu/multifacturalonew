@@ -2,12 +2,12 @@
 
 namespace App\CoreFacturalo\Transforms;
 
-use App\CoreFacturalo\Transforms\Inputs\DocumentInput;
-use App\CoreFacturalo\Transforms\Inputs\InvoiceInput;
-use App\CoreFacturalo\Transforms\Inputs\NoteInput;
-use App\CoreFacturalo\Transforms\Inputs\RetentionInput;
-use App\CoreFacturalo\Transforms\Inputs\SummaryInput;
-use App\CoreFacturalo\Transforms\Inputs\VoidedInput;
+use App\CoreFacturalo\Transforms\Api\DocumentInput;
+use App\CoreFacturalo\Transforms\Api\InvoiceInput;
+use App\CoreFacturalo\Transforms\Api\NoteInput;
+use App\CoreFacturalo\Transforms\Api\RetentionInput;
+use App\CoreFacturalo\Transforms\Api\SummaryInput;
+use App\CoreFacturalo\Transforms\Api\VoidedInput;
 use Closure;
 
 class TransformInput
