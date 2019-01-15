@@ -8,7 +8,7 @@ class NoteController extends Controller
 {
     public function create($document_id)
     {
-        $document = Document::with(['details', 'invoice'])->find($document_id);
+        $document = Document::find($document_id);
 
         return view('tenant.documents.note', compact('document'));
     }

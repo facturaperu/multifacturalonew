@@ -2,7 +2,7 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\DocumentType;
+use App\Models\Tenant\Catalogs\Code;
 
 class Series extends ModelTenant
 {
@@ -21,7 +21,7 @@ class Series extends ModelTenant
 
     public function document_type()
     {
-        return $this->belongsTo(DocumentType::class);
+        return $this->belongsTo(Code::class, 'document_type_id');
     }
 
     public function setNumberAttribute($value)

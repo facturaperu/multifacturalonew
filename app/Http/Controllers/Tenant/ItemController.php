@@ -1,10 +1,7 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
-use App\Models\Tenant\Catalogs\CurrencyType;
-use App\Models\Tenant\Catalogs\SystemIscType;
-use App\Models\Tenant\Catalogs\UnitType;
-use App\Models\Tenant\Code;
+use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Item;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\ItemRequest;

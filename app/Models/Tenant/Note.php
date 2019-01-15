@@ -2,8 +2,7 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\NoteCreditType;
-use App\Models\Tenant\Catalogs\NoteDebitType;
+use App\Models\Tenant\Catalogs\Code;
 
 class Note extends ModelTenant
 {
@@ -13,8 +12,8 @@ class Note extends ModelTenant
     protected $fillable = [
         'document_id',
         'note_type',
-        'note_credit_type_code',
-        'note_debit_type_code',
+        'note_credit_type_id',
+        'note_debit_type_id',
         'note_description',
         'affected_document_id',
     ];
@@ -29,13 +28,13 @@ class Note extends ModelTenant
         return $this->belongsTo(Document::class, 'affected_document_id');
     }
 
-//    public function note_credit_type()
-//    {
-//        return $this->belongsTo(NoteCreditType::class);
-//    }
-//
-//    public function note_debit_type()
-//    {
-//        return $this->belongsTo(NoteDebitType::class);
-//    }
+    public function note_credit_type()
+    {
+        return $this->belongsTo(Code::class, 'note_credit_type_id');
+    }
+
+    public function note_debit_type()
+    {
+        return $this->belongsTo(Code::class, 'note_debit_type_id');
+    }
 }

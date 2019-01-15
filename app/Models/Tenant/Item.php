@@ -2,9 +2,7 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\CurrencyType;
-use App\Models\Tenant\Catalogs\SystemIscType;
-use App\Models\Tenant\Catalogs\UnitType;
+use App\Models\Tenant\Catalogs\Code;
 
 class Item extends ModelTenant
 {

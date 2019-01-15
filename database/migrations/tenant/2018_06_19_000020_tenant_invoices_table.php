@@ -21,7 +21,7 @@ class TenantInvoicesTable extends Migration
             $table->date('date_of_due');
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
-//            $table->foreign('operation_type_id')->references('id')->on('operation_types');
+//            $table->foreign('operation_type_id')->references('id')->on('codes');
         });
     }
 

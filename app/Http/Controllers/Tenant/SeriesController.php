@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\SeriesRequest;
 use App\Http\Resources\Tenant\SeriesCollection;
-use App\Models\Tenant\Catalogs\DocumentType;
+use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Series;
 
 class SeriesController extends Controller
@@ -23,7 +23,7 @@ class SeriesController extends Controller
 
     public function tables()
     {
-        $document_types = DocumentType::whereIn('id', ['01', '03', '07', '08', '20'])->get();
+        $document_types = Code::whereCatalog('01')->whereActive()->whereCodes(['01', '03', '07', '08', '20'])->get();
 
         return compact('document_types');
     }

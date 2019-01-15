@@ -36,17 +36,17 @@ class ClientController extends Controller
     public function store(ClientRequest $request)
     {
         $subDom = $request->input('subdomain');
+        $uuid = env('PREFIX_DATABASE').'_'.$subDom;
+        $fqdn = $subDom.'.'.env('APP_URL_BASE');
+
+        $website = new Website();
+        $hostname = new Hostname();
 
         DB::connection('system')->beginTransaction();
         try {
-            $uuid = env('PREFIX_DATABASE').'_'.$subDom;
-
-            $website = new Website();
             $website->uuid = $uuid;
             app(WebsiteRepository::class)->create($website);
-
-            $hostname = new Hostname();
-            $hostname->fqdn = $subDom.'.'.env('APP_URL_BASE');
+            $hostname->fqdn = $fqdn;
             app(HostnameRepository::class)->attach($hostname, $website);
 
             $tenancy = app(Environment::class);
@@ -66,6 +66,11 @@ class ClientController extends Controller
         }
         catch (Exception $e) {
             DB::connection('system')->rollBack();
+//            $hostname = Hostname::where('fqdn', $fqdn)->first();
+//            $website = Website::where('uuid', $uuid)->first();
+            app(HostnameRepository::class)->delete($hostname, true);
+            app(WebsiteRepository::class)->delete($website, true);
+
             return [
                 'success' => false,
                 'message' => $e->getMessage()

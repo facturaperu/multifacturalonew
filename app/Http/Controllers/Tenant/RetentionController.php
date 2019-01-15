@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\RetentionRequest;
 use App\Http\Resources\Tenant\RetentionCollection;
 use App\Http\Resources\Tenant\RetentionResource;
+use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\RetentionType;
 use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Series;
@@ -51,20 +52,18 @@ class RetentionController extends Controller
     {
         $user_id = Auth::id();
         $establishments = Establishment::all();
-        $retention_types = RetentionType::whereActive()->orderByDescription()->get();
-//        $currency_types = CurrencyType::all();
+        $retention_types = Code::whereCatalog('23')->whereActive()->orderByDescription()->get();
         $suppliers = $this->table('suppliers');
-//        $items = $this->table('items');
         $series = Series::all();
 
-        return compact('user_id', 'establishments', 'suppliers', 'retention_types', 'document_types', 'series');
+        return compact('user_id', 'establishments', 'retention_types', 'suppliers', 'series');
     }
 
     public function document_tables()
     {
-        $document_types = DocumentType::whereIn('id', ['01', '03'])->get();
-        $currency_types = CurrencyType::whereActive()->orderByDescription()->get();
-        $retention_types = RetentionType::whereActive()->orderByDescription()->get();
+        $document_types = Code::whereCatalog('01')->whereCodes(['01', '03'])->get();
+        $currency_types = Code::whereCatalog('02')->whereActive()->get();
+        $retention_types = Code::whereCatalog('23')->whereActive()->orderByDescription()->get();
 
         return compact('document_types', 'currency_types', 'retention_types');
     }

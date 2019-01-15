@@ -2,18 +2,18 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\ProcessType;
+use App\Models\Tenant\Catalogs\Code;
 
 class Summary extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'documents'];
+    protected $with = ['user', 'soap_type', 'state_type', 'process_type', 'documents'];
 
     protected $fillable = [
         'user_id',
         'external_id',
         'soap_type_id',
         'state_type_id',
-        'process_type_code',
+        'process_type_id',
         'ubl_version',
         'date_of_issue',
         'date_of_reference',
@@ -44,10 +44,10 @@ class Summary extends ModelTenant
         return $this->belongsTo(StateType::class);
     }
 
-//    public function process_type()
-//    {
-//        return $this->belongsTo(ProcessType::class);
-//    }
+    public function process_type()
+    {
+        return $this->belongsTo(Code::class, 'process_type_id');
+    }
 
     public function documents()
     {

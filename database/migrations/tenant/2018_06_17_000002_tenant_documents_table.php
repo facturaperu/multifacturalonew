@@ -74,8 +74,8 @@ class TenantDocumentsTable extends Migration
             $table->foreign('soap_type_id')->references('id')->on('soap_types');
             $table->foreign('state_type_id')->references('id')->on('state_types');
             $table->foreign('group_id')->references('id')->on('groups');
-//            $table->foreign('document_type_id')->references('id')->on('document_types');
-//            $table->foreign('currency_type_id')->references('id')->on('currency_types');
+//            $table->foreign('document_type_id')->references('id')->on('codes');
+//            $table->foreign('currency_type_id')->references('id')->on('codes');
         });
     }
 

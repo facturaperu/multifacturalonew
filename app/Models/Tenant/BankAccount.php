@@ -2,8 +2,8 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\CurrencyType;
 use Hyn\Tenancy\Traits\UsesTenantConnection;
+use App\Models\Tenant\Catalogs\Code;
 
 class BankAccount extends ModelTenant
 {
@@ -25,6 +25,6 @@ class BankAccount extends ModelTenant
 
     public function currency_type()
     {
-        return $this->belongsTo(CurrencyType::class);
+        return $this->belongsTo(Code::class, 'currency_type_id');
     }
 }

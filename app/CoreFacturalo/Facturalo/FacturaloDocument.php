@@ -62,13 +62,13 @@ class FacturaloDocument extends FacturaloCore
         $customer = $this->document->customer;
         $text = join('|', [
             $this->company->number,
-            $this->document->document_type_id,
+            $this->document->document_type_code,
             $this->document->series,
             $this->document->number,
             $this->document->total_igv,
             $this->document->total,
             $this->document->date_of_issue->format('Y-m-d'),
-            $customer->identity_document_type_id,
+            $customer->identity_document_type_code,
             $customer->number,
             $hash
         ]);

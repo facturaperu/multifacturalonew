@@ -2,8 +2,7 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\CurrencyType;
-use App\Models\Tenant\Catalogs\DocumentType;
+use App\Models\Tenant\Catalogs\Code;
 
 class Document extends ModelTenant
 {
@@ -200,12 +199,12 @@ class Document extends ModelTenant
 
 //    public function document_type()
 //    {
-//        return $this->belongsTo(DocumentType::class);
+//        return $this->belongsTo(Code::class, 'document_type_id');
 //    }
 //
 //    public function currency_type()
 //    {
-//        return $this->belongsTo(CurrencyType::class);
+//        return $this->belongsTo(Code::class, 'currency_type_id');
 //    }
 
     public function invoice()
@@ -234,21 +233,6 @@ class Document extends ModelTenant
         $legend = collect($legends)->where('code', '1000')->first();
         return $legend->value;
     }
-
-//    public function getDownloadXmlAttribute()
-//    {
-//        return route('documents.download', ['type' => 'xml', 'document' => $this->id]);
-//    }
-//
-//    public function getDownloadPdfAttribute()
-//    {
-//        return route('documents.download', ['type' => 'pdf', 'document' => $this->id]);
-//    }
-//
-//    public function getDownloadCdrAttribute()
-//    {
-//        return route('documents.download', ['type' => 'cdr', 'document' => $this->id]);
-//    }
 
     public function getDownloadExternalXmlAttribute()
     {

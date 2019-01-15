@@ -2,7 +2,7 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\IdentityDocumentType;
+use App\Models\Tenant\Catalogs\Code;
 
 class Company extends ModelTenant
 {

@@ -20,7 +20,7 @@ class CodeCollection extends ResourceCollection
                 'catalog_description' => $row->catalog->description,
                 'code' => $row->code,
                 'description' => $row->description,
-                'active' => $row->active,
+                'active' => ($row->active)?'Si':'No',
                 'tribute_code' => $row->tribute_code,
                 'tribute_name' => $row->tribute_name,
                 'rate' => $row->rate,

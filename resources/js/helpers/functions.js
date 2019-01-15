@@ -52,11 +52,9 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         item_description: row_old.item.description,
         item: row_old.item,
         currency_type_id: currency_type_id_new,
-        //unit_type_id: row_old.item.unit_type_id,
         quantity: row_old.quantity,
         unit_value: 0,
-        affectation_igv_type_id: row_old.affectation_igv_type.id,
-        //affectation_igv_type_description: row_old.affectation_igv_type.description,
+        affectation_igv_type_id: row_old.affectation_igv_type_id,
         affectation_igv_type: row_old.affectation_igv_type,
         total_base_igv: 0,
         percentage_igv: 18,
@@ -82,7 +80,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
     let percentage_igv = 18
 
-    if (row.affectation_igv_type_id !== '5110') {
+    if (row.affectation_igv_type.code !== '10') {
         percentage_igv = 0
     }
 
@@ -179,7 +177,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     row.total = _.round(total, 2)
 
     if (row.affectation_igv_type.free) {
-        row.price_type_id = '02'
+        row.price_type_code = '1602'
         row.total = 0
     }
 

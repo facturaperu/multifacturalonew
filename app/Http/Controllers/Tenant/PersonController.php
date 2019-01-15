@@ -1,19 +1,15 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
+use App\Http\Requests\Tenant\PersonRequest;
 use App\Http\Resources\Tenant\PersonCollection;
 use App\Http\Resources\Tenant\PersonResource;
+use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
-use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
-use App\Models\Tenant\Code;
-use App\Models\Tenant\Customer;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Tenant\CustomerRequest;
-use App\Http\Resources\Tenant\CustomerCollection;
-use App\Http\Resources\Tenant\CustomerResource;
 use App\Models\Tenant\Person;
 use Illuminate\Http\Request;
 
@@ -64,7 +60,7 @@ class PersonController extends Controller
         return $record;
     }
 
-    public function store(Request $request)
+    public function store(PersonRequest $request)
     {
         $id = $request->input('id');
         $person = Person::firstOrNew(['id' => $id]);

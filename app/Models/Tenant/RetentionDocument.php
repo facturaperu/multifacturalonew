@@ -2,20 +2,19 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\CurrencyType;
-use App\Models\Tenant\Catalogs\DocumentType;
+use App\Models\Tenant\Catalogs\Code;
 
 class RetentionDocument extends ModelTenant
 {
     public $timestamps = false;
-    protected $with = [];
+    protected $with = ['document_type', 'currency_type'];
     protected $fillable = [
         'retention_id',
-        'document_type_code',
+        'document_type_id',
         'series',
         'number',
         'date_of_issue',
-        'currency_type_code',
+        'currency_type_id',
         'total_document',
         'payments',
         'exchange_rate',
@@ -50,13 +49,13 @@ class RetentionDocument extends ModelTenant
         $this->attributes['exchange_rate'] = (is_null($value))?null:json_encode($value);
     }
 
-//    public function document_type()
-//    {
-//        return $this->belongsTo(DocumentType::class);
-//    }
-//
-//    public function currency_type()
-//    {
-//        return $this->belongsTo(CurrencyType::class);
-//    }
+    public function document_type()
+    {
+        return $this->belongsTo(Code::class, 'document_type_id');
+    }
+
+    public function currency_type()
+    {
+        return $this->belongsTo(Code::class, 'currency_type_id');
+    }
 }

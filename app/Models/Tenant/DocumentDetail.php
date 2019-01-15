@@ -2,13 +2,11 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\AffectationIgvType;
-use App\Models\Tenant\Catalogs\PriceType;
-use App\Models\Tenant\Catalogs\SystemIscType;
-use App\Models\Tenant\Catalogs\UnitType;
+use App\Models\Tenant\Catalogs\Code;
 
 class DocumentDetail extends ModelTenant
 {
+//    protected $with = ['affectation_igv_type', 'system_isc_type', 'price_type'];
     protected $with = [];
     public $timestamps = false;
 

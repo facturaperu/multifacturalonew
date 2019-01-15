@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Tenant;
 
+use App\Models\Tenant\Catalogs\Code;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class DocumentCollection extends ResourceCollection
@@ -27,44 +28,6 @@ class DocumentCollection extends ResourceCollection
             $voided = null;
             $affected_document = null;
 
-//            if ($row->state_type_id === '05') {
-//                $btn_voided = true;
-//                $btn_note = true;
-//            }
-//            if ($row->state_type_id === '13') {
-//                $has_xml_voided = true;
-//                $btn_ticket = true;
-//                $voided = $row->voided;
-//                if ($row->group_id === '01') {
-//                    $download_xml_voided = route('tenant.voided.download', ['type' => 'xml', 'voided' => $voided->id]);
-//                } else {
-//                    $download_xml_voided = route('tenant.summaries.download', ['type' => 'xml', 'summary' => $voided->id]);
-//                }
-//            }
-//            if ($row->state_type_id === '11') {
-//                $has_xml_voided = true;
-//                $has_cdr_voided = true;
-//                $voided = $row->voided;
-//                if ($row->group_id === '01') {
-//                    $download_xml_voided = route('tenant.voided.download', ['type' => 'xml', 'voided' => $voided->id]);
-//                    $download_cdr_voided = route('tenant.voided.download', ['type' => 'cdr', 'voided' => $voided->id]);
-//                } else {
-//                    $download_xml_voided = route('tenant.summaries.download', ['type' => 'xml', 'summary' => $voided->id]);
-//                    $download_cdr_voided = route('tenant.summaries.download', ['type' => 'cdr', 'summary' => $voided->id]);
-//                }
-//            }
-//
-//            if (in_array($row->document_type_id, ['07', '08'])) {
-//                $btn_note = false;
-//                $affected_document = $row->note->affected_document_series.'-'.$row->note->affected_document_number;
-//            }
-//
-//            if ($row->group_id === '01') {
-//                if ($row->state_type_id === '01') {
-//                    $btn_resend = true;
-//                }
-//            }
-
             $has_xml = true;
             $has_pdf = true;
             $has_cdr = (bool) $row->has_cdr;
@@ -81,7 +44,7 @@ class DocumentCollection extends ResourceCollection
             $btn_voided = false;
             $btn_note = false;
             if(($row->group_id === '01' && $has_cdr === true) || ($row->group_id === '02' && $row->state_type_id === '05')) {
-                if (in_array($row->document_type_id, ['07', '08'])) {
+                if (in_array($row->document_type_code, ['07', '08'])) {
                     $btn_note = false;
                 } else {
                     $btn_note = true;
@@ -104,8 +67,8 @@ class DocumentCollection extends ResourceCollection
                 'date_of_issue' => $row->date_of_issue->format('Y-m-d'),
                 'number' => $row->number_full,
                 'customer_name' => $row->customer->name,
-                'customer_number' => $row->customer->identity_document_type->description.' '.$row->customer->number,
-                'currency_type_id' => $row->currency_type_id,
+                'customer_number' => Code::getDescriptionByCode($row->customer->identity_document_type_code).' '.$row->customer->number,
+                'currency_type_code' => $row->currency_type_code,
                 'total_exportation' => $row->total_exportation,
                 'total_free' => $row->total_free,
                 'total_unaffected' => $row->total_unaffected,
@@ -115,7 +78,7 @@ class DocumentCollection extends ResourceCollection
                 'total' => $row->total,
                 'state_type_id' => $row->state_type_id,
                 'state_type_description' => $row->state_type->description,
-                'document_type_description' => $row->document_type_description,
+                'document_type_description' => Code::getDescriptionByCode($row->document_type_code),
                 'has_xml' => $has_xml,
                 'has_pdf' => $has_pdf,
                 'has_cdr' => $has_cdr,

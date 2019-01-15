@@ -19,7 +19,7 @@
                     {{-- <img src="{{asset('img/%21logged-user.jpg')}}" alt="Profile" class="rounded-circle" data-lock-picture="img/%21logged-user.jpg" /> --}}
                     <div class="border rounded-circle text-center" style="width: 25px;"><i class="fas fa-user"></i></div>
                 </figure>
-                <div class="profile-info" data-lock-name="{{ $vc_user->email }}" data-lock-email="{{ \Auth::getUser()->email }}">
+                <div class="profile-info" data-lock-name="{{ $vc_user->email }}" data-lock-email="{{ $vc_user->email }}">
                     <span class="name">{{ $vc_user->name }}</span>
                     <span class="role">{{ $vc_user->email }}</span>
                 </div>

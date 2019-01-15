@@ -10,19 +10,9 @@ use App\Http\Requests\Tenant\DocumentVoidedRequest;
 use App\Http\Resources\Tenant\DocumentCollection;
 use App\Http\Resources\Tenant\DocumentResource;
 use App\Mail\Tenant\DocumentEmail;
-use App\Models\Tenant\Catalogs\AffectationIgvType;
-use App\Models\Tenant\Catalogs\ChargeDiscountType;
-use App\Models\Tenant\Catalogs\CurrencyType;
-use App\Models\Tenant\Catalogs\DocumentType;
-use App\Models\Tenant\Catalogs\NoteCreditType;
-use App\Models\Tenant\Catalogs\NoteDebitType;
-use App\Models\Tenant\Catalogs\OperationType;
-use App\Models\Tenant\Catalogs\PriceType;
-use App\Models\Tenant\Catalogs\SystemIscType;
-use App\Models\Tenant\Code;
+use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Configuration;
-use App\Models\Tenant\Customer;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Item;
@@ -39,7 +29,7 @@ class DocumentController extends Controller
 
     public function __construct()
     {
-        $this->middleware('transform.input:document,web', ['only' => ['store']]);
+        $this->middleware('transform.web:document', ['only' => ['store']]);
     }
 
     public function index()

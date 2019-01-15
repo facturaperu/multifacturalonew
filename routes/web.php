@@ -207,8 +207,6 @@ if ($hostname) {
             Route::post('currency_types', 'Tenant\CurrencyTypeController@store');
             Route::delete('currency_types/{currency_type}', 'Tenant\CurrencyTypeController@destroy');
 
-
-
             //Perceptions
             Route::get('perceptions', 'Tenant\PerceptionController@index')->name('tenant.perceptions.index');
             Route::get('perceptions/columns', 'Tenant\PerceptionController@columns');
@@ -219,15 +217,10 @@ if ($hostname) {
             Route::post('perceptions', 'Tenant\PerceptionController@store');
             Route::delete('perceptions/{perception}', 'Tenant\PerceptionController@destroy');
             Route::get('perceptions/item/tables', 'Tenant\PerceptionController@item_tables');
-
         });
     });
 } else {
     Route::domain(env('APP_URL_BASE'))->group(function() {
-
-
-
-
         Route::get('login', 'System\LoginController@showLoginForm')->name('login');
         Route::post('login', 'System\LoginController@login');
         Route::post('logout', 'System\LoginController@logout')->name('logout');

@@ -2,11 +2,11 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\OperationType;
+use App\Models\Tenant\Catalogs\Code;
 
 class Invoice extends ModelTenant
 {
-    protected $with = [];
+//    protected $with = ['operation_type'];
     public $timestamps = false;
 
     protected $fillable = [
@@ -26,6 +26,6 @@ class Invoice extends ModelTenant
 
 //    public function operation_type()
 //    {
-//        return $this->belongsTo(OperationType::class);
+//        return $this->belongsTo(Code::class, 'operation_type_id');
 //    }
 }

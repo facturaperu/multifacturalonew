@@ -6,8 +6,8 @@ class InvoiceBuilder extends DocumentBuilder
 {
     public function save($inputs)
     {
-        $document = $this->saveDocument($inputs['document']);
-        $document->invoice()->create($inputs['document_base']);
+        $document = $this->saveDocument(array_except($inputs, 'invoice'));
+        $document->invoice()->create($inputs['invoice']);
 
         return $document;
     }

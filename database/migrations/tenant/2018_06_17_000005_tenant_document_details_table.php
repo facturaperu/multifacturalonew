@@ -38,7 +38,7 @@ class TenantDocumentDetailsTable extends Migration
             $table->decimal('total_other_taxes', 12, 2)->default(0);
             $table->decimal('total_taxes', 12, 2);
 
-            $table->string('price_type_code', 2);
+            $table->string('price_type_code');
             $table->decimal('unit_price', 12, 2);
 
             $table->decimal('total_value', 12, 2);
@@ -52,6 +52,9 @@ class TenantDocumentDetailsTable extends Migration
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->foreign('item_id')->references('id')->on('items');
+//            $table->foreign('affectation_igv_type_id')->references('id')->on('codes');
+//            $table->foreign('system_isc_type_id')->references('id')->on('codes');
+//            $table->foreign('price_type_id')->references('id')->on('codes');
         });
     }
 

@@ -31,16 +31,16 @@ class CustomerRequest extends FormRequest
                 'required',
             ],
             'department_id' => [
-                'required_if:identity_document_type_id,"06000006"',
+                'required_if:identity_document_type_id,"066"',
             ],
             'province_id' => [
-                'required_if:identity_document_type_id,"06000006"',
+                'required_if:identity_document_type_id,"066"',
             ],
             'district_id' => [
-                'required_if:identity_document_type_id,"06000006"',
+                'required_if:identity_document_type_id,"066"',
             ],
             'address' => [
-                'required_if:identity_document_type_id,"06000006"',
+                'required_if:identity_document_type_id,"066"',
             ],
             'email' => [
                 'nullable',

@@ -1,12 +1,11 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
+use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
-use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
-use App\Models\Tenant\Code;
 use App\Models\Tenant\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\CustomerRequest;

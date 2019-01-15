@@ -39,7 +39,7 @@
                             <small v-if="row.affected_document" v-text="row.affected_document"></small>
                         </td>
                         <td>{{ row.state_type_description }}</td>
-                        <td class="text-center">{{ row.currency_type_id }}</td>
+                        <td class="text-center">{{ row.currency_type_code }}</td>
                         <td class="text-right">{{ row.total_exportation }}</td>
                         <td class="text-right">{{ row.total_free }}</td>
                         <td class="text-right">{{ row.total_unaffected }}</td>

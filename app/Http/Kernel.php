@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'transform.input' => \App\CoreFacturalo\Transforms\TransformInput::class,
+        'transform.web' => \App\CoreFacturalo\Transforms\TransformWeb::class,
     ];
 }

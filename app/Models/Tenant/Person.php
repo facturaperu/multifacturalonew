@@ -5,8 +5,8 @@ namespace App\Models\Tenant;
 use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
-use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
+use App\Models\Tenant\Catalogs\Code;
 
 class Person extends ModelTenant
 {

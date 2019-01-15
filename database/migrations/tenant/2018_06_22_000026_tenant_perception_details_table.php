@@ -16,11 +16,11 @@ class TenantPerceptionDetailsTable extends Migration
         Schema::create('perception_details', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('perception_id');
-            $table->char('document_type_id', 2);
+            $table->string('document_type_id');
             $table->string('number');
             $table->date('date_of_issue');
             $table->date('date_of_perception');
-            $table->char('currency_type_id', 3);
+            $table->string('currency_type_id');
             $table->decimal('total_document', 10, 2);
             $table->decimal('total_perception', 10, 2);
             $table->decimal('total', 10, 2);

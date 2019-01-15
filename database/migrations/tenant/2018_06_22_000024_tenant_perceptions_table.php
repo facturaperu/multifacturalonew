@@ -21,14 +21,14 @@ class TenantPerceptionsTable extends Migration
             $table->char('soap_type_id', 2);
             $table->char('state_type_id', 2);
             $table->string('ubl_version');
-            $table->char('document_type_id', 2);
+            $table->string('document_type_id');
             $table->unsignedInteger('series_id');
             $table->integer('number');
             $table->date('date_of_issue');
             $table->unsignedInteger('customer_id');
-            $table->char('currency_type_id', 3);
+            $table->string('currency_type_id');
             $table->text('observation');
-            $table->char('perception_type_id', 2);
+            $table->string('perception_type_id');
             $table->decimal('percent', 10, 2);
             $table->decimal('total_perception', 10, 2);
             $table->decimal('total', 10, 2);
@@ -44,10 +44,10 @@ class TenantPerceptionsTable extends Migration
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->foreign('soap_type_id')->references('id')->on('soap_types');
             $table->foreign('state_type_id')->references('id')->on('state_types');
-            $table->foreign('document_type_id')->references('id')->on('document_types');
+            $table->foreign('document_type_id')->references('id')->on('codes');
             $table->foreign('series_id')->references('id')->on('series');
-            $table->foreign('currency_type_id')->references('id')->on('currency_types');
-            $table->foreign('perception_type_id')->references('id')->on('perception_types');
+            $table->foreign('currency_type_id')->references('id')->on('codes');
+            $table->foreign('perception_type_id')->references('id')->on('codes');
         });
     }
 

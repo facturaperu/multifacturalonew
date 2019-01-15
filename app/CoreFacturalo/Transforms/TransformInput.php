@@ -39,7 +39,12 @@ class TransformInput
 
     private function originalAttributeDocument($inputs, $isWeb)
     {
-        $aux_document = DocumentInput::transform($inputs, $isWeb);
+        if($isWeb) {
+            $document = DocumentInput::transform($inputs);
+        } else {
+            $document = DocumentInput::transform($inputs, $isWeb);
+        }
+
         $document = $aux_document['document'];
         if(in_array($document['document_type_id'], ['01', '03'])) {
             $aux_document_base = InvoiceInput::transform($inputs, $document, $isWeb);

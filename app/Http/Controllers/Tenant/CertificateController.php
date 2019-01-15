@@ -1,8 +1,6 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
-use App\Core\WS\Signed\Certificate\X509Certificate;
-use App\Core\WS\Signed\Certificate\X509ContentType;
 use App\CoreFacturalo\Helpers\Certificate\GenerateCertificate;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Company;

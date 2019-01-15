@@ -5,18 +5,13 @@ use App\Models\Tenant\ModelTenant;
 
 class ModelCatalog extends ModelTenant
 {
-    public function scopeWhereActive($query, $active = true)
+    public function scopeWhereActive($query)
     {
-        return $query->where('active', $active);
+        return $query->where('active', true);
     }
 
     public function scopeOrderByDescription($query)
     {
         return $query->orderBy('description');
-    }
-
-    public function scopeOrderById($query)
-    {
-        return $query->orderBy('id');
     }
 }
