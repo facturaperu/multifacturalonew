@@ -49,10 +49,10 @@ class TenantRetentionsTable extends Migration
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->foreign('soap_type_id')->references('id')->on('soap_types');
             $table->foreign('state_type_id')->references('id')->on('state_types');
-            $table->foreign('document_type_id')->references('id')->on('codes');
+            $table->foreign('document_type_id')->references('id')->on('cat_document_types');
             $table->foreign('supplier_id')->references('id')->on('persons');
-            $table->foreign('retention_type_id')->references('id')->on('codes');
-            $table->foreign('currency_type_id')->references('id')->on('codes');
+            $table->foreign('retention_type_id')->references('id')->on('cat_retention_types');
+            $table->foreign('currency_type_id')->references('id')->on('cat_currency_types');
         });
     }
 

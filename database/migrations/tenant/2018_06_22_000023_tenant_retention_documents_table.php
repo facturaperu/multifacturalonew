@@ -30,8 +30,8 @@ class TenantRetentionDocumentsTable extends Migration
             $table->decimal('total_payment', 10, 2);
 
             $table->foreign('retention_id')->references('id')->on('retentions')->onDelete('cascade');
-            $table->foreign('document_type_id')->references('id')->on('codes');
-            $table->foreign('currency_type_id')->references('id')->on('codes');
+            $table->foreign('document_type_id')->references('id')->on('cat_document_types');
+            $table->foreign('currency_type_id')->references('id')->on('cat_currency_types');
         });
     }
 

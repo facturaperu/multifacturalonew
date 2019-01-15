@@ -361,6 +361,7 @@ class TenantCatalogsTable extends Migration
          ***************************************************************************************************************
          */
         Schema::create('cat_price_types', function (Blueprint $table) {
+            $table->string('id')->index();
             $table->boolean('active');
             $table->string('description');
         });
@@ -626,57 +627,57 @@ class TenantCatalogsTable extends Migration
          ***************************************************************************************************************
          ***************************************************************************************************************
          */
-        Schema::create('codes', function (Blueprint $table) {
-            $table->string('id')->index();
-            $table->char('catalog_id', 2);
-            $table->string('code');
-            $table->string('description');
-            $table->string('short')->nullable();
-            $table->string('symbol')->nullable();
-            $table->boolean('exportation')->nullable();
-            $table->boolean('free')->nullable();
-            $table->decimal('percentage', 10, 2)->nullable();
-            $table->boolean('base')->nullable();
-            $table->enum('type', ['discount', 'charge'])->nullable();
-            $table->enum('level', ['item', 'global'])->nullable();
-            $table->boolean('active');
-        });
-
-        DB::table('codes')->insert([
-            ['id' => '54001', 'catalog_id' => '54', 'code' => '001', 'active' =>true, 'percentage' => 0, 'description' => 'Azúcar y melaza de caña'],
-            ['id' => '54002', 'catalog_id' => '54', 'code' => '002', 'active' =>true, 'percentage' => 0, 'description' => 'Arroz'],
-            ['id' => '54003', 'catalog_id' => '54', 'code' => '003', 'active' =>true, 'percentage' => 0, 'description' => 'Alcohol etílico'],
-            ['id' => '54004', 'catalog_id' => '54', 'code' => '004', 'active' =>true, 'percentage' => 4, 'description' => 'Recursos hidrobiológicos'],
-            ['id' => '54005', 'catalog_id' => '54', 'code' => '005', 'active' =>true, 'percentage' => 4, 'description' => 'Maíz amarillo duro'],
-            ['id' => '54007', 'catalog_id' => '54', 'code' => '007', 'active' =>true, 'percentage' => 0, 'description' => 'Caña de azúcar'],
-            ['id' => '54008', 'catalog_id' => '54', 'code' => '008', 'active' =>true, 'percentage' => 4, 'description' => 'Madera'],
-            ['id' => '54009', 'catalog_id' => '54', 'code' => '009', 'active' =>true, 'percentage' => 0, 'description' => 'Arena y piedra'],
-            ['id' => '54010', 'catalog_id' => '54', 'code' => '010', 'active' =>true, 'percentage' => 0, 'description' => 'Residuos, subproductos, desechos, recortes y desperdicios'],
-            ['id' => '54011', 'catalog_id' => '54', 'code' => '011', 'active' =>true, 'percentage' => 0, 'description' => 'Bienes gravados con el IGV, o renuncia a la exoneración'],
-            ['id' => '54012', 'catalog_id' => '54', 'code' => '012', 'active' =>true, 'percentage' => 0, 'description' => 'Intermediación laboral y tercerización'],
-            ['id' => '54013', 'catalog_id' => '54', 'code' => '013', 'active' =>true, 'percentage' => 0, 'description' => 'Animales vivos'],
-            ['id' => '54014', 'catalog_id' => '54', 'code' => '014', 'active' =>true, 'percentage' => 4, 'description' => 'Carnes y despojos comestibles'],
-            ['id' => '54015', 'catalog_id' => '54', 'code' => '015', 'active' =>true, 'percentage' => 0, 'description' => 'Abonos, cueros y pieles de origen animal'],
-            ['id' => '54016', 'catalog_id' => '54', 'code' => '016', 'active' =>true, 'percentage' => 0, 'description' => 'Aceite de pescado'],
-            ['id' => '54017', 'catalog_id' => '54', 'code' => '017', 'active' =>true, 'percentage' => 4, 'description' => 'Harina, polvo y “pellets” de pescado, crustáceos, moluscos y demás invertebrados acuáticos'],
-            ['id' => '54019', 'catalog_id' => '54', 'code' => '019', 'active' =>true, 'percentage' => 0, 'description' => 'Arrendamiento de bienes muebles'],
-            ['id' => '54020', 'catalog_id' => '54', 'code' => '020', 'active' =>true, 'percentage' => 0, 'description' => 'Mantenimiento y reparación de bienes muebles'],
-            ['id' => '54021', 'catalog_id' => '54', 'code' => '021', 'active' =>true, 'percentage' => 0, 'description' => 'Movimiento de carga'],
-            ['id' => '54022', 'catalog_id' => '54', 'code' => '022', 'active' =>true, 'percentage' => 0, 'description' => 'Otros servicios empresariales'],
-            ['id' => '54024', 'catalog_id' => '54', 'code' => '024', 'active' =>true, 'percentage' => 0, 'description' => 'Comisión mercantil'],
-            ['id' => '54025', 'catalog_id' => '54', 'code' => '025', 'active' =>true, 'percentage' => 0, 'description' => 'Fabricación de bienes por encargo'],
-            ['id' => '54026', 'catalog_id' => '54', 'code' => '026', 'active' =>true, 'percentage' => 0, 'description' => 'Servicio de transporte de personas'],
-            ['id' => '54027', 'catalog_id' => '54', 'code' => '027', 'active' =>true, 'percentage' => 4, 'description' => 'Servicio de transporte de carga'],
-            ['id' => '54028', 'catalog_id' => '54', 'code' => '028', 'active' =>true, 'percentage' => 0, 'description' => 'Transporte de pasajeros'],
-            ['id' => '54030', 'catalog_id' => '54', 'code' => '030', 'active' =>true, 'percentage' => 4, 'description' => 'Contratos de construcción'],
-            ['id' => '54031', 'catalog_id' => '54', 'code' => '031', 'active' =>true, 'percentage' => 0, 'description' => 'Oro gravado con el IGV'],
-            ['id' => '54034', 'catalog_id' => '54', 'code' => '034', 'active' =>true, 'percentage' => 0, 'description' => 'Minerales metálicos no auríferos'],
-            ['id' => '54035', 'catalog_id' => '54', 'code' => '035', 'active' =>true, 'percentage' => 0, 'description' => 'Bienes exonerados del IGV'],
-            ['id' => '54036', 'catalog_id' => '54', 'code' => '036', 'active' =>true, 'percentage' => 0, 'description' => 'Oro y demás minerales metálicos exonerados del IGV'],
-            ['id' => '54037', 'catalog_id' => '54', 'code' => '037', 'active' =>true, 'percentage' => 0, 'description' => 'Demás servicios gravados con el IGV'],
-            ['id' => '54039', 'catalog_id' => '54', 'code' => '039', 'active' =>true, 'percentage' => 0, 'description' => 'Minerales no metálicos'],
-            ['id' => '54040', 'catalog_id' => '54', 'code' => '040', 'active' =>true, 'percentage' => 4, 'description' => 'Bien inmueble gravado con IGV'],
-        ]);
+//        Schema::create('codes', function (Blueprint $table) {
+//            $table->string('id')->index();
+//            $table->char('catalog_id', 2);
+//            $table->string('code');
+//            $table->string('description');
+//            $table->string('short')->nullable();
+//            $table->string('symbol')->nullable();
+//            $table->boolean('exportation')->nullable();
+//            $table->boolean('free')->nullable();
+//            $table->decimal('percentage', 10, 2)->nullable();
+//            $table->boolean('base')->nullable();
+//            $table->enum('type', ['discount', 'charge'])->nullable();
+//            $table->enum('level', ['item', 'global'])->nullable();
+//            $table->boolean('active');
+//        });
+//
+//        DB::table('codes')->insert([
+//            ['id' => '54001', 'catalog_id' => '54', 'code' => '001', 'active' =>true, 'percentage' => 0, 'description' => 'Azúcar y melaza de caña'],
+//            ['id' => '54002', 'catalog_id' => '54', 'code' => '002', 'active' =>true, 'percentage' => 0, 'description' => 'Arroz'],
+//            ['id' => '54003', 'catalog_id' => '54', 'code' => '003', 'active' =>true, 'percentage' => 0, 'description' => 'Alcohol etílico'],
+//            ['id' => '54004', 'catalog_id' => '54', 'code' => '004', 'active' =>true, 'percentage' => 4, 'description' => 'Recursos hidrobiológicos'],
+//            ['id' => '54005', 'catalog_id' => '54', 'code' => '005', 'active' =>true, 'percentage' => 4, 'description' => 'Maíz amarillo duro'],
+//            ['id' => '54007', 'catalog_id' => '54', 'code' => '007', 'active' =>true, 'percentage' => 0, 'description' => 'Caña de azúcar'],
+//            ['id' => '54008', 'catalog_id' => '54', 'code' => '008', 'active' =>true, 'percentage' => 4, 'description' => 'Madera'],
+//            ['id' => '54009', 'catalog_id' => '54', 'code' => '009', 'active' =>true, 'percentage' => 0, 'description' => 'Arena y piedra'],
+//            ['id' => '54010', 'catalog_id' => '54', 'code' => '010', 'active' =>true, 'percentage' => 0, 'description' => 'Residuos, subproductos, desechos, recortes y desperdicios'],
+//            ['id' => '54011', 'catalog_id' => '54', 'code' => '011', 'active' =>true, 'percentage' => 0, 'description' => 'Bienes gravados con el IGV, o renuncia a la exoneración'],
+//            ['id' => '54012', 'catalog_id' => '54', 'code' => '012', 'active' =>true, 'percentage' => 0, 'description' => 'Intermediación laboral y tercerización'],
+//            ['id' => '54013', 'catalog_id' => '54', 'code' => '013', 'active' =>true, 'percentage' => 0, 'description' => 'Animales vivos'],
+//            ['id' => '54014', 'catalog_id' => '54', 'code' => '014', 'active' =>true, 'percentage' => 4, 'description' => 'Carnes y despojos comestibles'],
+//            ['id' => '54015', 'catalog_id' => '54', 'code' => '015', 'active' =>true, 'percentage' => 0, 'description' => 'Abonos, cueros y pieles de origen animal'],
+//            ['id' => '54016', 'catalog_id' => '54', 'code' => '016', 'active' =>true, 'percentage' => 0, 'description' => 'Aceite de pescado'],
+//            ['id' => '54017', 'catalog_id' => '54', 'code' => '017', 'active' =>true, 'percentage' => 4, 'description' => 'Harina, polvo y “pellets” de pescado, crustáceos, moluscos y demás invertebrados acuáticos'],
+//            ['id' => '54019', 'catalog_id' => '54', 'code' => '019', 'active' =>true, 'percentage' => 0, 'description' => 'Arrendamiento de bienes muebles'],
+//            ['id' => '54020', 'catalog_id' => '54', 'code' => '020', 'active' =>true, 'percentage' => 0, 'description' => 'Mantenimiento y reparación de bienes muebles'],
+//            ['id' => '54021', 'catalog_id' => '54', 'code' => '021', 'active' =>true, 'percentage' => 0, 'description' => 'Movimiento de carga'],
+//            ['id' => '54022', 'catalog_id' => '54', 'code' => '022', 'active' =>true, 'percentage' => 0, 'description' => 'Otros servicios empresariales'],
+//            ['id' => '54024', 'catalog_id' => '54', 'code' => '024', 'active' =>true, 'percentage' => 0, 'description' => 'Comisión mercantil'],
+//            ['id' => '54025', 'catalog_id' => '54', 'code' => '025', 'active' =>true, 'percentage' => 0, 'description' => 'Fabricación de bienes por encargo'],
+//            ['id' => '54026', 'catalog_id' => '54', 'code' => '026', 'active' =>true, 'percentage' => 0, 'description' => 'Servicio de transporte de personas'],
+//            ['id' => '54027', 'catalog_id' => '54', 'code' => '027', 'active' =>true, 'percentage' => 4, 'description' => 'Servicio de transporte de carga'],
+//            ['id' => '54028', 'catalog_id' => '54', 'code' => '028', 'active' =>true, 'percentage' => 0, 'description' => 'Transporte de pasajeros'],
+//            ['id' => '54030', 'catalog_id' => '54', 'code' => '030', 'active' =>true, 'percentage' => 4, 'description' => 'Contratos de construcción'],
+//            ['id' => '54031', 'catalog_id' => '54', 'code' => '031', 'active' =>true, 'percentage' => 0, 'description' => 'Oro gravado con el IGV'],
+//            ['id' => '54034', 'catalog_id' => '54', 'code' => '034', 'active' =>true, 'percentage' => 0, 'description' => 'Minerales metálicos no auríferos'],
+//            ['id' => '54035', 'catalog_id' => '54', 'code' => '035', 'active' =>true, 'percentage' => 0, 'description' => 'Bienes exonerados del IGV'],
+//            ['id' => '54036', 'catalog_id' => '54', 'code' => '036', 'active' =>true, 'percentage' => 0, 'description' => 'Oro y demás minerales metálicos exonerados del IGV'],
+//            ['id' => '54037', 'catalog_id' => '54', 'code' => '037', 'active' =>true, 'percentage' => 0, 'description' => 'Demás servicios gravados con el IGV'],
+//            ['id' => '54039', 'catalog_id' => '54', 'code' => '039', 'active' =>true, 'percentage' => 0, 'description' => 'Minerales no metálicos'],
+//            ['id' => '54040', 'catalog_id' => '54', 'code' => '040', 'active' =>true, 'percentage' => 4, 'description' => 'Bien inmueble gravado con IGV'],
+//        ]);
 
         /*
          ***************************************************************************************************************

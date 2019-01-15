@@ -2,11 +2,13 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\DocumentType;
+use App\Models\Tenant\Catalogs\RetentionType;
 
 class Retention extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'document_type_id', 'retention_type', 'currency_type', 'documents'];
+    protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'retention_type', 'currency_type', 'documents'];
 
     protected $fillable = [
         'user_id',
@@ -106,17 +108,17 @@ class Retention extends ModelTenant
 
     public function document_type()
     {
-        return $this->belongsTo(Code::class, 'document_type_id');
+        return $this->belongsTo(DocumentType::class, 'document_type_id');
     }
 
     public function retention_type()
     {
-        return $this->belongsTo(Code::class, 'retention_type_id');
+        return $this->belongsTo(RetentionType::class, 'retention_type_id');
     }
 
     public function currency_type()
     {
-        return $this->belongsTo(Code::class, 'currency_type_id');
+        return $this->belongsTo(CurrencyType::class, 'currency_type_id');
     }
 
     public function documents()

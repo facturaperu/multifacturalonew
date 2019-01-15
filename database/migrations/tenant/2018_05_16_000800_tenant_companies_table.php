@@ -26,7 +26,7 @@ class TenantCompaniesTable extends Migration
             $table->string('logo')->nullable();
             $table->timestamps();
 
-            $table->foreign('identity_document_type_id')->references('id')->on('codes');
+            $table->foreign('identity_document_type_id')->references('id')->on('cat_identity_document_types');
             $table->foreign('soap_type_id')->references('id')->on('soap_types');
         });
     }

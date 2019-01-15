@@ -8,12 +8,12 @@ use Exception;
 
 class TransformFunctions
 {
-    public static function newNumber($soap_type_id, $document_type_code, $series, $number)
+    public static function newNumber($soap_type_id, $document_type_id, $series, $number)
     {
         if ($number === '#') {
             $document = Document::select('number')
                 ->where('soap_type_id', $soap_type_id)
-                ->where('document_type_code', $document_type_code)
+                ->where('document_type_id', $document_type_id)
                 ->where('series', $series)
                 ->orderBy('number', 'desc')
                 ->first();
@@ -22,27 +22,27 @@ class TransformFunctions
         return $number;
     }
 
-    public static function filename($company, $document_type_code, $series, $number)
+    public static function filename($company, $document_type_id, $series, $number)
     {
-        return join('-', [$company->number, $document_type_code, $series, $number]);
+        return join('-', [$company->number, $document_type_id, $series, $number]);
     }
 
-    public static function validateDocumentTypeId($document_type_code)
+    public static function validateDocumentTypeId($document_type_id)
     {
-        if(!in_array($document_type_code, ['01', '03', '07', '08'])) {
-            throw new Exception("El código tipo de documento {$document_type_code} es incorrecto.");
+        if(!in_array($document_type_id, ['01', '03', '07', '08'])) {
+            throw new Exception("El código tipo de documento {$document_type_id} es incorrecto.");
         }
     }
 
-    public static function validateUniqueDocument($soap_type_id, $document_type_code, $series, $number)
+    public static function validateUniqueDocument($soap_type_id, $document_type_id, $series, $number)
     {
         $document = Document::where('soap_type_id', $soap_type_id)
-            ->where('document_type_code', $document_type_code)
+            ->where('document_type_id', $document_type_id)
             ->where('series', $series)
             ->where('number', $number)
             ->first();
         if($document) {
-            throw new Exception("El documento: {$document_type_code} {$series}-{$number} ya se encuentra registrado.");
+            throw new Exception("El documento: {$document_type_id} {$series}-{$number} ya se encuentra registrado.");
         }
     }
 

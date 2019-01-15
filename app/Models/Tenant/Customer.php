@@ -5,8 +5,8 @@ namespace App\Models\Tenant;
 use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
+use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
-use App\Models\Tenant\Catalogs\Code;
 
 class Customer extends ModelTenant
 {
@@ -27,7 +27,7 @@ class Customer extends ModelTenant
 
     public function identity_document_type()
     {
-        return $this->belongsTo(Code::class, 'identity_document_type_id');
+        return $this->belongsTo(IdentityDocumentType::class, 'identity_document_type_id');
     }
 
     public function country()

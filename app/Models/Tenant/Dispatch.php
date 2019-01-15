@@ -2,7 +2,7 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\DocumentType;
 
 class Dispatch extends ModelTenant
 {
@@ -103,7 +103,7 @@ class Dispatch extends ModelTenant
 
     public function document_type()
     {
-        return $this->belongsTo(Code::class, 'document_type_id');
+        return $this->belongsTo(DocumentType::class, 'document_type_id');
     }
 
     public function details()

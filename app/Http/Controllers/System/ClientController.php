@@ -66,8 +66,6 @@ class ClientController extends Controller
         }
         catch (Exception $e) {
             DB::connection('system')->rollBack();
-//            $hostname = Hostname::where('fqdn', $fqdn)->first();
-//            $website = Website::where('uuid', $uuid)->first();
             app(HostnameRepository::class)->delete($hostname, true);
             app(WebsiteRepository::class)->delete($website, true);
 
@@ -78,7 +76,7 @@ class ClientController extends Controller
         }
 
         DB::connection('tenant')->table('companies')->insert([
-            'identity_document_type_id' => '066',
+            'identity_document_type_id' => '6',
             'number' => $request->input('number'),
             'name' => $request->input('name'),
             'trade_name' => $request->input('name'),
@@ -102,13 +100,13 @@ class ClientController extends Controller
         ]);
 
         DB::connection('tenant')->table('series')->insert([
-            ['establishment_id' => 1, 'document_type_id' => '0101', 'number' => 'F001'],
-            ['establishment_id' => 1, 'document_type_id' => '0103', 'number' => 'B001'],
-            ['establishment_id' => 1, 'document_type_id' => '0107', 'number' => 'FC01'],
-            ['establishment_id' => 1, 'document_type_id' => '0107', 'number' => 'BC001'],
-            ['establishment_id' => 1, 'document_type_id' => '0108', 'number' => 'FD01'],
-            ['establishment_id' => 1, 'document_type_id' => '0108', 'number' => 'BD01'],
-            ['establishment_id' => 1, 'document_type_id' => '0120', 'number' => 'R001'],
+            ['establishment_id' => 1, 'document_type_id' => '01', 'number' => 'F001'],
+            ['establishment_id' => 1, 'document_type_id' => '03', 'number' => 'B001'],
+            ['establishment_id' => 1, 'document_type_id' => '07', 'number' => 'FC01'],
+            ['establishment_id' => 1, 'document_type_id' => '07', 'number' => 'BC01'],
+            ['establishment_id' => 1, 'document_type_id' => '08', 'number' => 'FD01'],
+            ['establishment_id' => 1, 'document_type_id' => '08', 'number' => 'BD01'],
+            ['establishment_id' => 1, 'document_type_id' => '20', 'number' => 'R001'],
         ]);
 
         DB::connection('tenant')->table('users')->insert([

@@ -2,7 +2,6 @@
 
 namespace App\CoreFacturalo\Transforms\Web\Documents\Partials;
 
-use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Item;
 use Exception;
 
@@ -25,13 +24,13 @@ class ItemInput
                 $item_description = $row['item_description'];
                 $quantity = $row['quantity'];
                 $unit_value = $row['unit_value'];
-                $price_type_code = Code::getCodeById($row['price_type_id']);
+                $price_type_id = $row['price_type_id'];
                 $unit_price = $row['unit_price'];
-                $affectation_igv_type_code = Code::getCodeById($row['affectation_igv_type_id']);
+                $affectation_igv_type_id = $row['affectation_igv_type_id'];
                 $total_base_igv = $row['total_base_igv'];
                 $percentage_igv = $row['percentage_igv'];
                 $total_igv = $row['total_igv'];
-                $system_isc_type_code = Code::getCodeById($row['system_isc_type_id']);
+                $system_isc_type_id = $row['system_isc_type_id'];
                 $total_base_isc = $row['total_base_isc'];
                 $percentage_isc = $row['percentage_isc'];
                 $total_isc = $row['total_isc'];
@@ -54,13 +53,13 @@ class ItemInput
                     'item_description' => $item_description,
                     'quantity' => $quantity,
                     'unit_value' => $unit_value,
-                    'price_type_code' => $price_type_code,
+                    'price_type_id' => $price_type_id,
                     'unit_price' => $unit_price,
-                    'affectation_igv_type_code' => $affectation_igv_type_code,
+                    'affectation_igv_type_id' => $affectation_igv_type_id,
                     'total_base_igv' => $total_base_igv,
                     'percentage_igv' => $percentage_igv,
                     'total_igv' => $total_igv,
-                    'system_isc_type_code' => $system_isc_type_code,
+                    'system_isc_type_id' => $system_isc_type_id,
                     'total_base_isc' => $total_base_isc,
                     'percentage_isc' => $percentage_isc,
                     'total_isc' => $total_isc,

@@ -24,8 +24,8 @@ class TenantNotesTable extends Migration
             $table->unsignedInteger('affected_document_id');
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
-            $table->foreign('note_credit_type_id')->references('id')->on('codes');
-            $table->foreign('note_debit_type_id')->references('id')->on('codes');
+            $table->foreign('note_credit_type_id')->references('id')->on('cat_note_credit_types');
+            $table->foreign('note_debit_type_id')->references('id')->on('cat_note_debit_types');
             $table->foreign('affected_document_id')->references('id')->on('documents');
         });
     }

@@ -82,7 +82,7 @@ class TenantSystemTable extends Migration
             $table->string('currency_type_id');
 
             $table->foreign('bank_id')->references('id')->on('banks');
-            $table->foreign('currency_type_id')->references('id')->on('codes');
+            $table->foreign('currency_type_id')->references('id')->on('cat_currency_types');
         });
 
         Schema::create('exchange_rates', function (Blueprint $table) {

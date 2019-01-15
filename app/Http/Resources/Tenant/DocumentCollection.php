@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class DocumentCollection extends ResourceCollection
@@ -67,7 +66,7 @@ class DocumentCollection extends ResourceCollection
                 'date_of_issue' => $row->date_of_issue->format('Y-m-d'),
                 'number' => $row->number_full,
                 'customer_name' => $row->customer->name,
-                'customer_number' => Code::getDescriptionByCode($row->customer->identity_document_type_code).' '.$row->customer->number,
+                'customer_number' => $row->customer->number,
                 'currency_type_code' => $row->currency_type_code,
                 'total_exportation' => $row->total_exportation,
                 'total_free' => $row->total_free,
@@ -78,7 +77,7 @@ class DocumentCollection extends ResourceCollection
                 'total' => $row->total,
                 'state_type_id' => $row->state_type_id,
                 'state_type_description' => $row->state_type->description,
-                'document_type_description' => Code::getDescriptionByCode($row->document_type_code),
+                'document_type_description' => $row->document_type_id,
                 'has_xml' => $has_xml,
                 'has_pdf' => $has_pdf,
                 'has_cdr' => $has_cdr,

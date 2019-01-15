@@ -2,11 +2,12 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\DocumentType;
 
 class Document extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'group', 'details', 'invoice', 'note'];
+    protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'currency_type', 'group', 'details', 'invoice', 'note'];
 
     protected $fillable = [
         'user_id',
@@ -17,14 +18,14 @@ class Document extends ModelTenant
         'state_type_id',
         'ubl_version',
         'group_id',
-        'document_type_code',
+        'document_type_id',
         'series',
         'number',
         'date_of_issue',
         'time_of_issue',
         'customer_id',
         'customer',
-        'currency_type_code',
+        'currency_type_id',
         'purchase_order',
         'exchange_rate_sale',
         'total_prepayment',
@@ -197,15 +198,15 @@ class Document extends ModelTenant
         return $this->belongsTo(Group::class);
     }
 
-//    public function document_type()
-//    {
-//        return $this->belongsTo(Code::class, 'document_type_id');
-//    }
-//
-//    public function currency_type()
-//    {
-//        return $this->belongsTo(Code::class, 'currency_type_id');
-//    }
+    public function document_type()
+    {
+        return $this->belongsTo(DocumentType::class, 'document_type_id');
+    }
+
+    public function currency_type()
+    {
+        return $this->belongsTo(CurrencyType::class, 'currency_type_id');
+    }
 
     public function invoice()
     {

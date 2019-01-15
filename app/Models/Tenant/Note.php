@@ -2,11 +2,12 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\NoteCreditType;
+use App\Models\Tenant\Catalogs\NoteDebitType;
 
 class Note extends ModelTenant
 {
-    protected $with = ['affected_document'];
+    protected $with = ['affected_document', 'note_credit_type', 'note_debit_type'];
     public $timestamps = false;
 
     protected $fillable = [
@@ -30,11 +31,11 @@ class Note extends ModelTenant
 
     public function note_credit_type()
     {
-        return $this->belongsTo(Code::class, 'note_credit_type_id');
+        return $this->belongsTo(NoteCreditType::class, 'note_credit_type_id');
     }
 
     public function note_debit_type()
     {
-        return $this->belongsTo(Code::class, 'note_debit_type_id');
+        return $this->belongsTo(NoteDebitType::class, 'note_debit_type_id');
     }
 }

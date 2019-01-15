@@ -4,12 +4,12 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
     let currency_type_id_old = row_old.item.currency_type_id
     let unit_price = parseFloat(row_old.item.unit_price)
-    if (currency_type_id_old === '02PEN' && currency_type_id_old !== currency_type_id_new)
+    if (currency_type_id_old === 'PEN' && currency_type_id_old !== currency_type_id_new)
     {
         unit_price = _.round(unit_price / exchange_rate_sale, 2)
     }
 
-    if (currency_type_id_new === '02PEN' && currency_type_id_old !== currency_type_id_new)
+    if (currency_type_id_new === 'PEN' && currency_type_id_old !== currency_type_id_new)
     {
         unit_price = _.round(unit_price * exchange_rate_sale, 2)
     }
@@ -67,7 +67,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         percentage_other_taxes: 0,
         total_other_taxes: 0,
         total_taxes: 0,
-        price_type_id: '1601',
+        price_type_id: '01',
         unit_price: unit_price,
         total_value: 0,
         total_discount: 0,
@@ -80,7 +80,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
     let percentage_igv = 18
 
-    if (row.affectation_igv_type.code !== '10') {
+    if (row.affectation_igv_type_id !== '10') {
         percentage_igv = 0
     }
 
@@ -177,7 +177,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     row.total = _.round(total, 2)
 
     if (row.affectation_igv_type.free) {
-        row.price_type_code = '1602'
+        row.price_type_id = '02'
         row.total = 0
     }
 

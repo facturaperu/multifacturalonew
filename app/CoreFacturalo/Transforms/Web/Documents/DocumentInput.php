@@ -17,7 +17,6 @@ use App\CoreFacturalo\Transforms\Web\Documents\Partials\PersonInput;
 use App\CoreFacturalo\Transforms\Web\Documents\Partials\PrepaymentInput;
 use App\CoreFacturalo\Transforms\Web\Documents\Partials\RelatedInput;
 use App\CoreFacturalo\Transforms\TransformFunctions;
-use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Document;
 use Illuminate\Support\Str;
@@ -26,12 +25,12 @@ class DocumentInput
 {
     public static function transform($inputs)
     {
-        $document_type_code =  Code::getCodeById($inputs['document_type_id']);
+        $document_type_id = $inputs['document_type_id'];
         $series = TransformFunctions::findSeries($inputs['series_id']);
         $number = $inputs['number'];
         $date_of_issue = $inputs['date_of_issue'];
         $time_of_issue = $inputs['time_of_issue'];
-        $currency_type_code = Code::getCodeById($inputs['currency_type_id']);
+        $currency_type_id = $inputs['currency_type_id'];
         $purchase_order = array_key_exists('purchase_order', $inputs)?$inputs['purchase_order']:null;
         $exchange_rate_sale = $inputs['exchange_rate_sale'];
 
@@ -54,10 +53,10 @@ class DocumentInput
 
         $company = Company::active();
         $soap_type_id = $company->soap_type_id;
-        $number = TransformFunctions::newNumber($soap_type_id, $document_type_code, $series, $number);
-        $filename = TransformFunctions::filename($company, $document_type_code, $series, $number);
+        $number = TransformFunctions::newNumber($soap_type_id, $document_type_id, $series, $number);
+        $filename = TransformFunctions::filename($company, $document_type_id, $series, $number);
 
-        TransformFunctions::validateUniqueDocument($soap_type_id, $document_type_code, $series, $number);
+        TransformFunctions::validateUniqueDocument($soap_type_id, $document_type_id, $series, $number);
 
         $array_establishment = EstablishmentInput::transform($inputs);
         $array_customer = PersonInput::transform($inputs);
@@ -83,11 +82,11 @@ class DocumentInput
         $type = 'invoice';
         $group_id = null;
 
-        if(in_array($document_type_code, ['01', '03'])) {
-            $group_id = ($document_type_code === '01')?'01':'02';
+        if(in_array($document_type_id, ['01', '03'])) {
+            $group_id = ($document_type_id === '01')?'01':'02';
             $invoice = [
                 'date_of_due' => $inputs['date_of_due'],
-                'operation_type_code' => Code::getCodeById($inputs['operation_type_id'])
+                'operation_type_id' => $inputs['operation_type_id']
             ];
         } else {
             $aff_document_id = $inputs['affected_document_id'];
@@ -95,22 +94,22 @@ class DocumentInput
             $note_description = $inputs['note_description'];
             $aux_aff_document = Document::find($aff_document_id);
             $group_id = $aux_aff_document->group_id;
-            if ($document_type_code === '07') {
+            if ($document_type_id === '07') {
                 $note_type = 'credit';
-                $note_credit_type_code = Code::getCodeById($note_credit_or_debit_type_id);
-                $note_debit_type_code = null;
+                $note_credit_type_id = $note_credit_or_debit_type_id;
+                $note_debit_type_id = null;
                 $type = 'credit';
             } else {
                 $note_type = 'debit';
-                $note_credit_type_code = null;
-                $note_debit_type_code = Code::getCodeById($note_credit_or_debit_type_id);
+                $note_credit_type_id = null;
+                $note_debit_type_id = $note_credit_or_debit_type_id;
                 $type = 'debit';
             }
 
             $note = [
                 'note_type' => $note_type,
-                'note_credit_type_code' => $note_credit_type_code,
-                'note_debit_type_code' => $note_debit_type_code,
+                'note_credit_type_id' => $note_credit_type_id,
+                'note_debit_type_id' => $note_debit_type_id,
                 'note_description' => $note_description,
                 'affected_document_id' => $aff_document_id,
             ];
@@ -127,14 +126,14 @@ class DocumentInput
             'state_type_id' => '01',
             'ubl_version' => '2.1',
             'filename' => $filename,
-            'document_type_code' => $document_type_code,
+            'document_type_id' => $document_type_id,
             'series' => $series,
             'number' => $number,
             'date_of_issue' => $date_of_issue,
             'time_of_issue' => $time_of_issue,
             'customer_id' => $array_customer['customer_id'],
             'customer' => $array_customer['customer'],
-            'currency_type_code' => $currency_type_code,
+            'currency_type_id' => $currency_type_id,
             'purchase_order' => $purchase_order,
             'exchange_rate_sale' => $exchange_rate_sale,
             'total_prepayment' => $total_prepayment,

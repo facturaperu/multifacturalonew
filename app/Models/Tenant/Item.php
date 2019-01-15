@@ -2,7 +2,9 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\SystemIscType;
+use App\Models\Tenant\Catalogs\UnitType;
 
 class Item extends ModelTenant
 {
@@ -29,16 +31,16 @@ class Item extends ModelTenant
 
     public function unit_type()
     {
-        return $this->belongsTo(Code::class, 'unit_type_id');
+        return $this->belongsTo(UnitType::class, 'unit_type_id');
     }
 
     public function currency_type()
     {
-        return $this->belongsTo(Code::class, 'currency_type_id');
+        return $this->belongsTo(CurrencyType::class, 'currency_type_id');
     }
 
     public function system_isc_type()
     {
-        return $this->belongsTo(Code::class, 'system_isc_type_id');
+        return $this->belongsTo(SystemIscType::class, 'system_isc_type_id');
     }
 }

@@ -21,7 +21,7 @@ class TenantSeriesTable extends Migration
             $table->timestamps();
 
             $table->foreign('establishment_id')->references('id')->on('establishments');
-            $table->foreign('document_type_id')->references('id')->on('codes');
+            $table->foreign('document_type_id')->references('id')->on('cat_document_types');
         });
     }
 

@@ -29,7 +29,7 @@ class TenantPersonsTable extends Migration
             $table->string('telephone')->nullable();
             $table->timestamps();
 
-            $table->foreign('identity_document_type_id')->references('id')->on('codes');
+            $table->foreign('identity_document_type_id')->references('id')->on('cat_identity_document_types');
             $table->foreign('country_id')->references('id')->on('countries');
             $table->foreign('department_id')->references('id')->on('departments');
             $table->foreign('province_id')->references('id')->on('provinces');

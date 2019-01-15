@@ -23,14 +23,14 @@ class TenantDocumentsTable extends Migration
             $table->char('state_type_id', 2);
             $table->string('ubl_version');
             $table->char('group_id', 2);
-            $table->string('document_type_code');
+            $table->string('document_type_id');
             $table->char('series', 4);
             $table->integer('number');
             $table->date('date_of_issue');
             $table->time('time_of_issue');
             $table->unsignedInteger('customer_id');
             $table->json('customer');
-            $table->string('currency_type_code');
+            $table->string('currency_type_id');
             $table->string('purchase_order')->nullable();
             $table->decimal('exchange_rate_sale', 12, 2);
             $table->decimal('total_prepayment', 12, 2)->default(0);
@@ -74,8 +74,8 @@ class TenantDocumentsTable extends Migration
             $table->foreign('soap_type_id')->references('id')->on('soap_types');
             $table->foreign('state_type_id')->references('id')->on('state_types');
             $table->foreign('group_id')->references('id')->on('groups');
-//            $table->foreign('document_type_id')->references('id')->on('codes');
-//            $table->foreign('currency_type_id')->references('id')->on('codes');
+            $table->foreign('document_type_id')->references('id')->on('cat_document_types');
+            $table->foreign('currency_type_id')->references('id')->on('cat_currency_types');
         });
     }
 

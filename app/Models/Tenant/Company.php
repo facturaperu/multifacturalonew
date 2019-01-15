@@ -2,7 +2,7 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\IdentityDocumentType;
 
 class Company extends ModelTenant
 {
@@ -22,7 +22,7 @@ class Company extends ModelTenant
 
     public function identity_document_type()
     {
-        return $this->belongsTo(Code::class, 'identity_document_type_id');
+        return $this->belongsTo(IdentityDocumentType::class, 'identity_document_type_id');
     }
 
     public static function active()

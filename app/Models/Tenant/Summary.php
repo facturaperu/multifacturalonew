@@ -2,11 +2,11 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\SummaryStatusType;
 
 class Summary extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'process_type', 'documents'];
+    protected $with = ['user', 'soap_type', 'state_type', 'summary_status_type', 'documents'];
 
     protected $fillable = [
         'user_id',
@@ -44,9 +44,9 @@ class Summary extends ModelTenant
         return $this->belongsTo(StateType::class);
     }
 
-    public function process_type()
+    public function summary_status_type()
     {
-        return $this->belongsTo(Code::class, 'process_type_id');
+        return $this->belongsTo(SummaryStatusType::class, 'summary_status_type_id');
     }
 
     public function documents()
