@@ -260,6 +260,8 @@
             changeChargeType(index) {
                 let charge_type_id = this.form.charges[index].charge_type_id
                 this.form.charges[index].charge_type = _.find(this.charges, {id: charge_type_id})
+                console.log(this.form.charges[index])
+
             },
 
             clickAddAttribute() {
@@ -268,6 +270,7 @@
                     attribute_type: null,
                     description: null, 
                 })
+                console.log(this.form.attributes)
             },
             clickRemoveAttribute(index) {
                 this.form.attributes.splice(index, 1)
@@ -275,6 +278,7 @@
             changeAttributeType(index) {
                 let attribute_type_id = this.form.attributes[index].attribute_type_id
                 this.form.attributes[index].attribute_type = _.find(this.attributes, {id: attribute_type_id})
+                console.log(this.form.attributes[index])
             },
 
 

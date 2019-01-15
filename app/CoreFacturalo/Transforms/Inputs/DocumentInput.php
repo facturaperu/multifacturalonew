@@ -17,6 +17,7 @@ use App\CoreFacturalo\Transforms\Inputs\Partials\OptionalInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\PerceptionInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\PrepaymentInput;
 use App\CoreFacturalo\Transforms\Inputs\Partials\RelatedInput;
+use App\CoreFacturalo\Transforms\Inputs\Partials\ItemAttributeInput;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Series;
@@ -105,6 +106,9 @@ class DocumentInput
         $optional = OptionalInput::transform($inputs, $isWeb);
         $legends = LegendInput::transform($inputs, $isWeb);
 
+        $attributes = ItemAttributeInput::transform($inputs, $isWeb);
+
+
         $legends[] = [
             'code' => 1000,
             'value' => NumberLetter::convertToLetter($total)
@@ -151,6 +155,7 @@ class DocumentInput
                 'total' => $total,
                 'items' => $items,
                 'charges' => $charges,
+                'attributes' => $attributes,
                 'discounts' => $discounts,
                 'prepayments' => $prepayments,
                 'guides' => $guides,
