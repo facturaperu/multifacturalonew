@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Requests\Tenant;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class TributeConceptTypeRequest extends FormRequest
+{
+    public function authorize()
+    {
+        return true;
+    }
+
+    public function rules()
+    {
+        $id = $this->input('id');
+        return [
+            'id' => [
+                'required',
+                // 'unique:tenant.cat_tribute_concept_types',
+                Rule::unique('tenant.cat_tribute_concept_types')->ignore($id),
+            ],
+            'description' => [
+                'required',
+            ],
+            'active' => [
+                'required',
+            ],
+        ];
+    }
+}

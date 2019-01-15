@@ -39,8 +39,9 @@
             <tenant-currency-types-index></tenant-currency-types-index>
         </div>
 
+      
         <div class="col-lg-6 col-md-12">
-            <tenant-attributes-index></tenant-attributes-index>
+            <tenant-exchange_rates-index></tenant-exchange_rates-index>
         </div>
 
     </div>
@@ -60,8 +61,9 @@
         <div class="col-lg-6 col-md-12">
             <tenant-banks-index></tenant-banks-index>
         </div>
+
         <div class="col-lg-6 col-md-12">
-            <tenant-exchange_rates-index></tenant-exchange_rates-index>
+            <tenant-attributes-index></tenant-attributes-index>
         </div>
-    </div>
+    </div> 
 @endsection

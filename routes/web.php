@@ -217,6 +217,17 @@ if ($hostname) {
             Route::post('perceptions', 'Tenant\PerceptionController@store');
             Route::delete('perceptions/{perception}', 'Tenant\PerceptionController@destroy');
             Route::get('perceptions/item/tables', 'Tenant\PerceptionController@item_tables');
+
+
+            //Tribute Concept Type
+            Route::get('tribute_concept_types', 'Tenant\TributeConceptTypeController@index');
+            Route::get('tribute_concept_types/records', 'Tenant\TributeConceptTypeController@records'); 
+            Route::get('tribute_concept_types/record/{id}', 'Tenant\TributeConceptTypeController@record');
+            Route::post('tribute_concept_types', 'Tenant\TributeConceptTypeController@store');
+            Route::post('tribute_concept_types/update', 'Tenant\TributeConceptTypeController@update');
+            Route::delete('tribute_concept_types/{id}', 'Tenant\TributeConceptTypeController@destroy');
+
+
         });
     });
 } else {
