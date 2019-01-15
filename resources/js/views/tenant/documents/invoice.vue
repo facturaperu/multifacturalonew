@@ -209,6 +209,7 @@
                 currency_types: [],
                 discounts: [],
                 charges: [],
+                attributes: [],
                 customers: [],
                 company: null,
                 operation_types: [],
@@ -231,6 +232,7 @@
                     this.customers = response.data.customers
                     this.discounts = response.data.discounts
                     this.charges = response.data.charges
+                    this.attributes = response.data.attributes
 
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
@@ -389,6 +391,7 @@
              },
             submit() {
                 this.loading_submit = true
+                console.log(this.form)
                 this.$http.post(`/${this.resource}`, this.form)
                     .then(response => {
                         console.log(response)
