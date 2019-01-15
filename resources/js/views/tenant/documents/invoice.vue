@@ -281,6 +281,7 @@
                     items: [],
                     charges: [],
                     discounts: [],
+                    attributes: [],
                     guides: [],
                     optional: {
                         observations: null,

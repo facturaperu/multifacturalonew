@@ -70,6 +70,7 @@ class DocumentController extends Controller
         $operation_types = Code::whereCatalog('51')->whereActive()->get();
         $discounts = Code::whereCatalog('53')->whereType('discount')->whereLevel('global')->get();
         $charges = Code::whereCatalog('53')->whereType('charge')->whereLevel('global')->get();
+        
 
         return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
                        'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
@@ -86,9 +87,10 @@ class DocumentController extends Controller
         $operation_types = Code::whereCatalog('51')->whereActive()->get();
         $discounts = Code::whereCatalog('53')->whereType('discount')->whereLevel('item')->get();
         $charges = Code::whereCatalog('53')->whereType('charge')->whereLevel('item')->get();
+        $attributes = Code::whereCatalog('55')->get();
 
         return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types',
-                       'operation_types', 'discounts', 'charges');
+                       'operation_types', 'discounts', 'charges', 'attributes');
     }
 
     public function table($table)

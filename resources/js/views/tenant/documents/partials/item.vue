@@ -108,6 +108,37 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="col-md-12" v-if="attributes.length > 0">
+                        <label class="control-label">
+                            Atributos
+                            <a href="#" @click.prevent="clickAddAttribute">[+ Agregar]</a>
+                        </label>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Descripción</th> 
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(row, index) in form.attributes">
+                                <td>
+                                    <el-select v-model="row.attribute_type_id" @change="changeAttributeType(index)">
+                                        <el-option v-for="option in attributes" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                    </el-select>
+                                </td>
+                                <td>
+                                    <el-input v-model="row.description"></el-input>
+                                </td> 
+                                <td>
+                                    <button type="button" class="btn btn-danger" @click.prevent="clickRemoveAttribute(index)">x</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="form-actions text-right pt-2">
@@ -145,6 +176,7 @@
                 system_isc_types: [],
                 discounts: [],
                 charges: [],
+                attributes: [],
                 use_price: 1
             }
         },
@@ -158,6 +190,7 @@
                 this.system_isc_types = response.data.system_isc_types
                 this.discounts = response.data.discounts
                 this.charges = response.data.charges
+                this.attributes = response.data.attributes 
             })
 
             this.$eventHub.$on('reloadDataItems', (item_id) => {
@@ -181,6 +214,7 @@
                     unit_price: 0,
                     charges: [],
                     discounts: [],
+                    attributes: [],
                 }
             },
             initializeFields() {
@@ -227,6 +261,23 @@
                 let charge_type_id = this.form.charges[index].charge_type_id
                 this.form.charges[index].charge_type = _.find(this.charges, {id: charge_type_id})
             },
+
+            clickAddAttribute() {
+                this.form.attributes.push({
+                    attribute_type_id: null,
+                    attribute_type: null,
+                    description: null, 
+                })
+            },
+            clickRemoveAttribute(index) {
+                this.form.attributes.splice(index, 1)
+            },
+            changeAttributeType(index) {
+                let attribute_type_id = this.form.attributes[index].attribute_type_id
+                this.form.attributes[index].attribute_type = _.find(this.attributes, {id: attribute_type_id})
+            },
+
+
             close() {
                 this.initForm()
                 this.$emit('update:showDialog', false)
