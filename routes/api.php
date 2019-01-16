@@ -8,6 +8,7 @@ if ($hostname) {
         Route::middleware('auth:api')->group(function() {
             Route::post('documents', 'Tenant\Api\DocumentController@store');
             Route::post('retentions', 'Tenant\Api\RetentionController@store');
+            Route::post('dispatch', 'Tenant\Api\DispatchController@store');
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
             Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
         });
