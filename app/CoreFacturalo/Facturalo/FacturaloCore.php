@@ -181,6 +181,9 @@ class FacturaloCore
             case 'retention':
                 $builder = new RetentionBuilder();
                 break;
+            case 'dispatch':
+                $builder = new RetentionBuilder();
+                break;
             default:
                 $builder = new InvoiceBuilder();
                 break;
@@ -237,6 +240,9 @@ class FacturaloCore
         switch ($this->type) {
             case 'retention':
                 $this->endpoint = ($this->isDemo)?SunatEndpoints::RETENCION_BETA:SunatEndpoints::RETENCION_PRODUCCION;
+                break;
+            case 'dispatch':
+                $this->endpoint = ($this->isDemo)?SunatEndpoints::GUIA_BETA:SunatEndpoints::GUIA_PRODUCCION;
                 break;
             default:
                 $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA:SunatEndpoints::FE_PRODUCCION;

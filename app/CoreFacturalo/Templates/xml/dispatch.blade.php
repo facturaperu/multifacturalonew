@@ -60,25 +60,24 @@
         {{--</cac:Party>--}}
     {{--</cac:SellerSupplierParty>--}}
     {{--{% endif -%}--}}
-    @php($shipment = $document->shipment)
     <cac:Shipment>
         <cbc:ID>1</cbc:ID>
-        <cbc:HandlingCode>{{ $shipment->transfer_code }}</cbc:HandlingCode>
-        @if($shipment->transfer_description)
-        <cbc:Information>{{ $shipment->transfer_description }}</cbc:Information>
+        <cbc:HandlingCode>{{ $document->transfer_code }}</cbc:HandlingCode>
+        @if($document->transfer_description)
+        <cbc:Information>{{ $document->transfer_description }}</cbc:Information>
         @endif
-        <cbc:GrossWeightMeasure unitCode="{{ $shipment->weight_unit_type_id }}">{{ $shipment->total_weight }}</cbc:GrossWeightMeasure>
+        <cbc:GrossWeightMeasure unitCode="{{ $document->weight_unit_type_id }}">{{ $shipment->total_weight }}</cbc:GrossWeightMeasure>
         @if($shipment->packages_number)
-        <cbc:TotalTransportHandlingUnitQuantity>{{ $shipment->packages_number }}</cbc:TotalTransportHandlingUnitQuantity>
+        <cbc:TotalTransportHandlingUnitQuantity>{{ $document->packages_number }}</cbc:TotalTransportHandlingUnitQuantity>
         @endif
-        <cbc:SplitConsignmentIndicator>{{ ($shipment->transfer)?'true':'false' }}</cbc:SplitConsignmentIndicator>
+        <cbc:SplitConsignmentIndicator>{{ ($document->transfer)?'true':'false' }}</cbc:SplitConsignmentIndicator>
         <cac:ShipmentStage>
-            <cbc:TransportModeCode>{{ $shipment->modTraslado }}</cbc:TransportModeCode>
+            <cbc:TransportModeCode>{{ $document->modTraslado }}</cbc:TransportModeCode>
             <cac:TransitPeriod>
-                <cbc:StartDate>{{ $shipment->transfer_date }}</cbc:StartDate>
+                <cbc:StartDate>{{ $document->transfer_date }}</cbc:StartDate>
             </cac:TransitPeriod>
-            @if($shipment->dispatcher)
-            @php($dispatcher = $shipment->dispatcher)
+            @if($document->dispatcher)
+            @php($dispatcher = $document->dispatcher)
             <cac:CarrierParty>
                 <cac:PartyIdentification>
                     <cbc:ID schemeID="{{ $dispatcher->identity_document_type_id }}">{{ $dispatcher->number }}</cbc:ID>
@@ -93,28 +92,28 @@
                 </cac:RoadTransport>
             </cac:TransportMeans>
             <cac:DriverPerson>
-                <cbc:ID schemeID="{{ $dispatcher->driver->identity_document_type_id }}">{{ $dispatcher->driver->number }}</cbc:ID>
+                <cbc:ID schemeID="{{ $document->driver->identity_document_type_id }}">{{ $document->driver->number }}</cbc:ID>
             </cac:DriverPerson>
             @endif
         </cac:ShipmentStage>
         <cac:Delivery>
             <cac:DeliveryAddress>
-                <cbc:ID>{{ $shipment->delivery->location_id }}</cbc:ID>
-                <cbc:StreetName>{{ $shipment->delivery->address }}</cbc:StreetName>
+                <cbc:ID>{{ $document->delivery->location_id }}</cbc:ID>
+                <cbc:StreetName>{{ $document->delivery->address }}</cbc:StreetName>
             </cac:DeliveryAddress>
         </cac:Delivery>
-        @if($shipment->container_number)
+        @if($document->container_number)
         <cac:TransportHandlingUnit>
-            <cbc:ID>{{ $shipment->container_number }}</cbc:ID>
+            <cbc:ID>{{ $document->container_number }}</cbc:ID>
         </cac:TransportHandlingUnit>
         @endif
         <cac:OriginAddress>
-            <cbc:ID>{{ $shipment->origen->location_id }}</cbc:ID>
-            <cbc:StreetName>{{ $shipment->origen->address }}</cbc:StreetName>
+            <cbc:ID>{{ $document->origen->location_id }}</cbc:ID>
+            <cbc:StreetName>{{ $document->origen->address }}</cbc:StreetName>
         </cac:OriginAddress>
-        @if($shipment->port_code)
+        @if($document->port_code)
         <cac:FirstArrivalPortLocation>
-            <cbc:ID>{{ $shipment->port_code }}</cbc:ID>
+            <cbc:ID>{{ $document->port_code }}</cbc:ID>
         </cac:FirstArrivalPortLocation>
         @endif
     </cac:Shipment>

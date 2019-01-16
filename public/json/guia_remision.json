@@ -7,7 +7,7 @@
   "datos_del_emisor": {
     "codigo_del_domicilio_fiscal": "0000"
   },
-  "datos_del_proveedor":{
+  "datos_del_cliente_o_receptor":{
     "codigo_tipo_documento_identidad": "6",
     "numero_documento": "10414711225",
     "apellidos_y_nombres_o_razon_social": "EMPRESA XYZ S.A.",
@@ -19,31 +19,33 @@
     "telefono": "427-1148"
   },
   "observaciones": "-",
-  "envio": {
-    "modo_traslado": "",
-    "codigo_tipo_traslado": "",
-    "descripcion_traslado": "",
-    "fecha_de_traslado": "",
-    "codigo_de_puerto": "",
-    "indicador_de_transbordo": "",
-    "unidad_peso_total": "",
-    "peso_total": "",
-    "numero_de_bultos": "",
-    "numero_de_contendor": "",
-    "direccion_partida": {
-    },
-    "direccion_llegada": {
-    },
-    "transportista": {
-      "codigo_tipo_documento_identidad": "01",
-      "numero_documento": "",
-      "apellidos_y_nombres_o_razon_social": "",
-      "placa": "",
-      "chofer": {
-        "codigo_tipo_documento_identidad": "1",
-        "numero": "-"
-      }
-    }
+  "modo_traslado": "",
+  "codigo_tipo_traslado": "",
+  "descripcion_traslado": "",
+  "fecha_de_traslado": "",
+  "codigo_de_puerto": "",
+  "indicador_de_transbordo": "",
+  "unidad_peso_total": "",
+  "peso_total": "",
+  "numero_de_bultos": "",
+  "numero_de_contenedor": "",
+  "direccion_partida": {
+    "ubigeo": "",
+    "direccion": ""
+  },
+  "direccion_llegada": {
+    "ubigeo": "",
+    "direccion": ""
+  },
+  "transportista": {
+    "codigo_tipo_documento_identidad": "1",
+    "numero_documento": "",
+    "apellidos_y_nombres_o_razon_social": "",
+    "placa": ""
+  },
+  "chofer": {
+    "codigo_tipo_documento_identidad": "1",
+    "numero_documento": "-"
   },
   "items":[
     {
