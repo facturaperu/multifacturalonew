@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Document;
+use App\Models\Tenant\Retention;
 use App\Models\Tenant\Summary;
 use App\Models\Tenant\Voided;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class OptionController extends Controller
         Summary::where('soap_type_id', '01')->delete();
         Voided::where('soap_type_id', '01')->delete();
         Document::where('soap_type_id', '01')->delete();
+        Retention::where('soap_type_id', '01')->delete();
 
         return [
             'success' => true,
