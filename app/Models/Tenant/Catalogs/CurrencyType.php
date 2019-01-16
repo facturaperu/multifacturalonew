@@ -9,4 +9,6 @@ class CurrencyType extends ModelCatalog
     use UsesTenantConnection;
     
     protected $table = "cat_currency_types";
+    public $incrementing = false;
+    public $timestamps = false;
 }

@@ -16,10 +16,9 @@ class UnitTypeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'code' => $this->code,
-            'description' => $this->description,
-            'symbol' => $this->symbol,
             'active' => (bool) $this->active,
+            'symbol' => $this->symbol,
+            'description' => $this->description,
         ];
     }
 }

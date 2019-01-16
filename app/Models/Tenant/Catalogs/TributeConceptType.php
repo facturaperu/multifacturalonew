@@ -9,13 +9,12 @@ class TributeConceptType extends ModelCatalog
     use UsesTenantConnection;
 
     protected $table = "cat_tribute_concept_types";
+    public $incrementing = false;
+    public $timestamps = false;
 
     protected $fillable = [
         'id',
         'active',
         'description',
     ];
-
-    public $timestamps = false;
-
 }

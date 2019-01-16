@@ -9,4 +9,5 @@ class NoteDebitType extends ModelCatalog
     use UsesTenantConnection;
     
     protected $table = "cat_note_debit_types";
+    public $incrementing = false;
 }

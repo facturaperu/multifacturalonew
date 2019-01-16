@@ -8,6 +8,7 @@ use App\Models\Tenant\Catalogs\Code;
 use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
+use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Person;
@@ -48,7 +49,7 @@ class PersonController extends Controller
         $departments = Department::whereActive()->orderByDescription()->get();
         $provinces = Province::whereActive()->orderByDescription()->get();
         $districts = District::whereActive()->orderByDescription()->get();
-        $identity_document_types = Code::whereCatalog('06')->whereActive()->get();
+        $identity_document_types = IdentityDocumentType::whereActive()->get();
 
         return compact('countries', 'departments', 'provinces', 'districts', 'identity_document_types');
     }

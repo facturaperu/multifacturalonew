@@ -9,4 +9,5 @@ class DocumentType extends ModelCatalog
     use UsesTenantConnection;
 
     protected $table = "cat_document_types";
+    public $incrementing = false;
 }

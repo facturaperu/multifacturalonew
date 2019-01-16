@@ -57,7 +57,7 @@ Vue.component('tenant-retentions-form', require('./views/tenant/retentions/form.
 Vue.component('tenant-perceptions-index', require('./views/tenant/perceptions/index.vue'));
 Vue.component('tenant-perceptions-form', require('./views/tenant/perceptions/form.vue'));
 
-Vue.component('tenant-attributes-index', require('./views/tenant/attributes/index.vue'));
+Vue.component('tenant-tribute_concept_types-index', require('./views/tenant/tribute_concept_types/index.vue'));
 //Vue.component('tenant-charge_discounts-index', require('./views/tenant/charge_discounts/index.vue'));
 Vue.component('tenant-calendar', require('./views/tenant/components/calendar.vue'));
 

@@ -9,4 +9,5 @@ class TransferReasonType extends ModelCatalog
     use UsesTenantConnection;
 
     protected $table = "cat_transfer_reason_types";
+    public $incrementing = false;
 }

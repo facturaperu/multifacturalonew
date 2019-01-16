@@ -15,9 +15,9 @@ class TributeConceptTypeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id, 
-            'description' => $this->description, 
+            'id' => $this->id,
             'active' => (bool) $this->active,
+            'description' => $this->description,
         ];
     }
 }

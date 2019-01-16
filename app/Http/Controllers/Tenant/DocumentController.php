@@ -72,8 +72,8 @@ class DocumentController extends Controller
         $customers = $this->table('customers');
         $establishments = Establishment::all();
         $series = Series::all();
-        $document_types_invoice = DocumentType::whereIn(['01', '03'])->get();
-        $document_types_note = DocumentType::whereIn(['07', '08'])->get();
+        $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();
+        $document_types_note = DocumentType::whereIn('id', ['07', '08'])->get();
         $note_credit_types = NoteCreditType::whereActive()->orderByDescription()->get();
         $note_debit_types = NoteDebitType::whereActive()->orderByDescription()->get();
         $currency_types = CurrencyType::whereActive()->get();

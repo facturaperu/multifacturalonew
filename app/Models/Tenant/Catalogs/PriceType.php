@@ -9,4 +9,5 @@ class PriceType extends ModelCatalog
     use UsesTenantConnection;
 
     protected $table = "cat_price_types";
+    public $incrementing = false;
 }

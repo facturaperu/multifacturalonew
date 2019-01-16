@@ -63,7 +63,7 @@
         </div>
 
         <div class="col-lg-6 col-md-12">
-            <tenant-attributes-index></tenant-attributes-index>
+            <tenant-tribute_concept_types-index></tenant-tribute_concept_types-index>
         </div>
     </div> 
 @endsection
