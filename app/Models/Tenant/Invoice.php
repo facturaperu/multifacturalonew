@@ -11,7 +11,7 @@ class Invoice extends ModelTenant
 
     protected $fillable = [
         'document_id',
-        'operation_type_code',
+        'operation_type_id',
         'date_of_due',
     ];
 

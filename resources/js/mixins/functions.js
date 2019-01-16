@@ -119,10 +119,10 @@ export const serviceNumber = {
                 return
             }
             let identity_document_type_name = ''
-            if (this.form.identity_document_type_id === '066') {
+            if (this.form.identity_document_type_id === '6') {
                 identity_document_type_name = 'ruc'
             }
-            if (this.form.identity_document_type_id === '061') {
+            if (this.form.identity_document_type_id === '1') {
                 identity_document_type_name = 'dni'
             }
             this.loading_search = true

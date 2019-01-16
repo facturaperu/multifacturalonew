@@ -11,7 +11,7 @@ class RetentionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('transform.input:retention,api', ['only' => ['store']]);
+        $this->middleware('transform.api:retention', ['only' => ['store']]);
     }
 
     public function store(Request $request)

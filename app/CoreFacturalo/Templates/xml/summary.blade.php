@@ -42,8 +42,8 @@
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingSupplierParty>
-    @foreach($document->details as $detail)
-    @php($doc = $detail->document)
+    @foreach($document->documents as $row)
+    @php($doc = $row->document)
     <sac:SummaryDocumentsLine>
         <cbc:LineID>{{ $loop->iteration }}</cbc:LineID>
         <cbc:DocumentTypeCode>{{ $doc->document_type_id }}</cbc:DocumentTypeCode>

@@ -12,9 +12,8 @@ class SummaryBuilder
         $summary = Summary::create($data);
 
         foreach ($data['documents'] as $row) {
-            $summary->details()->create($row);
+            $summary->documents()->create($row);
         }
-
         return $summary;
     }
 }

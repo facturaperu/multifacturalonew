@@ -417,7 +417,7 @@
             @endif
             @if($detail->attributes)
             @foreach($detail->attributes as $attr)
-            <cac:AdditionalItcompanyroperty >
+            <cac:AdditionalItemProperty >
                 <cbc:Name>{{ $attr->name }}</cbc:Name>
                 <cbc:NameCode>{{ $attr->code }}</cbc:NameCode>
                 @if($attr->value)
@@ -436,7 +436,7 @@
                     @endif
                 </cac:UsabilityPeriod>
                 @endif
-            </cac:AdditionalItcompanyroperty>
+            </cac:AdditionalItemProperty>
             @endforeach
             @endif
         </cac:Item>

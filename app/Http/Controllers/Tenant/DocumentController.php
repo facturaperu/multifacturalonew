@@ -78,12 +78,12 @@ class DocumentController extends Controller
         $note_debit_types = NoteDebitType::whereActive()->orderByDescription()->get();
         $currency_types = CurrencyType::whereActive()->get();
         $operation_types = OperationType::whereActive()->get();
-        $discounts = ChargeDiscountType::whereType('discount')->whereLevel('global')->get();
-        $charges = ChargeDiscountType::whereType('charge')->whereLevel('global')->get();
+        $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
+        $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
 
         return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
                        'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
-                       'discounts', 'charges');
+                       'discount_types', 'charge_types');
     }
 
     public function item_tables()
@@ -94,12 +94,12 @@ class DocumentController extends Controller
         $system_isc_types = SystemIscType::whereActive()->get();
         $price_types = PriceType::whereActive()->get();
         $operation_types = OperationType::whereActive()->get();
-        $discounts = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
-        $charges = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
-        $attributes = TributeConceptType::whereActive()->orderByDescription()->get();
+        $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
+        $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
+        $attribute_types = TributeConceptType::whereActive()->orderByDescription()->get();
 
         return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types',
-                       'operation_types', 'discounts', 'charges', 'attributes');
+                       'operation_types', 'discount_types', 'charge_types', 'attribute_types');
     }
 
     public function table($table)
@@ -126,7 +126,8 @@ class DocumentController extends Controller
                     'description' => $row->description,
                     'currency_type_id' => $row->currency_type_id,
                     'currency_type_symbol' => $row->currency_type->symbol,
-                    'unit_price' => $row->unit_price
+                    'unit_price' => $row->unit_price,
+                    'unit_type_id' => $row->unit_type_id
                 ];
             });
             return $items;

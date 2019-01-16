@@ -20,7 +20,7 @@ class SummaryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('transform.input:summary,web', ['only' => ['store']]);
+        $this->middleware('transform.web:summary', ['only' => ['store']]);
     }
 
     public function index()
@@ -30,7 +30,7 @@ class SummaryController extends Controller
 
     public function records()
     {
-        $records = Summary::where('process_type_id', '1')
+        $records = Summary::where('summary_status_type_id', '1')
                             ->latest()
                             ->get();
 

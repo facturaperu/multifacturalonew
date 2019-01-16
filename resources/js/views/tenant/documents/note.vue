@@ -52,7 +52,7 @@
                         <div class="col-lg-2 col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Formato de PDF</label>
-                                <el-select v-model="form.optional.format_pdf" >
+                                <el-select v-model="form.actions.format_pdf" >
                                     <el-option key="a4" value="a4" label="Tamaño A4"></el-option>
                                     <el-option key="ticket" value="ticket" label="Tamaño Ticket"></el-option>
                                 </el-select>
@@ -253,8 +253,10 @@
                         method_payment:null,
                         salesman:null,
                         box_number:null,
-                        format_pdf: 'a4'
                     },
+                    actions: {
+                        format_pdf: 'a4'
+                    }
                 }
             },
             resetForm() {

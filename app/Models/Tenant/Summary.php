@@ -13,7 +13,7 @@ class Summary extends ModelTenant
         'external_id',
         'soap_type_id',
         'state_type_id',
-        'process_type_id',
+        'summary_status_type_id',
         'ubl_version',
         'date_of_issue',
         'date_of_reference',

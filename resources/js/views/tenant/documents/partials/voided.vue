@@ -43,7 +43,7 @@
                 this.errors = {},
                 this.form = {
                     date_of_reference: null,
-                    process_type_id: '3',
+                    summary_status_type_id: '3',
                     documents: [
                         {
                             document_id: null,

@@ -40,7 +40,7 @@
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-12" v-if="discounts.length > 0">
+                    <div class="col-md-12" v-if="discount_types.length > 0">
                         <label class="control-label">
                             Descuentos
                             <a href="#" @click.prevent="clickAddDiscount">[+ Agregar]</a>
@@ -58,7 +58,7 @@
                             <tr v-for="(row, index) in form.discounts">
                                 <td>
                                     <el-select v-model="row.discount_type_id" @change="changeDiscountType(index)">
-                                        <el-option v-for="option in discounts" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                        <el-option v-for="option in discount_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
                                 </td>
                                 <td>
@@ -74,7 +74,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-12" v-if="charges.length > 0">
+                    <div class="col-md-12" v-if="charge_types.length > 0">
                         <label class="control-label">
                             Cargos
                             <a href="#" @click.prevent="clickAddCharge">[+ Agregar]</a>
@@ -92,7 +92,7 @@
                             <tr v-for="(row, index) in form.charges">
                                 <td>
                                     <el-select v-model="row.charge_type_id" @change="changeChargeType(index)">
-                                        <el-option v-for="option in charges" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                        <el-option v-for="option in charge_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
                                 </td>
                                 <td>
@@ -109,7 +109,7 @@
                         </table>
                     </div>
 
-                    <div class="col-md-12" v-if="attributes.length > 0">
+                    <div class="col-md-12" v-if="attribute_types.length > 0">
                         <label class="control-label">
                             Atributos
                             <a href="#" @click.prevent="clickAddAttribute">[+ Agregar]</a>
@@ -125,12 +125,12 @@
                             <tbody>
                             <tr v-for="(row, index) in form.attributes">
                                 <td>
-                                    <el-select v-model="row.attribute_type_id" @change="changeAttributeType(index)">
-                                        <el-option v-for="option in attributes" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                    <el-select v-model="row.attribute_type_id" filterable @change="changeAttributeType(index)">
+                                        <el-option v-for="option in attribute_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
                                 </td>
                                 <td>
-                                    <el-input v-model="row.description"></el-input>
+                                    <el-input v-model="row.value"></el-input>
                                 </td> 
                                 <td>
                                     <button type="button" class="btn btn-danger" @click.prevent="clickRemoveAttribute(index)">x</button>
@@ -174,9 +174,9 @@
                 all_affectation_igv_types: [],
                 affectation_igv_types: [],
                 system_isc_types: [],
-                discounts: [],
-                charges: [],
-                attributes: [],
+                discount_types: [],
+                charge_types: [],
+                attribute_types: [],
                 use_price: 1
             }
         },
@@ -188,9 +188,9 @@
                 this.operation_types = response.data.operation_types
                 this.all_affectation_igv_types = response.data.affectation_igv_types
                 this.system_isc_types = response.data.system_isc_types
-                this.discounts = response.data.discounts
-                this.charges = response.data.charges
-                this.attributes = response.data.attributes 
+                this.discount_types = response.data.discount_types
+                this.charge_types = response.data.charge_types
+                this.attribute_types = response.data.attribute_types
             })
 
             this.$eventHub.$on('reloadDataItems', (item_id) => {
@@ -241,7 +241,7 @@
             },
             changeDiscountType(index) {
                 let discount_type_id = this.form.discounts[index].discount_type_id
-                this.form.discounts[index].discount_type = _.find(this.discounts, {id: discount_type_id})
+                this.form.discounts[index].discount_type = _.find(this.discount_types, {id: discount_type_id})
             },
             clickAddCharge() {
                 this.form.charges.push({
@@ -259,29 +259,26 @@
             },
             changeChargeType(index) {
                 let charge_type_id = this.form.charges[index].charge_type_id
-                this.form.charges[index].charge_type = _.find(this.charges, {id: charge_type_id})
-                console.log(this.form.charges[index])
-
+                this.form.charges[index].charge_type = _.find(this.charge_types, {id: charge_type_id})
             },
-
             clickAddAttribute() {
                 this.form.attributes.push({
                     attribute_type_id: null,
-                    attribute_type: null,
-                    description: null, 
+                    description: null,
+                    value: null,
+                    start_date: null,
+                    end_date: null,
+                    duration: null,
                 })
-                console.log(this.form.attributes)
             },
             clickRemoveAttribute(index) {
                 this.form.attributes.splice(index, 1)
             },
             changeAttributeType(index) {
                 let attribute_type_id = this.form.attributes[index].attribute_type_id
-                this.form.attributes[index].attribute_type = _.find(this.attributes, {id: attribute_type_id})
-                console.log(this.form.attributes[index])
+                let attribute_type = _.find(this.attribute_types, {id: attribute_type_id})
+                this.form.attributes[index].description = attribute_type.description
             },
-
-
             close() {
                 this.initForm()
                 this.$emit('update:showDialog', false)

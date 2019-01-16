@@ -1,7 +1,9 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
-use App\Models\Tenant\Catalogs\Code;
+use App\Models\Tenant\Catalogs\CurrencyType;
+use App\Models\Tenant\Catalogs\SystemIscType;
+use App\Models\Tenant\Catalogs\UnitType;
 use App\Models\Tenant\Item;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\ItemRequest;
@@ -38,9 +40,9 @@ class ItemController extends Controller
 
     public function tables()
     {
-        $unit_types = Code::whereCatalog('03')->whereActive()->orderByDescription()->get();
-        $currency_types = Code::whereCatalog('02')->whereActive()->orderByDescription()->get();
-        $system_isc_types = Code::whereCatalog('08')->whereActive()->orderByDescription()->get();
+        $unit_types = UnitType::whereActive()->orderByDescription()->get();
+        $currency_types = CurrencyType::whereActive()->orderByDescription()->get();
+        $system_isc_types = SystemIscType::whereActive()->orderByDescription()->get();
 
         return compact('unit_types', 'currency_types', 'system_isc_types');
     }

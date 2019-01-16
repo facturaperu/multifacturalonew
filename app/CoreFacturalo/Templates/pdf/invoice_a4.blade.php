@@ -16,8 +16,6 @@
         '1' => 'DNI',
         '6' => 'RUC',
     ];
-    $currency_type = \App\Models\Tenant\Catalogs\Code::findByCode($document->currency_type_code)
-
 @endphp
 <html>
 <head>
@@ -167,7 +165,7 @@
         <td width="30%">
             <table class="voucher-company-right">
                 <tbody>
-                <tr><td class="text-center font-lg">{{ \App\Models\Tenant\Catalogs\Code::getDescriptionByCode($document->document_type_code) }}</td></tr>
+                <tr><td class="text-center font-lg">{{ $document->document_type->description }}</td></tr>
                 <tr><td class="text-center font-xlg font-bold">{{ $document_number }}</td></tr>
                 </tbody>
             </table>
@@ -194,7 +192,7 @@
                     <td width="80%">{{ $customer->name }}</td>
                 </tr>
                 <tr>
-                    <td width="20%">{{ \App\Models\Tenant\Catalogs\Code::getDescriptionByCode($customer->identity_document_type_code) }}:</td>
+                    <td width="20%">{{ $customer->identity_document_type->description }}:</td>
                     <td width="80%">{{ $customer->number }}</td>
                 </tr>
                 @if ($customer->address !== '')
@@ -242,7 +240,7 @@
     @foreach($details as $row)
         <tr>
             <td class="text-center">{{ $row->quantity }}</td>
-            <td>{{ $row->item->unit_type_code }}</td>
+            <td>{{ $row->item->unit_type_id }}</td>
             <td>
                 {!! $row->item_description !!}
                 @if($row->attributes)
@@ -258,7 +256,7 @@
     </tbody>
     <tfoot style="border-top: 1px solid #333;">
     <tr>
-        <td colspan="5" class="font-lg font-bold"  style="padding-top: 2rem;">Son: {{ $document->number_to_letter }} {{ $currency_type->description }}</td>
+        <td colspan="5" class="font-lg font-bold"  style="padding-top: 2rem;">Son: {{ $document->number_to_letter }} {{ $document->currency_type->description }}</td>
     </tr>
     </tfoot>
 </table>
@@ -283,40 +281,40 @@
                 <tbody>
                 @if($document->total_exportation > 0)
                     <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. EXPORTACIÓN: {{ $currency_type->symbol }}</td>
+                        <td class="text-right font-lg font-bold" width="70%">OP. EXPORTACIÓN: {{ $document->currency_type->symbol }}</td>
                         <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_exportation, 2) }}</td>
                     </tr>
                 @endif
                 @if($document->total_free > 0)
                     <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. GRATUITAS: {{ $currency_type->symbol }}</td>
+                        <td class="text-right font-lg font-bold" width="70%">OP. GRATUITAS: {{ $document->currency_type->symbol }}</td>
                         <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_free, 2) }}</td>
                     </tr>
                 @endif
                 @if($document->total_unaffected > 0)
                     <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. INAFECTAS: {{ $currency_type->symbol }}</td>
+                        <td class="text-right font-lg font-bold" width="70%">OP. INAFECTAS: {{ $document->currency_type->symbol }}</td>
                         <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_unaffected, 2) }}</td>
                     </tr>
                 @endif
                 @if($document->total_exonerated > 0)
                     <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. EXONERADAS: {{ $currency_type->symbol }}</td>
+                        <td class="text-right font-lg font-bold" width="70%">OP. EXONERADAS: {{ $document->currency_type->symbol }}</td>
                         <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_exonerated, 2) }}</td>
                     </tr>
                 @endif
                 @if($document->total_taxed > 0)
                     <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. GRAVADAS: {{ $currency_type->symbol }}</td>
+                        <td class="text-right font-lg font-bold" width="70%">OP. GRAVADAS: {{ $document->currency_type->symbol }}</td>
                         <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_taxed, 2) }}</td>
                     </tr>
                 @endif
                 <tr>
-                    <td class="text-right font-lg font-bold" width="70%">IGV: {{ $currency_type->symbol }}</td>
+                    <td class="text-right font-lg font-bold" width="70%">IGV: {{ $document->currency_type->symbol }}</td>
                     <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_igv, 2) }}</td>
                 </tr>
                 <tr>
-                    <td class="text-right font-lg font-bold" width="70%">TOTAL A PAGAR: {{ $currency_type->symbol }}</td>
+                    <td class="text-right font-lg font-bold" width="70%">TOTAL A PAGAR: {{ $document->currency_type->symbol }}</td>
                     <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total, 2) }}</td>
                 </tr>
                 </tbody>

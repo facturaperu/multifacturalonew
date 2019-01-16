@@ -95,7 +95,7 @@
                         <div class="col-lg-2">
                             <div class="form-group">
                                 <label class="control-label">Formato de PDF</label>
-                                <el-select v-model="form.optional.format_pdf" >
+                                <el-select v-model="form.actions.format_pdf" >
                                     <el-option key="a4" value="a4" label="Tamaño A4"></el-option>
                                     <el-option key="ticket" value="ticket" label="Tamaño Ticket"></el-option>
                                 </el-select>
@@ -207,9 +207,8 @@
                 form: {}, 
                 document_types: [],
                 currency_types: [],
-                discounts: [],
-                charges: [],
-                attributes: [],
+                discount_types: [],
+                charges_types: [],
                 customers: [],
                 company: null,
                 operation_types: [],
@@ -230,9 +229,8 @@
                     this.operation_types = response.data.operation_types
                     this.all_series = response.data.series
                     this.customers = response.data.customers
-                    this.discounts = response.data.discounts
-                    this.charges = response.data.charges
-                    this.attributes = response.data.attributes
+                    this.discount_types = response.data.discount_types
+                    this.charges_types = response.data.charges_types
 
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
@@ -290,6 +288,8 @@
                         method_payment:null, 
                         salesman:null,
                         box_number:null,
+                    },
+                    actions: {
                         format_pdf:'a4',
                     }
                 }

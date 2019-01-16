@@ -91,7 +91,7 @@
                 this.errors = {}
                 this.form = {
                     id: null,
-                    process_type_id: '1',
+                    summary_status_type_id: '1',
                     date_of_issue: null,
                     date_of_reference: moment().format('YYYY-MM-DD'),
                     documents: [],

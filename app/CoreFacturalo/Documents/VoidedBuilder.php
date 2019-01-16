@@ -12,7 +12,7 @@ class VoidedBuilder
         $voided = Voided::create($data);
 
         foreach ($data['documents'] as $row) {
-            $voided->details()->create($row);
+            $voided->documents()->create($row);
         }
 
         return $voided;

@@ -68,7 +68,7 @@ class FacturaloDocument extends FacturaloCore
             $this->document->total_igv,
             $this->document->total,
             $this->document->date_of_issue->format('Y-m-d'),
-            $customer->identity_document_type_code,
+            $customer->identity_document_type_id,
             $customer->number,
             $hash
         ]);

@@ -17,7 +17,7 @@ class VoidedController extends Controller
 
     public function __construct()
     {
-        $this->middleware('transform.input:voided,web', ['only' => ['store']]);
+        $this->middleware('transform.web:voided', ['only' => ['store']]);
     }
 
     public function index()
@@ -41,7 +41,7 @@ class VoidedController extends Controller
         $summaries = DB::connection('tenant')
                         ->table('summaries')
                         ->select(DB::raw("id, external_id, date_of_reference, date_of_issue, ticket, identifier, state_type_id, 'summaries' AS 'type'"))
-                        ->where('process_type_id', '3');
+                        ->where('summary_status_type_id', '3');
 
         return new VoidedCollection($voided->union($summaries)->paginate(env('ITEMS_PER_PAGE', 20)));
     }

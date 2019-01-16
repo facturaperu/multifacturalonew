@@ -16,16 +16,16 @@ class DocumentRequest extends FormRequest
     {
         $id = $this->input('id');
         return [
-            'document.customer_id' => [
+            'customer_id' => [
                 'required',
             ],
-            'document.establishment_id' => [
+            'establishment_id' => [
                 'required',
             ],
-            'document.series' => [
+            'series' => [
                 'required',
             ],
-            'document.date_of_issue' => [
+            'date_of_issue' => [
                 'required',
             ],
 //            'document_base.note_credit_or_debit_type_id' => [

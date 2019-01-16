@@ -40,14 +40,14 @@
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingSupplierParty>
-    @foreach($document->details as $detail)
-    @php($doc = $detail->document)
+    @foreach($document->documents as $row)
+    @php($doc = $row->document)
     <sac:VoidedDocumentsLine>
         <cbc:LineID>{{ $loop->iteration }}</cbc:LineID>
         <cbc:DocumentTypeCode>{{ $doc->document_type_id }}</cbc:DocumentTypeCode>
         <sac:DocumentSerialID>{{ $doc->series }}</sac:DocumentSerialID>
         <sac:DocumentNumberID>{{ $doc->number }}</sac:DocumentNumberID>
-        <sac:VoidReasonDescription><![CDATA[{{ $detail->description }}]]></sac:VoidReasonDescription>
+        <sac:VoidReasonDescription><![CDATA[{{ $row->description }}]]></sac:VoidReasonDescription>
     </sac:VoidedDocumentsLine>
     @endforeach
 </VoidedDocuments>

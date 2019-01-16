@@ -4,12 +4,12 @@ namespace App\CoreFacturalo\Templates;
 
 class Template
 {
-    public function pdf($template, $company, $document)
+    public function pdf($template, $company, $document, $format_pdf)
     {
         if($template === 'credit' || $template === 'debit') {
             $template = 'note';
         }
-        $template = 'pdf.'.$template.'_'.$document->optional->format_pdf;
+        $template = 'pdf.'.$template.'_'.$format_pdf;
         return self::render($template, $company, $document);
     }
 

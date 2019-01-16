@@ -2,9 +2,9 @@
 
 namespace App\CoreFacturalo\Transforms;
 
-use App\CoreFacturalo\Transforms\Api\Web\Documents\SummaryInput;
-use App\CoreFacturalo\Transforms\Api\Web\Documents\VoidedInput;
-use App\CoreFacturalo\Transforms\Web\Documents\DocumentInput;
+use App\CoreFacturalo\Transforms\TransWeb\Documents\DocumentInput;
+use App\CoreFacturalo\Transforms\TransWeb\Documents\SummaryInput;
+use App\CoreFacturalo\Transforms\TransWeb\Documents\VoidedInput;
 use Closure;
 
 class TransformWeb
@@ -15,7 +15,6 @@ class TransformWeb
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @param  $type
-     * @param  $apiOrWeb
      * @return mixed
      */
     public function handle($request, Closure $next, $type)
@@ -31,7 +30,7 @@ class TransformWeb
         } else {
             $originalAttributes = [];
         }
-//        dd($originalAttributes);
+
         $request->replace($originalAttributes);
         return $next($request);
     }

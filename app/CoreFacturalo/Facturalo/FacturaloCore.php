@@ -34,6 +34,7 @@ class FacturaloCore
     protected $signer;
     protected $wsClient;
     protected $inputs;
+    protected $actions;
     protected $company;
     protected $isDemo;
     protected $type;
@@ -58,6 +59,7 @@ class FacturaloCore
     {
         $this->inputs = $inputs;
         $this->type = $inputs['type'];
+        $this->actions = $inputs['actions'];
     }
 
     public function setType($type)
@@ -143,7 +145,7 @@ class FacturaloCore
     public function createPdf()
     {
         $template = new Template();
-        $html = $template->pdf($this->type, $this->company, $this->document);
+        $html = $template->pdf($this->type, $this->company, $this->document, $this->actions['format_pdf']);
 
         $pdf = new Mpdf();
         $pdf->WriteHTML($html);

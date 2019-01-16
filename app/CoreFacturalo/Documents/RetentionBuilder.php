@@ -8,9 +8,14 @@ class RetentionBuilder
 {
     public function save($inputs)
     {
-        $data = $inputs['retention'];
-        $retention = Retention::create($data);
-        foreach ($data['documents'] as $row) {
+//        $document = $this->saveDocument(array_except($inputs, 'invoice'));
+//        $document->invoice()->create($inputs['invoice']);
+//
+//        return $document;
+//
+//        $data = $inputs['retention'];
+        $retention = Retention::create($inputs);
+        foreach ($inputs['documents'] as $row) {
             $retention->documents()->create($row);
         }
 

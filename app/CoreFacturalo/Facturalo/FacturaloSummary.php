@@ -35,11 +35,11 @@ class FacturaloSummary extends FacturaloCore
         $res = $extService->getStatus($this->document->ticket);
         if(!$res->isSuccess()) {
             $this->updateStateType(self::REJECTED);
-            $this->updateStateTypeDocuments(($this->document->process_type_id === '3')?self::ACCEPTED:self::REGISTERED);
+            $this->updateStateTypeDocuments(($this->document->summary_status_type_id === '3')?self::ACCEPTED:self::REGISTERED);
             throw new Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
         } else {
             $this->updateStateType(self::ACCEPTED);
-            $this->updateStateTypeDocuments(($this->document->process_type_id === '3')?self::ANNULLED:self::ACCEPTED);
+            $this->updateStateTypeDocuments(($this->document->summary_status_type_id === '3')?self::ANNULLED:self::ACCEPTED);
             $cdrResponse = $res->getCdrResponse();
             $this->uploadFile($res->getCdrZip(), 'cdr');
             return [

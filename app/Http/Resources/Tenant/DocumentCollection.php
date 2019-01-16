@@ -77,7 +77,7 @@ class DocumentCollection extends ResourceCollection
                 'total' => $row->total,
                 'state_type_id' => $row->state_type_id,
                 'state_type_description' => $row->state_type->description,
-                'document_type_description' => $row->document_type_id,
+                'document_type_description' => $row->document_type->description,
                 'has_xml' => $has_xml,
                 'has_pdf' => $has_pdf,
                 'has_cdr' => $has_cdr,
