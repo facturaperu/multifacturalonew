@@ -219,12 +219,10 @@ if ($hostname) {
             Route::get('perceptions/item/tables', 'Tenant\PerceptionController@item_tables');
 
 
-            //Tribute Concept Type
-            Route::get('tribute_concept_types', 'Tenant\TributeConceptTypeController@index');
+            //Tribute Concept Type 
             Route::get('tribute_concept_types/records', 'Tenant\TributeConceptTypeController@records'); 
             Route::get('tribute_concept_types/record/{id}', 'Tenant\TributeConceptTypeController@record');
-            Route::post('tribute_concept_types', 'Tenant\TributeConceptTypeController@store');
-            Route::post('tribute_concept_types/update', 'Tenant\TributeConceptTypeController@update');
+            Route::post('tribute_concept_types', 'Tenant\TributeConceptTypeController@store'); 
             Route::delete('tribute_concept_types/{id}', 'Tenant\TributeConceptTypeController@destroy');
 
 

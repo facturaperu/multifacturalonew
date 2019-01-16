@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Catalogs\TributeConceptType;
 use App\Http\Resources\Tenant\TributeConceptTypeResource;
+use App\Http\Resources\Tenant\TributeConceptTypeCollection;
 use App\Http\Requests\Tenant\TributeConceptTypeRequest;
 
 class TributeConceptTypeController extends Controller
 {
     public function records()
     { 
-        $records = TributeConceptType::get();
+        $records = new TributeConceptTypeCollection(TributeConceptType::all());
 
         return $records;
     }
@@ -22,31 +23,21 @@ class TributeConceptTypeController extends Controller
         $record = new TributeConceptTypeResource(TributeConceptType::findOrFail($id));
 
         return $record;
-    }
+    } 
 
     public function store(TributeConceptTypeRequest $request)
-    {  
-        
-        $tribute_concept_type = TributeConceptType::create($request->all()); 
-
-        return [
-            'success' => true,
-            'message' =>'Atributo registrado con éxito'
-        ];
-    }
-
-    public function update(TributeConceptTypeRequest $request)
     {
-
-        $tribute_concept_type = TributeConceptType::findOrFail($request->input('id'));
-        $tribute_concept_type->fill($request->all());       
+        $id = $request->input('id');
+        $tribute_concept_type = TributeConceptType::firstOrNew(['id' => $id]);
+        $tribute_concept_type->fill($request->all());
         $tribute_concept_type->save();
 
         return [
             'success' => true,
-            'message' => 'Atributo editado con éxito'
+            'message' => ($id) ? 'Atributo editado con éxito':'Atributo registrado con éxito'
         ];
     }
+
 
 
     public function destroy($id)

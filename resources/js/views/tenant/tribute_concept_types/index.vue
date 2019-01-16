@@ -7,20 +7,20 @@
             <div class="table-responsive">
                 <table class="table">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Código</th>
-                        <th>Descripción</th> 
-                        <th>Activo</th> 
-                        <th class="text-right">Acciones</th>
+                    <tr width="100%">
+                        <th width="5%">#</th>
+                        <th width="10%">Código</th>
+                        <th width="50%">Descripción</th> 
+                        <th width="5%">Activo</th> 
+                        <th width="30%" class="text-right">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="(row, index) in records">
                         <td>{{ index + 1 }}</td>
                         <td>{{ row.id }}</td>
-                        <td class="text-right">{{ row.description }}</td>
-                        <td class="text-right">{{ row.active }}</td>
+                        <td>{{ row.description }}</td>
+                        <td class="text-center">{{ row.active }}</td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"  @click.prevent="clickDelete(row.id)">Eliminar</button>
@@ -42,8 +42,6 @@
                          :recordId="recordId"></tribute-concept-types-form>
     </div>
 </template>
-
-
 <script>
 
 
@@ -70,7 +68,7 @@
             getData() {
                 this.$http.get(`/${this.resource}/records`)
                     .then(response => {
-                        this.records = response.data 
+                        this.records = response.data.data 
                     })
             },
             clickCreate(recordId = null) {
