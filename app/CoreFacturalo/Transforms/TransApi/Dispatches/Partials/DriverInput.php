@@ -15,7 +15,7 @@ class DriverInput
         $identity_document_type_id = $driver['codigo_tipo_documento_identidad'];
         $number = $driver['numero_documento'];
 
-        $transform_driver[] = [
+        $transform_driver = [
             'identity_document_type_id' => $identity_document_type_id,
             'number' => $number,
         ];

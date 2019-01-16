@@ -43,7 +43,7 @@ class TenantDispatchesTable extends Migration
             $table->json('origin');
             $table->json('delivery');
             $table->json('dispatcher')->nullable();
-            $table->json('diver')->nullable();
+            $table->json('driver')->nullable();
             $table->string('license_plate')->nullable();
 
             $table->json('legends')->nullable();

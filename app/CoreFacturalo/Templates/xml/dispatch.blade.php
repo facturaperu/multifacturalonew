@@ -43,7 +43,7 @@
         </cac:Party>
     </cac:DespatchSupplierParty>
     <cac:DeliveryCustomerParty>
-        <cbc:CustomerAssignedAccountID schemeID="{{ $document->customer->identity_document_id }}">{{ $document->customer->number }}</cbc:CustomerAssignedAccountID>
+        <cbc:CustomerAssignedAccountID schemeID="{{ $document->customer->identity_document_type_id }}">{{ $document->customer->number }}</cbc:CustomerAssignedAccountID>
         <cac:Party>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName><![CDATA[{{ $document->customer->name }}]]></cbc:RegistrationName>
@@ -66,15 +66,15 @@
         @if($document->transfer_reason_description)
         <cbc:Information>{{ $document->transfer_reason_description }}</cbc:Information>
         @endif
-        <cbc:GrossWeightMeasure unitCode="{{ $document->weight_unit_type_id }}">{{ $shipment->total_weight }}</cbc:GrossWeightMeasure>
-        @if($shipment->packages_number)
+        <cbc:GrossWeightMeasure unitCode="{{ $document->unit_type_id }}">{{ $document->total_weight }}</cbc:GrossWeightMeasure>
+        @if($document->packages_number)
         <cbc:TotalTransportHandlingUnitQuantity>{{ $document->packages_number }}</cbc:TotalTransportHandlingUnitQuantity>
         @endif
-        <cbc:SplitConsignmentIndicator>{{ ($document->transshipment_indicator)?'true':'false' }}</cbc:SplitConsignmentIndicator>
+        <cbc:SplitConsignmentIndicator>{{ ($document->transshipment_indicator)?"true":"false" }}</cbc:SplitConsignmentIndicator>
         <cac:ShipmentStage>
             <cbc:TransportModeCode>{{ $document->transport_mode_type_id }}</cbc:TransportModeCode>
             <cac:TransitPeriod>
-                <cbc:StartDate>{{ $document->date_of_shipping }}</cbc:StartDate>
+                <cbc:StartDate>{{ $document->date_of_shipping->format('Y-m-d') }}</cbc:StartDate>
             </cac:TransitPeriod>
             @if($document->dispatcher)
             @php($dispatcher = $document->dispatcher)
@@ -83,7 +83,7 @@
                     <cbc:ID schemeID="{{ $dispatcher->identity_document_type_id }}">{{ $dispatcher->number }}</cbc:ID>
                 </cac:PartyIdentification>
                 <cac:PartyName>
-                    <cbc:Name><![CDATA[{{ $dispatcher->number }}]]></cbc:Name>
+                    <cbc:Name><![CDATA[{{ $dispatcher->name }}]]></cbc:Name>
                 </cac:PartyName>
             </cac:CarrierParty>
             @endif
@@ -111,8 +111,8 @@
         </cac:TransportHandlingUnit>
         @endif
         <cac:OriginAddress>
-            <cbc:ID>{{ $document->origen->location_id }}</cbc:ID>
-            <cbc:StreetName>{{ $document->origen->address }}</cbc:StreetName>
+            <cbc:ID>{{ $document->origin->location_id }}</cbc:ID>
+            <cbc:StreetName>{{ $document->origin->address }}</cbc:StreetName>
         </cac:OriginAddress>
         @if($document->port_code)
         <cac:FirstArrivalPortLocation>

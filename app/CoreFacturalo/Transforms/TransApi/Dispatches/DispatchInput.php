@@ -40,7 +40,7 @@ class DispatchInput
         $origin = OriginInput::transform($inputs);
         $delivery = DeliveryInput::transform($inputs);
         $dispatcher = DispatcherInput::transform($inputs);
-        $diver = DriverInput::transform($inputs);
+        $driver = DriverInput::transform($inputs);
         $license_plate = $inputs['numero_de_placa'];
 
         $company = Company::active();
@@ -52,13 +52,15 @@ class DispatchInput
         Functions::validateUniqueDocument($soap_type_id, $document_type_id, $series, $number, Dispatch::class);
 
         $array_establishment = EstablishmentInput::transform($inputs);
-        $array_supplier = PersonInput::transform($inputs['datos_del_cliente_o_receptor']);
+        $array_customer = PersonInput::transform($inputs['datos_del_cliente_o_receptor']);
 
         Functions::validateSeries($series, $document_type_id, $array_establishment['establishment_id']);
 
         $items = ItemInput::transform($inputs);
         $optional = null;
         $legends = null;
+
+//        dd($delivery);
 
         return [
             'type' => 'dispatch',
@@ -75,8 +77,8 @@ class DispatchInput
             'number' => $number,
             'date_of_issue' => $date_of_issue,
             'time_of_issue' => $time_of_issue,
-            'supplier_id' => $array_supplier['person_id'],
-            'supplier' => $array_supplier['person'],
+            'customer_id' => $array_customer['person_id'],
+            'customer' => $array_customer['person'],
             'observations' => $observations,
             'transport_mode_type_id' => $transport_mode_type_id,
             'transfer_reason_type_id' => $transfer_reason_type_id,
@@ -91,7 +93,7 @@ class DispatchInput
             'origin' => $origin,
             'delivery' => $delivery,
             'dispatcher' => $dispatcher,
-            'diver' => $diver,
+            'driver' => $driver,
             'license_plate' => $license_plate,
             'items' => $items,
             'legends' => $legends,

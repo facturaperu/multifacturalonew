@@ -2,6 +2,7 @@
 
 namespace App\CoreFacturalo\Facturalo;
 
+use App\CoreFacturalo\Documents\DispatchBuilder;
 use App\CoreFacturalo\Documents\InvoiceBuilder;
 use App\CoreFacturalo\Documents\NoteBuilder;
 use App\CoreFacturalo\Documents\RetentionBuilder;
@@ -182,7 +183,7 @@ class FacturaloCore
                 $builder = new RetentionBuilder();
                 break;
             case 'dispatch':
-                $builder = new RetentionBuilder();
+                $builder = new DispatchBuilder();
                 break;
             default:
                 $builder = new InvoiceBuilder();

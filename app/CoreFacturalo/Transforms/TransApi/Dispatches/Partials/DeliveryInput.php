@@ -15,7 +15,7 @@ class DeliveryInput
         $location_id = $origin['ubigeo'];
         $address = $origin['direccion'];
 
-        $transform_origin[] = [
+        $transform_origin = [
             'location_id' => $location_id,
             'address' => $address,
         ];

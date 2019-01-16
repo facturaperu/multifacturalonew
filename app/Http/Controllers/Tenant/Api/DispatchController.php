@@ -21,7 +21,7 @@ class DispatchController extends Controller
         DB::connection('tenant')->transaction(function () use($facturalo) {
             $facturalo->save();
             $facturalo->createXmlAndSign();
-//            $facturalo->createPdf();
+            $facturalo->createPdf();
             $facturalo->sendXml();
         });
         $document = $facturalo->getDocument();
