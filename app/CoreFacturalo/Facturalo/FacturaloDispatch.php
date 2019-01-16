@@ -5,7 +5,7 @@ namespace App\CoreFacturalo\Facturalo;
 use App\CoreFacturalo\Helpers\Xml\XmlHash;
 use Exception;
 
-class FacturaloRetention extends FacturaloCore
+class FacturaloDispatch extends FacturaloCore
 {
     public function createXmlAndSign()
     {

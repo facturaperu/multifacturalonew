@@ -3,14 +3,14 @@
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.id}">
                             <label class="control-label">Código</label>
-                            <el-input v-model="form.id" :disabled="recordId != null"></el-input>
+                            <el-input v-model="form.id" :readonly="recordId !== null"></el-input>
                             <small class="form-control-feedback"  v-if="errors.id" v-text="errors.id[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-9">
                         <div class="form-group" :class="{'has-danger': errors.description}">
                             <label class="control-label">Descripción</label>
                             <el-input v-model="form.description"></el-input>
@@ -45,8 +45,7 @@
             return {
                 loading_submit: false,
                 titleDialog: null,
-                resource: 'tribute_concept_types',
-                url: null,
+                resource: 'tribute_concept_types', 
                 errors: {},
                 form: {},
                 options: [],
@@ -65,7 +64,7 @@
                 }
             },
             create() {
-                this.titleDialog = (this.recordId)? 'Editar Tributo':'Nuevo Tributo'
+                this.titleDialog = (this.recordId)? 'Editar Atributo':'Nuevo Atributo'
                 if (this.recordId) {
                     this.$http.get(`/${this.resource}/record/${this.recordId}`)
                         .then(response => {
@@ -74,10 +73,8 @@
                 } 
             },
             submit() {
-                this.loading_submit = true 
-                this.url = (this.recordId) ? 'tribute_concept_types/update' : 'tribute_concept_types'
-                
-                this.$http.post(`/${this.url}`, this.form)
+                this.loading_submit = true                  
+                this.$http.post(`/${this.resource}`, this.form)
                     .then(response => {
                         if (response.data.success) {
                             this.$message.success(response.data.message)                

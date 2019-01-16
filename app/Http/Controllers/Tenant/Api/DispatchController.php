@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Tenant\Api;
 
-use App\CoreFacturalo\Facturalo\FacturaloRetention;
+use App\CoreFacturalo\Facturalo\FacturaloDispatch;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
