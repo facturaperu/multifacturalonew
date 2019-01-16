@@ -62,19 +62,19 @@
     {{--{% endif -%}--}}
     <cac:Shipment>
         <cbc:ID>1</cbc:ID>
-        <cbc:HandlingCode>{{ $document->transfer_code }}</cbc:HandlingCode>
-        @if($document->transfer_description)
-        <cbc:Information>{{ $document->transfer_description }}</cbc:Information>
+        <cbc:HandlingCode>{{ $document->transfer_reason_type_id }}</cbc:HandlingCode>
+        @if($document->transfer_reason_description)
+        <cbc:Information>{{ $document->transfer_reason_description }}</cbc:Information>
         @endif
         <cbc:GrossWeightMeasure unitCode="{{ $document->weight_unit_type_id }}">{{ $shipment->total_weight }}</cbc:GrossWeightMeasure>
         @if($shipment->packages_number)
         <cbc:TotalTransportHandlingUnitQuantity>{{ $document->packages_number }}</cbc:TotalTransportHandlingUnitQuantity>
         @endif
-        <cbc:SplitConsignmentIndicator>{{ ($document->transfer)?'true':'false' }}</cbc:SplitConsignmentIndicator>
+        <cbc:SplitConsignmentIndicator>{{ ($document->transshipment_indicator)?'true':'false' }}</cbc:SplitConsignmentIndicator>
         <cac:ShipmentStage>
-            <cbc:TransportModeCode>{{ $document->modTraslado }}</cbc:TransportModeCode>
+            <cbc:TransportModeCode>{{ $document->transport_mode_type_id }}</cbc:TransportModeCode>
             <cac:TransitPeriod>
-                <cbc:StartDate>{{ $document->transfer_date }}</cbc:StartDate>
+                <cbc:StartDate>{{ $document->date_of_shipping }}</cbc:StartDate>
             </cac:TransitPeriod>
             @if($document->dispatcher)
             @php($dispatcher = $document->dispatcher)
@@ -86,13 +86,16 @@
                     <cbc:Name><![CDATA[{{ $dispatcher->number }}]]></cbc:Name>
                 </cac:PartyName>
             </cac:CarrierParty>
+            @endif
+            @if($document->driver)
+            @php($driver = $document->driver)
             <cac:TransportMeans>
                 <cac:RoadTransport>
-                    <cbc:LicensePlateID>{{ $dispatcher->license_plate }}</cbc:LicensePlateID>
+                    <cbc:LicensePlateID>{{ $document->license_plate }}</cbc:LicensePlateID>
                 </cac:RoadTransport>
             </cac:TransportMeans>
             <cac:DriverPerson>
-                <cbc:ID schemeID="{{ $document->driver->identity_document_type_id }}">{{ $document->driver->number }}</cbc:ID>
+                <cbc:ID schemeID="{{ $driver->identity_document_type_id }}">{{ $driver->number }}</cbc:ID>
             </cac:DriverPerson>
             @endif
         </cac:ShipmentStage>

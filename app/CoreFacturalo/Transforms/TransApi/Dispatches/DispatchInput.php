@@ -10,10 +10,10 @@ use App\CoreFacturalo\Transforms\TransApi\Common\PersonInput;
 use App\CoreFacturalo\Transforms\TransApi\Dispatches\Partials\DeliveryInput;
 use App\CoreFacturalo\Transforms\TransApi\Dispatches\Partials\DispatcherInput;
 use App\CoreFacturalo\Transforms\TransApi\Dispatches\Partials\DriverInput;
+use App\CoreFacturalo\Transforms\TransApi\Dispatches\Partials\ItemInput;
 use App\CoreFacturalo\Transforms\TransApi\Dispatches\Partials\OriginInput;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Dispatch;
-use App\Models\Tenant\Retention;
 use Illuminate\Support\Str;
 
 class DispatchInput
@@ -25,30 +25,30 @@ class DispatchInput
         $number = $inputs['numero_documento'];
         $date_of_issue = $inputs['fecha_de_emision'];
         $time_of_issue = $inputs['hora_de_emision'];
-        $retention_type_id = $inputs['codigo_tipo_retencion'];
         $observations = $inputs['observaciones'];
-        $observations = $inputs['modo_traslado'];
-        $observations = $inputs['codigo_tipo_traslado'];
-        $observations = $inputs['descripcion_traslado'];
-        $observations = $inputs['fecha_de_traslado'];
-        $observations = $inputs['codigo_de_puerto'];
-        $observations = $inputs['indicador_de_transbordo'];
-        $observations = $inputs['unidad_peso_total'];
-        $observations = $inputs['peso_total'];
-        $observations = $inputs['numero_de_bultos'];
-        $observations = $inputs['numero_de_contenedor'];
+        $transport_mode_type_id = $inputs['codigo_modo_transporte'];
+        $transfer_reason_type_id = $inputs['codigo_motivo_traslado'];
+        $transfer_reason_description = $inputs['descripcion_motivo_traslado'];
+        $date_of_shipping = $inputs['fecha_de_traslado'];
+        $port_code = $inputs['codigo_de_puerto'];
+        $transshipment_indicator = $inputs['indicador_de_transbordo'];
+        $unit_type_id = $inputs['unidad_peso_total'];
+        $total_weight = $inputs['peso_total'];
+        $packages_number = $inputs['numero_de_bultos'];
+        $container_number = $inputs['numero_de_contenedor'];
 
         $origin = OriginInput::transform($inputs);
         $delivery = DeliveryInput::transform($inputs);
         $dispatcher = DispatcherInput::transform($inputs);
         $diver = DriverInput::transform($inputs);
+        $license_plate = $inputs['numero_de_placa'];
 
         $company = Company::active();
         $soap_type_id = $company->soap_type_id;
         $number = Functions::newNumber($soap_type_id, $document_type_id, $series, $number, Dispatch::class);
         $filename = Functions::filename($company, $document_type_id, $series, $number);
 
-        Functions::validateDocumentTypeId($document_type_id, ['20']);
+        Functions::validateDocumentTypeId($document_type_id, ['09']);
         Functions::validateUniqueDocument($soap_type_id, $document_type_id, $series, $number, Dispatch::class);
 
         $array_establishment = EstablishmentInput::transform($inputs);
@@ -56,6 +56,7 @@ class DispatchInput
 
         Functions::validateSeries($series, $document_type_id, $array_establishment['establishment_id']);
 
+        $items = ItemInput::transform($inputs);
         $optional = null;
         $legends = null;
 
@@ -76,22 +77,22 @@ class DispatchInput
             'time_of_issue' => $time_of_issue,
             'supplier_id' => $array_supplier['person_id'],
             'supplier' => $array_supplier['person'],
-            'retention_type_id' => $retention_type_id,
             'observations' => $observations,
-            'observations' => $observations,
-            'observations' => $observations,
-            'observations' => $observations,
-            'observations' => $observations,
-            'observations' => $observations,
-            'observations' => $observations,
-            'observations' => $observations,
-            'observations' => $observations,
-            'observations' => $observations,
-            'observations' => $observations,
+            'transport_mode_type_id' => $transport_mode_type_id,
+            'transfer_reason_type_id' => $transfer_reason_type_id,
+            'transfer_reason_description' => $transfer_reason_description,
+            'date_of_shipping' => $date_of_shipping,
+            'transshipment_indicator' => $transshipment_indicator,
+            'port_code' => $port_code,
+            'unit_type_id' => $unit_type_id,
+            'total_weight' => $total_weight,
+            'packages_number' => $packages_number,
+            'container_number' => $container_number,
             'origin' => $origin,
             'delivery' => $delivery,
             'dispatcher' => $dispatcher,
             'diver' => $diver,
+            'license_plate' => $license_plate,
             'items' => $items,
             'legends' => $legends,
             'optional' => $optional,

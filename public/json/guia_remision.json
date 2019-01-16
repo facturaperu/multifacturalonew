@@ -19,9 +19,9 @@
     "telefono": "427-1148"
   },
   "observaciones": "-",
-  "modo_traslado": "",
-  "codigo_tipo_traslado": "",
-  "descripcion_traslado": "",
+  "codigo_modo_transporte": "",
+  "codigo_motivo_traslado": "",
+  "descripcion_motivo_traslado": "",
   "fecha_de_traslado": "",
   "codigo_de_puerto": "",
   "indicador_de_transbordo": "",
@@ -41,12 +41,12 @@
     "codigo_tipo_documento_identidad": "1",
     "numero_documento": "",
     "apellidos_y_nombres_o_razon_social": "",
-    "placa": ""
   },
   "chofer": {
     "codigo_tipo_documento_identidad": "1",
     "numero_documento": "-"
   },
+  "numero_de_placa": "",
   "items":[
     {
       "codigo_interno": "P0121",

@@ -30,10 +30,21 @@ class TenantDispatchesTable extends Migration
             $table->unsignedInteger('customer_id');
             $table->json('customer');
             $table->text('observations');
+            $table->string('transport_mode_type_id');
+            $table->string('transfer_reason_type_id');
+            $table->string('transfer_reason_description');
+            $table->date('date_of_shipping');
+            $table->boolean('transshipment_indicator');
+            $table->string('port_code')->nullable();
+            $table->string('unit_type_id');
+            $table->decimal('total_weight', 10, 2);
+            $table->integer('packages_number');
+            $table->integer('container_number')->nullable();
             $table->json('origin');
             $table->json('delivery');
-            $table->json('dispatcher');
-            $table->json('diver');
+            $table->json('dispatcher')->nullable();
+            $table->json('diver')->nullable();
+            $table->string('license_plate')->nullable();
 
             $table->json('legends')->nullable();
             $table->json('optional')->nullable();
@@ -51,6 +62,9 @@ class TenantDispatchesTable extends Migration
             $table->foreign('state_type_id')->references('id')->on('state_types');
             $table->foreign('document_type_id')->references('id')->on('cat_document_types');
             $table->foreign('customer_id')->references('id')->on('persons');
+            $table->foreign('unit_type_id')->references('id')->on('cat_unit_types');
+            $table->foreign('transport_mode_type_id')->references('id')->on('cat_transport_mode_types');
+            $table->foreign('transfer_reason_type_id')->references('id')->on('cat_transfer_reason_types');
         });
     }
 
