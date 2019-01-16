@@ -6,6 +6,7 @@ use App\CoreFacturalo\Facturalo\FacturaloDocument;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\DocumentEmailRequest;
+use App\Http\Requests\Tenant\DocumentRequest;
 use App\Http\Requests\Tenant\DocumentVoidedRequest;
 use App\Http\Resources\Tenant\DocumentCollection;
 use App\Http\Resources\Tenant\DocumentResource;
@@ -143,7 +144,7 @@ class DocumentController extends Controller
         return $record;
     }
 
-    public function store(Request $request)
+    public function store(DocumentRequest $request)
     {
         $facturalo = new FacturaloDocument();
         $facturalo->setInputs($request->all());

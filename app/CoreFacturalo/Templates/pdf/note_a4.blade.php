@@ -296,7 +296,7 @@
                 {!! $row->item_description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
-                        <br/>{!! $attr->name !!} : {{ $attr->value }}
+                        <br/>{!! $attr->description !!} : {{ $attr->value }}
                     @endforeach
                 @endif
             </td>

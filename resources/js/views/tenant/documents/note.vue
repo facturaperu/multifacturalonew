@@ -26,27 +26,30 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group" :class="{'has-danger': errors.note_credit_or_debit_type_id}">
-                                <template v-if="form.document_type_id === '08'">
+                            <template v-if="form.document_type_id === '08'">
+                                <div class="form-group" :class="{'has-danger': errors['note.note_debit_type_id']}">
                                     <label class="control-label">Tipo nota de débito</label>
                                     <el-select v-model="form.note_credit_or_debit_type_id">
                                         <el-option v-for="option in note_debit_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
-                                </template>
-                                <template v-else>
+                                    <small class="form-control-feedback" v-if="errors['note.note_debit_type_id']" v-text="errors['note.note_debit_type_id'][0]"></small>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="form-group" :class="{'has-danger': errors['note.note_credit_type_id']}">
                                     <label class="control-label">Tipo nota de crédito</label>
                                     <el-select v-model="form.note_credit_or_debit_type_id">
                                         <el-option v-for="option in note_credit_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
-                                </template>
-                                <small class="form-control-feedback" v-if="errors.note_credit_or_debit_type_id" v-text="errors.note_credit_or_debit_type_id[0]"></small>
-                            </div>
+                                    <small class="form-control-feedback" v-if="errors['note.note_credit_type_id']" v-text="errors['note.note_credit_type_id'][0]"></small>
+                                </div>
+                            </template>
                         </div>
                         <div class="col-lg-4 col-md-6">
-                            <div class="form-group" :class="{'has-danger': errors.note_description}">
+                            <div class="form-group" :class="{'has-danger': errors['note.note_description']}">
                                 <label class="control-label">Descripción</label>
                                 <el-input v-model="form.note_description"></el-input>
-                                <small class="form-control-feedback" v-if="errors.note_description" v-text="errors.note_description[0]"></small>
+                                <small class="form-control-feedback" v-if="errors['note.note_description']" v-text="errors['note.note_description'][0]"></small>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-6">
@@ -318,7 +321,6 @@
                     if (['10', '20', '30', '40'].indexOf(row.affectation_igv_type_id) < 0) {
                         total_free += parseFloat(row.total_value)
                     }
-
                     total_value += parseFloat(row.total_value)
                     total_igv += parseFloat(row.total_igv)
                     total += parseFloat(row.total)
@@ -347,7 +349,7 @@
                     })
                     .catch(error => {
                         if (error.response.status === 422) {
-                            this.errors = error.response.data.errors
+                            this.errors = error.response.data
                         } else {
                             this.$message.error(error.response.data.message)
                         }
