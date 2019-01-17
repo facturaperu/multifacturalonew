@@ -14,7 +14,9 @@ class QrCodeGenerate
 
         $qrCode->displayPNG($w, $background, $color, $filename, $quality);
         $image = ob_get_clean();
-//        echo ($image);
+//        ob_end_clean();
+//        ob_end_flush();
+        echo('');
         return base64_encode($image);
     }
 }

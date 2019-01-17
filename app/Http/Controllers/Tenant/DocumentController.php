@@ -36,8 +36,6 @@ use Nexmo\Account\Price;
 
 class DocumentController extends Controller
 {
-    use StorageDocument;
-
     public function __construct()
     {
         $this->middleware('transform.web:document', ['only' => ['store']]);
@@ -184,7 +182,7 @@ class DocumentController extends Controller
         if(!$document) {
             throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
         }
-        return $this->download($type, $document);
+        return StorageDocument::download($document->filename, $type);
     }
 
     public function download($type, Document $document)
@@ -203,14 +201,14 @@ class DocumentController extends Controller
                 throw new Exception('Tipo de archivo a descargar es inválido');
         }
 
-        return $this->downloadStorage($document->filename, $folder);
+        return StorageDocument::download($document->filename, $folder);
     }
 
     public function to_print($id)
     {
         $document = Document::find($id);
         $temp = tempnam(sys_get_temp_dir(), 'pdf');
-        file_put_contents($temp, $this->getStorage($document->filename, 'pdf'));
+        file_put_contents($temp, StorageDocument::get($document->filename, 'pdf'));
 
         return response()->file($temp);
     }

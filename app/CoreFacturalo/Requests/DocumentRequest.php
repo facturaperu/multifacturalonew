@@ -2,6 +2,7 @@
 
 namespace App\CoreFacturalo\Requests;
 
+use App\CoreFacturalo\Helpers\Number\NumberLetter;
 use App\CoreFacturalo\Requests\Partials\EstablishmentRequest;
 use App\CoreFacturalo\Requests\Partials\PersonRequest;
 use App\CoreFacturalo\Transforms\Functions;
@@ -66,6 +67,11 @@ class DocumentRequest
                 'affected_number' => $affected_number
             ];
         }
+
+        $inputs['legends'][] = [
+            'code' => 1000,
+            'value' => NumberLetter::convertToLetter($inputs['total'])
+        ];
 
         $inputs['type'] = $type;
         $inputs['number'] = $number;

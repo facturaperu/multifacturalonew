@@ -10,8 +10,7 @@ class FacturaloDocument extends FacturaloCore
 {
     public function createXmlAndSign()
     {
-        $this->createXmlUnsigned();
-//        $this->signXmlUnsigned();
+
 //        $this->updateHashAndQr();
     }
 

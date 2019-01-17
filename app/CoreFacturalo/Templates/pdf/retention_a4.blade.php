@@ -20,11 +20,9 @@
             <table class="">
                 <tbody>
                 <tr><td class="text-left font-xlg font-bold">{{ $company->name }}</td></tr>
-                @if($establishment)
-                    <tr><td class="text-left font-md">{{ $establishment->address }}</td></tr>
-                    <tr><td class="text-left font-md">{{ ($establishment->email != '-')? $establishment->email : '' }}</td></tr>
-                    <tr><td class="text-left font-md font-bold">{{ ($establishment->telephone != '-')? $establishment->telephone : '' }}</td></tr>
-                @endif
+                <tr><td class="text-left font-md">{{ $establishment->address }}</td></tr>
+                <tr><td class="text-left font-md">{{ ($establishment->email != '-')? $establishment->email : '' }}</td></tr>
+                <tr><td class="text-left font-md font-bold">{{ ($establishment->telephone != '-')? $establishment->telephone : '' }}</td></tr>
                 </tbody>
             </table>
         </td>

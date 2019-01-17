@@ -20,11 +20,16 @@ use App\CoreFacturalo\WS\Services\SunatEndpoints;
 use App\CoreFacturalo\WS\Signed\XmlSigned;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
 use App\Models\Tenant\Company;
+use App\Models\Tenant\Dispatch;
+use App\Models\Tenant\Document;
+use App\Models\Tenant\Retention;
+use App\Models\Tenant\Summary;
+use App\Models\Tenant\Voided;
 use Mpdf\Mpdf;
 
 class FacturaloCore
 {
-    use StorageDocument;
+//    use StorageDocument;
 
     const REGISTERED = '01';
     const SENT = '03';
@@ -42,6 +47,7 @@ class FacturaloCore
     protected $filename;
     protected $company;
     protected $isDemo;
+    protected $document_id;
     protected $document;
     protected $xmlUnsigned;
     protected $xmlSigned;
@@ -80,6 +86,11 @@ class FacturaloCore
     public function getInputs()
     {
         return $this->inputs;
+    }
+
+    public function getDocument()
+    {
+        return $this->document;
     }
 //
 //    public function setDocument($document)
@@ -125,7 +136,7 @@ class FacturaloCore
     public function createXmlUnsigned()
     {
         $template = new Template();
-        $this->xmlUnsigned = XmlFormat::format($template->xml($this->type, $this->company, $this->inputs));
+        $this->xmlUnsigned = XmlFormat::format($template->xml($this->type, $this->company, $this->document));
         $this->uploadFile($this->xmlUnsigned, 'unsigned');
     }
 
@@ -135,16 +146,6 @@ class FacturaloCore
         $this->signer->setCertificateFromFile($this->pathCertificate);
         $this->xmlSigned = $this->signer->signXml($this->xmlUnsigned);
         $this->uploadFile($this->xmlSigned, 'signed');
-
-        switch ($this->type) {
-            case 'debit':
-            case 'credit':
-            case 'invoice':
-                $this->inputs['hash'] = $this->getHash();
-                $this->inputs['qr'] = $this->getQr();
-                break;
-        }
-
     }
 
     public function loadXmlSigned()
@@ -174,7 +175,7 @@ class FacturaloCore
 
     public function uploadFile($file_content, $file_type)
     {
-        $this->uploadStorage($this->filename, $file_content, $file_type);
+        StorageDocument::upload($this->filename, $file_type, $file_content);
     }
 
     private function setDataSoapType()
@@ -209,7 +210,43 @@ class FacturaloCore
                 break;
         }
 
-        $this->document = $builder->save($this->inputs);
+        $this->document_id = $builder->save($this->inputs);
+        $this->setDocument();
+    }
+
+    private function setDocument()
+    {
+        switch ($this->type) {
+            case 'summary':
+                $this->document = Summary::find($this->document_id);
+                break;
+            case 'voided':
+                $this->document = Voided::find($this->document_id);
+                break;
+            case 'retention':
+                $this->document = Retention::find($this->document_id);
+                break;
+            case 'dispatch':
+                $this->document = Dispatch::find($this->document_id);
+                break;
+            default:
+                $this->document = Document::find($this->document_id);
+                break;
+        }
+    }
+
+    public function updateHash()
+    {
+        $this->document->update([
+            'hash' => $this->getHash(),
+        ]);
+    }
+
+    public function updateQr()
+    {
+        $this->document->update([
+            'qr' => $this->getQr(),
+        ]);
     }
 
     private function getHash()
@@ -220,19 +257,18 @@ class FacturaloCore
 
     private function getQr()
     {
-        $hash = $this->inputs['hash'];
-        $customer = $this->inputs['customer'];
+        $customer = $this->document->customer;
         $text = join('|', [
             $this->company->number,
-            $this->inputs['document_type_id'],
-            $this->inputs['series'],
-            $this->inputs['number'],
-            $this->inputs['total_igv'],
-            $this->inputs['total'],
-            $this->inputs['date_of_issue'],
-            $customer['identity_document_type_id'],
-            $customer['number'],
-            $hash
+            $this->document->document_type_id,
+            $this->document->series,
+            $this->document->number,
+            $this->document->total_igv,
+            $this->document->total,
+            $this->document->date_of_issue,
+            $customer->identity_document_type_id,
+            $customer->number,
+            $this->document->hash
         ]);
 
         $qrCode = new QrCodeGenerate();
