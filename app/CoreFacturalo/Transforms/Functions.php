@@ -64,4 +64,11 @@ class Functions
 
         return Series::find($series_id)->number;
     }
+
+    public static function validateSummaryStatusTypeId($summary_status_type_id)
+    {
+        if(!in_array($summary_status_type_id, ['1', '2', '3'], true)) {
+            throw new Exception("El código de tipo de proceso {$summary_status_type_id} es inválido");
+        }
+    }
 }

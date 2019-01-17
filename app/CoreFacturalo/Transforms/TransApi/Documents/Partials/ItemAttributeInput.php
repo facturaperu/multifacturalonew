@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Api\Partials;
+namespace App\CoreFacturalo\Transforms\TransApi\Documents\Partials;
 
 class ItemAttributeInput
 {
@@ -15,16 +15,16 @@ class ItemAttributeInput
         $transform_attributes = [];
         foreach ($attributes as $row)
         {
-            $code = $row['codigo'];
-            $name = $row['nombre'];
+            $attribute_type_id = $row['codigo'];
+            $description = $row['descripcion'];
             $value = array_key_exists('valor', $row)?$row['valor']:null;
             $start_date = array_key_exists('fecha_inicio', $row)?$row['fecha_inicio']:null;
             $end_date = array_key_exists('fecha_fin', $row)?$row['fecha_fin']:null;
             $duration = array_key_exists('duracion', $row)?$row['duracion']:null;
 
             $transform_attributes[] = [
-                'code' => $code,
-                'name' => $name,
+                'attribute_type_id' => $attribute_type_id,
+                'description' => $description,
                 'value' => $value,
                 'start_date' => $start_date,
                 'end_date' => $end_date,

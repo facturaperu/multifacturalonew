@@ -2,11 +2,13 @@
 
 namespace App\CoreFacturalo\Transforms;
 
+use App\CoreFacturalo\Requests\DocumentRequest;
 use App\CoreFacturalo\Transforms\TransApi\Dispatches\DispatchInput;
-use App\CoreFacturalo\Transforms\TransApi\Documents\DocumentInput;
+//use App\CoreFacturalo\Transforms\TransApi\Documents\DocumentInput;
 use App\CoreFacturalo\Transforms\TransApi\Documents\SummaryInput;
 use App\CoreFacturalo\Transforms\TransApi\Documents\VoidedInput;
 use App\CoreFacturalo\Transforms\TransApi\Retentions\RetentionInput;
+use App\CoreFacturalo\Transforms\TransformApi\Documents\DocumentInput;
 use Closure;
 
 class TransformApi
@@ -22,7 +24,11 @@ class TransformApi
     public function handle($request, Closure $next, $type)
     {
         if($type === 'document') {
-            $originalAttributes = DocumentInput::transform($request->all());
+            $transformInputs = DocumentInput::transform($request->all());
+            $originalAttributes = DocumentRequest::getInputs($transformInputs);
+//
+//            dd($originalAttributes);
+
         } elseif($type === 'retention') {
             $originalAttributes = RetentionInput::transform($request->all());
         } elseif($type === 'dispatch') {

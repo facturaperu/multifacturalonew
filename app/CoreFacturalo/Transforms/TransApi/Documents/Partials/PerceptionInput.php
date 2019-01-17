@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Api\Partials;
+namespace App\CoreFacturalo\Transforms\TransApi\Documents\Partials;
 
 class PerceptionInput
 {

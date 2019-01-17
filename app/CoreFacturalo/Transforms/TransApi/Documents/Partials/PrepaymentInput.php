@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\TransApi\Partials;
+namespace App\CoreFacturalo\Transforms\TransApi\Documents\Partials;
 
 class PrepaymentInput
 {

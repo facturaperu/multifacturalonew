@@ -43,7 +43,7 @@ class DocumentCollection extends ResourceCollection
             $btn_voided = false;
             $btn_note = false;
             if(($row->group_id === '01' && $has_cdr === true) || ($row->group_id === '02' && $row->state_type_id === '05')) {
-                if (in_array($row->document_type_code, ['07', '08'])) {
+                if (in_array($row->document_type_id, ['07', '08'])) {
                     $btn_note = false;
                 } else {
                     $btn_note = true;
@@ -67,7 +67,7 @@ class DocumentCollection extends ResourceCollection
                 'number' => $row->number_full,
                 'customer_name' => $row->customer->name,
                 'customer_number' => $row->customer->number,
-                'currency_type_code' => $row->currency_type_code,
+                'currency_type_id' => $row->currency_type_id,
                 'total_exportation' => $row->total_exportation,
                 'total_free' => $row->total_free,
                 'total_unaffected' => $row->total_unaffected,

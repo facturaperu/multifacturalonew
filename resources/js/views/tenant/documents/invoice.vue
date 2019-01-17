@@ -390,8 +390,7 @@
                 this.form.total = _.round(total, 2)
              },
             submit() {
-                this.loading_submit = true
-                console.log(this.form)
+                this.loading_submit = true 
                 this.$http.post(`/${this.resource}`, this.form)
                     .then(response => {
                         console.log(response)

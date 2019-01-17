@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\Api\Partials;
+namespace App\CoreFacturalo\Transforms\TransApi\Documents\Partials;
 
 class OptionalInput
 {
@@ -18,7 +18,6 @@ class OptionalInput
             'method_payment' => $method_payment,
             'salesman' => $salesman,
             'box_number' => $box_number,
-            'format_pdf' => $format_pdf
         ];
     }
 }

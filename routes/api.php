@@ -7,6 +7,7 @@ if ($hostname) {
     Route::domain($hostname->fqdn)->group(function() {
         Route::middleware('auth:api')->group(function() {
             Route::post('documents', 'Tenant\Api\DocumentController@store');
+            Route::post('summaries', 'Tenant\Api\SummaryController@store');
             Route::post('retentions', 'Tenant\Api\RetentionController@store');
             Route::post('dispatches', 'Tenant\Api\DispatchController@store');
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');

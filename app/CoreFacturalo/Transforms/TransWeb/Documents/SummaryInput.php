@@ -2,6 +2,7 @@
 
 namespace App\CoreFacturalo\Transforms\TransWeb\Documents;
 
+use App\CoreFacturalo\Transforms\TransWeb\Common\ActionInput;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Summary;
@@ -42,7 +43,8 @@ class SummaryInput
             'identifier' => $identifier,
             'filename' => $filename,
             'documents' => $documents,
-            'success' => true
+            'success' => true,
+            'actions' => ActionInput::transform($inputs),
         ];
     }
 
@@ -60,13 +62,6 @@ class SummaryInput
     {
         $company = Company::active();
         return $company->number.'-'.$identifier;
-    }
-
-    private static function validateSummaryStatusTypeId($summary_status_type_id)
-    {
-        if(!in_array($summary_status_type_id, ['1', '2', '3'], true)) {
-            throw new Exception("El código de tipo de proceso {$summary_status_type_id} es inválido");
-        }
     }
 
     private static function findDocuments($soap_type_id, $date_of_reference)

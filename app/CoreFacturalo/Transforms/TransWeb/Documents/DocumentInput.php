@@ -97,8 +97,8 @@ class DocumentInput
             $aff_document_id = $inputs['affected_document_id'];
             $note_credit_or_debit_type_id = $inputs['note_credit_or_debit_type_id'];
             $note_description = $inputs['note_description'];
-            $aux_aff_document = Document::find($aff_document_id);
-            $group_id = $aux_aff_document->group_id;
+            $aff_document = Document::find($aff_document_id);
+            $group_id = $aff_document->group_id;
             if ($document_type_id === '07') {
                 $note_type = 'credit';
                 $note_credit_type_id = $note_credit_or_debit_type_id;
@@ -116,7 +116,7 @@ class DocumentInput
                 'note_credit_type_id' => $note_credit_type_id,
                 'note_debit_type_id' => $note_debit_type_id,
                 'note_description' => $note_description,
-                'affected_document_id' => $aff_document_id,
+                'affected_document_id' => $aff_document->id,
             ];
         }
 

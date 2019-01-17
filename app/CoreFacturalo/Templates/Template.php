@@ -13,14 +13,14 @@ class Template
         return self::render($template, $company, $document);
     }
 
-    public function xml($template, $company, $document)
+    public function xml($template, $company, $inputs)
     {
-        return self::render('xml.'.$template, $company, $document);
+        return self::render('xml.'.$template, $company, $inputs);
     }
 
-    private function render($view, $company, $document)
+    private function render($view, $company, $inputs)
     {
         view()->addLocation(__DIR__);
-        return view($view, compact('company', 'document'))->render();
+        return view($view, compact('company', 'inputs'))->render();
     }
 }

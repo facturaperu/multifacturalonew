@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Tenant\Api;
 
 use App\CoreFacturalo\Facturalo;
+use App\CoreFacturalo\Facturalo\FacturaloSummary;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Summary;
 use App\Http\Controllers\Controller;
@@ -13,12 +14,12 @@ class SummaryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('transform.input:summary', ['only' => ['store']]);
+        $this->middleware('transform.api:summary', ['only' => ['store']]);
     }
 
     public function store(Request $request)
     {
-        $facturalo = new Facturalo(Company::active());
+        $facturalo = new FacturaloSummary();
         $facturalo->setInputs($request->all());
 
         DB::transaction(function () use($facturalo) {
@@ -26,7 +27,7 @@ class SummaryController extends Controller
             $facturalo->createXmlAndSign();
         });
 
-        $facturalo->sendXml($facturalo->getXmlSigned());
+        $facturalo->sendXml();
         $summary = $facturalo->getDocument();
 
         return [

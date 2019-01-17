@@ -195,6 +195,7 @@
                 documentNewId: null,
                 note_credit_types: [],
                 note_debit_types: [],
+                operation_types: [],
             }
         },
         created() {
@@ -207,9 +208,11 @@
                     this.customers = response.data.customers
                     this.note_credit_types = response.data.note_credit_types
                     this.note_debit_types = response.data.note_debit_types
+                    this.operation_types = response.data.operation_types
 
                     this.currency_type = _.find(this.currency_types, {'id': this.form.currency_type_id})
                     this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
+                    this.form.operation_type_id = (this.operation_types.length > 0)?this.operation_types[0].id:null
 
                     this.changeDocumentType()
                     this.changeDateOfIssue()
@@ -259,11 +262,13 @@
                     },
                     actions: {
                         format_pdf: 'a4'
-                    }
+                    },
+                    operation_type_id: null,
                 }
             },
             resetForm() {
                 this.initForm()
+                this.form.operation_type_id = (this.operation_types.length > 0)?this.operation_types[0].id:null
                 this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
                 this.changeDocumentType()
                 this.changeDateOfIssue()
@@ -333,6 +338,7 @@
                 this.form.total_free = _.round(total_free, 2)
                 this.form.total_igv = _.round(total_igv, 2)
                 this.form.total_value = _.round(total_value, 2)
+                this.form.total_taxes = _.round(total_igv, 2)
                 this.form.total = _.round(total, 2)
             },
             submit() {

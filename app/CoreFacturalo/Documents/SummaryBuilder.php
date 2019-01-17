@@ -8,11 +8,9 @@ class SummaryBuilder
 {
     public function save($inputs)
     {
-        $data = array_key_exists('summary', $inputs)?$inputs['summary']:$inputs;
-        $summary = Summary::create($data);
-
-        foreach ($data['documents'] as $row) {
-            $summary->documents()->create($row);
+        $summary = Summary::create($inputs);
+        foreach ($inputs['documents'] as $row) {
+            $summary->summary_documents()->create($row);
         }
         return $summary;
     }

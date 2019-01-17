@@ -1,5 +1,5 @@
 {
-  "serie_documento": "F001",
+  "serie_documento": "FD01",
   "numero_documento": "#",
   "fecha_de_emision": "2018-10-09",
   "hora_de_emision": "10:11:11",
@@ -9,9 +9,9 @@
   "codigo_tipo_moneda": "PEN",
   "numero_orden_de_compra": "0045467898",
   "documento_afectado": {
+    "codigo_tipo_documento": "01",
     "serie_documento": "F001",
-    "numero_documento": "1",
-    "codigo_tipo_documento": "01"
+    "numero_documento": "1"
   },
   "datos_del_emisor": {
     "codigo_del_domicilio_fiscal": "0000"
