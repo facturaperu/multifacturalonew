@@ -4,24 +4,30 @@ namespace App\CoreFacturalo\Helpers\Storage;
 
 use Illuminate\Support\Facades\Storage;
 
-class StorageDocument
+trait StorageDocument
 {
-    public static function upload($filename, $file_type, $file_content, $root = null)
+    protected $_folder;
+    protected $_filename;
+
+    public function uploadStorage($filename, $file_content, $file_type, $root = null)
     {
-        self::setData($filename, $file_type, $file_content, 'upload', $root);
+        $this->setData($filename, $file_type, $root);
+        Storage::disk('tenant')->put($this->_folder.DIRECTORY_SEPARATOR.$this->_filename, $file_content);
     }
 
-    public static function download($filename, $file_type, $root = null)
+    public function downloadStorage($filename, $file_type, $root = null)
     {
-        return self::setData($filename, $file_type, null, 'download', $root);
+        $this->setData($filename, $file_type, $root);
+        return Storage::disk('tenant')->download($this->_folder.DIRECTORY_SEPARATOR.$this->_filename);
     }
 
-    public static function get($filename, $file_type, $root = null)
+    public function getStorage($filename, $file_type, $root = null)
     {
-        return self::setData($filename, $file_type, null, 'get', $root);
+        $this->setData($filename, $file_type, $root);
+        return Storage::disk('tenant')->get($this->_folder.DIRECTORY_SEPARATOR.$this->_filename);
     }
 
-    private static function setData($filename, $file_type, $file_content, $action, $root)
+    private function setData($filename, $file_type, $root)
     {
         $extension = 'xml';
         switch ($file_type) {
@@ -37,20 +43,7 @@ class StorageDocument
                 $extension = 'zip';
                 break;
         }
-
-        $filename = $filename.'.'.$extension;
-        $folder = ($root)?$root.DIRECTORY_SEPARATOR.$file_type:$file_type;
-
-        switch ($action) {
-            case 'get':
-                Storage::disk('tenant')->get($folder . DIRECTORY_SEPARATOR . $filename);
-                break;
-            case 'upload':
-                Storage::disk('tenant')->put($folder.DIRECTORY_SEPARATOR.$filename, $file_content);
-                break;
-            case 'download':
-                return Storage::disk('tenant')->download($folder.DIRECTORY_SEPARATOR.$filename);
-                break;
-        }
+        $this->_filename = $filename.'.'.$extension;
+        $this->_folder = ($root)?$root.DIRECTORY_SEPARATOR.$file_type:$file_type;
     }
 }
