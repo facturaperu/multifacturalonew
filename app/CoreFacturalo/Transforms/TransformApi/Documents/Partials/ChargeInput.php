@@ -6,30 +6,26 @@ class ChargeInput
 {
     public static function transform($inputs)
     {
-        $charges = array_key_exists('cargos', $inputs)?$inputs['cargos']:null;
+        $charges = null;
+        if(key_exists('cargos', $inputs)) {
+            foreach ($inputs['cargos'] as $row)
+            {
+                $code = $row['codigo'];
+                $description = $row['descripcion'];
+                $percentage = $row['porcentaje'];
+                $amount = $row['monto'];
+                $base = $row['base'];
 
-        if(is_null($charges)) {
-            return null;
+                $charges[] = [
+                    'code' => $code,
+                    'description' => $description,
+                    'percentage' => $percentage,
+                    'amount' => $amount,
+                    'base' => $base,
+                ];
+            }
         }
 
-        $transform_charges = [];
-        foreach ($charges as $row)
-        {
-            $code = $row['codigo'];
-            $description = $row['descripcion'];
-            $factor = $row['factor'];
-            $amount = $row['monto'];
-            $base = $row['base'];
-
-            $transform_charges[] = [
-                'code' => $code,
-                'description' => $description,
-                'base' => $base,
-                'factor' => $factor,
-                'amount' => $amount,
-            ];
-        }
-
-        return $transform_charges;
+        return $charges;
     }
 }

@@ -14,9 +14,9 @@
     </ext:UBLExtensions>
     <cbc:UBLVersionID>2.0</cbc:UBLVersionID>
     <cbc:CustomizationID>1.1</cbc:CustomizationID>
-    <cbc:ID>{{ $summary->identifier }}</cbc:ID>
-    <cbc:ReferenceDate>{{ $summary->date_of_reference->format('Y-m-d') }}</cbc:ReferenceDate>
-    <cbc:IssueDate>{{ $summary->date_of_issue->format('Y-m-d') }}</cbc:IssueDate>
+    <cbc:ID>{{ $document->identifier }}</cbc:ID>
+    <cbc:ReferenceDate>{{ $document->date_of_reference->format('Y-m-d') }}</cbc:ReferenceDate>
+    <cbc:IssueDate>{{ $document->date_of_issue->format('Y-m-d') }}</cbc:IssueDate>
     <cac:Signature>
         <cbc:ID>{{ $company->number }}</cbc:ID>
         <cac:SignatoryParty>
@@ -42,7 +42,8 @@
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingSupplierParty>
-    @foreach($summary->documents as $doc)
+    @foreach($document->documents as $row)
+    @php($doc = $row->document)
     <sac:SummaryDocumentsLine>
         <cbc:LineID>{{ $loop->iteration }}</cbc:LineID>
         <cbc:DocumentTypeCode>{{ $doc->document_type_id }}</cbc:DocumentTypeCode>
@@ -71,7 +72,7 @@
         </sac:SUNATPerceptionSummaryDocumentReference>
         @endif
         <cac:Status>
-            <cbc:ConditionCode>{{ $summary->process_type_id }}</cbc:ConditionCode>
+            <cbc:ConditionCode>{{ $document->summary_status_type_id }}</cbc:ConditionCode>
         </cac:Status>
         <sac:TotalAmount currencyID="{{ $doc->currency_type_id }}">{{ $doc->total }}</sac:TotalAmount>
         @if($doc->total_taxed > 0)

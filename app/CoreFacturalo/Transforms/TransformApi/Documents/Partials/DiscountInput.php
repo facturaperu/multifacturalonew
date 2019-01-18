@@ -6,30 +6,25 @@ class DiscountInput
 {
     public static function transform($inputs)
     {
-        $discounts = array_key_exists('descuentos', $inputs)?$inputs['descuentos']:null;
+        $discounts = null;
+        if(key_exists('descuentos', $inputs)) {
+            foreach ($inputs['descuentos'] as $row) {
+                $code = $row['codigo'];
+                $description = $row['descripcion'];
+                $percentage = $row['porcentaje'];
+                $amount = $row['monto'];
+                $base = $row['base'];
 
-        if(is_null($discounts)) {
-            return null;
+                $discounts[] = [
+                    'code' => $code,
+                    'description' => $description,
+                    'percentage' => $percentage,
+                    'amount' => $amount,
+                    'base' => $base,
+                ];
+            }
         }
 
-        $transform_discounts = [];
-        foreach ($discounts as $row)
-        {
-            $code = $row['codigo'];
-            $description = $row['descripcion'];
-            $factor = $row['factor'];
-            $amount = $row['monto'];
-            $base = $row['base'];
-
-            $transform_discounts[] = [
-                'code' => $code,
-                'description' => $description,
-                'base' => $base,
-                'factor' => $factor,
-                'amount' => $amount,
-            ];
-        }
-
-        return $transform_discounts;
+        return $discounts;
     }
 }

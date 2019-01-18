@@ -2,28 +2,30 @@
 
 namespace App\CoreFacturalo\Transforms\TransformApi\Documents\Partials;
 
+use App\CoreFacturalo\Helpers\Number\NumberLetter;
+
 class LegendInput
 {
     public static function transform($inputs)
     {
-        $legends = array_key_exists('leyendas', $inputs)?$inputs['leyendas']:null;
-
-        if(is_null($legends)) {
-            return [];
+        $legends = [];
+        if(key_exists('leyendas', $inputs)) {
+            foreach ($inputs['leyendas'] as $row)
+            {
+                $code = $row['codigo'];
+                $value = $row['valor'];
+                $legends[] = [
+                    'code' => $code,
+                    'value' => $value,
+                ];
+            }
         }
 
-        $transform_legends = [];
-        foreach ($legends as $row)
-        {
-            $code = $row['codigo'];
-            $value = $row['valor'];
+        $legends[] = [
+            'code' => 1000,
+            'value' => NumberLetter::convertToLetter($inputs['totales']['total_venta'])
+        ];
 
-            $transform_legends[] = [
-                'code' => $code,
-                'value' => $value,
-            ];
-        }
-
-        return $transform_legends;
+        return $legends;
     }
 }

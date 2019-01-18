@@ -117,9 +117,9 @@
         <td>Código Hash: {{ $document->hash }}</td>
     </tr>
     @foreach($document->legends as $row)
-    <tr>
-        <td class="font-bold">{{ $row->value }}</td>
-    </tr>
+        <tr>
+            <td class="font-bold">{{ $row->value }}</td>
+        </tr>
     @endforeach
 </table>
 </body>

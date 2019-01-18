@@ -6,24 +6,20 @@ class GuideInput
 {
     public static function transform($inputs)
     {
-        $guides = array_key_exists('guias', $inputs)?$inputs['guias']:null;
+        $guides = null;
+        if(key_exists('guias', $inputs)) {
+            foreach ($inputs['guias'] as $row)
+            {
+                $number = $row['numero'];
+                $document_type_id = $row['codigo_tipo_documento'];
 
-        if(is_null($guides)) {
-            return null;
+                $guides[] = [
+                    'number' => $number,
+                    'document_type_id' => $document_type_id,
+                ];
+            }
         }
 
-        $transform_guides = [];
-        foreach ($guides as $row)
-        {
-            $number = $row['numero'];
-            $document_type_id = $row['tipo_de_documento'];
-
-            $transform_guides[] = [
-                'document_type_id' => $document_type_id,
-                'number' => $number,
-            ];
-        }
-
-        return $transform_guides;
+        return $guides;
     }
 }

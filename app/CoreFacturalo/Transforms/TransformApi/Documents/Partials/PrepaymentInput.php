@@ -6,26 +6,22 @@ class PrepaymentInput
 {
     public static function transform($inputs)
     {
-        $prepayments = array_key_exists('anticipos', $inputs)?$inputs['anticipos']:null;
+        $prepayments = null;
+        if(key_exists('anticipos', $inputs)) {
+            foreach ($inputs['anticipos'] as $row)
+            {
+                $number = $row['numero'];
+                $document_type_id = $row['codigo_tipo_documento'];
+                $amount = $row['monto'];
 
-        if(is_null($prepayments)) {
-            return null;
+                $prepayments[] = [
+                    'number' => $number,
+                    'document_type_id' => $document_type_id,
+                    'amount' => $amount
+                ];
+            }
         }
 
-        $transform_prepayments = [];
-        foreach ($prepayments as $row)
-        {
-            $number = $row['numero'];
-            $document_type_id = $row['tipo_de_documento'];
-            $amount = $row['monto'];
-
-            $transform_prepayments[] = [
-                'document_type_id' => $document_type_id,
-                'number' => $number,
-                'amount' => $amount
-            ];
-        }
-
-        return $transform_prepayments;
+        return $prepayments;
     }
 }

@@ -302,7 +302,7 @@
                 @endif
             </cac:TaxTotal>
             <cac:Item>
-                <cbc:Description><![CDATA[{{ $detail->item_description }}]]></cbc:Description>
+                <cbc:Description><![CDATA[{{ $detail->item->description }}]]></cbc:Description>
                 @if($detail->internal_id)
                 <cac:SellersItemIdentification>
                     <cbc:ID>{{ $detail->internal_id }}</cbc:ID>
@@ -321,8 +321,8 @@
                 @if($detail->attributes)
                 @foreach($detail->attributes as $attr)
                 <cac:AdditionalItemProperty >
-                    <cbc:Name>{{ $attr->description }}</cbc:Name>
-                    <cbc:NameCode>{{ $attr->attribute_type_id }}</cbc:NameCode>
+                    <cbc:Name>{{ $attr->name }}</cbc:Name>
+                    <cbc:NameCode>{{ $attr->code }}</cbc:NameCode>
                     @if($attr->value)
                     <cbc:Value>{{ $attr->value }}</cbc:Value>
                     @endif

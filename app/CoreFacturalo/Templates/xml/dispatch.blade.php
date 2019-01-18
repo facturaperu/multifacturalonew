@@ -128,7 +128,7 @@
             <cbc:LineID>{{ $loop->iteration }}</cbc:LineID>
         </cac:OrderLineReference>
         <cac:Item>
-            <cbc:Name><![CDATA[{{ $detail->item_description }}]]></cbc:Name>
+            <cbc:Name><![CDATA[{{ $detail->item->description }}]]></cbc:Name>
             <cac:SellersItemIdentification>
                 <cbc:ID>{{ $detail->item->internal_id }}</cbc:ID>
             </cac:SellersItemIdentification>
