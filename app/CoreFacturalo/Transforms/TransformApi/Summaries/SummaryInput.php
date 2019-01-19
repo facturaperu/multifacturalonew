@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreFacturalo\Transforms\TransformApi\Documents;
+namespace App\CoreFacturalo\Transforms\TransformApi\Summaries;
 
 use App\CoreFacturalo\Transforms\TransformApi\Common\ActionInput;
 use App\Models\Tenant\Company;
@@ -23,15 +23,16 @@ class SummaryInput
 
 
         $identifier = self::identifier($soap_type_id, $date_of_issue);
-        $filename = self::filename($identifier);
+        $filename = $company->number.'-'.$identifier;
+
         if ($summary_status_type_id === '1') {
             $documents = self::findDocuments($soap_type_id, $date_of_reference);
         } elseif ($summary_status_type_id === '3') {
             $documents = array_key_exists('documentos', $inputs)?$inputs['documentos']:[];
             $documents = self::verifyDocuments($soap_type_id, $date_of_reference, $documents);
         } else {
-            throw new Exception("El código de tipo de proceso {$summary_status_type_id} es inválido");
-        }
+        throw new Exception("El código de tipo de proceso {$summary_status_type_id} es inválido");
+    }
 
         return [
             'type' => 'summary',
@@ -50,22 +51,7 @@ class SummaryInput
         ];
     }
 
-    private static function identifier($soap_type_id, $date_of_issue)
-    {
-        $summaries = Summary::where('soap_type_id', $soap_type_id)
-                            ->where('date_of_issue', $date_of_issue)
-                            ->whereUser()
-                            ->get();
-        $numeration = count($summaries) + 1;
 
-        return join('-', ['RC', Carbon::parse($date_of_issue)->format('Ymd'), $numeration]);
-    }
-
-    private static function filename($identifier)
-    {
-        $company = Company::active();
-        return $company->number.'-'.$identifier;
-    }
 
     private static function findDocuments($soap_type_id, $date_of_reference)
     {
