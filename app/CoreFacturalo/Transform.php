@@ -29,58 +29,25 @@ class Transform
      */
     public function handle($request, Closure $next, $type, $service)
     {
-        if($type === 'document') {
-            $originalAttributes = $this->documentInputTransform($request->all(), $service);
-        } elseif ($type === 'summary') {
-            $originalAttributes = $this->summaryInputTransform($request->all(), $service);
-        } elseif ($type === 'voided') {
-            $originalAttributes = $this->voidedInputTransform($request->all(), $service);
-        } elseif ($type === 'retention') {
-            $originalAttributes = $this->retentionInputTransform($request->all(), $service);
-        } else {
-            $originalAttributes = $this->dispatchInputTransform($request->all(), $service);
+        $inputs = $request->all();
+        if($service === 'api') {
+            $inputs = $this->transformInputs($inputs, $type);
         }
-        $request->replace($originalAttributes);
+        $request->replace($this->formatInputs($inputs, $type));
         return $next($request);
     }
 
-    private function documentInputTransform($inputs, $service)
+    private function transformInputs($inputs, $type)
     {
-        if($service === 'api') {
-            return DocumentApiInput::transform($inputs);
-        }
-        return DocumentWebInput::transform($inputs);
+        $transformClass = 'App\\CoreFacturalo\\Transforms\\'.ucfirst($type);
+
+        return $transformClass::transform($inputs);
     }
 
-    private function summaryInputTransform($inputs, $service)
+    private function formatInputs($inputs, $type)
     {
-        if($service === 'api') {
-            return SummaryApiInput::transform($inputs);
-        }
-        return SummaryWebInput::transform($inputs);
-    }
+        $formatClass = 'App\\CoreFacturalo\\Formats\\'.ucfirst($type).'Format';
 
-    private function voidedInputTransform($inputs, $service)
-    {
-        if($service === 'api') {
-            return VoidedApiInput::transform($inputs);
-        }
-        return VoideWebInput::transform($inputs);
-    }
-
-    private function retentionInputTransform($inputs, $service)
-    {
-        if($service === 'api') {
-            return RetentionApiInput::transform($inputs);
-        }
-        return RetentionWebInput::transform($inputs);
-    }
-
-    private function dispatchInputTransform($inputs, $service)
-    {
-        if($service === 'api') {
-            return DispatchApiInput::transform($inputs);
-        }
-        return DispatchWebInput::transform($inputs);
+        return $formatClass::format($inputs);
     }
 }
