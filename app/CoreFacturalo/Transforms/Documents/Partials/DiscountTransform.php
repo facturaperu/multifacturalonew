@@ -1,0 +1,25 @@
+<?php
+
+namespace App\CoreFacturalo\Transforms\Documents\Partials;
+
+class DiscountTransform
+{
+    public static function transform($inputs)
+    {
+        if(key_exists('descuentos', $inputs)) {
+            $discounts = [];
+            foreach ($inputs['descuentos'] as $row) {
+                $discounts[] = [
+                    'code' => $row['codigo'],
+                    'description' => $row['descripcion'],
+                    'percentage' => $row['porcentaje'],
+                    'amount' => $row['monto'],
+                    'base' =>  $row['base'],
+                ];
+            }
+
+            return $discounts;
+        }
+        return null;
+    }
+}

@@ -74,7 +74,7 @@ class Facturalo
             case 'credit':
                 $document = Document::create($inputs);
                 foreach ($inputs['details'] as $row) {
-                    $document->details()->create($row);
+                    $document->items()->create($row);
                 }
                 $document->note()->create($inputs['note']);
                 $this->document = Document::find($document->id);
@@ -111,7 +111,7 @@ class Facturalo
             default:
                 $document = Dispatch::create($inputs);
                 foreach ($inputs['details'] as $row) {
-                    $document->details()->create($row);
+                    $document->items()->create($row);
                 }
                 $this->document = Dispatch::find($document->id);
                 break;

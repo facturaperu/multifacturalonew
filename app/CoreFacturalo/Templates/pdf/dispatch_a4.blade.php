@@ -108,7 +108,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach($document->details as $row)
+    @foreach($document->items as $row)
         <tr>
             <td class="text-center">{{ $loop->iteration }}</td>
             <td class="text-center">{{ $row->item->internal_id }}</td>

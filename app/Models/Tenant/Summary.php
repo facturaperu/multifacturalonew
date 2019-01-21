@@ -56,16 +56,16 @@ class Summary extends ModelTenant
 
     public function getDownloadExternalXmlAttribute()
     {
-        return route('tenant.summaries.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'summary', 'type' => 'xml', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalPdfAttribute()
     {
-        return route('tenant.summaries.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'summary', 'type' => 'pdf', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalCdrAttribute()
     {
-        return route('tenant.summaries.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'summary', 'type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }

@@ -58,7 +58,6 @@ class TenantDocumentsTable extends Migration
             $table->json('perception')->nullable();
             $table->json('detraction')->nullable();
             $table->json('legends')->nullable();
-            $table->json('optional')->nullable();
 
             $table->string('filename')->nullable();
             $table->string('hash')->nullable();

@@ -120,23 +120,23 @@
         </cac:FirstArrivalPortLocation>
         @endif
     </cac:Shipment>
-    @foreach($document->details as $detail)
+    @foreach($document->items as $row)
     <cac:DespatchLine>
         <cbc:ID>{{ $loop->iteration }}</cbc:ID>
-        <cbc:DeliveredQuantity unitCode="{{ $detail->item->unit_type_id }}">{{ $detail->quantity }}</cbc:DeliveredQuantity>
+        <cbc:DeliveredQuantity unitCode="{{ $row->item->unit_type_id }}">{{ $row->quantity }}</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID>{{ $loop->iteration }}</cbc:LineID>
         </cac:OrderLineReference>
         <cac:Item>
-            <cbc:Name><![CDATA[{{ $detail->item->description }}]]></cbc:Name>
+            <cbc:Name><![CDATA[{{ $row->item->description }}]]></cbc:Name>
             <cac:SellersItemIdentification>
-                <cbc:ID>{{ $detail->item->internal_id }}</cbc:ID>
+                <cbc:ID>{{ $row->item->internal_id }}</cbc:ID>
             </cac:SellersItemIdentification>
-            @if($detail->item->item_code)
+            @if($row->item->item_code)
             <cac:CommodityClassification>
                 <cbc:ItemClassificationCode listID="UNSPSC"
                                             listAgencyName="GS1 US"
-                                            listName="Item Classification">{{ $detail->item->item_code }}</cbc:ItemClassificationCode>
+                                            listName="Item Classification">{{ $row->item->item_code }}</cbc:ItemClassificationCode>
             </cac:CommodityClassification>
             @endif
         </cac:Item>

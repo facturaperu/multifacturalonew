@@ -2,10 +2,8 @@
 namespace App\Http\Controllers\Tenant\Api;
 
 use App\CoreFacturalo\Facturalo;
-use App\CoreFacturalo\Facturalo\FacturaloSummary;
-use App\Models\Tenant\Company;
-use App\Models\Tenant\Summary;
 use App\Http\Controllers\Controller;
+use App\Models\Tenant\Summary;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,26 +12,29 @@ class SummaryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('transform.api:summary', ['only' => ['store']]);
+        $this->middleware('input.transform:summary,api', ['only' => ['store']]);
     }
 
     public function store(Request $request)
     {
-        $facturalo = new FacturaloSummary();
-        $facturalo->setInputs($request->all());
-
-        DB::transaction(function () use($facturalo) {
-            $facturalo->save();
-            $facturalo->createXmlAndSign();
+        $fact = DB::transaction(function () use($request) {
+            $facturalo = new Facturalo();
+            $facturalo->save($request->all());
+            $facturalo->createXmlUnsigned();
+            $facturalo->signXmlUnsigned();
+            $facturalo->senderXmlSignedSummary();
+            return $facturalo;
         });
 
-        $facturalo->sendXml();
-        $summary = $facturalo->getDocument();
+        $document = $fact->getDocument();
+        //$response = $fact->getResponse();
 
         return [
             'success' => true,
-            'external_id' => $summary->external_id,
-            'ticket' => $summary->ticket,
+            'data' => [
+                'external_id' => $document->external_id,
+                'ticket' => $document->ticket,
+            ]
         ];
     }
 
@@ -42,16 +43,16 @@ class SummaryController extends Controller
         if($request->has('external_id')) {
             $external_id = $request->input('external_id');
             $summary = Summary::where('external_id', $external_id)
-                                ->where('user_id', auth()->id())
-                                ->first();
+                ->whereUser()
+                ->first();
             if(!$summary) {
-                throw new Exception("El código {$external_id} es inválido, no se encontró resumen relacionado");
+                throw new Exception("El código externo {$external_id} es inválido, no se encontró resumen relacionado");
             }
         } elseif ($request->has('ticket')) {
             $ticket = $request->input('ticket');
             $summary = Summary::where('ticket', $ticket)
-                                ->where('user_id', auth()->id())
-                                ->first();
+                ->whereUser()
+                ->first();
             if(!$summary) {
                 throw new Exception("El ticket {$ticket} es inválido, no se encontró resumen relacionado");
             }
@@ -59,9 +60,11 @@ class SummaryController extends Controller
             throw new Exception('Es requerido el código externo o ticket');
         }
 
-        $facturalo = new Facturalo($summary->user->company);
+        $facturalo = new Facturalo();
         $facturalo->setDocument($summary);
-        $res = $facturalo->statusSummary($summary->ticket);
+        $facturalo->statusSummary($summary->ticket);
+
+        $response = $facturalo->getResponse();
 
         return [
             'success' => true,
@@ -71,10 +74,10 @@ class SummaryController extends Controller
             ],
             'links' => [
                 'xml' => $summary->download_external_xml,
-                'pdf' => $summary->download_external_pdf,
+//                'pdf' => $summary->download_external_pdf,
                 'cdr' => $summary->download_external_cdr,
             ],
-            'response' => $res
+            'response' => $response
         ];
     }
 }

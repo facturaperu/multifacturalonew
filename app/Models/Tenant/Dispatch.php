@@ -10,7 +10,7 @@ use App\Models\Tenant\Catalogs\UnitType;
 class Dispatch extends ModelTenant
 {
     protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'unit_type', 'transport_mode_type',
-                       'transfer_reason_type', 'details'];
+                       'transfer_reason_type', 'items'];
 
     protected $fillable = [
         'user_id',
@@ -45,7 +45,6 @@ class Dispatch extends ModelTenant
         'license_plate',
 
         'legends',
-        'optional',
 
         'filename',
         'hash',
@@ -130,16 +129,6 @@ class Dispatch extends ModelTenant
         $this->attributes['legends'] = (is_null($value))?null:json_encode($value);
     }
 
-    public function getOptionalAttribute($value)
-    {
-        return (is_null($value))?null:(object) json_decode($value);
-    }
-
-    public function setOptionalAttribute($value)
-    {
-        $this->attributes['optional'] = (is_null($value))?null:json_encode($value);
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -180,9 +169,9 @@ class Dispatch extends ModelTenant
         return $this->belongsTo(TransferReasonType::class, 'transfer_reason_type_id');
     }
 
-    public function details()
+    public function items()
     {
-        return $this->hasMany(DispatchDetails::class);
+        return $this->hasMany(DispatchItem::class);
     }
 
     public function getNumberFullAttribute()
@@ -192,16 +181,16 @@ class Dispatch extends ModelTenant
 
     public function getDownloadExternalXmlAttribute()
     {
-        return route('tenant.dispatches.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'dispatch', 'type' => 'xml', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalPdfAttribute()
     {
-        return route('tenant.dispatches.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'dispatch', 'type' => 'pdf', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalCdrAttribute()
     {
-        return route('tenant.dispatches.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'dispatch', 'type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }

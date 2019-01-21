@@ -32,7 +32,6 @@ class Retention extends ModelTenant
         'total',
 
         'legends',
-        'optional',
 
         'filename',
         'hash',
@@ -74,16 +73,6 @@ class Retention extends ModelTenant
     public function setLegendsAttribute($value)
     {
         $this->attributes['legends'] = (is_null($value))?null:json_encode($value);
-    }
-
-    public function getOptionalAttribute($value)
-    {
-        return (is_null($value))?null:(object) json_decode($value);
-    }
-
-    public function setOptionalAttribute($value)
-    {
-        $this->attributes['optional'] = (is_null($value))?null:json_encode($value);
     }
 
     public function user()
@@ -133,16 +122,16 @@ class Retention extends ModelTenant
 
     public function getDownloadExternalXmlAttribute()
     {
-        return route('tenant.retentions.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'retention', 'type' => 'xml', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalPdfAttribute()
     {
-        return route('tenant.retentions.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'retention', 'type' => 'pdf', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalCdrAttribute()
     {
-        return route('tenant.retentions.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'retention', 'type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }

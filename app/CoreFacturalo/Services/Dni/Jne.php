@@ -17,7 +17,7 @@ class Jne
             ];
         }
 
-        $client = new  Client(['base_uri' => 'http://aplicaciones007.jne.gob.pe/']);
+        $client = new  Client(['base_uri' => 'http://aplicaciones007.jne.gob.pe/srop_publico/Consulta/Afiliado/GetNombresCiudadano?DNI=']);
         $response = $client->request('GET', 'srop_publico/Consulta/Afiliado/GetNombresCiudadano?DNI='.$number);
         if ($response->getStatusCode() == 200 && $response != "") {
             $text = $response->getBody()->getContents();

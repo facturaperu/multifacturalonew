@@ -103,7 +103,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach($document->details as $row)
+    @foreach($document->items as $row)
         <tr>
             <td class="text-center">{{ $row->quantity }}</td>
             <td class="text-center">{{ $row->item->unit_type_id }}</td>
