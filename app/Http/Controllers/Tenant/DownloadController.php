@@ -3,7 +3,6 @@ namespace App\Http\Controllers\Tenant;
 
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
-use App\Models\Tenant\Company;
 use Exception;
 
 class DownloadController extends Controller
@@ -36,7 +35,6 @@ class DownloadController extends Controller
                 throw new Exception('Tipo de archivo a descargar es inválido');
         }
 
-        $company = Company::active();
-        return $this->downloadStorage($document->filename, $folder, $company->number);
+        return $this->downloadStorage($document->filename, $folder);
     }
 }

@@ -8,7 +8,6 @@ class DetractionTransform
     {
         if(key_exists('detraccion', $inputs)) {
             $detraction = $inputs['detraccion'];
-
             return [
                 'code' => $detraction['codigo'],
                 'percentage' => $detraction['porcentaje'],

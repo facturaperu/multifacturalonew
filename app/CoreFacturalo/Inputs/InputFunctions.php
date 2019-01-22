@@ -7,7 +7,7 @@ use App\Models\Tenant\Series;
 use Carbon\Carbon;
 use Exception;
 
-class Functions
+class InputFunctions
 {
     public static function newNumber($soap_type_id, $document_type_id, $series, $number, $model)
     {
@@ -77,12 +77,11 @@ class Functions
     public static function identifier($soap_type_id, $date_of_issue, $model)
     {
         $documents = $model::where('soap_type_id', $soap_type_id)
-            ->where('date_of_issue', $date_of_issue)
-            ->whereUser()
-            ->get();
+                        ->where('date_of_issue', $date_of_issue)
+                        ->get();
         $numeration = count($documents) + 1;
-
-        switch (get_class($model)) {
+        $path = explode('\\', $model);
+        switch (array_pop($path)) {
             case 'Voided':
                 $prefix = 'RA';
                 break;
@@ -117,12 +116,20 @@ class Functions
 
     public static function verifyDocumentsByVoided($soap_type_id, $date_of_reference, $documents, $model)
     {
-        $group_id = (get_class($model) === 'summary')?'02':'01';
+        $path = explode('\\', $model);
+        switch (array_pop($path)) {
+            case 'Voided':
+                $group_id = '01';
+                break;
+            default:
+                $group_id = '02';
+                break;
+        }
         $aux_documents = [];
         foreach ($documents as $doc)
         {
             $external_id = $doc['external_id'];
-            $description = $doc['motivo_anulacion'];
+            $description = $doc['description'];
 
             $document = Document::where('soap_type_id', $soap_type_id)
                 ->where('external_id', $external_id)
@@ -146,6 +153,14 @@ class Functions
 
     public static function valueKeyInArray($inputs, $key, $default = null)
     {
-        return array_key_exists($key, $inputs)?$inputs[$key]:$default;
+        if(array_key_exists($key, $inputs)) {
+            if(!is_null($inputs[$key])) {
+                return $inputs[$key];
+//            } else {
+
+            }
+        }
+        return $default;
+//        return array_key_exists($key, $inputs)?$inputs[$key]:$default;
     }
 }

@@ -7,7 +7,6 @@
   "codigo_tipo_nota": "01",
   "motivo_o_sustento_de_nota": "Error al emitir comprobante",
   "codigo_tipo_moneda": "PEN",
-  "factor_tipo_de_cambio": 3.35,
   "numero_orden_de_compra": "0045467898",
   "documento_afectado": {
     "serie_documento": "F001",
@@ -42,8 +41,8 @@
     {
       "codigo_interno": "P0121",
       "descripcion":"Inca Kola 250 ml",
-      "codigo_producto_sunat": "51121703",
-      "codigo_producto_gsl": "51121703",
+      "codigo_producto_sunat": "",
+      "codigo_producto_gsl": "",
       "unidad_de_medida": "NIU",
       "cantidad": 2,
       "valor_unitario": 50,

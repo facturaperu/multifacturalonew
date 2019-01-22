@@ -2,13 +2,13 @@
 
 namespace App\CoreFacturalo;
 
+use App\CoreFacturalo\Inputs\Dispatches\DispatchInput;
 use App\CoreFacturalo\Inputs\Documents\DocumentInput;
-use App\CoreFacturalo\Inputs\Documents\Partials\DiscountInput;
 use App\CoreFacturalo\Inputs\Retentions\RetentionInput;
 use App\CoreFacturalo\Inputs\Summaries\SummaryInput;
 use App\CoreFacturalo\Inputs\Voided\VoidedInput;
+use App\CoreFacturalo\Transforms\Dispatches\DispatchTransform;
 use App\CoreFacturalo\Transforms\Documents\DocumentTransform;
-use App\CoreFacturalo\Transforms\Documents\Partials\DiscountTransform;
 use App\CoreFacturalo\Transforms\Retentions\RetentionTransform;
 use App\CoreFacturalo\Transforms\Summaries\SummaryTransform;
 use App\CoreFacturalo\Transforms\Voided\VoidedTransform;
@@ -31,7 +31,9 @@ class InputTransform
         $inputs = $request->all();
         if($service === 'api') {
             $inputs = $this->transformInputs($inputs, $type);
+//            dd($inputs);
         }
+//        dd($this->setInputs($inputs, $type, $service));
         $request->replace($this->setInputs($inputs, $type, $service));
         return $next($request);
     }
@@ -40,7 +42,7 @@ class InputTransform
     {
         switch ($type) {
             case 'dispatch':
-                return DiscountTransform::transform($inputs);
+                return DispatchTransform::transform($inputs);
                 break;
             case 'retention':
                 return RetentionTransform::transform($inputs);
@@ -61,7 +63,7 @@ class InputTransform
     {
         switch ($type) {
             case 'dispatch':
-                return DiscountInput::set($inputs, $service);
+                return DispatchInput::set($inputs, $service);
                 break;
             case 'retention':
                 return RetentionInput::set($inputs, $service);

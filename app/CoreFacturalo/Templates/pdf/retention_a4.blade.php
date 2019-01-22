@@ -105,9 +105,9 @@
     <tfoot>
     <tr>
         <td class="border-top text-right" colspan="4">Totales({{ $document->currency_type->symbol }})</td>
-        <td class="border-top text-right">0.00</td>
+        <td class="border-top text-right">{{ $document->total }}</td>
         <td class="border-top"></td>
-        <td class="border-top text-right">0.00</td>
+        <td class="border-top text-right">{{ $document->total_retention }}</td>
         <td class="border-top"></td>
     </tr>
     </tfoot>

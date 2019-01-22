@@ -2,7 +2,7 @@
 
 namespace App\CoreFacturalo\Transforms\Documents\Partials;
 
-use App\CoreFacturalo\Transforms\Functions;
+use App\CoreFacturalo\Transforms\TransformFunctions;
 
 class ItemAttributeTransform
 {
@@ -15,10 +15,10 @@ class ItemAttributeTransform
                 $attributes[] = [
                     'code' => $row['codigo'],
                     'name' => $row['nombre'],
-                    'value' => Functions::valueKeyInArray($row, 'valor'),
-                    'start_date' => Functions::valueKeyInArray($row, 'fecha_inicio'),
-                    'end_date' => Functions::valueKeyInArray($row, 'fecha_fin'),
-                    'duration' => Functions::valueKeyInArray($row, 'duracion'),
+                    'value' => TransformFunctions::valueKeyInArray($row, 'valor'),
+                    'start_date' => TransformFunctions::valueKeyInArray($row, 'fecha_inicio'),
+                    'end_date' => TransformFunctions::valueKeyInArray($row, 'fecha_fin'),
+                    'duration' => TransformFunctions::valueKeyInArray($row, 'duracion'),
                 ];
             }
 

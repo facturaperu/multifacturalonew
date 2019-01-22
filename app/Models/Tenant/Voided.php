@@ -49,16 +49,16 @@ class Voided extends ModelTenant
 
     public function getDownloadExternalXmlAttribute()
     {
-        return route('tenant.voided.download_external', ['type' => 'xml', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'voided', 'type' => 'xml', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalPdfAttribute()
     {
-        return route('tenant.voided.download_external', ['type' => 'pdf', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'voided', 'type' => 'pdf', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalCdrAttribute()
     {
-        return route('tenant.voided.download_external', ['type' => 'cdr', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'voided', 'type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }

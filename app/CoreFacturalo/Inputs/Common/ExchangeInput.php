@@ -6,7 +6,7 @@ class ExchangeInput
 {
     public static function set($inputs)
     {
-        if(key_exists('exchange_rate', $inputs)) {
+        if(array_key_exists('exchange_rate', $inputs)) {
             $exchange_rate = $inputs['exchange_rate'];
             $currency_type_id_source = $exchange_rate['currency_type_id_source'];
             $currency_type_id_target = $exchange_rate['currency_type_id_target'];

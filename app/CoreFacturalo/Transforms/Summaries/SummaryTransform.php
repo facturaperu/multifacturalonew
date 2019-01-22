@@ -13,7 +13,7 @@ class SummaryTransform
             'date_of_reference' => $inputs['fecha_de_emision_de_documentos'],
             'summary_status_type_id' => $inputs['codigo_tipo_proceso'],
             'documents' => DocumentTransform::transform($inputs),
-            'actions' => ActionTransform::transform($inputs),
+//            'actions' => ActionTransform::transform($inputs),
         ];
     }
 }

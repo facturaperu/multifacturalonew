@@ -6,7 +6,7 @@ class DriverInput
 {
     public static function set($inputs)
     {
-        if(key_exists('driver', $inputs)) {
+        if(array_key_exists('driver', $inputs)) {
             $driver = $inputs['driver'];
             $identity_document_type_id = $driver['identity_document_type_id'];
             $number = $driver['number'];

@@ -1,7 +1,7 @@
 @php
     $establishment = $document->establishment;
     $customer = $document->customer;
-    $details = $document->details;
+
     $document_base = $document->note;
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
     $document_type_description_array = [
@@ -288,12 +288,12 @@
     </tr>
     </thead>
     <tbody>
-    @foreach($details as $row)
+    @foreach($document->items as $row)
         <tr>
             <td class="text-center">{{ $row->quantity }}</td>
             <td>{{ $row->item->unit_type_id }}</td>
             <td>
-                {!! $row->item_description !!}
+                {!! $row->item->description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
                         <br/>{!! $attr->description !!} : {{ $attr->value }}

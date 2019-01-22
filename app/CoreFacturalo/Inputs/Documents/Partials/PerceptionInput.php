@@ -6,19 +6,21 @@ class PerceptionInput
 {
     public static function set($inputs)
     {
-        if(key_exists('perception', $inputs)) {
-            $perception = $inputs['perception'];
-            $code = $perception['code'];
-            $percentage = $perception['percentage'];
-            $amount = $perception['amount'];
-            $base = $perception['base'];
+        if(array_key_exists('perception', $inputs)) {
+            if($inputs['perception']) {
+                $perception = $inputs['perception'];
+                $code = $perception['code'];
+                $percentage = $perception['percentage'];
+                $amount = $perception['amount'];
+                $base = $perception['base'];
 
-            return [
-                'code' => $code,
-                'percentage' => $percentage,
-                'amount' => $amount,
-                'base' => $base,
-            ];
+                return [
+                    'code' => $code,
+                    'percentage' => $percentage,
+                    'amount' => $amount,
+                    'base' => $base,
+                ];
+            }
         }
         return null;
     }

@@ -4,7 +4,7 @@ namespace App\Models\Tenant;
 
 class VoidedDocument extends ModelTenant
 {
-    protected $with = ['voided', 'document'];
+    protected $with = ['document'];
     public $timestamps = false;
 
     protected $fillable = [
@@ -12,11 +12,6 @@ class VoidedDocument extends ModelTenant
         'document_id',
         'description'
     ];
-
-    public function voided()
-    {
-        return $this->belongsTo(Voided::class);
-    }
 
     public function document()
     {

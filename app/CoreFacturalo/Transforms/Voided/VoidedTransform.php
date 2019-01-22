@@ -10,9 +10,9 @@ class VoidedTransform
     public static function transform($inputs)
     {
         return [
-            'date_of_issue' => $inputs['fecha_de_emision_de_documentos'],
+            'date_of_reference' => $inputs['fecha_de_emision_de_documentos'],
             'documents' => DocumentTransform::transform($inputs),
-            'actions' => ActionTransform::transform($inputs),
+//            'actions' => ActionTransform::transform($inputs),
         ];
     }
 }

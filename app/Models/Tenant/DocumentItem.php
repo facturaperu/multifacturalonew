@@ -14,7 +14,6 @@ class DocumentItem extends ModelTenant
     protected $fillable = [
         'document_id',
         'item_id',
-        'item_description',
         'item',
         'quantity',
         'unit_value',
@@ -83,11 +82,6 @@ class DocumentItem extends ModelTenant
     public function setDiscountsAttribute($value)
     {
         $this->attributes['discounts'] = (is_null($value))?null:json_encode($value);
-    }
-
-    public function document()
-    {
-        return $this->belongsTo(Document::class);
     }
 
     public function affectation_igv_type()

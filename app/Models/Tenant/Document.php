@@ -226,16 +226,16 @@ class Document extends ModelTenant
 
     public function getDownloadExternalXmlAttribute()
     {
-        return route('download.external_id', ['model' => 'document', 'type' => 'xml', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'document', 'type' => 'xml', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalPdfAttribute()
     {
-        return route('download.external_id', ['model' => 'document', 'type' => 'pdf', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'document', 'type' => 'pdf', 'external_id' => $this->external_id]);
     }
 
     public function getDownloadExternalCdrAttribute()
     {
-        return route('download.external_id', ['model' => 'document', 'type' => 'cdr', 'external_id' => $this->external_id]);
+        return route('tenant.download.external_id', ['model' => 'document', 'type' => 'cdr', 'external_id' => $this->external_id]);
     }
 }

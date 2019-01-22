@@ -4,18 +4,13 @@ namespace App\Models\Tenant;
 
 class SummaryDocument extends ModelTenant
 {
-    protected $with = ['summary', 'document'];
+    protected $with = ['document'];
     public $timestamps = false;
 
     protected $fillable = [
         'summary_id',
         'document_id',
     ];
-
-    public function summary()
-    {
-        return $this->belongsTo(Summary::class);
-    }
 
     public function document()
     {

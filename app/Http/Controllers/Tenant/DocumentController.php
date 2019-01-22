@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\CoreFacturalo\Documents\VoidedBuilder;
+use App\CoreFacturalo\Facturalo;
 use App\CoreFacturalo\Facturalo\FacturaloDocument;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
@@ -38,7 +39,7 @@ class DocumentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('transform.web:document', ['only' => ['store']]);
+        $this->middleware('input.transform:document,web', ['only' => ['store']]);
     }
 
     public function index()
@@ -144,36 +145,70 @@ class DocumentController extends Controller
 
     public function store(DocumentRequest $request)
     {
-        $facturalo = new FacturaloDocument();
-        $facturalo->setInputs($request->all());
-
-        DB::connection('tenant')->transaction(function () use($facturalo) {
-            $facturalo->save();
-            $facturalo->createXmlAndSign();
+        $fact = $document = DB::transaction(function () use($request) {
+            $facturalo = new Facturalo();
+            $facturalo->save($request->all());
+            $facturalo->createXmlUnsigned();
+            $facturalo->signXmlUnsigned();
+            $facturalo->updateHash();
+            $facturalo->updateQr();
             $facturalo->createPdf();
+            $facturalo->senderXmlSignedBill();
+            return $facturalo;
         });
-        $document = $facturalo->getDocument();
 
-        $send = ($document->group_id === '01')?true:false;
-
-        $configuration = Configuration::first();
-
-        $send = $send && (bool)$configuration->send_auto;
-        $res = ($send)?$facturalo->sendXml():[];
+        $document = $fact->getDocument();
+        $response = $fact->getResponse();
 
         return [
             'success' => true,
             'data' => [
                 'id' => $document->id,
-                'number' => $document->number_full,
+//                'number' => $document->number_full,
+//                'filename' => $document->filename,
+//                'external_id' => $document->external_id,
+//                'number_to_letter' => $document->number_to_letter,
+//                'hash' => $document->hash,
+//                'qr' => $document->qr,
             ],
-            'links' => [
-                'xml' => $document->download_external_xml,
-                'pdf' => $document->download_external_pdf,
-                'cdr' => ($send)?$document->download_external_cdr:'',
-            ],
-            'response' => $res
+//            'links' => [
+//                'xml' => $document->download_external_xml,
+//                'pdf' => $document->download_external_pdf,
+//                'cdr' => ($response['sent'])?$document->download_external_cdr:'',
+//            ],
+//            'response' => ($response['sent'])?array_except($response, 'sent'):[]
         ];
+
+//        $facturalo = new FacturaloDocument();
+//        $facturalo->setInputs($request->all());
+//
+//        DB::connection('tenant')->transaction(function () use($facturalo) {
+//            $facturalo->save();
+//            $facturalo->createXmlAndSign();
+//            $facturalo->createPdf();
+//        });
+//        $document = $facturalo->getDocument();
+//
+//        $send = ($document->group_id === '01')?true:false;
+//
+//        $configuration = Configuration::first();
+//
+//        $send = $send && (bool)$configuration->send_auto;
+//        $res = ($send)?$facturalo->sendXml():[];
+//
+//        return [
+//            'success' => true,
+//            'data' => [
+//                'id' => $document->id,
+//                'number' => $document->number_full,
+//            ],
+//            'links' => [
+//                'xml' => $document->download_external_xml,
+//                'pdf' => $document->download_external_pdf,
+//                'cdr' => ($send)?$document->download_external_cdr:'',
+//            ],
+//            'response' => $res
+//        ];
     }
 
     public function downloadExternal($type, $external_id)

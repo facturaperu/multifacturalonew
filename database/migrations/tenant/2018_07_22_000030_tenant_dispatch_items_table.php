@@ -17,7 +17,6 @@ class TenantDispatchItemsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('dispatch_id');
             $table->unsignedInteger('item_id');
-            $table->text('item_description');
             $table->json('item');
             $table->integer('quantity');
 

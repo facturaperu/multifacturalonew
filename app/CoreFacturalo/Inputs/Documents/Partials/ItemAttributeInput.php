@@ -6,7 +6,7 @@ class ItemAttributeInput
 {
     public static function set($inputs)
     {
-        if(key_exists('attributes', $inputs)) {
+        if(array_key_exists('attributes', $inputs)) {
             if($inputs['attributes']) {
                 $attributes = [];
                 foreach ($inputs['attributes'] as $row) {

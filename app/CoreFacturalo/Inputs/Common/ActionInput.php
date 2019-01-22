@@ -2,20 +2,28 @@
 
 namespace App\CoreFacturalo\Inputs\Common;
 
+use App\CoreFacturalo\Inputs\InputFunctions;
+
 class ActionInput
 {
     public static function set($inputs)
     {
-        $actions = key_exists('actions', $inputs)?$inputs['actions']:[];
+        $actions = [];
+        if(array_key_exists('actions', $inputs)) {
+           if($inputs['actions']) {
+               $actions = $inputs['actions'];
+           }
+        }
 
-        $send_email = array_key_exists('send_email', $actions)?(bool)$actions['send_email']:false;
-        $send_xml_signed = array_key_exists('send_xml_signed', $actions)?(bool)$actions['send_xml_signed']:true;
-        $format_pdf = array_key_exists('format_pdf', $actions)?$actions['format_pdf']:'a4';
+        $send_xml_signed = InputFunctions::valueKeyInArray($actions, 'send_xml_signed', true);
+        if($inputs['group_id'] === '02') {
+            $send_xml_signed = false;
+        }
 
         return [
-            'send_email' => $send_email,
+            'send_email' => InputFunctions::valueKeyInArray($actions, 'send_email', false),
             'send_xml_signed' => $send_xml_signed,
-            'format_pdf' => $format_pdf,
+            'format_pdf' => InputFunctions::valueKeyInArray($actions, 'format_pdf', 'a4'),
         ];
     }
 }

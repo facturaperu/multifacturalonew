@@ -6,7 +6,7 @@ class DispatcherInput
 {
     public static function set($inputs)
     {
-        if(key_exists('dispatcher', $inputs)) {
+        if(array_key_exists('dispatcher', $inputs)) {
             $dispatcher = $inputs['dispatcher'];
             $identity_document_type_id = $dispatcher['identity_document_type_id'];
             $number = $dispatcher['number'];

@@ -12,7 +12,7 @@ class DiscountTransform
                 $discounts[] = [
                     'code' => $row['codigo'],
                     'description' => $row['descripcion'],
-                    'percentage' => $row['porcentaje'],
+                    'factor' => $row['factor'],
                     'amount' => $row['monto'],
                     'base' =>  $row['base'],
                 ];

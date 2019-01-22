@@ -43,7 +43,6 @@ class VoidedController extends Controller
         if($request->has('external_id')) {
             $external_id = $request->input('external_id');
             $summary = Voided::where('external_id', $external_id)
-                            ->whereUser()
                             ->first();
             if(!$summary) {
                 throw new Exception("El código externo {$external_id} es inválido, no se encontró anulación relacionada");
@@ -51,7 +50,6 @@ class VoidedController extends Controller
         } elseif ($request->has('ticket')) {
             $ticket = $request->input('ticket');
             $summary = Voided::where('ticket', $ticket)
-                            ->whereUser()
                             ->first();
             if(!$summary) {
                 throw new Exception("El ticket {$ticket} es inválido, no se encontró anulación relacionada");

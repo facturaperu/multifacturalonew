@@ -6,7 +6,7 @@ class PaymentInput
 {
     public static function set($inputs)
     {
-        if(key_exists('payments', $inputs)) {
+        if(array_key_exists('payments', $inputs)) {
             $payments = [];
             foreach ($inputs['payments'] as $row)
             {

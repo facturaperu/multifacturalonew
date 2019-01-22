@@ -6,7 +6,7 @@ class GuideInput
 {
     public static function set($inputs)
     {
-        if(key_exists('guides', $inputs)) {
+        if(array_key_exists('guides', $inputs)) {
             if($inputs['guides']) {
                 $guides = [];
                 foreach ($inputs['guides'] as $row) {

@@ -18,7 +18,6 @@ class TenantDocumentItemsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('document_id');
             $table->unsignedInteger('item_id');
-            $table->text('item_description');
             $table->json('item');
             $table->integer('quantity');
             $table->decimal('unit_value', 12, 2);

@@ -67,13 +67,13 @@ class Facturalo
 
     public function save($inputs)
     {
-        $this->actions = $inputs['actions'];
+        $this->actions = array_key_exists('actions', $inputs)?$inputs['actions']:[];
         $this->type = $inputs['type'];
         switch ($this->type) {
             case 'debit':
             case 'credit':
                 $document = Document::create($inputs);
-                foreach ($inputs['details'] as $row) {
+                foreach ($inputs['items'] as $row) {
                     $document->items()->create($row);
                 }
                 $document->note()->create($inputs['note']);
@@ -81,8 +81,8 @@ class Facturalo
                 break;
             case 'invoice':
                 $document = Document::create($inputs);
-                foreach ($inputs['details'] as $row) {
-                    $document->details()->create($row);
+                foreach ($inputs['items'] as $row) {
+                    $document->items()->create($row);
                 }
                 $document->invoice()->create($inputs['invoice']);
                 $this->document = Document::find($document->id);
@@ -103,14 +103,14 @@ class Facturalo
                 break;
             case 'retention':
                 $document = Retention::create($inputs);
-                foreach ($inputs['details'] as $row) {
+                foreach ($inputs['documents'] as $row) {
                     $document->documents()->create($row);
                 }
                 $this->document = Retention::find($document->id);
                 break;
             default:
                 $document = Dispatch::create($inputs);
-                foreach ($inputs['details'] as $row) {
+                foreach ($inputs['items'] as $row) {
                     $document->items()->create($row);
                 }
                 $this->document = Dispatch::find($document->id);
@@ -201,17 +201,18 @@ class Facturalo
 
     public function senderXmlSignedBill()
     {
-        $sent = true;
-        if($this->actions['send_xml_signed']) {
-            $sent = !($this->document->group_id === '02') && (bool)$this->actions['send_xml_signed'];
-        }
-        if(!$sent) {
+        if(!$this->actions['send_xml_signed']) {
             $this->response = [
                 'sent' => false,
             ];
             return;
         }
+        $this->onlySenderXmlSignedBill();
 
+    }
+
+    public function onlySenderXmlSignedBill()
+    {
         $res = $this->senderXmlSigned();
         if($res->isSuccess()) {
             $cdrResponse = $res->getCdrResponse();

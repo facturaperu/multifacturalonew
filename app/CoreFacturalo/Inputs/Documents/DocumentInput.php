@@ -16,7 +16,7 @@ use App\CoreFacturalo\Inputs\Documents\Partials\NoteInput;
 use App\CoreFacturalo\Inputs\Documents\Partials\PerceptionInput;
 use App\CoreFacturalo\Inputs\Documents\Partials\PrepaymentInput;
 use App\CoreFacturalo\Inputs\Documents\Partials\RelatedInput;
-use App\CoreFacturalo\Inputs\Functions;
+use App\CoreFacturalo\Inputs\InputFunctions;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Document;
 use Illuminate\Support\Str;
@@ -31,10 +31,10 @@ class DocumentInput
 
         $company = Company::active();
         $soap_type_id = $company->soap_type_id;
-        $number = Functions::newNumber($soap_type_id, $document_type_id, $series, $number, Document::class);
-        $filename = Functions::filename($company, $document_type_id, $series, $number);
+        $number = InputFunctions::newNumber($soap_type_id, $document_type_id, $series, $number, Document::class);
+        $filename = InputFunctions::filename($company, $document_type_id, $series, $number);
 
-        Functions::validateUniqueDocument($soap_type_id, $document_type_id, $series, $number, Document::class);
+        InputFunctions::validateUniqueDocument($soap_type_id, $document_type_id, $series, $number, Document::class);
 
         if(in_array($document_type_id, ['01', '03'])) {
             $array_partial = InvoiceInput::set($inputs);
@@ -46,12 +46,15 @@ class DocumentInput
             $invoice = null;
         }
 
+        $inputs['type'] = $array_partial['type'];
+        $inputs['group_id'] = $array_partial['group_id'];
+
         $establishment_array = EstablishmentInput::set($inputs, $service);
         $customer_array = PersonInput::set($inputs, 'customer', $service);
 
         return [
-            'type' => $array_partial['type'],
-            'group_id' => $array_partial['group_id'],
+            'type' => $inputs['type'],
+            'group_id' => $inputs['group_id'],
             'user_id' => auth()->id(),
             'external_id' => Str::uuid()->toString(),
             'establishment_id' => $establishment_array['establishment_id'],
@@ -70,23 +73,23 @@ class DocumentInput
             'currency_type_id' => $inputs['currency_type_id'],
             'purchase_order' => $inputs['purchase_order'],
             'exchange_rate_sale' => $inputs['exchange_rate_sale'],
-            'total_prepayment' => Functions::valueKeyInArray($inputs, 'total_prepayment', 0),
-            'total_discount' => Functions::valueKeyInArray($inputs, 'total_discount', 0),
-            'total_charge' => Functions::valueKeyInArray($inputs, 'total_charge', 0),
-            'total_exportation' => Functions::valueKeyInArray($inputs, 'total_exportation', 0),
-            'total_free' => Functions::valueKeyInArray($inputs, 'total_free', 0),
+            'total_prepayment' => InputFunctions::valueKeyInArray($inputs, 'total_prepayment', 0),
+            'total_discount' => InputFunctions::valueKeyInArray($inputs, 'total_discount', 0),
+            'total_charge' => InputFunctions::valueKeyInArray($inputs, 'total_charge', 0),
+            'total_exportation' => InputFunctions::valueKeyInArray($inputs, 'total_exportation', 0),
+            'total_free' => InputFunctions::valueKeyInArray($inputs, 'total_free', 0),
             'total_taxed' => $inputs['total_taxed'],
             'total_unaffected' => $inputs['total_unaffected'],
             'total_exonerated' => $inputs['total_exonerated'],
             'total_igv' => $inputs['total_igv'],
-            'total_base_isc' => Functions::valueKeyInArray($inputs, 'total_base_isc', 0),
-            'total_isc' => Functions::valueKeyInArray($inputs, 'total_isc', 0),
-            'total_base_other_taxes' => Functions::valueKeyInArray($inputs, 'total_base_other_taxes', 0),
-            'total_other_taxes' => Functions::valueKeyInArray($inputs, 'total_other_taxes', 0),
+            'total_base_isc' => InputFunctions::valueKeyInArray($inputs, 'total_base_isc', 0),
+            'total_isc' => InputFunctions::valueKeyInArray($inputs, 'total_isc', 0),
+            'total_base_other_taxes' => InputFunctions::valueKeyInArray($inputs, 'total_base_other_taxes', 0),
+            'total_other_taxes' => InputFunctions::valueKeyInArray($inputs, 'total_other_taxes', 0),
             'total_taxes' => $inputs['total_taxes'],
             'total_value' => $inputs['total_value'],
             'total' => $inputs['total'],
-            'items' => ItemInput::set($inputs),
+            'items' => ItemInput::set($inputs, $service),
             'charges' => ChargeInput::set($inputs),
             'discounts' => DiscountInput::set($inputs),
             'prepayments' => PrepaymentInput::set($inputs),

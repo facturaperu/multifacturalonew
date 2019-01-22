@@ -6,7 +6,7 @@ class OriginInput
 {
     public static function set($inputs)
     {
-        if(key_exists('origin', $inputs)) {
+        if(array_key_exists('origin', $inputs)) {
             $origin = $inputs['origin'];
             $location_id = $origin['location_id'];
             $address = $origin['address'];

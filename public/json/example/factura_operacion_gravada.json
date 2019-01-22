@@ -6,8 +6,7 @@
   "codigo_tipo_operacion": "0101",
   "codigo_tipo_documento":"01",
   "codigo_tipo_moneda": "PEN",
-  "factor_tipo_de_cambio": 3.35,
-  "fecha_de_vencimiento": "2018-10-09",
+  "fecha_de_vencimiento":"2018-08-30",
   "numero_orden_de_compra": "0045467898",
   "datos_del_emisor": {
     "codigo_del_domicilio_fiscal": "0000"
@@ -38,7 +37,6 @@
       "codigo_interno": "P0121",
       "descripcion":"Inca Kola 250 ml",
       "codigo_producto_sunat": "51121703",
-      "codigo_producto_gsl": "51121703",
       "unidad_de_medida": "NIU",
       "cantidad": 2,
       "valor_unitario": 50,

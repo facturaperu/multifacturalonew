@@ -11,14 +11,14 @@ use App\CoreFacturalo\Inputs\Dispatches\Partials\DispatcherInput;
 use App\CoreFacturalo\Inputs\Dispatches\Partials\DriverInput;
 use App\CoreFacturalo\Inputs\Dispatches\Partials\ItemInput;
 use App\CoreFacturalo\Inputs\Dispatches\Partials\OriginInput;
-use App\CoreFacturalo\Inputs\Functions;
+use App\CoreFacturalo\Inputs\InputFunctions;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Dispatch;
 use Illuminate\Support\Str;
 
 class DispatchInput
 {
-    public static function set($inputs)
+    public static function set($inputs, $service)
     {
         $document_type_id = $inputs['document_type_id'];
         $series = $inputs['series'];
@@ -26,18 +26,20 @@ class DispatchInput
 
         $company = Company::active();
         $soap_type_id = $company->soap_type_id;
-        $number = Functions::newNumber($soap_type_id, $document_type_id, $series, $number, Dispatch::class);
-        $filename = Functions::filename($company, $document_type_id, $series, $number);
+        $number = InputFunctions::newNumber($soap_type_id, $document_type_id, $series, $number, Dispatch::class);
+        $filename = InputFunctions::filename($company, $document_type_id, $series, $number);
 
-        Functions::validateDocumentTypeId($document_type_id, ['09']);
-        Functions::validateUniqueDocument($soap_type_id, $document_type_id, $series, $number, Dispatch::class);
+        InputFunctions::validateUniqueDocument($soap_type_id, $document_type_id, $series, $number, Dispatch::class);
+
+        $establishment_array = EstablishmentInput::set($inputs, $service);
+        $customer_array = PersonInput::set($inputs, 'customer', $service);
 
         return [
             'type' => 'dispatch',
             'user_id' => auth()->id(),
-            'external_id' => Str::uuid(),
-            'establishment_id' => $inputs['establishment_id'],
-            'establishment' => EstablishmentInput::set($inputs['establishment_id']),
+            'external_id' => Str::uuid()->toString(),
+            'establishment_id' => $establishment_array['establishment_id'],
+            'establishment' => $establishment_array['establishment'],
             'soap_type_id' => $soap_type_id,
             'state_type_id' => '01',
             'ubl_version' => '2.0',
@@ -47,8 +49,8 @@ class DispatchInput
             'number' => $number,
             'date_of_issue' => $inputs['date_of_issue'],
             'time_of_issue' => $inputs['time_of_issue'],
-            'customer_id' => $inputs['customer_id'],
-            'customer' => PersonInput::set($inputs['customer_id']),
+            'customer_id' => $customer_array['person_id'],
+            'customer' => $customer_array['person'],
             'observations' => $inputs['observations'],
             'transport_mode_type_id' => $inputs['transport_mode_type_id'],
             'transfer_reason_type_id' => $inputs['transfer_reason_type_id'],
@@ -65,7 +67,7 @@ class DispatchInput
             'delivery' => DeliveryInput::set($inputs),
             'dispatcher' => DispatcherInput::set($inputs),
             'driver' => DriverInput::set($inputs),
-            'items' => ItemInput::set($inputs),
+            'items' => ItemInput::set($inputs, $service),
             'legends' => LegendInput::set($inputs),
             'actions' => ActionInput::set($inputs),
         ];

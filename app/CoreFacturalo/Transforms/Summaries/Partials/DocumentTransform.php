@@ -2,7 +2,7 @@
 
 namespace App\CoreFacturalo\Transforms\Summaries\Partials;
 
-use App\CoreFacturalo\Transforms\Functions;
+use App\CoreFacturalo\Transforms\TransformFunctions;
 
 class DocumentTransform
 {
@@ -13,8 +13,8 @@ class DocumentTransform
             foreach ($inputs['documentos'] as $row)
             {
                 $documents[] = [
-                    'external_id' => Functions::valueKeyInArray($row, 'external_id'),
-                    'description' => Functions::valueKeyInArray($row, 'motivo_anulacion'),
+                    'external_id' => TransformFunctions::valueKeyInArray($row, 'external_id'),
+                    'description' => TransformFunctions::valueKeyInArray($row, 'motivo_anulacion'),
                 ];
             }
             return $documents;

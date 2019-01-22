@@ -6,7 +6,7 @@ class PrepaymentInput
 {
     public static function set($inputs)
     {
-        if(key_exists('prepayments', $inputs)) {
+        if(array_key_exists('prepayments', $inputs)) {
             if($inputs['prepayments']) {
                 $prepayments = [];
                 foreach ($inputs['prepayments'] as $row)

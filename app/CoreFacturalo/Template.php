@@ -20,7 +20,7 @@ class Template
 
     private function render($view, $company, $document)
     {
-        view()->addLocation(__DIR__);
+        view()->addLocation(__DIR__.'/Templates');
         return view($view, compact('company', 'document'))->render();
     }
 }

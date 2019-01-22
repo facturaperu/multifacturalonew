@@ -8,23 +8,28 @@ class LegendInput
 {
     public static function set($inputs)
     {
-        $legends = key_exists('legends', $inputs)?$inputs['legends']:[];
+        $legends = [];
+        if(array_key_exists('legends', $inputs)) {
+            if($inputs['legends']) {
+                foreach ($inputs['legends'] as $row)
+                {
+                    $code = $row['code'];
+                    $value = $row['value'];
 
-        foreach ($legends as $row)
-        {
-            $code = $row['code'];
-            $value = $row['value'];
-
-            $legends[] = [
-                'code' => $code,
-                'value' => $value
-            ];
+                    $legends[] = [
+                        'code' => $code,
+                        'value' => $value
+                    ];
+                }
+            }
         }
 
-        $legends[] = [
-            'code' => 1000,
-            'value' => NumberLetter::convertToLetter($inputs['total'])
-        ];
+        if(array_key_exists('total', $inputs)) {
+            $legends[] = [
+                'code' => 1000,
+                'value' => NumberLetter::convertToLetter($inputs['total'])
+            ];
+        }
 
         return $legends;
     }

@@ -65,7 +65,7 @@ class DocumentController extends Controller
             $fact = new Facturalo();
             $fact->setDocument($document);
             $fact->loadXmlSigned();
-            $fact->senderXmlSignedBill();
+            $fact->onlySenderXmlSignedBill();
             $response = $fact->getResponse();
             return [
                 'success' => true,
@@ -77,7 +77,7 @@ class DocumentController extends Controller
                 'links' => [
                     'cdr' => $document->download_external_cdr,
                 ],
-                'response' => $response
+                'response' => array_except($response, 'sent')
             ];
         }
     }

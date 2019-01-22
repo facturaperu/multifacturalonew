@@ -9,7 +9,7 @@ class DocumentInput
 {
     public static function set($inputs)
     {
-        if(key_exists('documents', $inputs)) {
+        if(array_key_exists('documents', $inputs)) {
             $documents = [];
             foreach ($inputs['documents'] as $row)
             {

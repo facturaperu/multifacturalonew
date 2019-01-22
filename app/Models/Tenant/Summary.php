@@ -6,7 +6,7 @@ use App\Models\Tenant\Catalogs\SummaryStatusType;
 
 class Summary extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'summary_status_type', 'summary_documents'];
+    protected $with = ['user', 'soap_type', 'state_type', 'summary_status_type', 'documents'];
 
     protected $fillable = [
         'user_id',
@@ -49,7 +49,7 @@ class Summary extends ModelTenant
         return $this->belongsTo(SummaryStatusType::class);
     }
 
-    public function summary_documents()
+    public function documents()
     {
         return $this->hasMany(SummaryDocument::class);
     }

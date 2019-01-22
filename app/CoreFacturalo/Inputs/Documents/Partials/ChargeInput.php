@@ -6,20 +6,20 @@ class ChargeInput
 {
     public static function set($inputs)
     {
-        if(key_exists('charges', $inputs)) {
+        if(array_key_exists('charges', $inputs)) {
             if($inputs['charges']) {
                 $charges = [];
                 foreach ($inputs['charges'] as $row) {
                     $code = $row['code'];
                     $description = $row['description'];
-                    $percentage = $row['percentage'];
+                    $factor = $row['factor'];
                     $amount = $row['amount'];
                     $base = $row['base'];
 
                     $charges[] = [
                         'code' => $code,
                         'description' => $description,
-                        'percentage' => $percentage,
+                        'factor' => $factor,
                         'amount' => $amount,
                         'base' => $base,
                     ];

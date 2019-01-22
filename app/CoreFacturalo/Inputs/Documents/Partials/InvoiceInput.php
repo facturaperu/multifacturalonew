@@ -6,7 +6,7 @@ class InvoiceInput
 {
     public static function set($inputs)
     {
-        if(key_exists('invoice', $inputs)) {
+        if(array_key_exists('invoice', $inputs)) {
             $document_type_id = $inputs['document_type_id'];
             $invoice = $inputs['invoice'];
             $operation_type_id = $invoice['operation_type_id'];

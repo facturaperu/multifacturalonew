@@ -6,20 +6,20 @@ class DiscountInput
 {
     public static function set($inputs)
     {
-        if(key_exists('discounts', $inputs)) {
+        if(array_key_exists('discounts', $inputs)) {
             if($inputs['discounts']) {
                 $discounts = [];
                 foreach ($inputs['discounts'] as $row) {
                     $code = $row['code'];
                     $description = $row['description'];
-                    $percentage = $row['percentage'];
+                    $factor = $row['factor'];
                     $amount = $row['amount'];
                     $base = $row['base'];
 
                     $discounts[] = [
                         'code' => $code,
                         'description' => $description,
-                        'percentage' => $percentage,
+                        'factor' => $factor,
                         'amount' => $amount,
                         'base' => $base,
                     ];

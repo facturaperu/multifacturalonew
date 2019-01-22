@@ -43,16 +43,14 @@ class SummaryController extends Controller
         if($request->has('external_id')) {
             $external_id = $request->input('external_id');
             $summary = Summary::where('external_id', $external_id)
-                ->whereUser()
-                ->first();
+                                ->first();
             if(!$summary) {
                 throw new Exception("El código externo {$external_id} es inválido, no se encontró resumen relacionado");
             }
         } elseif ($request->has('ticket')) {
             $ticket = $request->input('ticket');
             $summary = Summary::where('ticket', $ticket)
-                ->whereUser()
-                ->first();
+                                ->first();
             if(!$summary) {
                 throw new Exception("El ticket {$ticket} es inválido, no se encontró resumen relacionado");
             }

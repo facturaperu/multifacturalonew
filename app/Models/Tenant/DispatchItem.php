@@ -9,7 +9,6 @@ class DispatchItem extends ModelTenant
     protected $fillable = [
         'dispatch_id',
         'item_id',
-        'item_description',
         'item',
         'quantity',
     ];

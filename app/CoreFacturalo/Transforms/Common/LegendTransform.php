@@ -15,7 +15,6 @@ class LegendTransform
                     'value' => $row['valor'],
                 ];
             }
-
             return $legends;
         }
         return null;

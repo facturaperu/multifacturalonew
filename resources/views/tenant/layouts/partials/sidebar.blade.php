@@ -38,12 +38,12 @@
                             {{--<i class="fas fa-users"></i><span>Proveedores</span>--}}
                         {{--</a>--}}
                     {{--</li>--}}
-                    <li class="{{ ($path[0] === 'persons')?'nav-active':'' }}">
+                    <li class="{{ ($path[0] === 'persons' && $path[1] === 'customer')?'nav-active':'' }}">
                         <a class="nav-link" href="{{route('tenant.persons.index', ['type' => 'customer'])}}">
                             <i class="fas fa-users"></i><span>Clientes</span>
                         </a>
                     </li>
-                    <li class="{{ ($path[0] === 'persons')?'nav-active':'' }}">
+                    <li class="{{ ($path[0] === 'persons' && $path[1] === 'supplier')?'nav-active':'' }}">
                         <a class="nav-link" href="{{route('tenant.persons.index', ['type' => 'supplier'])}}">
                             <i class="fas fa-users"></i><span>Proveedores</span>
                         </a>

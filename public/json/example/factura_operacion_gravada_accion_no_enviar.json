@@ -37,7 +37,6 @@
       "codigo_interno": "P0121",
       "descripcion":"Inca Kola 250 ml",
       "codigo_producto_sunat": "51121703",
-      "codigo_producto_gsl": "51121703",
       "unidad_de_medida": "NIU",
       "cantidad": 2,
       "valor_unitario": 50,
@@ -52,12 +51,6 @@
       "total_item": 118
     }
   ],
-  "extras":{
-    "forma_de_pago": "Efectivo",
-    "observaciones": "probando",
-    "vendedor": "Juan",
-    "caja": "Caja 1"
-  },
   "acciones": {
     "enviar_xml_firmado": false
   }

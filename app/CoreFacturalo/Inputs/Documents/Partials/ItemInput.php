@@ -2,25 +2,35 @@
 
 namespace App\CoreFacturalo\Inputs\Documents\Partials;
 
+use App\CoreFacturalo\Inputs\InputFunctions;
 use App\Models\Tenant\Item;
 
 class ItemInput
 {
-    public static function set($inputs)
+    public static function set($inputs, $service)
     {
-        if(key_exists('items', $inputs)) {
+        if(array_key_exists('items', $inputs)) {
             $items = [];
             foreach ($inputs['items'] as $row) {
+                $row['currency_type_id'] = $inputs['currency_type_id'];
+
                 $attributes = ItemAttributeInput::set($row);
                 $discounts = DiscountInput::set($row);
                 $charges = ChargeInput::set($row);
 
-                $item = Item::find($row['item_id']);
+                if($service === 'api') {
+                    $item_id = self::updateOrCreateItem($row);
+                } else {
+                    $item_id = $row['item_id'];
+                }
+
+                $item = Item::find($item_id);
 
                 $items[] = [
+                    'item_id' => $item->id,
                     'item' => [
-                        'description' => $item->descripcion,
-                        'item_type_id' => '01',
+                        'description' => $item->description,
+                        'item_type_id' => $item->item_type_id,
                         'internal_id' => $item->internal_id,
                         'item_code' => $item->item_code,
                         'item_code_gs1' => $item->item_code_gs1,
@@ -35,13 +45,13 @@ class ItemInput
                     'percentage_igv' => $row['percentage_igv'],
                     'total_igv' => $row['total_igv'],
                     'system_isc_type_id' => $row['system_isc_type_id'],
-                    'total_base_isc' => $row['total_base_isc'],
-                    'percentage_isc' => $row['percentage_isc'],
-                    'total_isc' => $row['$total_isc'],
-                    'total_base_other_taxes' => $row['total_base_other_taxes'],
-                    'percentage_other_taxes' => $row['percentage_other_taxes'],
-                    'total_other_taxes' => $row['$total_other_taxes'],
-                    'total_taxes' => $row['$total_taxes'],
+                    'total_base_isc' => InputFunctions::valueKeyInArray($inputs, 'total_base_isc', 0),
+                    'percentage_isc' => InputFunctions::valueKeyInArray($inputs, 'percentage_isc', 0),
+                    'total_isc' => InputFunctions::valueKeyInArray($inputs, 'total_isc', 0),
+                    'total_base_other_taxes' => InputFunctions::valueKeyInArray($inputs, 'total_base_other_taxes', 0),
+                    'percentage_other_taxes' => InputFunctions::valueKeyInArray($inputs, 'percentage_other_taxes', 0),
+                    'total_other_taxes' => InputFunctions::valueKeyInArray($inputs, 'total_other_taxes', 0),
+                    'total_taxes' => $row['total_taxes'],
                     'total_value' => $row['total_value'],
                     'total' => $row['total'],
 
@@ -54,5 +64,25 @@ class ItemInput
             return $items;
         }
         return null;
+    }
+
+    public static function updateOrCreateItem($data)
+    {
+        $item = Item::updateOrCreate(
+            [
+                'internal_id' => $data['internal_id'],
+            ],
+            [
+                'description' => $data['description'],
+                'item_type_id' => $data['item_type_id'],
+                'item_code' => $data['item_code'],
+                'item_code_gs1' => $data['item_code_gs1'],
+                'unit_type_id' => $data['unit_type_id'],
+                'currency_type_id' => $data['currency_type_id'],
+                'unit_price' => $data['unit_price'],
+            ]
+        );
+
+        return $item->id;
     }
 }

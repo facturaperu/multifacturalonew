@@ -2,7 +2,7 @@
 
 namespace App\CoreFacturalo\Transforms;
 
-class Functions
+class TransformFunctions
 {
     public static function valueKeyInArray($inputs, $key, $default = null)
     {
