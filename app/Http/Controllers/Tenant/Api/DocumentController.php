@@ -25,10 +25,10 @@ class DocumentController extends Controller
             $facturalo->updateHash();
             $facturalo->updateQr();
             $facturalo->createPdf();
-            $facturalo->senderXmlSignedBill();
             return $facturalo;
         });
 
+        $fact->senderXmlSignedBill();
         $document = $fact->getDocument();
         $response = $fact->getResponse();
 

@@ -21,10 +21,10 @@ class DispatchController extends Controller
             $facturalo->createXmlUnsigned();
             $facturalo->signXmlUnsigned();
             $facturalo->createPdf();
-            $facturalo->senderXmlSignedBill();
             return $facturalo;
         });
 
+        $fact->senderXmlSignedBill();
         $document = $fact->getDocument();
         $response = $fact->getResponse();
 

@@ -2,7 +2,6 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\CoreFacturalo\Facturalo;
-use App\CoreFacturalo\Facturalo\FacturaloSummary;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\SummaryDocumentsRequest;
@@ -62,10 +61,10 @@ class SummaryController extends Controller
             $facturalo->save($request->all());
             $facturalo->createXmlUnsigned();
             $facturalo->signXmlUnsigned();
-            $facturalo->senderXmlSignedSummary();
             return $facturalo;
         });
 
+        $fact->senderXmlSignedSummary();
         $document = $fact->getDocument();
         //$response = $fact->getResponse();
 
@@ -77,12 +76,12 @@ class SummaryController extends Controller
 
     public function status($summary_id)
     {
-        $summary = Summary::find($summary_id);
+        $document = Summary::find($summary_id);
 
-        $fact = DB::connection('tenant')->transaction(function () use($summary) {
+        $fact = DB::connection('tenant')->transaction(function () use($document) {
             $facturalo = new Facturalo();
-            $facturalo->setDocument($summary);
-            $facturalo->statusSummary($summary->ticket);
+            $facturalo->setDocument($document);
+            $facturalo->statusSummary($document->ticket);
             return $facturalo;
         });
 
