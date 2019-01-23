@@ -47,16 +47,16 @@ class InputFunctions
         }
     }
 
-    public static function validateSeries($series_number, $document_type_id, $establishment_id)
-    {
-        $series = Series::where('establishment_id', $establishment_id)
-            ->where('document_type_id', $document_type_id)
-            ->where('number', $series_number)
-            ->first();
-        if(!$series) {
-            throw new Exception("La serie ingresa no corresponde al establecimiento o al tipo de  documento");
-        }
-    }
+//    public static function validateSeries($series_number, $document_type_id, $establishment_id)
+//    {
+//        $series = Series::where('establishment_id', $establishment_id)
+//            ->where('document_type_id', $document_type_id)
+//            ->where('number', $series_number)
+//            ->first();
+//        if(!$series) {
+//            throw new Exception("La serie ingresa no corresponde al establecimiento o al tipo de  documento");
+//        }
+//    }
 
 //    public static function findSeries($series_id)
 //    {

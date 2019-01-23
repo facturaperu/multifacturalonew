@@ -15,15 +15,33 @@ class ActionInput
            }
         }
 
+        return [
+            'send_email' => self::sendEmail($actions, $inputs),
+            'send_xml_signed' => self::sendXmlSigned($actions, $inputs),
+            'format_pdf' => self::formatPdf($actions, $inputs),
+        ];
+    }
+
+    private static function sendEmail($actions, $inputs)
+    {
+        return InputFunctions::valueKeyInArray($actions, 'send_email', false);
+    }
+
+    private static function sendXmlSigned($actions, $inputs)
+    {
         $send_xml_signed = InputFunctions::valueKeyInArray($actions, 'send_xml_signed', true);
-        if($inputs['group_id'] === '02') {
-            $send_xml_signed = false;
+        if(in_array($inputs['type'], ['invoice', 'credit', 'debit'])) {
+            if($inputs['group_id'] === '02') {
+                return false;
+            }
+            return $send_xml_signed;
         }
 
-        return [
-            'send_email' => InputFunctions::valueKeyInArray($actions, 'send_email', false),
-            'send_xml_signed' => $send_xml_signed,
-            'format_pdf' => InputFunctions::valueKeyInArray($actions, 'format_pdf', 'a4'),
-        ];
+        return true;
+    }
+
+    private static function formatPdf($actions, $inputs)
+    {
+        return InputFunctions::valueKeyInArray($actions, 'format_pdf', 'a4');
     }
 }

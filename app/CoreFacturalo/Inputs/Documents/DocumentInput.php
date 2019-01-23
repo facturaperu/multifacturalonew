@@ -49,16 +49,16 @@ class DocumentInput
         $inputs['type'] = $array_partial['type'];
         $inputs['group_id'] = $array_partial['group_id'];
 
-        $establishment_array = EstablishmentInput::set($inputs, $service);
-        $customer_array = PersonInput::set($inputs, 'customer', $service);
+        $establishment = EstablishmentInput::set($inputs['establishment_id']);
+        $customer= PersonInput::set($inputs['customer_id']);
 
         return [
             'type' => $inputs['type'],
             'group_id' => $inputs['group_id'],
             'user_id' => auth()->id(),
             'external_id' => Str::uuid()->toString(),
-            'establishment_id' => $establishment_array['establishment_id'],
-            'establishment' => $establishment_array['establishment'],
+            'establishment_id' => $inputs['establishment_id'],
+            'establishment' => $establishment,
             'soap_type_id' => $soap_type_id,
             'state_type_id' => '01',
             'ubl_version' => '2.1',
@@ -68,8 +68,8 @@ class DocumentInput
             'number' => $number,
             'date_of_issue' => $inputs['date_of_issue'],
             'time_of_issue' => $inputs['time_of_issue'],
-            'customer_id' => $customer_array['person_id'],
-            'customer' => $customer_array['person'],
+            'customer_id' => $inputs['customer_id'],
+            'customer' => $customer,
             'currency_type_id' => $inputs['currency_type_id'],
             'purchase_order' => $inputs['purchase_order'],
             'exchange_rate_sale' => $inputs['exchange_rate_sale'],

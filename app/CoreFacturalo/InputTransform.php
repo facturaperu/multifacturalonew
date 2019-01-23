@@ -7,11 +7,11 @@ use App\CoreFacturalo\Inputs\Documents\DocumentInput;
 use App\CoreFacturalo\Inputs\Retentions\RetentionInput;
 use App\CoreFacturalo\Inputs\Summaries\SummaryInput;
 use App\CoreFacturalo\Inputs\Voided\VoidedInput;
-use App\CoreFacturalo\Transforms\Dispatches\DispatchTransform;
-use App\CoreFacturalo\Transforms\Documents\DocumentTransform;
-use App\CoreFacturalo\Transforms\Retentions\RetentionTransform;
-use App\CoreFacturalo\Transforms\Summaries\SummaryTransform;
-use App\CoreFacturalo\Transforms\Voided\VoidedTransform;
+use App\CoreFacturalo\Transforms\Api\Dispatches\DispatchTransform;
+use App\CoreFacturalo\Transforms\Api\Documents\DocumentTransform;
+use App\CoreFacturalo\Transforms\Api\Retentions\RetentionTransform;
+use App\CoreFacturalo\Transforms\Api\Summaries\SummaryTransform;
+use App\CoreFacturalo\Transforms\Api\Voided\VoidedTransform;
 use Closure;
 
 class InputTransform
@@ -29,54 +29,21 @@ class InputTransform
     public function handle($request, Closure $next, $type, $service)
     {
         $inputs = $request->all();
-        if($service === 'api') {
-            $inputs = $this->transformInputs($inputs, $type);
-//            dd($inputs);
-        }
-//        dd($this->setInputs($inputs, $type, $service));
-        $request->replace($this->setInputs($inputs, $type, $service));
+        $transform_inputs = $this->transformInputs($inputs, $type, $service);
+//        dd($this->setInputs($transform_inputs, $type, $service));
+        $request->replace($this->setInputs($transform_inputs, $type, $service));
         return $next($request);
     }
 
-    private function transformInputs($inputs, $type)
+    private function transformInputs($inputs, $type, $service)
     {
-        switch ($type) {
-            case 'dispatch':
-                return DispatchTransform::transform($inputs);
-                break;
-            case 'retention':
-                return RetentionTransform::transform($inputs);
-                break;
-            case 'summary':
-                return SummaryTransform::transform($inputs);
-                break;
-            case 'voided':
-                return VoidedTransform::transform($inputs);
-                break;
-            default:
-                return DocumentTransform::transform($inputs);
-                break;
-        }
+        $class = "App\\CoreFacturalo\\Transforms\\".ucfirst($service)."\\".ucfirst(str_plural($type))."\\".ucfirst($type)."Transform";
+        return $class::transform($inputs);
     }
 
     private function setInputs($inputs, $type, $service)
     {
-        switch ($type) {
-            case 'dispatch':
-                return DispatchInput::set($inputs, $service);
-                break;
-            case 'retention':
-                return RetentionInput::set($inputs, $service);
-                break;
-            case 'summary':
-                return SummaryInput::set($inputs, $service);
-                break;
-            case 'voided':
-                return VoidedInput::set($inputs, $service);
-                break;
-            default:
-                return DocumentInput::set($inputs, $service);
-                break;
-        }
+        $class = "App\\CoreFacturalo\\Inputs\\".ucfirst(str_plural($type))."\\".ucfirst($type)."Input";
+        return $class::set($inputs, $service);
     }
 }

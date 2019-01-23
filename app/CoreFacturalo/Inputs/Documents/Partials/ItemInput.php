@@ -7,7 +7,7 @@ use App\Models\Tenant\Item;
 
 class ItemInput
 {
-    public static function set($inputs, $service)
+    public static function set($inputs)
     {
         if(array_key_exists('items', $inputs)) {
             $items = [];
@@ -18,13 +18,7 @@ class ItemInput
                 $discounts = DiscountInput::set($row);
                 $charges = ChargeInput::set($row);
 
-                if($service === 'api') {
-                    $item_id = self::updateOrCreateItem($row);
-                } else {
-                    $item_id = $row['item_id'];
-                }
-
-                $item = Item::find($item_id);
+                $item = Item::find($row['item_id']);
 
                 $items[] = [
                     'item_id' => $item->id,
@@ -64,25 +58,5 @@ class ItemInput
             return $items;
         }
         return null;
-    }
-
-    public static function updateOrCreateItem($data)
-    {
-        $item = Item::updateOrCreate(
-            [
-                'internal_id' => $data['internal_id'],
-            ],
-            [
-                'description' => $data['description'],
-                'item_type_id' => $data['item_type_id'],
-                'item_code' => $data['item_code'],
-                'item_code_gs1' => $data['item_code_gs1'],
-                'unit_type_id' => $data['unit_type_id'],
-                'currency_type_id' => $data['currency_type_id'],
-                'unit_price' => $data['unit_price'],
-            ]
-        );
-
-        return $item->id;
     }
 }

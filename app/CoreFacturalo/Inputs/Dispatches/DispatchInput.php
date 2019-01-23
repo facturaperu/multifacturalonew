@@ -31,15 +31,17 @@ class DispatchInput
 
         InputFunctions::validateUniqueDocument($soap_type_id, $document_type_id, $series, $number, Dispatch::class);
 
-        $establishment_array = EstablishmentInput::set($inputs, $service);
-        $customer_array = PersonInput::set($inputs, 'customer', $service);
+        $establishment = EstablishmentInput::set($inputs['establishment_id']);
+        $customer= PersonInput::set($inputs['customer_id']);
+
+        $inputs['type'] = 'dispatch';
 
         return [
-            'type' => 'dispatch',
+            'type' => $inputs['type'],
             'user_id' => auth()->id(),
             'external_id' => Str::uuid()->toString(),
-            'establishment_id' => $establishment_array['establishment_id'],
-            'establishment' => $establishment_array['establishment'],
+            'establishment_id' => $inputs['establishment_id'],
+            'establishment' => $establishment,
             'soap_type_id' => $soap_type_id,
             'state_type_id' => '01',
             'ubl_version' => '2.0',
@@ -49,8 +51,8 @@ class DispatchInput
             'number' => $number,
             'date_of_issue' => $inputs['date_of_issue'],
             'time_of_issue' => $inputs['time_of_issue'],
-            'customer_id' => $customer_array['person_id'],
-            'customer' => $customer_array['person'],
+            'customer_id' => $inputs['customer_id'],
+            'customer' => $customer,
             'observations' => $inputs['observations'],
             'transport_mode_type_id' => $inputs['transport_mode_type_id'],
             'transfer_reason_type_id' => $inputs['transfer_reason_type_id'],

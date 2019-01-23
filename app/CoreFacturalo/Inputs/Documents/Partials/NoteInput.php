@@ -2,7 +2,6 @@
 
 namespace App\CoreFacturalo\Inputs\Documents\Partials;
 
-use App\Models\Tenant\Company;
 use App\Models\Tenant\Document;
 
 class NoteInput
@@ -14,7 +13,9 @@ class NoteInput
             $note = $inputs['note'];
             $note_credit_or_debit_type_id = $note['note_credit_or_debit_type_id'];
             $note_description = $note['note_description'];
-            $affected_document = self::findAffectedDocument($note['document_type_id'], $note['series'], $note['number']);
+            $affected_document_id = $note['affected_document_id'];
+
+            $affected_document = Document::find($affected_document_id);
 
             $type = ($document_type_id === '07')?'credit':'debit';
 
@@ -31,17 +32,5 @@ class NoteInput
             ];
         }
         return null;
-    }
-
-    private static function findAffectedDocument($document_type_id, $series, $number)
-    {
-        $company = Company::active();
-        $soap_type_id = $company->soap_type_id;
-
-        return Document::where('document_type_id', $document_type_id)
-                        ->where('series', $series)
-                        ->where('number', $number)
-                        ->where('soap_type_id', $soap_type_id)
-                        ->first();
     }
 }
