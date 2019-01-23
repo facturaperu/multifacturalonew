@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'input.transform' => \App\CoreFacturalo\InputTransform::class,
+        'input.request' => \App\CoreFacturalo\InputRequest::class,
+//        'input.transform' => \App\CoreFacturalo\InputTransform::class,
     ];
 }

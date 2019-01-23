@@ -10,7 +10,7 @@ class DispatchController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('input.transform:dispatch,api', ['only' => ['store']]);
+        $this->middleware('input.request:dispatch,api', ['only' => ['store']]);
     }
 
     public function store(Request $request)

@@ -12,7 +12,7 @@ class SummaryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('input.transform:summary,api', ['only' => ['store']]);
+        $this->middleware('input.request:summary,api', ['only' => ['store']]);
     }
 
     public function store(Request $request)

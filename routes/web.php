@@ -12,6 +12,7 @@ if ($hostname) {
         Route::post('search', 'Tenant\SearchController@store');
 
         Route::get('downloads/{model}/{type}/{external_id}', 'Tenant\DownloadController@downloadExternal')->name('tenant.download.external_id');
+        Route::get('print/{model}/{external_id}', 'Tenant\DownloadController@toPrint');
 
         Route::middleware('auth')->group(function() {
             Route::get('/', function () {
@@ -122,7 +123,6 @@ if ($hostname) {
             Route::get('documents/record/{document}', 'Tenant\DocumentController@record');
             Route::post('documents', 'Tenant\DocumentController@store');
 //            Route::post('documents/voided', 'Tenant\DocumentController@voided');
-            Route::get('documents/to_print/{document}', 'Tenant\DocumentController@to_print');
 //            Route::get('documents/download/{type}/{document}', 'Tenant\DocumentController@download')->name('tenant.documents.download');
             Route::get('documents/send_xml/{document}', 'Tenant\DocumentController@send_xml');
             Route::post('documents/email', 'Tenant\DocumentController@email');

@@ -37,9 +37,11 @@ use Nexmo\Account\Price;
 
 class DocumentController extends Controller
 {
+    use StorageDocument;
+
     public function __construct()
     {
-        $this->middleware('input.transform:document,web', ['only' => ['store']]);
+        $this->middleware('input.request:document,web', ['only' => ['store']]);
     }
 
     public function index()
@@ -211,42 +213,35 @@ class DocumentController extends Controller
 //        ];
     }
 
-    public function downloadExternal($type, $external_id)
-    {
-        $document = Document::where('external_id', $external_id)->first();
-        if(!$document) {
-            throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
-        }
-        return StorageDocument::download($document->filename, $type);
-    }
+//    public function downloadExternal($type, $external_id)
+//    {
+//        $document = Document::where('external_id', $external_id)->first();
+//        if(!$document) {
+//            throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
+//        }
+//        return StorageDocument::download($document->filename, $type);
+//    }
+//
+//    public function download($type, Document $document)
+//    {
+//        switch ($type) {
+//            case 'pdf':
+//                $folder = 'pdf';
+//                break;
+//            case 'xml':
+//                $folder = 'signed';
+//                break;
+//            case 'cdr':
+//                $folder = 'cdr';
+//                break;
+//            default:
+//                throw new Exception('Tipo de archivo a descargar es inválido');
+//        }
+//
+//        return StorageDocument::download($document->filename, $folder);
+//    }
 
-    public function download($type, Document $document)
-    {
-        switch ($type) {
-            case 'pdf':
-                $folder = 'pdf';
-                break;
-            case 'xml':
-                $folder = 'signed';
-                break;
-            case 'cdr':
-                $folder = 'cdr';
-                break;
-            default:
-                throw new Exception('Tipo de archivo a descargar es inválido');
-        }
 
-        return StorageDocument::download($document->filename, $folder);
-    }
-
-    public function to_print($id)
-    {
-        $document = Document::find($id);
-        $temp = tempnam(sys_get_temp_dir(), 'pdf');
-        file_put_contents($temp, StorageDocument::get($document->filename, 'pdf'));
-
-        return response()->file($temp);
-    }
 
     public function voided(DocumentVoidedRequest $request)
     {

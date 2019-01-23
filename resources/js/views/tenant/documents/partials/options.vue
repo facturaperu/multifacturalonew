@@ -56,6 +56,7 @@
                 this.errors = {}
                 this.form = {
                     id: null,
+                    external_id: null,
                     number: null,
                     customer_email: null,
                     download_pdf: null
@@ -69,7 +70,7 @@
                     })
             },
             clickPrint(){
-                window.open(`/${this.resource}/to_print/${this.form.id}`, '_blank');
+                window.open(`/print/document/${this.form.external_id}`, '_blank');
             },
             clickDownload() {
                 window.open(this.form.download_pdf, '_blank');

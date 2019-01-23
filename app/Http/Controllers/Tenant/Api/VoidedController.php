@@ -12,7 +12,7 @@ class VoidedController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('input.transform:voided,api', ['only' => ['store']]);
+        $this->middleware('input.request:voided,api', ['only' => ['store']]);
     }
 
     public function store(Request $request)

@@ -37,4 +37,17 @@ class DownloadController extends Controller
 
         return $this->downloadStorage($document->filename, $folder);
     }
+
+    public function toPrint($model, $external_id)
+    {
+        $model = "App\\Models\\Tenant\\".ucfirst($model);
+        $document = $model::where('external_id', $external_id)->first();
+        if(!$document) {
+            throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
+        }
+        $temp = tempnam(sys_get_temp_dir(), 'pdf');
+        file_put_contents($temp, $this->getStorage($document->filename, 'pdf'));
+
+        return response()->file($temp);
+    }
 }

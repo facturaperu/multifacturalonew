@@ -89,6 +89,7 @@ class Facturalo
                 break;
             case 'summary':
                 $document = Summary::create($inputs);
+//                dd($inputs);
                 foreach ($inputs['documents'] as $row) {
                     $document->documents()->create($row);
                 }
