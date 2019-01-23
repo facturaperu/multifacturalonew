@@ -27,9 +27,9 @@ class VoidedCollection extends ResourceCollection
                 $has_cdr = true;
             }
 
-            $download_external_xml = route('tenant.'.$row->type.'.download_external', ['type' => 'xml', 'external_id' => $row->external_id]);
-            $download_external_pdf = route('tenant.'.$row->type.'.download_external', ['type' => 'pdf', 'external_id' => $row->external_id]);
-            $download_external_cdr = route('tenant.'.$row->type.'.download_external', ['type' => 'cdr', 'external_id' => $row->external_id]);
+            $download_external_xml = route('tenant.download.external_id', ['model' => $row->type, 'type' => 'xml', 'external_id' => $row->external_id]);
+            $download_external_pdf = route('tenant.download.external_id', ['model' => $row->type, 'type' => 'pdf', 'external_id' => $row->external_id]);
+            $download_external_cdr = route('tenant.download.external_id', ['model' => $row->type, 'type' => 'cdr', 'external_id' => $row->external_id]);
 
             return [
                 'type' => $row->type,

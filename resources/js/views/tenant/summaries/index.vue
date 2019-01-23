@@ -94,7 +94,7 @@
                 this.showDialog = true
             },
             clickTicket(id) {
-                this.$http.get(`/${this.resource}/ticket/${id}`)
+                this.$http.get(`/${this.resource}/status/${id}`)
                     .then(response => {
                         if (response.data.success) {
                             this.$message.success(response.data.message)

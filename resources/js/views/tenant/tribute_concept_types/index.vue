@@ -38,8 +38,7 @@
   
   
         <tribute-concept-types-form :showDialog.sync="showDialog"
-                        @load:list="getData"
-                         :recordId="recordId"></tribute-concept-types-form>
+                                    :recordId="recordId"></tribute-concept-types-form>
     </div>
 </template>
 <script>
@@ -60,9 +59,11 @@
                 records: [],
             }
         },
-        created() { 
+        created() {
+            this.$eventHub.$on('reloadData', () => {
+                this.getData()
+            })
             this.getData()
-
         },
         methods: { 
             getData() {
@@ -77,7 +78,7 @@
             },
             clickDelete(id) {
                 this.destroy(`/${this.resource}/${id}`).then(() =>
-                    this.getData()
+                    this.$eventHub.$emit('reloadData')
                 )
             }
         }

@@ -53,7 +53,7 @@
             <cbc:AdditionalAccountID>{{ $doc->customer->identity_document_type_id }}</cbc:AdditionalAccountID>
         </cac:AccountingCustomerParty>
         @if(in_array($doc->document_type_id, ['07', '08']))
-        @php($affected_document = $doc->note->affected_document->series)
+        @php($affected_document = $doc->note->affected_document)
         <cac:BillingReference>
             <cac:InvoiceDocumentReference>
                 <cbc:ID>{{ $affected_document->series }}-{{ $affected_document->number }}</cbc:ID>

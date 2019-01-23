@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
+use App\CoreFacturalo\Facturalo;
 use App\CoreFacturalo\Facturalo\FacturaloSummary;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
@@ -20,7 +21,7 @@ class SummaryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('transform.web:summary', ['only' => ['store']]);
+        $this->middleware('input.request:summary,web', ['only' => ['store']]);
     }
 
     public function index()
@@ -56,58 +57,40 @@ class SummaryController extends Controller
 
     public function store(SummaryRequest $request)
     {
-        $facturalo = new FacturaloSummary();
-        $facturalo->setInputs($request->all());
-
-        DB::connection('tenant')->transaction(function () use($facturalo) {
-            $facturalo->save();
-            $facturalo->createXmlAndSign();
-            $facturalo->sendXml();
+        $fact = DB::connection('tenant')->transaction(function () use($request) {
+            $facturalo = new Facturalo();
+            $facturalo->save($request->all());
+            $facturalo->createXmlUnsigned();
+            $facturalo->signXmlUnsigned();
+            $facturalo->senderXmlSignedSummary();
+            return $facturalo;
         });
 
-        $summary = $facturalo->getDocument();
+        $document = $fact->getDocument();
+        //$response = $fact->getResponse();
 
         return [
             'success' => true,
-            'message' => "El resumen {$summary->identifier} fue creado correctamente",
+            'message' => "El resumen {$document->identifier} fue creado correctamente",
         ];
     }
 
-    public function ticket($summary_id)
+    public function status($summary_id)
     {
         $summary = Summary::find($summary_id);
-        $facturalo = new FacturaloSummary();
-        $facturalo->setType('summary');
-        $facturalo->setDocument($summary);
-        $res = $facturalo->statusTicket();
+
+        $fact = DB::connection('tenant')->transaction(function () use($summary) {
+            $facturalo = new Facturalo();
+            $facturalo->setDocument($summary);
+            $facturalo->statusSummary($summary->ticket);
+            return $facturalo;
+        });
+
+        $response = $fact->getResponse();
 
         return [
             'success' => true,
-            'message' => $res['description']
+            'message' => $response['description'],
         ];
-    }
-
-    public function downloadExternal($type, $external_id)
-    {
-        $summary = Summary::where('external_id', $external_id)->first();
-        if(!$summary) {
-            throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
-        }
-
-        switch ($type) {
-            case 'pdf':
-                $folder = 'pdf';
-                break;
-            case 'xml':
-                $folder = 'signed';
-                break;
-            case 'cdr':
-                $folder = 'cdr';
-                break;
-            default:
-                throw new Exception('Tipo de archivo a descargar es inválido');
-        }
-
-        return $this->downloadStorage($summary->filename, $folder);
     }
 }

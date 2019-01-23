@@ -70,7 +70,7 @@
         },
         methods: {
             clickTicket(type, id) {
-                this.$http.get(`/${type}/ticket/${id}`)
+                this.$http.get(`/${type}/status/${id}`)
                     .then(response => {
                         if (response.data.success) {
                             this.$message.success(response.data.message)

@@ -107,4 +107,9 @@ class Functions
     {
         return Series::find($inputs['series_id']);
     }
+
+    public static function findAffectedDocument($inputs)
+    {
+        return Document::find($inputs['affected_document_id']);
+    }
 }

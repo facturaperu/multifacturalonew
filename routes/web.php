@@ -122,9 +122,7 @@ if ($hostname) {
             Route::get('documents/tables', 'Tenant\DocumentController@tables');
             Route::get('documents/record/{document}', 'Tenant\DocumentController@record');
             Route::post('documents', 'Tenant\DocumentController@store');
-//            Route::post('documents/voided', 'Tenant\DocumentController@voided');
-//            Route::get('documents/download/{type}/{document}', 'Tenant\DocumentController@download')->name('tenant.documents.download');
-            Route::get('documents/send_xml/{document}', 'Tenant\DocumentController@send_xml');
+            Route::get('documents/send/{document}', 'Tenant\DocumentController@send');
             Route::post('documents/email', 'Tenant\DocumentController@email');
             Route::get('documents/note/{document}', 'Tenant\NoteController@create');
             Route::get('documents/item/tables', 'Tenant\DocumentController@item_tables');
@@ -135,7 +133,7 @@ if ($hostname) {
             Route::get('summaries/records', 'Tenant\SummaryController@records');
             Route::post('summaries/documents', 'Tenant\SummaryController@documents');
             Route::post('summaries', 'Tenant\SummaryController@store');
-            Route::get('summaries/ticket/{summary}', 'Tenant\SummaryController@ticket');
+            Route::get('summaries/status/{summary}', 'Tenant\SummaryController@status');
 
             //Voided
             Route::get('voided', 'Tenant\VoidedController@index')->name('tenant.voided.index');
@@ -143,7 +141,7 @@ if ($hostname) {
             Route::get('voided/records', 'Tenant\VoidedController@records');
             Route::post('voided', 'Tenant\VoidedController@store');
 //            Route::get('voided/download/{type}/{voided}', 'Tenant\VoidedController@download')->name('tenant.voided.download');
-            Route::get('voided/ticket/{voided}', 'Tenant\VoidedController@ticket');
+            Route::get('voided/status/{voided}', 'Tenant\VoidedController@status');
 //            Route::get('voided/ticket/{voided_id}/{group_id}', 'Tenant\VoidedController@ticket');
 
             //Retentions

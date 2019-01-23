@@ -2,35 +2,23 @@
 
 namespace App\CoreFacturalo\Requests\Web\Validation;
 
-use App\Models\Tenant\Document;
-use Exception;
-
 class SummaryValidation
 {
     public static function validation($inputs)
     {
-        if($inputs['summary_status_type_id'] === '3') {
-            $inputs['documents'] = Functions::voidedDocuments($inputs, 'summary');
-        } else {
-            $inputs['documents'] = self::findDocuments($inputs);
+        if($inputs['summary_status_type_id'] === '1') {
+            $inputs['documents'] = self::setDocuments($inputs);
         }
         return $inputs;
     }
 
-    private static function findDocuments($inputs)
+    private static function setDocuments($inputs)
     {
-        $documents = Document::where('date_of_issue', $inputs['date_of_reference'])
-                            ->where('group_id', '02')
-                            ->get();
-        if(!$documents) {
-            throw new Exception("No se encontraron documentos con fecha de emisión {$inputs}.");
-        }
-
         $docs = [];
-        foreach ($documents as $row)
+        foreach ($inputs['documents'] as $row)
         {
             $docs[] = [
-                'document_id' => $row->id
+                'document_id' => $row['id']
             ];
         }
         return $docs;

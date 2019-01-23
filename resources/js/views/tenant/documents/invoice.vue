@@ -101,13 +101,13 @@
                                 </el-select>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="form-group" :class="{'has-danger': errors.observations}">
-                                <label class="control-label">Observaciones</label>
-                                <el-input v-model="form.optional.observations" type="textarea" autosize></el-input>
-                                <small class="form-control-feedback" v-if="errors.observations" v-text="errors.observations[0]"></small>
-                            </div>
-                        </div>
+                        <!--<div class="col-lg-4 col-md-6">-->
+                            <!--<div class="form-group" :class="{'has-danger': errors.observations}">-->
+                                <!--<label class="control-label">Observaciones</label>-->
+                                <!--<el-input v-model="form.optional.observations" type="textarea" autosize></el-input>-->
+                                <!--<small class="form-control-feedback" v-if="errors.observations" v-text="errors.observations[0]"></small>-->
+                            <!--</div>-->
+                        <!--</div>-->
                     </div>
                     <div class="row">
                         <div class="col-lg-2 col-md-6 d-flex align-items-end pt-2">
@@ -136,7 +136,7 @@
                                     <tbody>
                                     <tr v-for="(row, index) in form.items">
                                         <td>{{ index + 1 }}</td>
-                                        <td>{{ row.item_description }}<br/><small>{{ row.affectation_igv_type.description }}</small></td>
+                                        <td>{{ row.item.description }}<br/><small>{{ row.affectation_igv_type.description }}</small></td>
                                         <td class="text-center">{{ row.item.unit_type_id }}</td>
                                         <td class="text-right">{{ row.quantity }}</td>
                                         <td class="text-right">{{ currency_type.symbol }} {{ row.unit_price }}</td>
@@ -283,12 +283,6 @@
                     discounts: [],
                     attributes: [],
                     guides: [],
-                    optional: {
-                        observations: null,
-                        method_payment:null, 
-                        salesman:null,
-                        box_number:null,
-                    },
                     actions: {
                         format_pdf:'a4',
                     }

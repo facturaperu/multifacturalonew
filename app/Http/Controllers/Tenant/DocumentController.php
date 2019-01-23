@@ -147,7 +147,7 @@ class DocumentController extends Controller
 
     public function store(Request $request)
     {
-        $fact = $document = DB::transaction(function () use($request) {
+        $fact = DB::connection('tenant')->transaction(function () use ($request) {
             $facturalo = new Facturalo();
             $facturalo->save($request->all());
             $facturalo->createXmlUnsigned();
@@ -166,82 +166,9 @@ class DocumentController extends Controller
             'success' => true,
             'data' => [
                 'id' => $document->id,
-//                'number' => $document->number_full,
-//                'filename' => $document->filename,
-//                'external_id' => $document->external_id,
-//                'number_to_letter' => $document->number_to_letter,
-//                'hash' => $document->hash,
-//                'qr' => $document->qr,
             ],
-//            'links' => [
-//                'xml' => $document->download_external_xml,
-//                'pdf' => $document->download_external_pdf,
-//                'cdr' => ($response['sent'])?$document->download_external_cdr:'',
-//            ],
-//            'response' => ($response['sent'])?array_except($response, 'sent'):[]
         ];
-
-//        $facturalo = new FacturaloDocument();
-//        $facturalo->setInputs($request->all());
-//
-//        DB::connection('tenant')->transaction(function () use($facturalo) {
-//            $facturalo->save();
-//            $facturalo->createXmlAndSign();
-//            $facturalo->createPdf();
-//        });
-//        $document = $facturalo->getDocument();
-//
-//        $send = ($document->group_id === '01')?true:false;
-//
-//        $configuration = Configuration::first();
-//
-//        $send = $send && (bool)$configuration->send_auto;
-//        $res = ($send)?$facturalo->sendXml():[];
-//
-//        return [
-//            'success' => true,
-//            'data' => [
-//                'id' => $document->id,
-//                'number' => $document->number_full,
-//            ],
-//            'links' => [
-//                'xml' => $document->download_external_xml,
-//                'pdf' => $document->download_external_pdf,
-//                'cdr' => ($send)?$document->download_external_cdr:'',
-//            ],
-//            'response' => $res
-//        ];
     }
-
-//    public function downloadExternal($type, $external_id)
-//    {
-//        $document = Document::where('external_id', $external_id)->first();
-//        if(!$document) {
-//            throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
-//        }
-//        return StorageDocument::download($document->filename, $type);
-//    }
-//
-//    public function download($type, Document $document)
-//    {
-//        switch ($type) {
-//            case 'pdf':
-//                $folder = 'pdf';
-//                break;
-//            case 'xml':
-//                $folder = 'signed';
-//                break;
-//            case 'cdr':
-//                $folder = 'cdr';
-//                break;
-//            default:
-//                throw new Exception('Tipo de archivo a descargar es inválido');
-//        }
-//
-//        return StorageDocument::download($document->filename, $folder);
-//    }
-
-
 
     public function voided(DocumentVoidedRequest $request)
     {
@@ -283,17 +210,22 @@ class DocumentController extends Controller
         ];
     }
 
-    public function send_xml($document_id)
+    public function send($document_id)
     {
-        $facturalo = new FacturaloDocument();
         $document = Document::find($document_id);
-        $facturalo->setDocument($document);
-        $facturalo->loadXmlSigned();
-        $res = $facturalo->sendXml();
+
+        $fact = DB::connection('tenant')->transaction(function () use ($document) {
+            $facturalo = new Facturalo();
+            $facturalo->setDocument($document);
+            $facturalo->loadXmlSigned();
+            $facturalo->onlySenderXmlSignedBill();
+        });
+
+        $response = $fact->getResponse();
 
         return [
             'success' => true,
-            'message' => $res['description'],
+            'message' => $response['description'],
         ];
     }
 }

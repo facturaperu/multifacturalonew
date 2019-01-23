@@ -89,6 +89,13 @@
                             </div>
                         </div>
                         <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.purchase_order}">
+                                <label class="control-label">Orden Compra</label>
+                                <el-input v-model="form.purchase_order"></el-input>
+                                <small class="form-control-feedback" v-if="errors.purchase_order" v-text="errors.purchase_order[0]"></small>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
                                 <label class="control-label">Tipo de cambio</label>
                                 <el-input v-model="form.exchange_rate_sale"></el-input>
@@ -123,7 +130,7 @@
                                     <tbody>
                                     <tr v-for="(row, index) in form.items">
                                         <td>{{ index + 1 }}</td>
-                                        <td>{{ row.item_description }}<br/><small>{{ row.affectation_igv_type.description }}</small></td>
+                                        <td>{{ row.item.description }}<br/><small>{{ row.affectation_igv_type.description }}</small></td>
                                         <td class="text-center">{{ row.item.unit_type_id }}</td>
                                         <td class="text-right">{{ row.quantity }}</td>
                                         <td class="text-right">{{ currency_type.symbol }} {{ row.unit_price }}</td>
@@ -233,6 +240,7 @@
                     time_of_issue: moment().format('HH:mm:ss'),
                     customer_id: this.document.customer_id,
                     currency_type_id: this.document.currency_type_id,
+                    purchase_order: null,
                     exchange_rate_sale: 0,
                     total_prepayment:this.document.total_prepayment,
                     total_charge: this.document.total_charge,
@@ -250,16 +258,10 @@
                     total_taxes: this.document.total_taxes,
                     total_value: this.document.total_value,
                     total: this.document.total,
-                    items: this.document.details,
+                    items: this.document.items,
                     affected_document_id: this.document.id,
                     note_credit_or_debit_type_id: null,
                     note_description: null,
-                    optional: {
-                        observations: null,
-                        method_payment:null,
-                        salesman:null,
-                        box_number:null,
-                    },
                     actions: {
                         format_pdf: 'a4'
                     },

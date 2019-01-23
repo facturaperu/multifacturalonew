@@ -15,11 +15,11 @@ class DocumentValidation
         $inputs['series'] = $series->number;
         unset($inputs['series_id']);
 
-        if(in_array($inputs['document_type_id'], ['07', '08'])) {
-            $document = Functions::findAffectedDocumentByExternalId($inputs['affected_document_external_id']);
-            $inputs['affected_document_id'] = $document->id;
-            unset($inputs['affected_document_external_id']);
-        }
+//        if(in_array($inputs['document_type_id'], ['07', '08'])) {
+//            $document =  Functions::findAffectedDocument($inputs);
+//            $inputs['affected_document_id'] = $document->id;
+//            unset($inputs['affected_document_external_id']);
+//        }
 
 //        dd($inputs);
 //        $inputs['customer_id'] = Functions::person($inputs['customer'], 'customer');

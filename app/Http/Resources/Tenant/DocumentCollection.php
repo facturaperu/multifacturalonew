@@ -15,48 +15,37 @@ class DocumentCollection extends ResourceCollection
     public function toArray($request)
     {
         return $this->collection->transform(function($row, $key) {
-
-            $btn_voided = false;
-            $btn_ticket = false;
-            $btn_note = false;
-            $btn_resend = false;
-            $has_xml_voided = false;
-            $has_cdr_voided = false;
-            $download_xml_voided = null;
-            $download_cdr_voided = null;
-            $voided = null;
-            $affected_document = null;
-
             $has_xml = true;
             $has_pdf = true;
-            $has_cdr = (bool) $row->has_cdr;
-
-            if($row->group_id === '02') {
-                $has_cdr = false;
-            }
-
-            $btn_resend = false;
-            if($row->group_id === '01' && $has_cdr === false) {
-                $btn_resend = true;
-            }
-
-            $btn_voided = false;
+            $has_cdr = false;
             $btn_note = false;
-            if(($row->group_id === '01' && $has_cdr === true) || ($row->group_id === '02' && $row->state_type_id === '05')) {
-                if (in_array($row->document_type_id, ['07', '08'])) {
-                    $btn_note = false;
-                } else {
+            $btn_resend = false;
+            $btn_voided = false;
+
+            $affected_document = null;
+
+            if($row->group_id === '01') {
+                if($row->state_type_id === '01') {
+                    $btn_resend = true;
+                }
+                if($row->state_type_id === '05') {
+                    $has_cdr = true;
                     $btn_note = true;
+                    $btn_resend = false;
+                    $btn_voided = true;
+                }
+                if(in_array($row->document_type_id, ['07', '08'])) {
+                    $btn_note = false;
                 }
             }
-
-            if($row->state_type_id === '05') {
-                $btn_voided = true;
-            }
-
-            if(in_array($row->state_type_id, ['11', '13'])) {
-                $has_xml_voided = true;
-                $btn_note = false;
+            if($row->group_id === '02') {
+                if($row->state_type_id === '05') {
+                    $btn_note = true;
+                    $btn_voided = true;
+                }
+                if(in_array($row->document_type_id, ['07', '08'])) {
+                    $btn_note = false;
+                }
             }
 
             return [

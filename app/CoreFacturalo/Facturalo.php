@@ -26,6 +26,11 @@ class Facturalo
 {
     use StorageDocument;
 
+    const SENT = '03';
+    const ACCEPTED = '05';
+    const CANCELING = '13';
+    const VOIDED = '11';
+
     protected $company;
     protected $isDemo;
     protected $signer;
@@ -89,7 +94,6 @@ class Facturalo
                 break;
             case 'summary':
                 $document = Summary::create($inputs);
-//                dd($inputs);
                 foreach ($inputs['documents'] as $row) {
                     $document->documents()->create($row);
                 }
@@ -146,6 +150,23 @@ class Facturalo
         $this->document->update([
             'qr' => $this->getQr(),
         ]);
+    }
+
+    public function updateState($state_type_id)
+    {
+        $this->document->update([
+            'state_type_id' => $state_type_id
+        ]);
+    }
+
+    public function updateStateDocuments($state_type_id)
+    {
+        foreach ($this->document->documents as $doc)
+        {
+            $doc->document->update([
+                'state_type_id' => $state_type_id
+            ]);
+        }
     }
 
     private function getHash()
@@ -218,6 +239,7 @@ class Facturalo
         if($res->isSuccess()) {
             $cdrResponse = $res->getCdrResponse();
             $this->uploadFile($res->getCdrZip(), 'cdr');
+            $this->updateState(self::ACCEPTED);
             $this->response = [
                 'sent' => true,
                 'code' => $cdrResponse->getCode(),
@@ -235,6 +257,16 @@ class Facturalo
         if($res->isSuccess()) {
             $ticket = $res->getTicket();
             $this->updateTicket($ticket);
+            $this->updateState(self::SENT);
+            if($this->type === 'summary') {
+                if($this->document->summary_status_type_id === '01') {
+                    $this->updateStateDocuments(self::SENT);
+                } else {
+                    $this->updateStateDocuments(self::CANCELING);
+                }
+            } else {
+                $this->updateStateDocuments(self::CANCELING);
+            }
             $this->response = [
                 'sent' => true
             ];
@@ -261,6 +293,16 @@ class Facturalo
         } else {
             $cdrResponse = $res->getCdrResponse();
             $this->uploadFile($res->getCdrZip(), 'cdr');
+            $this->updateState(self::ACCEPTED);
+            if($this->type === 'summary') {
+                if($this->document->summary_status_type_id === '01') {
+                    $this->updateStateDocuments(self::ACCEPTED);
+                } else {
+                    $this->updateStateDocuments(self::VOIDED);
+                }
+            } else {
+                $this->updateStateDocuments(self::VOIDED);
+            }
             $this->response = [
                 'code' => $cdrResponse->getCode(),
                 'description' => $cdrResponse->getDescription(),

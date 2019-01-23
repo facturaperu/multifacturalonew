@@ -136,13 +136,13 @@
                 window.open(download, '_blank');
             },
             clickResend(document_id) {
-                this.$http.get(`/${this.resource}/send_xml/${document_id}`)
+                this.$http.get(`/${this.resource}/send/${document_id}`)
                     .then(response => {
                         if (response.data.success) {
                             this.$message.success(response.data.message)
                             this.$eventHub.$emit('reloadData')
                         } else {
-                            this.$message.error('Error al reenviar el archivo xml')
+                            this.$message.error(response.data.message)
                         }
                     })
                     .catch(error => {
