@@ -37,6 +37,8 @@ class DocumentItem extends ModelTenant
         'unit_price',
 
         'total_value',
+        'total_charge',
+        'total_discount',
         'total',
 
         'attributes',

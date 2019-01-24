@@ -184,7 +184,7 @@
     @foreach($document->charges as $charge)
     <cac:AllowanceCharge>
         <cbc:ChargeIndicator>true</cbc:ChargeIndicator>
-        <cbc:AllowanceChargeReasonCode>{{ $charge->code }}</cbc:AllowanceChargeReasonCode>
+        <cbc:AllowanceChargeReasonCode>{{ $charge->charge_type_id }}</cbc:AllowanceChargeReasonCode>
         <cbc:MultiplierFactorNumeric>{{ $charge->factor }}</cbc:MultiplierFactorNumeric>
         <cbc:Amount currencyID="{{ $document->currency_type_id }}">{{ $charge->amount }}</cbc:Amount>
         <cbc:BaseAmount currencyID="{{ $document->currency_type_id }}">{{ $charge->base }}</cbc:BaseAmount>
@@ -195,7 +195,7 @@
     @foreach($document->discounts as $discount)
     <cac:AllowanceCharge>
         <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
-        <cbc:AllowanceChargeReasonCode>{{ $discount->code }}</cbc:AllowanceChargeReasonCode>
+        <cbc:AllowanceChargeReasonCode>{{ $discount->discount_type_id }}</cbc:AllowanceChargeReasonCode>
         <cbc:MultiplierFactorNumeric>{{ $discount->factor }}</cbc:MultiplierFactorNumeric>
         <cbc:Amount currencyID="{{ $document->currency_type_id }}">{{ $discount->amount }}</cbc:Amount>
         <cbc:BaseAmount currencyID="{{ $document->currency_type_id }}">{{ $discount->base }}</cbc:BaseAmount>
@@ -334,7 +334,7 @@
         @foreach($row->charges as $charge)
         <cac:AllowanceCharge>
             <cbc:ChargeIndicator>true</cbc:ChargeIndicator>
-            <cbc:AllowanceChargeReasonCode>{{ $charge->code }}</cbc:AllowanceChargeReasonCode>
+            <cbc:AllowanceChargeReasonCode>{{ $charge->charge_type_id }}</cbc:AllowanceChargeReasonCode>
             <cbc:MultiplierFactorNumeric>{{ $charge->factor }}</cbc:MultiplierFactorNumeric>
             <cbc:Amount currencyID="{{ $document->currency_type_id }}">{{ $charge->amount }}</cbc:Amount>
             <cbc:BaseAmount currencyID="{{ $document->currency_type_id }}">{{ $charge->base }}</cbc:BaseAmount>
@@ -345,7 +345,7 @@
         @foreach($row->discounts as $discount)
         <cac:AllowanceCharge>
             <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
-            <cbc:AllowanceChargeReasonCode>{{ $discount->code }}</cbc:AllowanceChargeReasonCode>
+            <cbc:AllowanceChargeReasonCode>{{ $discount->discount_type_id }}</cbc:AllowanceChargeReasonCode>
             <cbc:MultiplierFactorNumeric>{{ $discount->factor }}</cbc:MultiplierFactorNumeric>
             <cbc:Amount currencyID="{{ $document->currency_type_id }}">{{ $discount->amount }}</cbc:Amount>
             <cbc:BaseAmount currencyID="{{ $document->currency_type_id }}">{{ $discount->base }}</cbc:BaseAmount>
@@ -417,9 +417,9 @@
             @endif
             @if($row->attributes)
             @foreach($row->attributes as $attr)
-            <cac:AdditionalItcompanyroperty >
-                <cbc:Name>{{ $attr->name }}</cbc:Name>
-                <cbc:NameCode>{{ $attr->code }}</cbc:NameCode>
+            <cac:AdditionalItemProperty>
+                <cbc:Name><![CDATA[{{ $attr->description }}]]></cbc:Name>
+                <cbc:NameCode>{{ $attr->attribute_type_id }}</cbc:NameCode>
                 @if($attr->value)
                 <cbc:Value>{{ $attr->value }}</cbc:Value>
                 @endif
@@ -436,7 +436,7 @@
                     @endif
                 </cac:UsabilityPeriod>
                 @endif
-            </cac:AdditionalItcompanyroperty>
+            </cac:AdditionalItemProperty>
             @endforeach
             @endif
         </cac:Item>

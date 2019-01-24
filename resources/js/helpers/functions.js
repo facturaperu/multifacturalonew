@@ -181,6 +181,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         row.total = 0
     }
 
+    console.log(row)
     return row
 }
 

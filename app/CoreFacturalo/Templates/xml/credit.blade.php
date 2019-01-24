@@ -320,7 +320,7 @@
             @endif
             @if($row->attributes)
             @foreach($row->attributes as $attr)
-            <cac:AdditionalItemProperty >
+            <cac:AdditionalItemProperty>
                 <cbc:Name>{{ $attr->name }}</cbc:Name>
                 <cbc:NameCode>{{ $attr->code }}</cbc:NameCode>
                 @if($attr->value)

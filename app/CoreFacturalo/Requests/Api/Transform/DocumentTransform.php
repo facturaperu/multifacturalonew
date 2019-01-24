@@ -93,6 +93,8 @@ class DocumentTransform
 
                     'total_taxes' => Functions::valueKeyInArray($row, 'total_impuestos'),
                     'total_value' => Functions::valueKeyInArray($row, 'total_valor_item'),
+                    'total_charge' => Functions::valueKeyInArray($row, 'total_cargos'),
+                    'total_discount' => Functions::valueKeyInArray($row, 'total_descuentos'),
                     'total' => Functions::valueKeyInArray($row, 'total_item'),
 
                     'attributes' => self::attributes($row),
@@ -113,8 +115,8 @@ class DocumentTransform
             foreach ($inputs['datos_adicionales'] as $row)
             {
                 $attributes[] = [
-                    'code' => $row['codigo'],
-                    'name' => $row['nombre'],
+                    'attribute_type_id' => $row['codigo'],
+                    'description' => $row['descripcion'],
                     'value' => Functions::valueKeyInArray($row, 'valor'),
                     'start_date' => Functions::valueKeyInArray($row, 'fecha_inicio'),
                     'end_date' => Functions::valueKeyInArray($row, 'fecha_fin'),

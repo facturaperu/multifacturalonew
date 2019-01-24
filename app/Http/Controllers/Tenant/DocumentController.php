@@ -170,33 +170,6 @@ class DocumentController extends Controller
         ];
     }
 
-//    public function voided(DocumentVoidedRequest $request)
-//    {
-//        DB::connection('tenant')->transaction(function () use($request) {
-//            $document = Document::find($request->input('id'));
-//            $document->state_type_id = '13';
-//            //$document->voided_description = $request->input('voided_description');
-//            $document->save();
-//
-//            if ($document->group_id === '01') {
-//                $builder = new VoidedBuilder();
-//                $builder->save($document);
-//                $xmlBuilder = new XmlBuilder();
-//                $xmlBuilder->createXMLSigned($builder);
-//            } else {
-//                $builder = new SummaryBuilder();
-//                $builder->voided($document);
-//                $xmlBuilder = new XmlBuilder();
-//                $xmlBuilder->createXMLSigned($builder);
-//            }
-//        });
-//
-//        return [
-//            'success' => true,
-//            'message' => 'Se registró correctamente la anulación, por favor consulte el ticket.'
-//        ];
-//    }
-
     public function email(DocumentEmailRequest $request)
     {
         $company = Company::active();
@@ -219,6 +192,7 @@ class DocumentController extends Controller
             $facturalo->setDocument($document);
             $facturalo->loadXmlSigned();
             $facturalo->onlySenderXmlSignedBill();
+            return $facturalo;
         });
 
         $response = $fact->getResponse();

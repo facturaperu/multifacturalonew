@@ -210,6 +210,7 @@ class Facturalo
     public function loadXmlSigned()
     {
         $this->xmlSigned = $this->getStorage($this->document->filename, 'signed');
+//        dd($this->xmlSigned);
     }
 
     private function senderXmlSigned()
@@ -260,7 +261,7 @@ class Facturalo
             $this->updateTicket($ticket);
             $this->updateState(self::SENT);
             if($this->type === 'summary') {
-                if($this->document->summary_status_type_id === '01') {
+                if($this->document->summary_status_type_id === '1') {
                     $this->updateStateDocuments(self::SENT);
                 } else {
                     $this->updateStateDocuments(self::CANCELING);
@@ -296,7 +297,7 @@ class Facturalo
             $this->uploadFile($res->getCdrZip(), 'cdr');
             $this->updateState(self::ACCEPTED);
             if($this->type === 'summary') {
-                if($this->document->summary_status_type_id === '01') {
+                if($this->document->summary_status_type_id === '1') {
                     $this->updateStateDocuments(self::ACCEPTED);
                 } else {
                     $this->updateStateDocuments(self::VOIDED);

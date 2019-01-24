@@ -9,8 +9,6 @@ use App\Models\Tenant\Catalogs\CurrencyType;
 
 class CurrencyTypeController extends Controller
 {
-    protected $catalog_id = '02';
-
     public function records()
     {
         $records = CurrencyType::all();

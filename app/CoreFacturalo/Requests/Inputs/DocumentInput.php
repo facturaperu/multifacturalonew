@@ -119,14 +119,16 @@ class DocumentInput
                     'percentage_igv' => $row['percentage_igv'],
                     'total_igv' => $row['total_igv'],
                     'system_isc_type_id' => $row['system_isc_type_id'],
-                    'total_base_isc' => Functions::valueKeyInArray($inputs, 'total_base_isc', 0),
-                    'percentage_isc' => Functions::valueKeyInArray($inputs, 'percentage_isc', 0),
-                    'total_isc' => Functions::valueKeyInArray($inputs, 'total_isc', 0),
-                    'total_base_other_taxes' => Functions::valueKeyInArray($inputs, 'total_base_other_taxes', 0),
-                    'percentage_other_taxes' => Functions::valueKeyInArray($inputs, 'percentage_other_taxes', 0),
-                    'total_other_taxes' => Functions::valueKeyInArray($inputs, 'total_other_taxes', 0),
+                    'total_base_isc' => Functions::valueKeyInArray($row, 'total_base_isc', 0),
+                    'percentage_isc' => Functions::valueKeyInArray($row, 'percentage_isc', 0),
+                    'total_isc' => Functions::valueKeyInArray($row, 'total_isc', 0),
+                    'total_base_other_taxes' => Functions::valueKeyInArray($row, 'total_base_other_taxes', 0),
+                    'percentage_other_taxes' => Functions::valueKeyInArray($row, 'percentage_other_taxes', 0),
+                    'total_other_taxes' => Functions::valueKeyInArray($row, 'total_other_taxes', 0),
                     'total_taxes' => $row['total_taxes'],
                     'total_value' => $row['total_value'],
+                    'total_charge' => Functions::valueKeyInArray($row, 'total_charge', 0),
+                    'total_discount' => Functions::valueKeyInArray($row, 'total_discount', 0),
                     'total' => $row['total'],
                     'attributes' => self::attributes($row),
                     'discounts' => self::discounts($row),
@@ -144,16 +146,16 @@ class DocumentInput
             if($inputs['attributes']) {
                 $attributes = [];
                 foreach ($inputs['attributes'] as $row) {
-                    $code = $row['code'];
-                    $name = $row['name'];
-                    $value = array_key_exists('valor', $row) ? $row['value'] : null;
-                    $start_date = array_key_exists('start_date', $row) ? $row['start_date'] : null;
-                    $end_date = array_key_exists('start_date', $row) ? $row['start_date'] : null;
-                    $duration = array_key_exists('duration', $row) ? $row['duration'] : null;
+                    $attribute_type_id = $row['attribute_type_id'];
+                    $description = $row['description'];
+                    $value = array_key_exists('value', $row)?$row['value']:null;
+                    $start_date = array_key_exists('start_date', $row)?$row['start_date']:null;
+                    $end_date = array_key_exists('start_date', $row)?$row['start_date']:null;
+                    $duration = array_key_exists('duration', $row)?$row['duration']:null;
 
                     $attributes[] = [
-                        'code' => $code,
-                        'name' => $name,
+                        'attribute_type_id' => $attribute_type_id,
+                        'description' => $description,
                         'value' => $value,
                         'start_date' => $start_date,
                         'end_date' => $end_date,
@@ -172,14 +174,14 @@ class DocumentInput
             if($inputs['charges']) {
                 $charges = [];
                 foreach ($inputs['charges'] as $row) {
-                    $code = $row['code'];
+                    $charge_type_id = $row['charge_type_id'];
                     $description = $row['description'];
                     $factor = $row['factor'];
                     $amount = $row['amount'];
                     $base = $row['base'];
 
                     $charges[] = [
-                        'code' => $code,
+                        'discount_type_id' => $charge_type_id,
                         'description' => $description,
                         'factor' => $factor,
                         'amount' => $amount,
@@ -198,14 +200,14 @@ class DocumentInput
             if($inputs['discounts']) {
                 $discounts = [];
                 foreach ($inputs['discounts'] as $row) {
-                    $code = $row['code'];
+                    $discount_type_id = $row['discount_type_id'];
                     $description = $row['description'];
                     $factor = $row['factor'];
                     $amount = $row['amount'];
                     $base = $row['base'];
 
                     $discounts[] = [
-                        'code' => $code,
+                        'discount_type_id' => $discount_type_id,
                         'description' => $description,
                         'factor' => $factor,
                         'amount' => $amount,
