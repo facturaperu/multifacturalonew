@@ -48,6 +48,13 @@
                             <i class="fas fa-users"></i><span>Proveedores</span>
                         </a>
                     </li>
+
+                    <li class="{{ ($path[0] === 'purchases')?'nav-active':'' }}">
+                        <a class="nav-link" href="{{route('tenant.purchases.index')}}">
+                            <i class="fas fa-shopping-cart"></i><span>Compras</span>
+                        </a>
+                    </li>
+
                     <li class="{{ ($path[0] === 'summaries')?'nav-active':'' }}">
                         <a class="nav-link" href="{{route('tenant.summaries.index')}}">
                             <i class="fas fa-list"></i><span>Resúmenes</span>
