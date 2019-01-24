@@ -79,6 +79,9 @@
                                     @click.prevent="clickResend(row.id)"
                                     v-if="row.btn_resend">Reenviar</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickConsultCdr(row.id)"
+                                    v-if="row.btn_consult_cdr">Consultar CDR</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
                                     @click.prevent="clickOptions(row.id)">Opciones</button>
                         </td>
                     </tr>
@@ -137,6 +140,20 @@
             },
             clickResend(document_id) {
                 this.$http.get(`/${this.resource}/send/${document_id}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            this.$message.success(response.data.message)
+                            this.$eventHub.$emit('reloadData')
+                        } else {
+                            this.$message.error(response.data.message)
+                        }
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data.message)
+                    })
+            },
+            clickConsultCdr(document_id) {
+                this.$http.get(`/${this.resource}/consult_cdr/${document_id}`)
                     .then(response => {
                         if (response.data.success) {
                             this.$message.success(response.data.message)

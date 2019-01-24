@@ -79,29 +79,29 @@ class Functions
         return $document;
     }
 
-    public static function voidedDocuments($inputs, $type)
-    {
-        if(count($inputs['documents']) === 0) {
-            throw new Exception("No se enviaron documentos para la anulación.");
-        }
-        $documents = [];
-        foreach ($inputs['documents'] as $row)
-        {
-            $document = Document::where('external_id', $row['external_id'])
-                ->where('date_of_issue', $inputs['date_of_reference'])
-                ->where('group_id', ($type === 'summary')?'02':'01')
-                ->first();
-            if(!$document) {
-                throw new Exception("El código externo {$row['external_id']} no fue encontrado o la fecha indica no corresponde al documento.");
-            }
-            $documents[] = [
-                'document_id' => $document->id,
-                'description' => $row['description']
-            ];
-        }
-
-        return $documents;
-    }
+//    public static function voidedDocuments($inputs, $type)
+//    {
+//        if(count($inputs['documents']) === 0) {
+//            throw new Exception("No se enviaron documentos para la anulación.");
+//        }
+//        $documents = [];
+//        foreach ($inputs['documents'] as $row)
+//        {
+//            $document = Document::where('external_id', $row['external_id'])
+//                ->where('date_of_issue', $inputs['date_of_reference'])
+//                ->where('group_id', ($type === 'summary')?'02':'01')
+//                ->first();
+//            if(!$document) {
+//                throw new Exception("El código externo {$row['external_id']} no fue encontrado o la fecha indica no corresponde al documento.");
+//            }
+//            $documents[] = [
+//                'document_id' => $document->id,
+//                'description' => $row['description']
+//            ];
+//        }
+//
+//        return $documents;
+//    }
 
     public static function findSeries($inputs)
     {

@@ -21,6 +21,7 @@ class DocumentCollection extends ResourceCollection
             $btn_note = false;
             $btn_resend = false;
             $btn_voided = false;
+            $btn_consult_cdr = false;
 
             $affected_document = null;
 
@@ -33,6 +34,7 @@ class DocumentCollection extends ResourceCollection
                     $btn_note = true;
                     $btn_resend = false;
                     $btn_voided = true;
+                    $btn_consult_cdr = true;
                 }
                 if(in_array($row->document_type_id, ['07', '08'])) {
                     $btn_note = false;
@@ -77,6 +79,7 @@ class DocumentCollection extends ResourceCollection
                 'btn_note' => $btn_note,
 //                'btn_ticket' => $btn_ticket,
                 'btn_resend' => $btn_resend,
+                'btn_consult_cdr' => $btn_consult_cdr,
 //                'voided' => $voided,
                 'affected_document' => $affected_document,
 //                'has_xml_voided' => $has_xml_voided,

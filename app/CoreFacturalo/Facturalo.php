@@ -8,6 +8,7 @@ use App\CoreFacturalo\Helpers\Xml\XmlHash;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\CoreFacturalo\WS\Client\WsClient;
 use App\CoreFacturalo\WS\Services\BillSender;
+use App\CoreFacturalo\WS\Services\ConsultCdrService;
 use App\CoreFacturalo\WS\Services\ExtService;
 use App\CoreFacturalo\WS\Services\SummarySender;
 use App\CoreFacturalo\WS\Services\SunatEndpoints;
@@ -304,6 +305,29 @@ class Facturalo
                 $this->updateStateDocuments(self::VOIDED);
             }
             $this->response = [
+                'code' => $cdrResponse->getCode(),
+                'description' => $cdrResponse->getDescription(),
+                'notes' => $cdrResponse->getNotes()
+            ];
+        }
+    }
+
+    public function consultCdr()
+    {
+        $consultCdrService = new ConsultCdrService();
+        $consultCdrService->setClient($this->wsClient);
+        $consultCdrService->setCodeProvider(new XmlErrorCodeProvider());
+        $res = $consultCdrService->getStatusCdr($this->company->number, $this->document->document_type_id,
+                                                $this->document->series, $this->document->number);
+
+        if(!$res->isSuccess()) {
+            throw new Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
+        } else {
+            $cdrResponse = $res->getCdrResponse();
+            $this->uploadFile($res->getCdrZip(), 'cdr');
+            $this->updateState(self::ACCEPTED);
+            $this->response = [
+                'sent' => true,
                 'code' => $cdrResponse->getCode(),
                 'description' => $cdrResponse->getDescription(),
                 'notes' => $cdrResponse->getNotes()

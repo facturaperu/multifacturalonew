@@ -22,22 +22,22 @@ class PersonInput
             'country_id' => $person->country_id,
             'country' => [
                 'id' => $person->country_id,
-                'description' => $person->country->description,
+                'description' => optional($person->country)->description,
             ],
             'department_id' => $person->department_id,
             'department' => [
                 'id' => $person->department_id,
-                'description' => $person->department->description,
+                'description' => optional($person->department)->description,
             ],
             'province_id' => $person->province_id,
             'province' => [
                 'id' => $person->province_id,
-                'description' => $person->province->description,
+                'description' => optional($person->province)->description,
             ],
             'district_id' => $person->district_id,
             'district' => [
                 'id' => $person->district_id,
-                'description' => $person->district->description,
+                'description' => optional($person->district)->description,
             ],
             'address' => $person->address,
             'email' => $person->email,

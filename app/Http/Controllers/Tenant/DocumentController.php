@@ -228,4 +228,22 @@ class DocumentController extends Controller
             'message' => $response['description'],
         ];
     }
+
+    public function consultCdr($document_id)
+    {
+        $document = Document::find($document_id);
+
+        $fact = DB::connection('tenant')->transaction(function () use ($document) {
+            $facturalo = new Facturalo();
+            $facturalo->setDocument($document);
+            $facturalo->consultCdr();
+        });
+
+        $response = $fact->getResponse();
+
+        return [
+            'success' => true,
+            'message' => $response['description'],
+        ];
+    }
 }

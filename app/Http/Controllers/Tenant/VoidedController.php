@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\CoreFacturalo\Facturalo;
-use App\CoreFacturalo\Facturalo\FacturaloVoided;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Tenant\VoidedCollection;
 use App\Models\Tenant\Voided;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +16,7 @@ class VoidedController extends Controller
 
     public function __construct()
     {
-        $this->middleware('transform.web:voided', ['only' => ['store']]);
+        $this->middleware('input.request:voided,web', ['only' => ['store']]);
     }
 
     public function index()
@@ -49,24 +47,25 @@ class VoidedController extends Controller
 
     public function store(Request $request)
     {
-        $facturalo = new FacturaloVoided();
-        $facturalo->setInputs($request->all());
-
-        DB::connection('tenant')->transaction(function () use($facturalo) {
-            $facturalo->save();
-            $facturalo->createXmlAndSign();
-            $facturalo->sendXml();
+        $fact = DB::connection('tenant')->transaction(function () use($request) {
+            $facturalo = new Facturalo();
+            $facturalo->save($request->all());
+            $facturalo->createXmlUnsigned();
+            $facturalo->signXmlUnsigned();
+            return $facturalo;
         });
 
-        $voided = $facturalo->getDocument();
+        $fact->senderXmlSignedSummary();
+        $document = $fact->getDocument();
+        //$response = $fact->getResponse();
 
         return [
             'success' => true,
-            'message' => "La anulación {$voided->identifier} fue creado correctamente",
+            'message' => "La anulación {$document->identifier} fue creado correctamente",
         ];
     }
 
-    public function ticket($voided_id)
+    public function status($voided_id)
     {
         $document = Voided::find($voided_id);
 
