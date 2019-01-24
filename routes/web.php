@@ -222,6 +222,21 @@ if ($hostname) {
             Route::post('tribute_concept_types', 'Tenant\TributeConceptTypeController@store'); 
             Route::delete('tribute_concept_types/{id}', 'Tenant\TributeConceptTypeController@destroy');
 
+            //purchases
+            Route::get('purchases', 'Tenant\PurchaseController@index')->name('tenant.purchases.index');
+            Route::get('purchases/columns', 'Tenant\PurchaseController@columns');
+            Route::get('purchases/records', 'Tenant\PurchaseController@records');
+            Route::get('purchases/create', 'Tenant\PurchaseController@create');
+            Route::get('purchases/tables', 'Tenant\PurchaseController@tables');
+            Route::get('purchases/table/{table}', 'Tenant\PurchaseController@table');
+            Route::post('purchases', 'Tenant\PurchaseController@store');
+            Route::get('purchases/record/{document}', 'Tenant\PurchaseController@record');
+            // Route::get('documents/send/{document}', 'Tenant\DocumentController@send');
+            // Route::get('documents/consult_cdr/{document}', 'Tenant\DocumentController@consultCdr');
+            // Route::post('documents/email', 'Tenant\DocumentController@email');
+            // Route::get('documents/note/{document}', 'Tenant\NoteController@create');
+            Route::get('purchases/item/tables', 'Tenant\PurchaseController@item_tables');
+            // Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
 
         });
     });
