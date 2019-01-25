@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
+use App\Models\Tenant\Catalogs\AffectationIgvType;
 use App\Models\Tenant\Catalogs\AttributeType;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\SystemIscType;
@@ -45,8 +46,9 @@ class ItemController extends Controller
         $currency_types = CurrencyType::whereActive()->orderByDescription()->get();
         $attribute_types = AttributeType::whereActive()->orderByDescription()->get();
         $system_isc_types = SystemIscType::whereActive()->orderByDescription()->get();
+        $affectation_igv_types = AffectationIgvType::whereActive()->get();
 
-        return compact('unit_types', 'currency_types', 'attribute_types', 'system_isc_types');
+        return compact('unit_types', 'currency_types', 'attribute_types', 'system_isc_types', 'affectation_igv_types');
     }
 
     public function record($id)

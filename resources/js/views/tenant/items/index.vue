@@ -31,7 +31,7 @@
                         <td>{{ row.unit_type_id }}</td>
                         <td>{{ row.description }}</td>
                         <td>{{ row.item_code }}</td>
-                        <td>{{ row.stock }}<br/>Mín:{{ row.stock_min }}, Máx:{{ row.stock_max }}</td>
+                        <td>{{ row.stock }}<br/>Mín:{{ row.stock_min }}</td>
                         <td class="text-right">{{ row.unit_price }}</td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>

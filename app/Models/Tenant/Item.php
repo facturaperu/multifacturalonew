@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Tenant\Catalogs\AffectationIgvType;
 use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\Catalogs\UnitType;
@@ -22,9 +23,12 @@ class Item extends ModelTenant
         'system_isc_type_id',
         'percentage_isc',
         'suggested_price',
+
+        'sale_affectation_igv_type_id',
+        'purchase_affectation_igv_type_id',
+
         'stock',
         'stock_min',
-        'stock_max',
 
         'attributes',
     ];
@@ -57,5 +61,15 @@ class Item extends ModelTenant
     public function system_isc_type()
     {
         return $this->belongsTo(SystemIscType::class, 'system_isc_type_id');
+    }
+
+    public function sale_affectation_igv_type()
+    {
+        return $this->belongsTo(AffectationIgvType::class, 'sale_affectation_igv_type_id');
+    }
+
+    public function purchase_affectation_igv_type()
+    {
+        return $this->belongsTo(AffectationIgvType::class, 'purchase_affectation_igv_type_id');
     }
 }

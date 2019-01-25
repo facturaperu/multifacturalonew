@@ -24,7 +24,6 @@ class ItemCollection extends ResourceCollection
                 'item_code_gs1' => $row->item_code_gs1,
                 'stock' => $row->stock,
                 'stock_min' => $row->stock_min,
-                'stock_max' => $row->stock_max,
                 'unit_price' => "{$row->currency_type->symbol} {$row->unit_price}",
                 'created_at' => $row->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $row->updated_at->format('Y-m-d H:i:s'),

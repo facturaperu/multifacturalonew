@@ -31,9 +31,11 @@ class TenantItemsTable extends Migration
             $table->decimal('percentage_isc', 12, 2)->default(0);
             $table->decimal('suggested_price', 12, 2)->default(0);
 
+            $table->string('sale_affectation_igv_type_id');
+            $table->string('purchase_affectation_igv_type_id');
+
             $table->decimal('stock', 12, 2);
             $table->decimal('stock_min', 12, 2);
-            $table->decimal('stock_max', 12, 2);
 
             $table->json('attributes')->nullable();
             $table->timestamps();
@@ -42,6 +44,8 @@ class TenantItemsTable extends Migration
             $table->foreign('unit_type_id')->references('id')->on('cat_unit_types');
             $table->foreign('currency_type_id')->references('id')->on('cat_currency_types');
             $table->foreign('system_isc_type_id')->references('id')->on('cat_system_isc_types');
+            $table->foreign('sale_affectation_igv_type_id')->references('id')->on('cat_affectation_igv_types');
+            $table->foreign('purchase_affectation_igv_type_id')->references('id')->on('cat_affectation_igv_types');
         });
     }
 
