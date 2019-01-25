@@ -42,7 +42,7 @@ class ClientController extends Controller
 
     public function store(ClientRequest $request)
     {
-        $subDom = $request->input('subdomain');
+        $subDom = strtolower($request->input('subdomain'));
         $uuid = env('PREFIX_DATABASE').'_'.$subDom;
         $fqdn = $subDom.'.'.env('APP_URL_BASE');
 
@@ -64,7 +64,7 @@ class ClientController extends Controller
             $client = new Client();
             $client->hostname_id = $hostname->id;
             $client->token = $token;
-            $client->email = $request->input('email');
+            $client->email = strtolower($request->input('email'));
             $client->name = $request->input('name');
             $client->number = $request->input('number');
             $client->save();
