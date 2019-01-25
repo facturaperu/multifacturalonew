@@ -178,7 +178,6 @@
         created() {
             this.initForm()
             this.$http.get(`/${this.resource}/item/tables`).then(response => {
-  
                 this.items = response.data.items
                 this.affectation_igv_types = response.data.affectation_igv_types
                 this.system_isc_types = response.data.system_isc_types
@@ -210,11 +209,11 @@
                     attributes: [],
                 }
             },
-            initializeFields() {
-                this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
-            },
-            create() { 
-                this.initializeFields()
+            // initializeFields() {
+            //     this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
+            // },
+            create() {
+            //     this.initializeFields()
             },
             clickAddDiscount() {
                 this.form.discounts.push({
@@ -277,13 +276,14 @@
             changeItem() {
                 this.form.item = _.find(this.items, {'id': this.form.item_id})
                 this.form.unit_price = this.form.item.unit_price
+                this.form.affectation_igv_type_id = this.form.item.purchase_affectation_igv_type_id
             },
             clickAddItem() {
                 this.form.item.unit_price = this.form.unit_price
                 this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
                 this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale)
                 this.initForm()
-                this.initializeFields()
+                // this.initializeFields()
                 this.$emit('add', this.row)
             },
             reloadDataItems(item_id) {
