@@ -98,4 +98,14 @@ class PurchaseItem extends ModelTenant
     {
         return $this->belongsTo(PriceType::class, 'price_type_id');
     }
+
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class);
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
 }

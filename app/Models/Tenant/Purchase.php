@@ -199,6 +199,15 @@ class Purchase extends ModelTenant
         return $this->series.'-'.$this->number;
     }
 
+    public function kardex()
+    {
+        return $this->hasMany(Kardex::class);
+    }
+
+    public function purchase_items()
+    {
+        return $this->hasMany(PurchaseItem::class);
+    }
 
     public function getNumberToLetterAttribute()
     {

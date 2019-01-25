@@ -58,4 +58,14 @@ class Item extends ModelTenant
     {
         return $this->belongsTo(SystemIscType::class, 'system_isc_type_id');
     }
+
+    public function kardex()
+    {
+        return $this->hasMany(Kardex::class);
+    }
+
+    public function purchase_item()
+    {
+        return $this->hasMany(PurchaseItem::class);
+    }
 }

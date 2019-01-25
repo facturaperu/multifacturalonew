@@ -212,6 +212,11 @@ class Document extends ModelTenant
         return $this->hasMany(DocumentItem::class);
     }
 
+    public function kardex()
+    {
+        return $this->hasMany(Kardex::class);
+    }
+
     public function getNumberFullAttribute()
     {
         return $this->series.'-'.$this->number;
