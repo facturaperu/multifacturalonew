@@ -31,7 +31,7 @@ class ItemController extends Controller
         $records = Item::where($request->column, 'like', "%{$request->value}%")
                        ->orderBy('description');
 
-        return new ItemCollection($records->paginate(env('ITEMS_PER_PAGE', 5)));
+        return new ItemCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
     }
 
     public function create()

@@ -37,7 +37,7 @@ class PerceptionController extends Controller
                             ->orderBy('series_id')
                             ->orderBy('number', 'desc');
 
-        return new PerceptionCollection($records->paginate(env('ITEMS_PER_PAGE', 5)));
+        return new PerceptionCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
     }
 
     public function create()

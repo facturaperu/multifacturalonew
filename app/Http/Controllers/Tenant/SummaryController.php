@@ -34,7 +34,7 @@ class SummaryController extends Controller
                             ->latest()
                             ->get();
 
-        return new SummaryCollection($records);
+        return new SummaryCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
     }
 
     public function documents(SummaryDocumentsRequest $request)

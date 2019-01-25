@@ -40,7 +40,7 @@ class RetentionController extends Controller
                             ->orderBy('series')
                             ->orderBy('number', 'desc');
 
-        return new RetentionCollection($records->paginate(env('ITEMS_PER_PAGE', 20)));
+        return new RetentionCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
     }
 
     public function create()

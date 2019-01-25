@@ -61,7 +61,7 @@ class DocumentController extends Controller
         $records = Document::where($request->column, 'like', "%{$request->value}%")
                             ->latest();
 
-        return new DocumentCollection($records->paginate(env('ITEMS_PER_PAGE', 20)));
+        return new DocumentCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
     }
 
     public function create()

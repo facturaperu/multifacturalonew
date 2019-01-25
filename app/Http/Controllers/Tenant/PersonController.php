@@ -35,7 +35,7 @@ class PersonController extends Controller
                             ->where('type', $type)
                             ->orderBy('name');
 
-        return new PersonCollection($records->paginate(env('ITEMS_PER_PAGE',20)));
+        return new PersonCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
     }
 
     public function create()

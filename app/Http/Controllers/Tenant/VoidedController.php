@@ -42,7 +42,7 @@ class VoidedController extends Controller
                         ->select(DB::raw("id, external_id, date_of_reference, date_of_issue, ticket, identifier, state_type_id, 'summaries' AS 'type'"))
                         ->where('summary_status_type_id', '3');
 
-        return new VoidedCollection($voided->union($summaries)->paginate(env('ITEMS_PER_PAGE', 20)));
+        return new VoidedCollection($voided->union($summaries)->paginate(env('ITEMS_PER_PAGE', 10)));
     }
 
     public function store(Request $request)

@@ -21,7 +21,10 @@ class Item extends ModelTenant
         'has_isc',
         'system_isc_type_id',
         'percentage_isc',
-        'suggested_price'
+        'suggested_price',
+        'stock',
+        'stock_min',
+        'stock_max'
     ];
 
     public function item_type()
