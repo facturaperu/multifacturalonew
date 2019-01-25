@@ -217,13 +217,13 @@
                     attributes: [],
                 }
             },
-            initializeFields() {
-                this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
-            },
+            // initializeFields() {
+            //     this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
+            // },
             create() {
                 let operation_type = _.find(this.operation_types, {id: this.operationTypeId})
                 this.affectation_igv_types = _.filter(this.all_affectation_igv_types, {exportation: operation_type.exportation})
-                this.initializeFields()
+                // this.initializeFields()
             },
             clickAddDiscount() {
                 this.form.discounts.push({
@@ -286,13 +286,14 @@
             changeItem() {
                 this.form.item = _.find(this.items, {'id': this.form.item_id})
                 this.form.unit_price = this.form.item.unit_price
+                this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id
             },
             clickAddItem() {
                 this.form.item.unit_price = this.form.unit_price
                 this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
                 this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale)
                 this.initForm()
-                this.initializeFields()
+                //this.initializeFields()
                 this.$emit('add', this.row)
             },
             reloadDataItems(item_id) {

@@ -70,11 +70,22 @@
                             <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group" :class="{'has-danger': errors.stock_max}">
-                            <label class="control-label">Stock Máximo</label>
-                            <el-input v-model="form.stock_max"></el-input>
-                            <small class="form-control-feedback" v-if="errors.stock_max" v-text="errors.stock_max[0]"></small>
+                    <div class="col-md-6">
+                        <div class="form-group" :class="{'has-danger': errors.sale_affectation_igv_type_id}">
+                            <label class="control-label">Tipo de afectación (Venta)</label>
+                            <el-select v-model="form.sale_affectation_igv_type_id">
+                                <el-option v-for="option in affectation_igv_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.sale_affectation_igv_type_id" v-text="errors.sale_affectation_igv_type_id[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" :class="{'has-danger': errors.purchase_affectation_igv_type_id}">
+                            <label class="control-label">Tipo de afectación (Compra)</label>
+                            <el-select v-model="form.purchase_affectation_igv_type_id">
+                                <el-option v-for="option in affectation_igv_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.purchase_affectation_igv_type_id" v-text="errors.purchase_affectation_igv_type_id[0]"></small>
                         </div>
                     </div>
                 </div>
@@ -100,7 +111,8 @@
                 form: {},
                 unit_types: [],
                 currency_types: [],
-                system_isc_types: []
+                system_isc_types: [],
+                affectation_igv_types: []
             }
         },
         created() {
@@ -110,6 +122,10 @@
                     this.unit_types = response.data.unit_types
                     this.currency_types = response.data.currency_types
                     this.system_isc_types = response.data.system_isc_types
+                    this.affectation_igv_types = response.data.affectation_igv_types
+
+                    this.form.sale_affectation_igv_type_id = (this.affectation_igv_types.length > 0)?this.affectation_igv_types[0].id:null
+                    this.form.purchase_affectation_igv_type_id = (this.affectation_igv_types.length > 0)?this.affectation_igv_types[0].id:null
                 })
         },
         methods: {
@@ -130,10 +146,16 @@
                     system_isc_type_id: null,
                     percentage_isc: 0,
                     suggested_price: 0,
+                    sale_affectation_igv_type_id: null,
+                    purchase_affectation_igv_type_id: null,
                     stock: 0,
                     stock_min: 1,
-                    stock_max: 1
                 }
+            },
+            resetForm() {
+                this.initForm()
+                this.form.sale_affectation_igv_type_id = (this.affectation_igv_types.length > 0)?this.affectation_igv_types[0].id:null
+                this.form.purchase_affectation_igv_type_id = (this.affectation_igv_types.length > 0)?this.affectation_igv_types[0].id:null
             },
             create() {
                 this.titleDialog = (this.recordId)? 'Editar Producto':'Nuevo Producto'
@@ -173,7 +195,7 @@
             },
             close() {
                 this.$emit('update:showDialog', false)
-                this.initForm()
+                this.resetForm()
             },
             changeHasIsc() {
                 this.form.system_isc_type_id = null

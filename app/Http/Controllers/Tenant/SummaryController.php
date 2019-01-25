@@ -31,8 +31,7 @@ class SummaryController extends Controller
     public function records()
     {
         $records = Summary::where('summary_status_type_id', '1')
-                            ->latest()
-                            ->get();
+                            ->latest();
 
         return new SummaryCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
     }

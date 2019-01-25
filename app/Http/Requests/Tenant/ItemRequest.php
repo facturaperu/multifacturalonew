@@ -38,7 +38,10 @@ class ItemRequest extends FormRequest
             'stock_min' => [
                 'required'
             ],
-            'stock_max' => [
+            'sale_affectation_igv_type_id' => [
+                'required'
+            ],
+            'purchase_affectation_igv_type_id' => [
                 'required'
             ],
         ];

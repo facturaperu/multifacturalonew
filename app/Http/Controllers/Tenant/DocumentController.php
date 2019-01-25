@@ -129,7 +129,9 @@ class DocumentController extends Controller
                     'currency_type_id' => $row->currency_type_id,
                     'currency_type_symbol' => $row->currency_type->symbol,
                     'unit_price' => $row->unit_price,
-                    'unit_type_id' => $row->unit_type_id
+                    'unit_type_id' => $row->unit_type_id,
+                    'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
+                    'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id
                 ];
             });
             return $items;
