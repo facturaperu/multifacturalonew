@@ -24,8 +24,20 @@ class Item extends ModelTenant
         'suggested_price',
         'stock',
         'stock_min',
-        'stock_max'
+        'stock_max',
+
+        'attributes',
     ];
+
+    public function getAttributesAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setAttributesAttribute($value)
+    {
+        $this->attributes['attributes'] = (is_null($value))?null:json_encode($value);
+    }
 
     public function item_type()
     {
