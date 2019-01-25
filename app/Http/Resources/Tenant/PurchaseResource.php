@@ -19,9 +19,7 @@ class PurchaseResource extends JsonResource
             'external_id' => $this->external_id,
             'group_id' => $this->group_id,
             'number' => $this->number_full,
-            'date_of_issue' => $this->date_of_issue->format('Y-m-d'),
-            'supplier_email' => $this->supplier->email,
-            'download_pdf' => $this->download_external_pdf,
+            'date_of_issue' => $this->date_of_issue->format('Y-m-d'), 
         ];
     }
 }

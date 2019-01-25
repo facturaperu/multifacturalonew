@@ -56,6 +56,13 @@
             color:black;
             padding:5px;
         }
+        html.sidebar-light:not(.dark) ul.nav-main > li.nav-active > a {
+            color: #0088CC;
+        }
+
+        ul.nav-main > li.nav-active > a {
+            box-shadow: 2px 0 0 #0088CC inset;
+        }
     </style>
 </head>
 <body class="pr-0">

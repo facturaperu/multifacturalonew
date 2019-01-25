@@ -14,15 +14,13 @@ use App\Models\Tenant\Item;
 use App\Http\Resources\Tenant\PurchaseCollection;
 use App\Http\Resources\Tenant\PurchaseResource;
 use App\Models\Tenant\Catalogs\AffectationIgvType;  
-use App\Models\Tenant\Catalogs\DocumentType;
-use App\Models\Tenant\Catalogs\NoteCreditType;
-use App\Models\Tenant\Catalogs\NoteDebitType;
-use App\Models\Tenant\Catalogs\OperationType;
+use App\Models\Tenant\Catalogs\DocumentType;  
 use Illuminate\Support\Facades\DB;
 use App\Models\Tenant\Catalogs\PriceType;
 use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\Catalogs\AttributeType;
 use App\Models\Tenant\Company;
+use App\Http\Requests\Tenant\PurchaseRequest;
 use Illuminate\Support\Str;
 use App\CoreFacturalo\Requests\Inputs\Common\PersonInput;
 
@@ -60,11 +58,11 @@ class PurchaseController extends Controller
         $suppliers = $this->table('suppliers');
         $establishment = Establishment::first();              
         $currency_types = CurrencyType::whereActive()->get();
-        
+        $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();        
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
 
-        return compact('suppliers', 'establishment','currency_types', 'discount_types', 'charge_types');
+        return compact('suppliers', 'establishment','currency_types', 'discount_types', 'charge_types', 'document_types_invoice');
     }
 
 
@@ -91,7 +89,7 @@ class PurchaseController extends Controller
         return $record;
     }
 
-    public function store(Request $request)
+    public function store(PurchaseRequest $request)
     {
 
         $data = self::convert($request);
@@ -117,15 +115,18 @@ class PurchaseController extends Controller
 
     public static function convert($inputs){
         
-        $company = Company::active();
-        $soap_type_id = $company->soap_type_id;
+        $company = Company::active();  
 
-        $inputs['user_id'] = auth()->id(); 
-        $inputs['external_id'] = Str::uuid()->toString();
-        $inputs['supplier'] = PersonInput::set($inputs['supplier_id']);
-        $inputs['soap_type_id'] = $soap_type_id;
-        $inputs['group_id'] = '01';
-        $inputs['state_type_id'] = '01'; 
+        $values = [
+            'user_id' => auth()->id(),
+            'external_id' => Str::uuid()->toString(),
+            'supplier' => PersonInput::set($inputs['supplier_id']),
+            'soap_type_id' => $company->soap_type_id,
+            'group_id' => ($inputs->document_type_id === '01') ? '01':'02',
+            'state_type_id' => '01'
+        ]; 
+
+        $inputs->merge($values);
 
         return $inputs->all();
     }

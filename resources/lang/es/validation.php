@@ -170,6 +170,8 @@ return [
         'code' => 'código',
         'unit_type_id' => 'unidad',
         'document_type_id' => 'tipo de documento',
+        'supplier_id' => 'proveedor',
+        'date_of_issue' => 'fecha de emisión',
         'charge_discount_type_id' => 'tipo de cargo',
         'percentage' => 'porcentaje',
     ],

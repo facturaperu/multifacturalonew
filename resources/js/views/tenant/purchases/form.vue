@@ -6,13 +6,23 @@
         <div class="card-body">
             <form autocomplete="off" @submit.prevent="submit">
                 <div class="form-body">
+                   
                     <div class="row">   
+                         <div class="col-lg-3">
+                            <div class="form-group" :class="{'has-danger': errors.document_type_id}">
+                                <label class="control-label">Tipo de comprobante</label>
+                                <el-select v-model="form.document_type_id" >
+                                    <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                </el-select>
+                                <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
+                            </div>
+                        </div>
                         <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.series_id}">
+                            <div class="form-group" :class="{'has-danger': errors.series}">
                                 <label class="control-label">Serie</label> 
-                                <el-input v-model="form.series"></el-input>
+                                <el-input v-model="form.series" :maxlength="4"></el-input>
 
-                                <small class="form-control-feedback" v-if="errors.series_id" v-text="errors.series_id[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
                             </div>
                         </div>
                         <div class="col-lg-2">
@@ -32,6 +42,8 @@
                                 <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
                             </div>
                         </div>
+                        
+                       
                         <div class="col-lg-3">
                             <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
                                 <label class="control-label">Fecha de emisión</label>
@@ -39,18 +51,10 @@
                                 <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="form-group" :class="{'has-danger': errors.date_of_due}">
-                                <label class="control-label">Fecha de vencimiento</label>
-                                <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
-                                <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
-                            </div>
-                        </div>
-                       
                     </div>
                     <div class="row">
                         
-                        <div class="col-lg-6">
+                        <div class="col-lg-5">
                             <div class="form-group" :class="{'has-danger': errors.supplier_id}">
                                 <label class="control-label">
                                     Proveedor
@@ -61,7 +65,23 @@
                                 </el-select>
                                 <small class="form-control-feedback" v-if="errors.supplier_id" v-text="errors.supplier_id[0]"></small>
                             </div>
-                        </div>   
+                        </div>  
+                        
+                        <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.date_of_due}">
+                                <label class="control-label">Fecha de vencimiento</label>
+                                <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
+                                <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
+                            </div>
+                        </div> 
+                        <div class="col-lg-2">
+                            <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
+                                <label class="control-label">Tipo de cambio</label>
+                                <el-input v-model="form.exchange_rate_sale"></el-input>
+                                <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
+                            </div>
+                        </div>
+                        
                         <div class="col-lg-2 col-md-6 d-flex align-items-end pt-2">
                             <div class="form-group">
                                 <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Producto</button>
@@ -175,6 +195,7 @@
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
 
+                    this.document_types = response.data.document_types_invoice
                     this.currency_types = response.data.currency_types
                     this.establishment = response.data.establishment
                     this.suppliers = response.data.suppliers
@@ -182,6 +203,7 @@
                     this.charges_types = response.data.charges_types 
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishment.id) ? this.establishment.id:null 
+                    this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
  
                     this.changeDateOfIssue() 
                     this.changeCurrencyType()
@@ -195,7 +217,7 @@
                 this.errors = {}
                 this.form = {
                     establishment_id: null,
-                    document_type_id: '01',
+                    document_type_id: null,
                     series: null,
                     number: null,
                     date_of_issue: moment().format('YYYY-MM-DD'),
@@ -233,15 +255,16 @@
                 this.initForm()
                 this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                 this.form.establishment_id = this.establishment.id
+                this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
            
                 this.changeDateOfIssue()
                 this.changeCurrencyType()
             }, 
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
-                this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
-                    this.form.exchange_rate_sale = response
-                })
+                // this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
+                //     this.form.exchange_rate_sale = response
+                // })
             }, 
             addRow(row) {
                 this.form.items.push(row)

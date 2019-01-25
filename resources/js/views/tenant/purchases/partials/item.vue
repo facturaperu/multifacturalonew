@@ -158,8 +158,7 @@
 
     export default {
         props: ['showDialog', 'currencyTypeIdActive', 'exchangeRateSale'],
-        components: {itemForm},
-        // mixins: [formDocumentItem],
+        components: {itemForm}, 
         data() {
             return {
                 titleDialog: 'Agregar Producto o Servicio',
@@ -179,8 +178,7 @@
         created() {
             this.initForm()
             this.$http.get(`/${this.resource}/item/tables`).then(response => {
- 
-                console.log(response.data)
+  
                 this.items = response.data.items
                 this.affectation_igv_types = response.data.affectation_igv_types
                 this.system_isc_types = response.data.system_isc_types
@@ -196,8 +194,7 @@
         methods: {
             initForm() {
                 this.errors = {}
-                this.form = {
-//                    category_id: [1],
+                this.form = { 
                     item_id: null,
                     item: {},
                     affectation_igv_type_id: null,
