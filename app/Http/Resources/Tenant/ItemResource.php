@@ -27,6 +27,9 @@ class ItemResource extends JsonResource
             'system_isc_type_id' => $this->system_isc_type_id,
             'percentage_isc' => $this->percentage_isc,
             'suggested_price' => $this->suggested_price,
+            'stock' => $this->stock,
+            'stock_min' => $this->stock_min,
+            'stock_max' => $this->stock_max,
         ];
     }
 }
