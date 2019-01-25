@@ -256,6 +256,7 @@ if ($hostname) {
             Route::get('clients', 'System\ClientController@index')->name('system.clients.index');
             Route::get('clients/records', 'System\ClientController@records');
             Route::get('clients/create', 'System\ClientController@create');
+            Route::get('clients/tables', 'System\ClientController@tables');
             Route::post('clients', 'System\ClientController@store');
             Route::delete('clients/{client}', 'System\ClientController@destroy');
             Route::post('clients/password/{client}', 'System\ClientController@password');

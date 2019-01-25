@@ -4,17 +4,17 @@
             <div class="form-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.name}">
-                            <label class="control-label">Nombre de la Empresa</label>
-                            <el-input v-model="form.name"></el-input>
-                            <small class="form-control-feedback" v-if="errors.name" v-text="errors.name[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">RUC</label>
                             <el-input v-model="form.number" :maxlength="11"></el-input>
                             <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" :class="{'has-danger': errors.name}">
+                            <label class="control-label">Nombre de la Empresa</label>
+                            <el-input v-model="form.name"></el-input>
+                            <small class="form-control-feedback" v-if="errors.name" v-text="errors.name[0]"></small>
                         </div>
                     </div>
                 </div>
@@ -22,7 +22,9 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': (errors.subdomain || errors.uuid)}">
                             <label class="control-label">Nombre de Subdominio</label>
-                            <el-input v-model="form.subdomain"></el-input>
+                            <el-input v-model="form.subdomain">
+                                <template slot="append">{{ url_base }}</template>
+                            </el-input>
                             <small class="form-control-feedback" v-if="errors.subdomain" v-text="errors.subdomain[0]"></small>
                             <small class="form-control-feedback" v-if="errors.uuid" v-text="errors.uuid[0]"></small>
                         </div>
@@ -68,16 +70,15 @@
                 resource: 'clients',
                 error: {},
                 form: {},
+                url_base: null,
             }
         },
         created() {
             this.initForm()
-//            this.$http.get(`/${this.resource}/record`)
-//                .then(response => {
-//                    if (response.data !== '') {
-//                        this.form = response.data.data
-//                    }
-//                })
+            this.$http.get(`/${this.resource}/tables`)
+                .then(response => {
+                    this.url_base = response.data.url_base
+                })
         },
         methods: {
             initForm() {

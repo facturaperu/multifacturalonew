@@ -21,7 +21,7 @@ use App\Models\Tenant\Catalogs\NoteDebitType;
 use App\Models\Tenant\Catalogs\OperationType;
 use App\Models\Tenant\Catalogs\PriceType;
 use App\Models\Tenant\Catalogs\SystemIscType;
-use App\Models\Tenant\Catalogs\TributeConceptType;
+use App\Models\Tenant\Catalogs\AttributeType;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Configuration;
 use App\Models\Tenant\Document;
@@ -98,7 +98,7 @@ class DocumentController extends Controller
         $operation_types = OperationType::whereActive()->get();
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
-        $attribute_types = TributeConceptType::whereActive()->orderByDescription()->get();
+        $attribute_types = AttributeType::whereActive()->orderByDescription()->get();
 
         return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types',
                        'operation_types', 'discount_types', 'charge_types', 'attribute_types');

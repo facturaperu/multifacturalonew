@@ -31,6 +31,11 @@ class TenantItemsTable extends Migration
             $table->decimal('percentage_isc', 12, 2)->default(0);
             $table->decimal('suggested_price', 12, 2)->default(0);
 
+            $table->decimal('stock', 12, 2);
+            $table->decimal('stock_min', 12, 2);
+            $table->decimal('stock_max', 12, 2);
+
+            $table->json('attributes');
             $table->timestamps();
 
             $table->foreign('item_type_id')->references('id')->on('item_types');

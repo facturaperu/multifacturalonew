@@ -4,11 +4,11 @@ namespace App\Models\Tenant\Catalogs;
 
 use Hyn\Tenancy\Traits\UsesTenantConnection;
 
-class TributeConceptType extends ModelCatalog
+class AttributeType extends ModelCatalog
 {
     use UsesTenantConnection;
 
-    protected $table = "cat_tribute_concept_types";
+    protected $table = "cat_attribute_types";
     public $incrementing = false;
     public $timestamps = false;
 

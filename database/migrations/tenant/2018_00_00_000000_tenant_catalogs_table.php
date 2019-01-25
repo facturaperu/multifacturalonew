@@ -684,13 +684,13 @@ class TenantCatalogsTable extends Migration
          ***************************************************************************************************************
          ***************************************************************************************************************
          */
-        Schema::create('cat_tribute_concept_types', function (Blueprint $table) {
+        Schema::create('cat_attribute_types', function (Blueprint $table) {
             $table->string('id')->index();
             $table->boolean('active');
             $table->string('description');
         });
 
-        DB::table('cat_tribute_concept_types')->insert([
+        DB::table('cat_attribute_types')->insert([
             ['id' => '3001', 'active' => true, 'description' => 'Detracciones: Recursos Hidrobiológicos-Matrícula de la embarcación'],
             ['id' => '3002', 'active' => true, 'description' => 'Detracciones: Recursos Hidrobiológicos-Nombre de la embarcación'],
             ['id' => '3003', 'active' => true, 'description' => 'Detracciones: Recursos Hidrobiológicos-Tipo de especie vendida'],
@@ -832,7 +832,7 @@ class TenantCatalogsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('cat_payment_method_types');
-        Schema::dropIfExists('cat_tribute_concept_types');
+        Schema::dropIfExists('cat_attribute_types');
         Schema::dropIfExists('cat_charge_discount_types');
         Schema::dropIfExists('cat_legend_types');
         Schema::dropIfExists('cat_operation_types');

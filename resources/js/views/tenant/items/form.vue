@@ -56,43 +56,27 @@
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
-                    <!--<div class="col-md-2">-->
-                        <!--<div class="form-group" :class="{'has-danger': errors.has_isc}">-->
-                            <!--<label class="control-label d-block">¿Tiene ISC?</label>-->
-                            <!--<el-switch-->
-                                    <!--v-model="form.has_isc"-->
-                                    <!--active-text="Si"-->
-                                    <!--inactive-text="No"-->
-                                    <!--@change="changeHasIsc">-->
-                            <!--</el-switch>-->
-                            <!--<small class="form-control-feedback" v-if="errors.has_isc" v-text="errors.has_isc[0]"></small>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<template v-if="form.has_isc">-->
-                        <!--<div class="col-md-6">-->
-                            <!--<div class="form-group" :class="{'has-danger': errors.system_isc_type_id}">-->
-                                <!--<label class="control-label">Sistema Isc</label>-->
-                                <!--<el-select v-model="form.system_isc_type_id" filterable @change="changeSystemIscType">-->
-                                    <!--<el-option v-for="option in system_isc_types" :key="option.id" :value="option.id" :label="option.description"></el-option>-->
-                                <!--</el-select>-->
-                                <!--<small class="form-control-feedback" v-if="errors.system_isc_type_id" v-text="errors.system_isc_type_id[0]"></small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2">-->
-                            <!--<div class="form-group" :class="{'has-danger': errors.percentage_isc}">-->
-                                <!--<label class="control-label">Porcentaje Isc</label>-->
-                                <!--<el-input v-model="form.percentage_isc"></el-input>-->
-                                <!--<small class="form-control-feedback" v-if="errors.percentage_isc" v-text="errors.percentage_isc[0]"></small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2">-->
-                            <!--<div class="form-group" :class="{'has-danger': errors.suggested_price}">-->
-                                <!--<label class="control-label">Precio sugerido</label>-->
-                                <!--<el-input v-model="form.suggested_price"></el-input>-->
-                                <!--<small class="form-control-feedback" v-if="errors.suggested_price" v-text="errors.suggested_price[0]"></small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</template>-->
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.stock}">
+                            <label class="control-label">Stock</label>
+                            <el-input v-model="form.stock"></el-input>
+                            <small class="form-control-feedback" v-if="errors.stock" v-text="errors.stock[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.stock_min}">
+                            <label class="control-label">Stock Mínimo</label>
+                            <el-input v-model="form.stock_min"></el-input>
+                            <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.stock_max}">
+                            <label class="control-label">Stock Máximo</label>
+                            <el-input v-model="form.stock_max"></el-input>
+                            <small class="form-control-feedback" v-if="errors.stock_max" v-text="errors.stock_max[0]"></small>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-actions text-right pt-2">
@@ -145,7 +129,10 @@
                     has_isc: false,
                     system_isc_type_id: null,
                     percentage_isc: 0,
-                    suggested_price: 0
+                    suggested_price: 0,
+                    stock: 0,
+                    stock_min: 1,
+                    stock_max: 1
                 }
             },
             create() {

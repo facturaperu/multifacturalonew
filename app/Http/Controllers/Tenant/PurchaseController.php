@@ -21,7 +21,7 @@ use App\Models\Tenant\Catalogs\OperationType;
 use Illuminate\Support\Facades\DB;
 use App\Models\Tenant\Catalogs\PriceType;
 use App\Models\Tenant\Catalogs\SystemIscType;
-use App\Models\Tenant\Catalogs\TributeConceptType;
+use App\Models\Tenant\Catalogs\AttributeType;
 use App\Models\Tenant\Company;
 use Illuminate\Support\Str;
 use App\CoreFacturalo\Requests\Inputs\Common\PersonInput;
@@ -78,7 +78,7 @@ class PurchaseController extends Controller
         $price_types = PriceType::whereActive()->get(); 
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
-        $attribute_types = TributeConceptType::whereActive()->orderByDescription()->get();
+        $attribute_types = AttributeType::whereActive()->orderByDescription()->get();
 
         return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types',
                         'discount_types', 'charge_types', 'attribute_types');

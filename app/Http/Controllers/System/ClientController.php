@@ -26,6 +26,13 @@ class ClientController extends Controller
         return view('system.clients.form');
     }
 
+    public function tables()
+    {
+        $url_base = '.'.env('APP_URL_BASE');
+
+        return compact('url_base');
+    }
+
     public function records()
     {
         $records = Client::all();
