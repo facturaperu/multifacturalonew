@@ -17,22 +17,24 @@
                         <th class="text-center">Fecha Emisión</th>
                         <th>Proveedor</th>
                         <th>Número</th>
-                        <th>Estado</th>
                         <th class="text-right">T.Retención</th>
                         <th class="text-right">Total</th>
-                        <th class="text-right">Acciones</th>
+                        <th class="text-center">Descargas</th>
                     <tr>
                     <tr slot-scope="{ index, row }">
                         <td>{{ index }}</td>
                         <td class="text-center">{{ row.date_of_issue }}</td>
                         <td>{{ row.supplier_name }}<br/><small v-text="row.supplier_number"></small></td>
                         <td>{{ row.number }}</td>
-                        <td>{{ row.state_type_description }}</td>
                         <td class="text-right">{{ row.total_retention }}</td>
                         <td class="text-right">{{ row.total }}</td>
-                        <td class="text-right">
-                            <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>-->
-                            <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickDelete(row.id)">Eliminar</button>-->
+                        <td class="text-center">
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickDownload(row.download_external_xml)">XML</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickDownload(row.download_external_pdf)">PDF</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickDownload(row.download_external_cdr)">CDR</button>
                         </td>
                     </tr>
                 </data-table>
@@ -51,6 +53,13 @@
             return {
                 resource: 'retentions',
             }
+        },
+        created() {
+        },
+        methods: {
+            clickDownload(download) {
+                window.open(download, '_blank');
+            },
         }
     }
 </script>

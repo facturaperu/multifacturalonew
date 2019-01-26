@@ -28,11 +28,8 @@ class AppServiceProvider extends ServiceProvider
     private function sale(){
 
         DocumentItem::created(function ($document_item) {          
-            
             $document = Document::whereIn('document_type_id',['01','03'])->find($document_item->document_id);
-            
-            if($document){ 
-
+            if($document){
                 $kardex = Kardex::create([
                     'type' => 'sale',
                     'date_of_issue' => date('Y-m-d'),
@@ -41,21 +38,16 @@ class AppServiceProvider extends ServiceProvider
                     'purchase_id' => null,
                     'quantity' => $document_item->quantity,
                 ]);
-
                 $item = Item::find($document_item->item_id);
                 $item->stock -= $kardex->quantity;
                 $item->save();
-
             }
-            
-
         });
     }
 
     private function purchase(){
 
         PurchaseItem::created(function ($purchase_item) {                    
-            
             $kardex = Kardex::create([
                 'type' => 'purchase',
                 'date_of_issue' => date('Y-m-d'),
@@ -64,12 +56,9 @@ class AppServiceProvider extends ServiceProvider
                 'purchase_id' => $purchase_item->purchase_id,
                 'quantity' => $purchase_item->quantity,
             ]); 
-
             $item = Item::find($purchase_item->item_id);
             $item->stock += $kardex->quantity;
             $item->save();
-
         });
-
     }
 }

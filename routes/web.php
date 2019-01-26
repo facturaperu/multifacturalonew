@@ -157,6 +157,14 @@ if ($hostname) {
             Route::get('retentions/document/tables', 'Tenant\RetentionController@document_tables');
             Route::get('retentions/table/{table}', 'Tenant\RetentionController@table');
 
+            //Dispatches
+            Route::get('dispatches', 'Tenant\DispatchController@index')->name('tenant.dispatches.index');
+            Route::get('dispatches/columns', 'Tenant\DispatchController@columns');
+            Route::get('dispatches/records', 'Tenant\DispatchController@records');
+
+
+
+
             Route::get('reports', 'Tenant\ReportController@index')->name('tenant.reports.index');
             Route::post('reports/search', 'Tenant\ReportController@search')->name('tenant.search');
             Route::post('reports/pdf', 'Tenant\ReportController@pdf')->name('tenant.report_pdf');

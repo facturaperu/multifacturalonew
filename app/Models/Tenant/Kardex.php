@@ -33,5 +33,4 @@ class Kardex extends ModelTenant
     {
         return $this->belongsTo(Item::class);
     }
-
 }

@@ -34,8 +34,8 @@ class TenantItemsTable extends Migration
             $table->string('sale_affectation_igv_type_id');
             $table->string('purchase_affectation_igv_type_id');
 
-            $table->decimal('stock', 12, 2);
-            $table->decimal('stock_min', 12, 2);
+            $table->decimal('stock', 12, 2)->default(0);
+            $table->decimal('stock_min', 12, 2)->default(0);
 
             $table->json('attributes')->nullable();
             $table->timestamps();
