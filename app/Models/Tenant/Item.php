@@ -18,7 +18,7 @@ class Item extends ModelTenant
         'item_code_gs1',
         'unit_type_id',
         'currency_type_id',
-        'unit_price',
+        'sale_unit_price',
         'purchase_unit_price',
         'has_isc',
         'system_isc_type_id',

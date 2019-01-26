@@ -66,10 +66,15 @@
                 resource: 'users',
                 errors: {},
                 form: {},
+                modules: []
             }
         },
         created() {
             this.initForm()
+            this.$http.get(`/${this.resource}/tables`)
+                .then(response => {
+                    this.modules = response.data.modules
+                })
         },
         methods: {
             initForm() {
@@ -80,7 +85,8 @@
                     email: null,
                     api_token: null,
                     password: null,
-                    password_confirmation: null
+                    password_confirmation: null,
+                    modules: []
                 }
             },
             create() {

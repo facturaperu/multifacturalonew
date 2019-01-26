@@ -1,9 +1,7 @@
 <?php
 namespace App\Http\Controllers\Tenant;
 
-use App\CoreFacturalo\Documents\VoidedBuilder;
 use App\CoreFacturalo\Facturalo;
-use App\CoreFacturalo\Facturalo\FacturaloDocument;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\DocumentEmailRequest;
@@ -128,7 +126,8 @@ class DocumentController extends Controller
                     'description' => $row->description,
                     'currency_type_id' => $row->currency_type_id,
                     'currency_type_symbol' => $row->currency_type->symbol,
-                    'unit_price' => $row->unit_price,
+                    'sale_unit_price' => $row->sale_unit_price,
+                    'purchase_unit_price' => $row->purchase_unit_price,
                     'unit_type_id' => $row->unit_type_id,
                     'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
                     'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id

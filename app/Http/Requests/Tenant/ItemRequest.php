@@ -29,7 +29,7 @@ class ItemRequest extends FormRequest
             'currency_type_id' => [
                 'required'
             ],
-            'unit_price' => [
+            'sale_unit_price' => [
                 'required', 'numeric'
             ],
             'purchase_unit_price' => [

@@ -28,4 +28,42 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function modules()
+    {
+        return $this->belongsToMany(Module::class);
+    }
+
+    public function authorizeModules($modules)
+    {
+        if ($this->hasAnyModule($modules)) {
+            return true;
+        }
+        abort(401, 'Esta acción no está autorizada.');
+    }
+
+    public function hasAnyModule($modules)
+    {
+        if (is_array($modules)) {
+            foreach ($modules as $module)
+            {
+                if ($this->hasModule($module)) {
+                    return true;
+                }
+            }
+        } else {
+            if ($this->hasModule($modules)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasModule($module)
+    {
+        if ($this->modules()->where('name', $module)->first()) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -61,6 +61,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'input.request' => \App\CoreFacturalo\InputRequest::class,
-//        'input.transform' => \App\CoreFacturalo\InputTransform::class,
+        'role' => \App\Http\Middleware\CheckRole::class,
     ];
 }

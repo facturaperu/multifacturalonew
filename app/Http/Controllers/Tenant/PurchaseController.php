@@ -65,8 +65,6 @@ class PurchaseController extends Controller
         return compact('suppliers', 'establishment','currency_types', 'discount_types', 'charge_types', 'document_types_invoice');
     }
 
-
-    
     public function item_tables()
     {
         $items = $this->table('items');
@@ -91,14 +89,11 @@ class PurchaseController extends Controller
 
     public function store(PurchaseRequest $request)
     {
-
         $data = self::convert($request);
-
         $purchase = DB::connection('tenant')->transaction(function () use ($data) {
-            
             $doc = Purchase::create($data);
-        
-            foreach ($data['items'] as $row) {
+            foreach ($data['items'] as $row)
+            {
                 $doc->items()->create($row);
             }     
 
@@ -113,10 +108,9 @@ class PurchaseController extends Controller
         ];
     }
 
-    public static function convert($inputs){
-        
-        $company = Company::active();  
-
+    public static function convert($inputs)
+    {
+        $company = Company::active();
         $values = [
             'user_id' => auth()->id(),
             'external_id' => Str::uuid()->toString(),
@@ -175,7 +169,5 @@ class PurchaseController extends Controller
 
                 break;
         } 
-
     }
-
 }

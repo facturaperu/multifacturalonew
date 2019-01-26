@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\UserRequest;
 use App\Http\Resources\Tenant\UserResource;
+use App\Models\Tenant\Module;
 use App\Models\Tenant\User;
 use App\Http\Resources\Tenant\UserCollection;
 
@@ -14,6 +15,13 @@ class UserController extends Controller
         $record = new UserResource(User::findOrFail($id));
 
         return $record;
+    }
+
+    public function tables()
+    {
+        $modules = Module::all();
+
+        return compact('modules');
     }
 
     public function store(UserRequest $request)
