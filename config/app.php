@@ -164,6 +164,8 @@ return [
         App\Providers\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
+        App\Providers\KardexServiceProvider::class,
+
     ],
 
     /*
