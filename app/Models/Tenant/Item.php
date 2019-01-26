@@ -19,6 +19,7 @@ class Item extends ModelTenant
         'unit_type_id',
         'currency_type_id',
         'unit_price',
+        'purchase_unit_price',
         'has_isc',
         'system_isc_type_id',
         'percentage_isc',

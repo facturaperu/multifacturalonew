@@ -32,6 +32,9 @@ class ItemRequest extends FormRequest
             'unit_price' => [
                 'required', 'numeric'
             ],
+            'purchase_unit_price' => [
+                'required', 'numeric'
+            ],
             'stock' => [
                 'required'
             ],

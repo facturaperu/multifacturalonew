@@ -50,8 +50,15 @@
                         </div>
                     </div>
                     <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.purchase_unit_price}">
+                            <label class="control-label">Precio Unitario (Venta)</label>
+                            <el-input v-model="form.purchase_unit_price"></el-input>
+                            <small class="form-control-feedback" v-if="errors.purchase_unit_price" v-text="errors.purchase_unit_price[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.unit_price}">
-                            <label class="control-label">Precio Unitario</label>
+                            <label class="control-label">Precio Unitario (Compra)</label>
                             <el-input v-model="form.unit_price"></el-input>
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
@@ -142,6 +149,7 @@
                     unit_type_id: 'NIU',
                     currency_type_id: 'PEN',
                     unit_price: null,
+                    purchase_unit_price: null,
                     has_isc: false,
                     system_isc_type_id: null,
                     percentage_isc: 0,

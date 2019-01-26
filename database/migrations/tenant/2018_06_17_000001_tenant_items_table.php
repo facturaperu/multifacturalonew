@@ -25,6 +25,7 @@ class TenantItemsTable extends Migration
             $table->string('unit_type_id');
             $table->string('currency_type_id');
             $table->decimal('unit_price', 12, 2);
+            $table->decimal('purchase_unit_price', 12, 2)->default(0);
 
             $table->boolean('has_isc')->default(false);
             $table->string('system_isc_type_id')->nullable();
