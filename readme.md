@@ -1,4 +1,4 @@
-# **FACTURADOR PRO**
+# **FACTURADOR PRO V 2.0**
 
 ## Acerca de FACTURALATAM
 
@@ -31,7 +31,7 @@ Contraseña: 123456
 
 Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/1iHUrlqzjwoQm967PRYirX5SN4L2ONAH8yvwTcePZ1PU/edit?usp=sharing "Clic")
  
-## Patrocinadores FACTURADOR PRO
+## Patrocinadores FACTURADOR PRO V 2.0
 
  - **[FACTURALATAM](http://facturalatam.com/)** 
  - **[CursosDev](http://cursosdev.com/)** 
