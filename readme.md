@@ -1,65 +1,48 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# **FACTURADOR PRO V 2.0**
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Acerca de FACTURALATAM
 
-## About Laravel
+Estamos enfocados en crear herramientas y soluciones para desarrolladores de software, empresas medianas y pequeñas, tenemos un sueño, queremos democratizar la facturación electrónica.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+## Instalación del Facturador Pro
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Para conocer el proceso de instalación del facturador, visite la documentación
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+[Manual - forge](https://docs.google.com/document/d/1NVV2yv8ys8tjdz5ByvEPhIUdm0GJ95XiB-iMlElaJTA/edit# "Clic")
+<br>
+[Manual - windows - linux](https://drive.google.com/open?id=1piT-xWJmYRYm3L5u-G-v611NlPWq62uFcGaFiJGS9H0 "Clic")
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+## Manejo de la API
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+Para conocer acerca de nuestra API, visite la [documentación](https://docs.google.com/document/d/1FtuEGAq7scoQFGQKBuT8Zd6dLVU7h9abeGXbE41J-qA/edit# "Clic")
+ 
+## Pruebas
 
-## Laravel Sponsors
+[Manual de pruebas](https://docs.google.com/document/d/1GihGu-qNukj27hufdkPWUYO6wl-XIUVyK2cXygDqdlI/edit#heading=h.kfj5m3r1n58v "Clic")
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+## DEMO
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
+Visite el siguiente enlace: [FACTURADOR PRO](http://demo.2facturaloperuonline.com "Clic")
+<br>
+Usuario: demo@gmail.com<br>
+Contraseña: 123456
 
-## Contributing
+## Cambio de entornos (Prueba - Producción)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/1iHUrlqzjwoQm967PRYirX5SN4L2ONAH8yvwTcePZ1PU/edit?usp=sharing "Clic")
+ 
+## Patrocinadores FACTURADOR PRO V 2.0
 
-## Security Vulnerabilities
+ - **[FACTURALATAM](http://facturalatam.com/)** 
+ - **[CursosDev](http://cursosdev.com/)** 
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Contribución
+ 
+Gracias por considerar contribuir al facturador pro
 
-## License
+## Vulnerabilidades de seguridad
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Si descubre una vulnerabilidad de seguridad en la API, envíe un correo electrónico a facturalatamglobal@gmail.com . Las vulnerabilidades de seguridad serán tratadas con prontitud.
+
+
