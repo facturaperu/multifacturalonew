@@ -14,7 +14,7 @@ if ($hostname) {
         Route::get('downloads/{model}/{type}/{external_id}', 'Tenant\DownloadController@downloadExternal')->name('tenant.download.external_id');
         Route::get('print/{model}/{external_id}', 'Tenant\DownloadController@toPrint');
 
-        Route::middleware('auth')->group(function() {
+        Route::middleware(['auth', 'module'])->group(function() {
             Route::get('/', function () {
                 return redirect()->route('tenant.documents.create');
             });
@@ -88,22 +88,22 @@ if ($hostname) {
             Route::delete('items/{item}', 'Tenant\ItemController@destroy');
 
             //Customers
-            Route::get('customers', 'Tenant\CustomerController@index')->name('tenant.customers.index');
-            Route::get('customers/columns', 'Tenant\CustomerController@columns');
-            Route::get('customers/records', 'Tenant\CustomerController@records');
-            Route::get('customers/tables', 'Tenant\CustomerController@tables');
-            Route::get('customers/record/{item}', 'Tenant\CustomerController@record');
-            Route::post('customers', 'Tenant\CustomerController@store');
-            Route::delete('customers/{customer}', 'Tenant\CustomerController@destroy');
-
-            //Suppliers
-            Route::get('suppliers', 'Tenant\SupplierController@index')->name('tenant.suppliers.index');
-            Route::get('suppliers/columns', 'Tenant\SupplierController@columns');
-            Route::get('suppliers/records', 'Tenant\SupplierController@records');
-            Route::get('suppliers/tables', 'Tenant\SupplierController@tables');
-            Route::get('suppliers/record/{item}', 'Tenant\SupplierController@record');
-            Route::post('suppliers', 'Tenant\SupplierController@store');
-            Route::delete('suppliers/{supplier}', 'Tenant\SupplierController@destroy');
+//            Route::get('customers', 'Tenant\CustomerController@index')->name('tenant.customers.index');
+//            Route::get('customers/columns', 'Tenant\CustomerController@columns');
+//            Route::get('customers/records', 'Tenant\CustomerController@records');
+//            Route::get('customers/tables', 'Tenant\CustomerController@tables');
+//            Route::get('customers/record/{item}', 'Tenant\CustomerController@record');
+//            Route::post('customers', 'Tenant\CustomerController@store');
+//            Route::delete('customers/{customer}', 'Tenant\CustomerController@destroy');
+//
+//            //Suppliers
+//            Route::get('suppliers', 'Tenant\SupplierController@index')->name('tenant.suppliers.index');
+//            Route::get('suppliers/columns', 'Tenant\SupplierController@columns');
+//            Route::get('suppliers/records', 'Tenant\SupplierController@records');
+//            Route::get('suppliers/tables', 'Tenant\SupplierController@tables');
+//            Route::get('suppliers/record/{item}', 'Tenant\SupplierController@record');
+//            Route::post('suppliers', 'Tenant\SupplierController@store');
+//            Route::delete('suppliers/{supplier}', 'Tenant\SupplierController@destroy');
 
             //Persons
             Route::get('persons/columns', 'Tenant\PersonController@columns');

@@ -75,7 +75,7 @@ class Handler extends ExceptionHandler
             return $this->errorResponse('', '', $exception);
         }
 
-        if(env('APP_ENV') === 'local') {
+        if(!$this->isFrontend($request)) {
             return $this->errorResponse('', 500, $exception);
         }
 

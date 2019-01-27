@@ -41,6 +41,8 @@ class UserController extends Controller
         }
         $user->save();
 
+        $user->modules()->sync($request->input('modules'));
+
         return [
             'success' => true,
             'message' => ($id)?'Usuario actualizado':'Usuario registrado'
