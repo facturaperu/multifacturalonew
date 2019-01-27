@@ -176,10 +176,10 @@
                 }
             },
             create() {
-                if(this.type === 'customer') {
+                if(this.type === 'customers') {
                     this.titleDialog = (this.recordId)? 'Editar Cliente':'Nuevo Cliente'
                 }
-                if(this.type === 'supplier') {
+                if(this.type === 'suppliers') {
                     this.titleDialog = (this.recordId)? 'Editar Proveedor':'Nuevo Proveedor'
                 }
                 if (this.recordId) {

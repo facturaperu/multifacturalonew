@@ -17,17 +17,13 @@
                             <small class="form-control-feedback" v-if="errors.email" v-text="errors.email[0]"></small>
                         </div>
                     </div>
-                </div>
-                <div class="row" v-show="form.id">
-                    <div class="col-md-12">
+                    <div class="col-md-12" v-show="form.id">
                         <div class="form-group" :class="{'has-danger': errors.api_token}">
                             <label class="control-label">Api Token</label>
                             <el-input v-model="form.api_token" :readonly="form.id!=null"></el-input>
                             <small class="form-control-feedback" v-if="errors.api_token" v-text="errors.api_token[0]"></small>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.password}">
                             <label class="control-label">Contraseña</label>
@@ -40,6 +36,20 @@
                             <label class="control-label">Confirmar Contraseña</label>
                             <el-input v-model="form.password_confirmation"></el-input>
                             <small class="form-control-feedback" v-if="errors.password_confirmation" v-text="errors.password_confirmation[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Módulos</label>
+                            <el-select v-model="form.modules" multiple>
+                                <el-option
+                                        v-for="module in modules"
+                                        :key="module.id"
+                                        :label="module.description"
+                                        :value="module.id">
+                                </el-option>
+                            </el-select>
+                            <!--<el-switch v-model="form.modules.id" active-text="Si" inactive-text="No"></el-switch>-->
                         </div>
                     </div>
                 </div>
