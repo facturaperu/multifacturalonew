@@ -136,7 +136,7 @@ class DocumentTransform
             foreach ($inputs['cargos'] as $row)
             {
                 $charges[] = [
-                    'code' => $row['codigo'],
+                    'charge_type_id' => $row['codigo'],
                     'description' => $row['descripcion'],
                     'factor' => $row['factor'],
                     'amount' => $row['monto'],
@@ -155,7 +155,7 @@ class DocumentTransform
             $discounts = [];
             foreach ($inputs['descuentos'] as $row) {
                 $discounts[] = [
-                    'code' => $row['codigo'],
+                    'discount_type_id' => $row['codigo'],
                     'description' => $row['descripcion'],
                     'factor' => $row['factor'],
                     'amount' => $row['monto'],

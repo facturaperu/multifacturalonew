@@ -11,7 +11,7 @@
                          <div class="col-lg-3">
                             <div class="form-group" :class="{'has-danger': errors.document_type_id}">
                                 <label class="control-label">Tipo de comprobante</label>
-                                <el-select v-model="form.document_type_id" >
+                                <el-select v-model="form.document_type_id" @change="changeDocumentType">
                                     <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
                                 <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
@@ -147,7 +147,7 @@
                            @add="addRow"></purchase-form-item>
 
         <person-form :showDialog.sync="showDialogNewPerson"
-                       type="supplier"
+                       type="suppliers"
                        :external="true"></person-form>
 
         <purchase-options :showDialog.sync="showDialogOptions"
@@ -180,6 +180,7 @@
                 currency_types: [],
                 discount_types: [],
                 charges_types: [],
+                all_suppliers: [],
                 suppliers: [],
                 company: null,
                 operation_types: [],
@@ -198,14 +199,15 @@
                     this.document_types = response.data.document_types_invoice
                     this.currency_types = response.data.currency_types
                     this.establishment = response.data.establishment
-                    this.suppliers = response.data.suppliers
+                    this.all_suppliers = response.data.suppliers
                     this.discount_types = response.data.discount_types
                     this.charges_types = response.data.charges_types 
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishment.id) ? this.establishment.id:null 
                     this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
  
-                    this.changeDateOfIssue() 
+                    this.changeDateOfIssue()
+                    this.changeDocumentType()
                     this.changeCurrencyType()
                 })
             this.$eventHub.$on('reloadDataPersons', (supplier_id) => {
@@ -258,6 +260,7 @@
                 this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
            
                 this.changeDateOfIssue()
+                this.changeDocumentType()
                 this.changeCurrencyType()
             }, 
             changeDateOfIssue() {
@@ -265,7 +268,18 @@
                 // this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
                 //     this.form.exchange_rate_sale = response
                 // })
-            }, 
+            },
+            changeDocumentType() {
+                this.filterSuppliers()
+            },
+            filterSuppliers() {
+                this.form.supplier_id = null
+                if(this.form.document_type_id === '01') {
+                    this.suppliers = _.filter(this.all_suppliers, {'identity_document_type_id': '6'})
+                } else {
+                    this.suppliers = this.all_suppliers
+                }
+            },
             addRow(row) {
                 this.form.items.push(row)
                 this.calculateTotal()

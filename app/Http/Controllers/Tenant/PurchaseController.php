@@ -130,7 +130,7 @@ class PurchaseController extends Controller
         switch ($table) {
             case 'suppliers':
 
-                $suppliers = Person::whereType('supplier')->orderBy('name')->get()->transform(function($row) {
+                $suppliers = Person::whereType('suppliers')->orderBy('name')->get()->transform(function($row) {
                     return [
                         'id' => $row->id,
                         'description' => $row->number.' - '.$row->name,

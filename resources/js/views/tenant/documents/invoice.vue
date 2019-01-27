@@ -176,7 +176,7 @@
                            @add="addRow"></document-form-item>
 
         <person-form :showDialog.sync="showDialogNewPerson"
-                       type="customer"
+                       type="customers"
                        :external="true"></person-form>
 
         <document-options :showDialog.sync="showDialogOptions"
@@ -209,6 +209,7 @@
                 currency_types: [],
                 discount_types: [],
                 charges_types: [],
+                all_customers: [],
                 customers: [],
                 company: null,
                 operation_types: [],
@@ -228,7 +229,7 @@
                     this.establishments = response.data.establishments
                     this.operation_types = response.data.operation_types
                     this.all_series = response.data.series
-                    this.customers = response.data.customers
+                    this.all_customers = response.data.customers
                     this.discount_types = response.data.discount_types
                     this.charges_types = response.data.charges_types
 
@@ -307,6 +308,7 @@
             },
             changeDocumentType() {
                 this.filterSeries()
+                this.filterCustomers()
             },
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
@@ -319,6 +321,14 @@
                 this.series = _.filter(this.all_series, {'establishment_id': this.form.establishment_id,
                                                          'document_type_id': this.form.document_type_id})
                 this.form.series_id = (this.series.length > 0)?this.series[0].id:null
+            },
+            filterCustomers() {
+                this.form.customer_id = null
+                if(this.form.document_type_id === '01') {
+                    this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
+                } else {
+                    this.customers = this.all_customers
+                }
             },
             addRow(row) {
                 this.form.items.push(row)
