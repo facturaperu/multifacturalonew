@@ -5,11 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Type" content="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
+        <title>Compras</title>
     </head>
     <body>
         <div>
-            <h3 align="center" class="title"><strong>Reporte Documentos</strong></h3>
+            <h3 align="center" class="title"><strong>Reporte Compras</strong></h3>
         </div>
         <br>
         <div style="margin-top:20px; margin-bottom:15px;">
@@ -66,8 +66,8 @@
                                 <td class="celda">{{$value->document_type->id}}</td>
                                 <td class="celda">{{$value->series}}-{{$value->number}}</td>
                                 <td class="celda">{{$value->date_of_issue->format('Y-m-d')}}</td>
-                                <td class="celda">{{$value->customer->name}}</td>
-                                <td class="celda">{{$value->customer->number}}</td>
+                                <td class="celda">{{$value->supplier->name}}</td>
+                                <td class="celda">{{$value->supplier->number}}</td>
                                 <td class="celda">{{$value->state_type->description}}</td>
                                 <td class="celda">{{$value->total_taxed}}</td>
                                 <td class="celda">{{$value->total_igv}}</td>

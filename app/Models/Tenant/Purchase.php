@@ -188,6 +188,10 @@ class Purchase extends ModelTenant
     {
         return $this->belongsTo(CurrencyType::class, 'currency_type_id');
     }
+    
+    public function supplier() {
+        return $this->belongsTo(CurrencyType::class, 'supplier_id');
+    }
   
     public function items()
     {
