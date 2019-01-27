@@ -161,19 +161,19 @@ if ($hostname) {
             Route::get('dispatches', 'Tenant\DispatchController@index')->name('tenant.dispatches.index');
             Route::get('dispatches/columns', 'Tenant\DispatchController@columns');
             Route::get('dispatches/records', 'Tenant\DispatchController@records');
-
-
-
-
+            
             Route::get('reports', 'Tenant\ReportController@index')->name('tenant.reports.index');
             Route::post('reports/search', 'Tenant\ReportController@search')->name('tenant.search');
             Route::post('reports/pdf', 'Tenant\ReportController@pdf')->name('tenant.report_pdf');
             Route::post('reports/excel', 'Tenant\ReportController@excel')->name('tenant.report_excel');
-
-
+            
+            Route::get('reports/purchases', 'Tenant\ReportPurchaseController@index')->name('tenant.reports.purchases.index');
+            Route::post('reports/purchases/search', 'Tenant\ReportPurchaseController@search')->name('tenant.reports.purchases.search');
+            Route::post('reports/purchases/pdf', 'Tenant\ReportPurchaseController@pdf')->name('tenant.report.purchases.pdf');
+            Route::post('reports/purchases/excel', 'Tenant\ReportPurchaseController@excel')->name('tenant.report.purchases.report_excel');
+            
             Route::post('options/delete_documents', 'Tenant\OptionController@deleteDocuments');
-
-
+            
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
             Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
             Route::post('services/exchange_rate', 'Tenant\Api\ServiceController@exchange_rate');

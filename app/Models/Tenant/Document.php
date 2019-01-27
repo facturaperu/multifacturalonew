@@ -181,7 +181,11 @@ class Document extends ModelTenant
     {
         return $this->belongsTo(StateType::class);
     }
-
+    
+    public function person() {
+        return $this->belongsTo(Person::class, 'customer_id');
+    }
+    
     public function group()
     {
         return $this->belongsTo(Group::class);

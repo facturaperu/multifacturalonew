@@ -6,12 +6,12 @@
             <div class="card card-primary">
                 <div class="card-header">
                     <div>
-                        <h4 class="card-title">Consulta de Documentos</h4>
+                        <h4 class="card-title">Consulta de Compras</h4>
                     </div>
                 </div>
                 <div class="card-body">
                     <div>
-                        <form action="{{route('tenant.search')}}" class="el-form demo-form-inline el-form--inline" method="POST">
+                        <form action="{{route('tenant.reports.purchases.search')}}" class="el-form demo-form-inline el-form--inline" method="POST">
                             {{csrf_field()}}
                             <tenant-calendar :document_types="{{json_encode($documentTypes)}}"></tenant-calendar>
                         </form>
@@ -21,7 +21,7 @@
                         <div class="box-body no-padding">
                             <div style="margin-bottom: 10px">
                                 @if(isset($reports))
-                                    <form action="{{route('tenant.report_pdf')}}" class="d-inline" method="POST">
+                                    <form action="{{route('tenant.report.purchases.pdf')}}" class="d-inline" method="POST">
                                         {{csrf_field()}}
                                         <input type="hidden" value="{{$d}}" name="d">
                                         <input type="hidden" value="{{$a}}" name="a">
@@ -29,7 +29,7 @@
                                         <button class="btn btn-custom   mt-2 mr-2" type="submit"><i class="fa fa-file-pdf"></i> Exportar PDF</button>
                                         {{-- <label class="pull-right">Se encontraron {{$reports->count()}} registros.</label> --}}
                                     </form>
-                                <form action="{{route('tenant.report_excel')}}" class="d-inline" method="POST">
+                                <form action="{{route('tenant.report.purchases.report_excel')}}" class="d-inline" method="POST">
                                     {{csrf_field()}}
                                     <input type="hidden" value="{{$d}}" name="d">
                                     <input type="hidden" value="{{$td}}" name="td">
@@ -61,8 +61,8 @@
                                         <td>{{$value->document_type->id}}</td>
                                         <td>{{$value->series}}-{{$value->number}}</td>
                                         <td>{{$value->date_of_issue->format('Y-m-d')}}</td>
-                                        <td>{{$value->person->name}}</td>
-                                        <td>{{$value->person->number}}</td>
+                                        <td>{{$value->supplier->name}}</td>
+                                        <td>{{$value->supplier->number}}</td>
                                         <td>{{$value->state_type->description}}</td>
                                         <td>{{$value->total_taxed}}</td>
                                         <td>{{$value->total_igv}}</td>

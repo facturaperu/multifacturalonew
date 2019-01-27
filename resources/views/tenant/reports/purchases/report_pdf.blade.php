@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Type" content="application/pdf; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
+        <title>Compras</title>
         <style>
             html {
                 font-family: sans-serif;
@@ -53,7 +53,7 @@
     </head>
     <body>
         <div>
-            <p align="center" class="title"><strong>Reporte Documentos</strong></p>
+            <p align="center" class="title"><strong>Reporte Compras</strong></p>
         </div>
         <div style="margin-top:20px; margin-bottom:20px;">
             <table>
@@ -100,8 +100,8 @@
                                     <td class="celda">{{$value->document_type->id}}</td>
                                     <td class="celda">{{$value->series}}-{{$value->number}}</td>
                                     <td class="celda">{{$value->date_of_issue->format('Y-m-d')}}</td>
-                                    <td class="celda">{{$value->customer->name}}</td>
-                                    <td class="celda">{{$value->customer->number}}</td>
+                                    <td class="celda">{{$value->supplier->name}}</td>
+                                    <td class="celda">{{$value->supplier->number}}</td>
                                     <td class="celda">{{$value->state_type->description}}</td>
                                     <td class="celda">{{$value->total_taxed}}</td>
                                     <td class="celda">{{$value->total_igv}}</td>
