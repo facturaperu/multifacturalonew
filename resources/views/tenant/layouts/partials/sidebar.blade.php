@@ -75,7 +75,7 @@
                         </a>
                     </li>
                     @endif
-                    <li class="{{(($path[0] === 'reports') && (($path[1] != 'purchases') && ($path[1] != 'inventories'))) ? 'nav-active' : ''}}">
+                    <li class="{{(($path[0] === 'reports') && (($path[1] != 'purchases') && ($path[1] != 'inventories') && ($path[1] != 'kardex'))) ? 'nav-active' : ''}}">
                         <a class="nav-link" href="{{route('tenant.reports.index')}}">
                             <i class="fas fa-chart-line"></i><span>Reporte documentos</span>
                         </a>
@@ -88,6 +88,11 @@
                     <li class="{{(($path[0] === 'reports') && ($path[1] === 'inventories')) ? 'nav-active' : ''}}">
                         <a class="nav-link" href="{{route('tenant.reports.inventories.index')}}">
                             <i class="fas fa-chart-line"></i><span>Reporte inventario</span>
+                        </a>
+                    </li>
+                    <li class="{{(($path[0] === 'reports') && ($path[1] === 'kardex')) ? 'nav-active' : ''}}">
+                        <a class="nav-link" href="{{route('tenant.reports.kardex.index')}}">
+                            <i class="fas fa-chart-line"></i><span>Reporte kardex</span>
                         </a>
                     </li>
                     {{--<li class="{{ ($path[0] === 'perceptions')?'nav-active':'' }}">--}}

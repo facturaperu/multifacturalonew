@@ -82,9 +82,9 @@ class ReportInventoryController extends Controller
             ->get();
         
         return (new InventoryExport)
-                ->records($records)
-                ->company($company)
-                ->establishment($establishment)
-                ->download('ReporteInv'.Carbon::now().'.xlsx');
+            ->records($records)
+            ->company($company)
+            ->establishment($establishment)
+            ->download('ReporteInv'.Carbon::now().'.xlsx');
     }
 }
