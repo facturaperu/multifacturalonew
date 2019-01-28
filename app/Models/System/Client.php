@@ -25,4 +25,10 @@ class Client extends Model
     {
         return $this->belongsTo(Hostname::class);
     }
+
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
 }

@@ -269,6 +269,15 @@ if ($hostname) {
             Route::delete('clients/{client}', 'System\ClientController@destroy');
             Route::post('clients/password/{client}', 'System\ClientController@password');
 
+            //Planes
+            Route::get('plans', 'System\PlanController@index')->name('system.plans.index');
+            Route::get('plans/records', 'System\PlanController@records');
+            Route::get('plans/record/{plan}', 'System\PlanController@record');
+            Route::post('plans', 'System\PlanController@store');
+            Route::delete('plans/{plan}', 'System\PlanController@destroy');
+
+
+
             //Users
             Route::get('users/create', 'System\UserController@create')->name('system.users.create');
             Route::get('users/record', 'System\UserController@record');
