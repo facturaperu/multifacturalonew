@@ -184,17 +184,16 @@
                                     Productos
                                 </a>
                             </li>
-                            <li class="#">
-                                <a class="nav-link" href="#">
+                            <li class="{{(($path[0] === 'reports') && ($path[1] != 'inventories')) ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('tenant.reports.inventories.index')}}">
                                     Valor actual del inventario
                                 </a>
                             </li>
-                            <li class="#">
-                                <a class="nav-link" href="#">
+                            <li class="{{(($path[0] === 'reports') && ($path[1] != 'kardex')) ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('tenant.reports.kardex.index')}}">
                                     Kardex
                                 </a>
                             </li>
-
                         </ul>
                     </li>
                     <li class="nav-parent {{(($path[0] === 'reports') && (($path[1] != 'purchases') && ($path[1] != 'inventories') && ($path[1] != 'kardex'))) ? 'nav-active' : ''}}">
@@ -218,16 +217,16 @@
                                     Documentos
                                 </a>
                             </li>
-                            <li class="{{(($path[0] === 'reports') && ($path[1] != 'inventories')) ? 'nav-active' : ''}}">
+                            {{-- <li class="{{(($path[0] === 'reports') && ($path[1] != 'inventories')) ? 'nav-active' : ''}}">
                                 <a class="nav-link" href="{{route('tenant.reports.inventories.index')}}">
                                     Inventarios
                                 </a>
-                            </li>
-                            <li class="{{(($path[0] === 'reports') && ($path[1] != 'kardex')) ? 'nav-active' : ''}}">
+                            </li> --}}
+                            {{-- <li class="{{(($path[0] === 'reports') && ($path[1] != 'kardex')) ? 'nav-active' : ''}}">
                                 <a class="nav-link" href="{{route('tenant.reports.kardex.index')}}">
                                     Kardex
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
                     <li class="
