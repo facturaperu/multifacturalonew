@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="sidebar-light sidebar-left-big-icons">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="fixed sidebar-light no-mobile-device custom-scroll">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -65,8 +65,8 @@
 
         .header .logo img {
             height: 45px;
-        }      
-      
+        }
+
         html.sidebar-light:not(.dark) ul.nav-main > li.nav-active > a {
             color: #0088CC;
         }
@@ -75,7 +75,7 @@
             box-shadow: 2px 0 0 #0088CC inset;
         }
     </style>
-     
+
 </head>
 <body class="pr-0">
     <section class="body">
