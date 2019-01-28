@@ -197,17 +197,12 @@
 
                         </ul>
                     </li>
-
-                    <li class="
-                        nav-parent
-                        {{(($path[0] === 'reports') && ($path[1] === 'purchases')) ? 'nav-active' : ''}}
-                        ">
+                    <li class="nav-parent {{(($path[0] === 'reports') && (($path[1] != 'purchases') && ($path[1] != 'inventories') && ($path[1] != 'kardex'))) ? 'nav-active' : ''}}">
                         <a class="nav-link" href="#">
                             <i class="fas fa-file-alt" aria-hidden="true"></i>
                             <span>Reportes</span>
                         </a>
                         <ul class="nav nav-children" style="">
-
                             <li class="{{(($path[0] === 'reports') && ($path[1] === 'purchases')) ? 'nav-active' : ''}}">
                                 <a class="nav-link" href="{{route('tenant.reports.purchases.index')}}">
                                     Compras
@@ -223,10 +218,18 @@
                                     Documentos
                                 </a>
                             </li>
-
+                            <li class="{{(($path[0] === 'reports') && ($path[1] != 'inventories')) ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('tenant.reports.inventories.index')}}">
+                                    Inventarios
+                                </a>
+                            </li>
+                            <li class="{{(($path[0] === 'reports') && ($path[1] != 'kardex')) ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('tenant.reports.kardex.index')}}">
+                                    Kardex
+                                </a>
+                            </li>
                         </ul>
                     </li>
-
                     <li class="
                         nav-parent
                         {{ ($path[0] === 'companies')?'nav-active nav-expanded':'' }}
