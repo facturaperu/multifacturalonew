@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Exception;
 use Hyn\Tenancy\Contracts\Repositories\HostnameRepository;
 use Hyn\Tenancy\Contracts\Repositories\WebsiteRepository;
@@ -36,8 +37,51 @@ class ClientController extends Controller
     public function records()
     {
         $records = Client::all();
-
+        foreach ($records as &$row) {
+            $tenancy = app(Environment::class);
+            $tenancy->tenant($row->hostname->website);
+            $row->count_doc = DB::connection('tenant')->table('documents')->count();
+        }
         return new ClientCollection($records);
+    }
+
+    public function charts()
+    {
+        $records = Client::all();
+        $count_documents = [];
+        foreach ($records as $row) {
+            $tenancy = app(Environment::class);
+            $tenancy->tenant($row->hostname->website);
+            for($i = 1; $i <= 12; $i++)
+            {
+                $date_initial = Carbon::parse('2019-'.$i.'-1');
+                $date_final = Carbon::parse('2019-'.$i.'-'.cal_days_in_month(CAL_GREGORIAN, $i, 2018));
+                $count_documents[] = [
+                    'client' => $row->number,
+                    'month' => $i,
+                    'count' => $row->count_doc = DB::connection('tenant')
+                                                    ->table('documents')
+                                                    ->whereBetween('date_of_issue', [$date_initial, $date_final])
+                                                    ->count()
+                ];
+            }
+        }
+
+        $groups_by_month = collect($count_documents)->groupBy('month');
+        $labels = [];
+        $documents_by_month = [];
+        foreach($groups_by_month as $month => $group)
+        {
+            $labels[] = $month;
+            $documents_by_month[] = $group->sum('count');
+        }
+
+        $line = [
+            'labels' => $labels,
+            'data' => $documents_by_month
+        ];
+
+        return compact('line');
     }
 
     public function store(ClientRequest $request)

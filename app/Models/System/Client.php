@@ -12,6 +12,7 @@ class Client extends Model
 {
     use UsesSystemConnection;
 
+    protected $with = ['hostname'];
     protected $fillable = [
         'hostname_id',
         'number',
@@ -23,6 +24,6 @@ class Client extends Model
 
     public function hostname()
     {
-        return $this->belongsTo(Hostname::class);
+        return $this->belongsTo(Hostname::class)->with(['website']);
     }
 }

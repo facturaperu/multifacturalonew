@@ -21,6 +21,8 @@ Vue.use(ElementUI, {size: 'small'})
 Vue.prototype.$eventHub = new Vue()
 Vue.prototype.$http = Axios
 
+// import VueCharts from 'vue-charts'
+// Vue.use(VueCharts);
 // import { TableComponent, TableColumn } from 'vue-table-component';
 //
 // Vue.component('table-component', TableComponent);
