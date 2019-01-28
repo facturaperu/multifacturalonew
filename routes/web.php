@@ -172,6 +172,11 @@ if ($hostname) {
             Route::post('reports/purchases/pdf', 'Tenant\ReportPurchaseController@pdf')->name('tenant.report.purchases.pdf');
             Route::post('reports/purchases/excel', 'Tenant\ReportPurchaseController@excel')->name('tenant.report.purchases.report_excel');
             
+            Route::get('reports/inventories', 'Tenant\ReportInventoryController@index')->name('tenant.reports.inventories.index');
+            Route::post('reports/inventories/search', 'Tenant\ReportInventoryController@search')->name('tenant.reports.inventories.search');
+            Route::post('reports/inventories/pdf', 'Tenant\ReportInventoryController@pdf')->name('tenant.report.inventories.pdf');
+            Route::post('reports/purchases/excel', 'Tenant\ReportInventoryController@excel')->name('tenant.report.inventories.report_excel');
+            
             Route::post('options/delete_documents', 'Tenant\OptionController@deleteDocuments');
             
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
