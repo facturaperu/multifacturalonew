@@ -70,14 +70,14 @@
                         </a>
                         <ul class="nav nav-children" style="">
                             @if(in_array('purchases', $vc_modules))
-                            <li class="@if($path[0] === 'purchases') @if($path[1] != 'create') nav-active @endif @endif">
+                            <li class="{{ ($path[0] === 'purchases' && $path[1] != 'create')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.purchases.index')}}">
-                                    Listado {{$path[1]}}
+                                    Listado
                                 </a>
                             </li>
                             @endif
                             @if(in_array('purchases', $vc_modules))
-                            <li class="@if($path[0] === 'purchases') @if($path[1] === 'create') nav-active @endif @endif">
+                            <li class="{{ ($path[0] === 'purchases' && $path[1] === 'create')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.purchases.create')}}">
                                     Nuevo
                                 </a>

@@ -40,6 +40,10 @@
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
+                    <div class="col-md-12 mt-3">
+                        Infomacion adicional atributos UBL 2.1 <button class="el-button el-button--primary el-button--small" v-on:click="isHidden = !isHidden">+</button>
+                    </div>
+                    <div v-if="!isHidden" class="col-md-12">
                     <div class="col-md-12" v-if="discount_types.length > 0">
                         <label class="control-label">
                             Descuentos
@@ -118,7 +122,7 @@
                             <thead>
                             <tr>
                                 <th>Tipo</th>
-                                <th>Descripción</th> 
+                                <th>Descripción</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -131,13 +135,14 @@
                                 </td>
                                 <td>
                                     <el-input v-model="row.value"></el-input>
-                                </td> 
+                                </td>
                                 <td>
                                     <button type="button" class="btn btn-danger" @click.prevent="clickRemoveAttribute(index)">x</button>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -177,7 +182,9 @@
                 discount_types: [],
                 charge_types: [],
                 attribute_types: [],
-                use_price: 1
+                use_price: 1,
+
+                isHidden: true
             }
         },
         created() {
