@@ -13,6 +13,11 @@ use App\Http\Resources\Tenant\EstablishmentCollection;
 
 class EstablishmentController extends Controller
 {
+    public function index()
+    {
+        return view('tenant.establishments.index');
+    }
+
     public function create()
     {
         return view('tenant.establishments.form');

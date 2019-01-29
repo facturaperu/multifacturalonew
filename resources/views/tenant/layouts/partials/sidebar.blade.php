@@ -33,7 +33,7 @@
                             @if(in_array('documents', $vc_modules))
                             <li class="{{ ($path[0] === 'documents')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.documents.index')}}">
-                                    Facturas/Boletas electrónicas
+                                    Comprobantes electrónicos
                                 </a>
                             </li>
                             @endif
@@ -72,7 +72,7 @@
                             @if(in_array('purchases', $vc_modules))
                             <li class="@if($path[0] === 'purchases') @if($path[1] != 'create') nav-active @endif @endif">
                                 <a class="nav-link" href="{{route('tenant.purchases.index')}}">
-                                    Listado {{$path[1]}}
+                                    Listado
                                 </a>
                             </li>
                             @endif
@@ -92,21 +92,26 @@
                             @endif
                         </ul>
                     </li>
-
-                    <li class="
-                        nav-parent
-                        ">
+                    <li class="nav-parent {{ in_array($path[0], ['users', 'establishments'])?'nav-active nav-expanded':'' }}">
                         <a class="nav-link" href="#">
                             <i class="fas fa-users" aria-hidden="true"></i>
                             <span>Usuarios/Locales & Series</span>
                         </a>
                         <ul class="nav nav-children" style="">
-
-                            <li class="#">
-                                <a class="nav-link" href="#">
-                                    NEW PAGE
+                            @if(in_array('users', $vc_modules))
+                            <li class="{{ ($path[0] === 'users')?'nav-active':'' }}">
+                                <a class="nav-link" href="{{route('tenant.users.index')}}">
+                                    Usuarios
                                 </a>
                             </li>
+                            @endif
+                            @if(in_array('establishments', $vc_modules))
+                            <li class="{{ ($path[0] === 'establishments')?'nav-active':'' }}">
+                                <a class="nav-link" href="{{route('tenant.establishments.index')}}">
+                                    Establecimientos
+                                </a>
+                            </li>
+                                @endif
                         </ul>
                     </li>
 
@@ -123,16 +128,16 @@
                         </a>
                         <ul class="nav nav-children" style="">
 
-                            <li class="#">
-                                <a class="nav-link" href="#">
-                                    Notas de débito
-                                </a>
-                            </li>
-                            <li class="#">
-                                <a class="nav-link" href="#">
-                                    Notas de crébito
-                                </a>
-                            </li>
+                            {{--<li class="#">--}}
+                                {{--<a class="nav-link" href="#">--}}
+                                    {{--Notas de débito--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li class="#">--}}
+                                {{--<a class="nav-link" href="#">--}}
+                                    {{--Notas de crébito--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
                             @if(in_array('summaries', $vc_modules))
                             <li class="{{ ($path[0] === 'summaries')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.summaries.index')}}">
@@ -163,40 +168,40 @@
                             @endif
                             <li class="#">
                                 <a class="nav-link" href="#">
-                                    Persepciones (Pronto)
+                                    Percepciones (Pronto)
                                 </a>
                             </li>
 
                         </ul>
                     </li>
 
-                    <li class="
-                        nav-parent
-                        ">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-file-alt" aria-hidden="true"></i>
-                            <span>Inventario</span>
-                        </a>
-                        <ul class="nav nav-children" style="">
+                    {{--<li class="--}}
+                        {{--nav-parent--}}
+                        {{--">--}}
+                        {{--<a class="nav-link" href="#">--}}
+                            {{--<i class="fas fa-file-alt" aria-hidden="true"></i>--}}
+                            {{--<span>Inventario</span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="nav nav-children" style="">--}}
 
-                            <li class="#">
-                                <a class="nav-link" href="#">
-                                    Productos
-                                </a>
-                            </li>
-                            <li class="{{(($path[0] === 'reports') && ($path[1] != 'inventories')) ? 'nav-active' : ''}}">
-                                <a class="nav-link" href="{{route('tenant.reports.inventories.index')}}">
-                                    Valor actual del inventario
-                                </a>
-                            </li>
-                            <li class="{{(($path[0] === 'reports') && ($path[1] != 'kardex')) ? 'nav-active' : ''}}">
-                                <a class="nav-link" href="{{route('tenant.reports.kardex.index')}}">
-                                    Kardex
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-parent {{(($path[0] === 'reports') && (($path[1] != 'purchases') && ($path[1] != 'inventories') && ($path[1] != 'kardex'))) ? 'nav-active' : ''}}">
+                            {{--<li class="#">--}}
+                                {{--<a class="nav-link" href="#">--}}
+                                    {{--Productos--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li class="{{(($path[0] === 'reports') && ($path[1] != 'inventories')) ? 'nav-active' : ''}}">--}}
+                                {{--<a class="nav-link" href="{{route('tenant.reports.inventories.index')}}">--}}
+                                    {{--Valor actual del inventario--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li class="{{(($path[0] === 'reports') && ($path[1] != 'kardex')) ? 'nav-active' : ''}}">--}}
+                                {{--<a class="nav-link" href="{{route('tenant.reports.kardex.index')}}">--}}
+                                    {{--Kardex--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                    <li class="nav-parent {{  (($path[0] === 'reports') && in_array($path[1], ['purchases', 'kardex', ''])) ? 'nav-active nav-expanded' : ''}}">
                         <a class="nav-link" href="#">
                             <i class="fas fa-file-alt" aria-hidden="true"></i>
                             <span>Reportes</span>
@@ -207,14 +212,19 @@
                                     Compras
                                 </a>
                             </li>
-                            <li class="#">
-                                <a class="nav-link" href="#">
+                            {{--<li class="#">--}}
+                                {{--<a class="nav-link" href="#">--}}
+                                    {{--Ventas--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            <li class="{{(($path[0] === 'reports') && ($path[1] === '')) ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('tenant.reports.index')}}">
                                     Ventas
                                 </a>
                             </li>
-                            <li class="{{(($path[0] === 'reports') && ($path[1] != 'purchases')) ? 'nav-active' : ''}}">
-                                <a class="nav-link" href="{{route('tenant.reports.index')}}">
-                                    Documentos
+                            <li class="{{(($path[0] === 'reports') && ($path[1] === 'kardex')) ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('tenant.reports.kardex.index')}}">
+                                    Kardex
                                 </a>
                             </li>
                             {{-- <li class="{{(($path[0] === 'reports') && ($path[1] != 'inventories')) ? 'nav-active' : ''}}">
@@ -229,16 +239,12 @@
                             </li> --}}
                         </ul>
                     </li>
-                    <li class="
-                        nav-parent
-                        {{ ($path[0] === 'companies')?'nav-active nav-expanded':'' }}
-                        ">
+                    <li class="nav-parent {{ in_array($path[0], ['companies', 'catalogs', 'advanced'])?'nav-active nav-expanded':'' }}">
                         <a class="nav-link" href="#">
                             <i class="fas fa-cogs" aria-hidden="true"></i>
                             <span>Configuracion</span>
                         </a>
                         <ul class="nav nav-children" style="">
-
                             @if(in_array('companies', $vc_modules))
                             <li class="{{ ($path[0] === 'companies')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.companies.create')}}">
@@ -246,17 +252,20 @@
                                 </a>
                             </li>
                             @endif
-                            <li class="#">
-                                <a class="nav-link" href="#">
-                                    Catalogos
+                            @if(in_array('catalogs', $vc_modules))
+                            <li class="{{ ($path[0] === 'catalogs')?'nav-active':'' }}">
+                                <a class="nav-link" href="{{route('tenant.catalogs.index')}}">
+                                    Catálogos
                                 </a>
                             </li>
-                            <li class="#">
-                                <a class="nav-link" href="#">
+                            @endif
+                            @if(in_array('advanced', $vc_modules))
+                            <li class="{{ ($path[0] === 'advanced')?'nav-active':'' }}">
+                                <a class="nav-link" href="{{route('tenant.advanced.index')}}">
                                     Avanzado
                                 </a>
                             </li>
-
+                            @endif
                         </ul>
                     </li>
 

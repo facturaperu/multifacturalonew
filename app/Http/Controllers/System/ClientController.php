@@ -67,12 +67,14 @@ class ClientController extends Controller
             }
         }
 
+        $total_documents = collect($count_documents)->sum('count');
+
         $groups_by_month = collect($count_documents)->groupBy('month');
-        $labels = [];
+        $labels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'];
         $documents_by_month = [];
         foreach($groups_by_month as $month => $group)
         {
-            $labels[] = $month;
+//            $labels[] = $month;
             $documents_by_month[] = $group->sum('count');
         }
 
@@ -81,7 +83,7 @@ class ClientController extends Controller
             'data' => $documents_by_month
         ];
 
-        return compact('line');
+        return compact('line', 'total_documents');
     }
 
     public function store(ClientRequest $request)

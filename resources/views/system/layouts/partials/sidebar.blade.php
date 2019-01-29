@@ -18,9 +18,9 @@
         <div class="nano-content">
             <nav id="menu" class="nav-main" role="navigation">
                 <ul class="nav nav-main">
-                    <li class="{{ ($path[0] === 'clients')?'nav-active':'' }}">
+                    <li class="{{ (in_array($path[0], ['clients', 'dashboard']))?'nav-active':'' }}">
                         <a class="nav-link" href="{{route('system.clients.index')}}">
-                            <i class="fas fa-building"></i><span>Clientes</span>
+                            <i class="fas fa-chart-line"></i><span>Dashboard</span>
                         </a>
                     </li>
                 </ul>

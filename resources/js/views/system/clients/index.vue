@@ -3,11 +3,8 @@
         <header class="page-header">
             <h2><a href="/dashboard"><i class="fa fa-list-alt"></i></a></h2>
             <ol class="breadcrumbs">
-                <li class="active"><span>Clientes</span></li>
+                <li class="active"><span>Dashboard</span></li>
             </ol>
-            <div class="right-wrapper pull-right">
-                <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
-            </div>
         </header>
         <div class="row">
             <div class="col-lg-6 mb-3">
@@ -32,49 +29,49 @@
             <div class="col-lg-6">
                 <div class="row mb-3">
                     <div class="col-xl-6">
-                        <section class="card card-featured-left card-featured-primary mb-3">
+                        <section class="card card-featured-left card-featured-secondary">
                             <div class="card-body">
                                 <div class="widget-summary">
                                     <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-primary">
-                                            <i class="fas fa-life-ring"></i>
+                                        <div class="summary-icon bg-secondary">
+                                            <i class="fa fa-building"></i>
                                         </div>
                                     </div>
                                     <div class="widget-summary-col">
                                         <div class="summary">
-                                            <h4 class="title">Support Questions</h4>
+                                            <h4 class="title">Total Clientes</h4>
                                             <div class="info">
-                                                <strong class="amount">1281</strong>
-                                                <span class="text-primary">(14 unread)</span>
+                                                <strong class="amount">{{ records.length }}</strong>
                                             </div>
                                         </div>
-                                        <div class="summary-footer">
-                                            <a class="text-muted text-uppercase" href="#">(view all)</a>
-                                        </div>
+                                        <!--<div class="summary-footer">-->
+                                            <!--<a class="text-muted text-uppercase" href="#">(withdraw)</a>-->
+                                        <!--</div>-->
                                     </div>
                                 </div>
                             </div>
                         </section>
                     </div>
                     <div class="col-xl-6">
-                        <section class="card card-featured-left card-featured-secondary">
+                        <section class="card card-featured-left card-featured-primary mb-3">
                             <div class="card-body">
                                 <div class="widget-summary">
                                     <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-secondary">
-                                            <i class="fas fa-dollar-sign"></i>
+                                        <div class="summary-icon bg-primary">
+                                            <i class="fas fa-file"></i>
                                         </div>
                                     </div>
                                     <div class="widget-summary-col">
                                         <div class="summary">
-                                            <h4 class="title">Total Profit</h4>
+                                            <h4 class="title">Total Comprobantes</h4>
                                             <div class="info">
-                                                <strong class="amount">$ 14,890.30</strong>
+                                                <strong class="amount">{{ total_documents }}</strong>
+                                                <!--<span class="text-primary">(14 unread)</span>-->
                                             </div>
                                         </div>
-                                        <div class="summary-footer">
-                                            <a class="text-muted text-uppercase" href="#">(withdraw)</a>
-                                        </div>
+                                        <!--<div class="summary-footer">-->
+                                        <!--<a class="text-muted text-uppercase" href="#">(view all)</a>-->
+                                        <!--</div>-->
                                     </div>
                                 </div>
                             </div>
@@ -87,20 +84,20 @@
                             <div class="card-body">
                                 <div class="widget-summary">
                                     <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-tertiary">
-                                            <i class="fas fa-shopping-cart"></i>
+                                        <div class="summary-icon bg-warning">
+                                            <i class="fas fa-file"></i>
                                         </div>
                                     </div>
                                     <div class="widget-summary-col">
                                         <div class="summary">
-                                            <h4 class="title">Today's Orders</h4>
+                                            <h4 class="title">Total Facturas</h4>
                                             <div class="info">
-                                                <strong class="amount">38</strong>
+                                                <strong class="amount">{{ total_documents }}</strong>
                                             </div>
                                         </div>
-                                        <div class="summary-footer">
-                                            <a class="text-muted text-uppercase" href="#">(statement)</a>
-                                        </div>
+                                        <!--<div class="summary-footer">-->
+                                            <!--<a class="text-muted text-uppercase" href="#">(statement)</a>-->
+                                        <!--</div>-->
                                     </div>
                                 </div>
                             </div>
@@ -111,20 +108,20 @@
                             <div class="card-body">
                                 <div class="widget-summary">
                                     <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-quaternary">
-                                            <i class="fas fa-user"></i>
+                                        <div class="summary-icon bg-danger">
+                                            <i class="fas fa-dollar-sign"></i>
                                         </div>
                                     </div>
                                     <div class="widget-summary-col">
                                         <div class="summary">
-                                            <h4 class="title">Today's Visitors</h4>
+                                            <h4 class="title">Total Venta en Planes</h4>
                                             <div class="info">
-                                                <strong class="amount">3765</strong>
+                                                <strong class="amount">2</strong>
                                             </div>
                                         </div>
-                                        <div class="summary-footer">
-                                            <a class="text-muted text-uppercase" href="#">(report)</a>
-                                        </div>
+                                        <!--<div class="summary-footer">-->
+                                            <!--<a class="text-muted text-uppercase" href="#">(report)</a>-->
+                                        <!--</div>-->
                                     </div>
                                 </div>
                             </div>
@@ -137,6 +134,9 @@
         <div class="card">
             <div class="card-header bg-info">
                 Listado de Clientes
+                <div class="right-wrapper pull-right">
+                    <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -194,7 +194,8 @@
                 recordId: null,
                 records: [],
                 loaded: false,
-                year: null,
+                year: 2019,
+                total_documents: 0,
                 dataChartLine : {
                     labels: null,
                     datasets: [
@@ -214,6 +215,7 @@
                     let line = response.data.line
                     this.dataChartLine.labels = line.labels
                     this.dataChartLine.datasets[0].data = line.data
+                    this.total_documents = response.data.total_documents
                     // console.log(response.data)
                     // this.records = response.data.data
                 })

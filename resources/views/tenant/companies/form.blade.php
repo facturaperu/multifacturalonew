@@ -26,14 +26,14 @@
             <tenant-unit_types-index></tenant-unit_types-index>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-6 col-md-12">
-            <tenant-users-index></tenant-users-index>
-        </div>
-        <div class="col-lg-6 col-md-12">
-            <tenant-establishments-index></tenant-establishments-index>
-        </div>
-    </div>
+    {{--<div class="row">--}}
+        {{--<div class="col-lg-6 col-md-12">--}}
+            {{--<tenant-users-index></tenant-users-index>--}}
+        {{--</div>--}}
+        {{--<div class="col-lg-6 col-md-12">--}}
+            {{--<tenant-establishments-index></tenant-establishments-index>--}}
+        {{--</div>--}}
+    {{--</div>--}}
     <div class="row">
         <div class="col-lg-6 col-md-12">
             <tenant-currency-types-index></tenant-currency-types-index>
@@ -50,5 +50,5 @@
         <div class="col-lg-6 col-md-12">
             <tenant-attribute_types-index></tenant-attribute_types-index>
         </div>
-    </div> 
+    </div>
 @endsection

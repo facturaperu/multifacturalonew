@@ -21,8 +21,7 @@ class CreateClientsTable extends Migration
             $table->string('email');
             $table->string('token');
             $table->boolean('locked')->default(false);
-            
-            $table->integer ('plan_id')->unsigned();
+            $table->unsignedInteger('plan_id')->nullable();
 
             $table->timestamps();
 
