@@ -19,6 +19,8 @@ if ($hostname) {
                 return redirect()->route('tenant.documents.create');
             });
             Route::get('dashboard', 'Tenant\HomeController@index')->name('tenant.dashboard');
+            Route::get('catalogs', 'Tenant\CatalogController@index')->name('tenant.catalogs.index');
+            Route::get('advanced', 'Tenant\AdvancedController@index')->name('tenant.advanced.index');
 
             //Company
             Route::get('companies/create', 'Tenant\CompanyController@create')->name('tenant.companies.create');
@@ -38,6 +40,7 @@ if ($hostname) {
             Route::delete('certificates', 'Tenant\CertificateController@destroy');
 
             //Establishments
+            Route::get('establishments', 'Tenant\EstablishmentController@index')->name('tenant.establishments.index');
             Route::get('establishments/create', 'Tenant\EstablishmentController@create');
             Route::get('establishments/tables', 'Tenant\EstablishmentController@tables');
             Route::get('establishments/record/{establishment}', 'Tenant\EstablishmentController@record');
@@ -62,6 +65,7 @@ if ($hostname) {
             Route::delete('series/{series}', 'Tenant\SeriesController@destroy');
 
             //Users
+            Route::get('users', 'Tenant\UserController@index')->name('tenant.users.index');
             Route::get('users/create', 'Tenant\UserController@create')->name('tenant.users.create');
             Route::get('users/tables', 'Tenant\UserController@tables');
             Route::get('users/record/{user}', 'Tenant\UserController@record');
@@ -172,6 +176,16 @@ if ($hostname) {
             Route::post('reports/purchases/pdf', 'Tenant\ReportPurchaseController@pdf')->name('tenant.report.purchases.pdf');
             Route::post('reports/purchases/excel', 'Tenant\ReportPurchaseController@excel')->name('tenant.report.purchases.report_excel');
 
+            Route::get('reports/inventories', 'Tenant\ReportInventoryController@index')->name('tenant.reports.inventories.index');
+            Route::post('reports/inventories/search', 'Tenant\ReportInventoryController@search')->name('tenant.reports.inventories.search');
+            Route::post('reports/inventories/pdf', 'Tenant\ReportInventoryController@pdf')->name('tenant.report.inventories.pdf');
+            Route::post('reports/inventories/excel', 'Tenant\ReportInventoryController@excel')->name('tenant.report.inventories.report_excel');
+            
+            Route::get('reports/kardex', 'Tenant\ReportKardexController@index')->name('tenant.reports.kardex.index');
+            Route::post('reports/kardex/search', 'Tenant\ReportKardexController@search')->name('tenant.reports.kardex.search');
+            Route::post('reports/kardex/pdf', 'Tenant\ReportKardexController@pdf')->name('tenant.report.kardex.pdf');
+            Route::post('reports/kardex/excel', 'Tenant\ReportKardexController@excel')->name('tenant.report.kardex.report_excel');
+
             Route::post('options/delete_documents', 'Tenant\OptionController@deleteDocuments');
 
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
@@ -265,9 +279,19 @@ if ($hostname) {
             Route::get('clients/records', 'System\ClientController@records');
             Route::get('clients/create', 'System\ClientController@create');
             Route::get('clients/tables', 'System\ClientController@tables');
+            Route::get('clients/charts', 'System\ClientController@charts');
             Route::post('clients', 'System\ClientController@store');
             Route::delete('clients/{client}', 'System\ClientController@destroy');
             Route::post('clients/password/{client}', 'System\ClientController@password');
+
+            //Planes
+            Route::get('plans', 'System\PlanController@index')->name('system.plans.index');
+            Route::get('plans/records', 'System\PlanController@records');
+            Route::get('plans/record/{plan}', 'System\PlanController@record');
+            Route::post('plans', 'System\PlanController@store');
+            Route::delete('plans/{plan}', 'System\PlanController@destroy');
+
+
 
             //Users
             Route::get('users/create', 'System\UserController@create')->name('system.users.create');

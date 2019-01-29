@@ -21,6 +21,8 @@ Vue.use(ElementUI, {size: 'small'})
 Vue.prototype.$eventHub = new Vue()
 Vue.prototype.$http = Axios
 
+// import VueCharts from 'vue-charts'
+// Vue.use(VueCharts);
 // import { TableComponent, TableColumn } from 'vue-table-component';
 //
 // Vue.component('table-component', TableComponent);
@@ -68,6 +70,8 @@ Vue.component('system-clients-index', require('./views/system/clients/index.vue'
 Vue.component('system-clients-form', require('./views/system/clients/form.vue'));
 Vue.component('system-users-form', require('./views/system/users/form.vue'));
 
+Vue.component('system-plans-index', require('./views/system/plans/index.vue'));
+Vue.component('system-plans-form', require('./views/system/plans/form.vue'));
 
 const app = new Vue({
     el: '#main-wrapper'
