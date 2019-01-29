@@ -5,10 +5,11 @@ namespace App\Http\Controllers\System;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
 use App\Models\System\Plan;
+use App\Models\System\PlanDocument;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\System\PlanCollection;
 use App\Http\Resources\System\PlanResource;
-use App\Http\Requests\System\ClientRequest;
+use App\Http\Requests\System\PlanRequest;
 
 class PlanController extends Controller
 {
@@ -32,8 +33,15 @@ class PlanController extends Controller
         return $record;
     }
 
+    public function tables()
+    {
+        $plan_documents = PlanDocument::all(); 
 
-    public function store(Request $request)
+        return compact('plan_documents');
+    }
+
+
+    public function store(PlanRequest $request)
     {
         $id = $request->input('id');
         $plan = Plan::firstOrNew(['id' => $id]);

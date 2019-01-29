@@ -18,18 +18,23 @@
 					
                     <template v-for="(row, index) in records">
 
-                        <div class="col-lg-3 col-sm-6 text-center" style="padding:10px;background-color:007bff" :key="index">
+                        <div  class="col-lg-3 col-sm-6 text-center" style="padding:10px;" :key="index">
 							<div class="plan most-popular">
 								<div class="plan-ribbon-wrapper "></div>
 								<h3>{{row.name}}<span>S/ {{row.pricing}}</span></h3> 
 								<ul>
-									<li><strong>{{row.limit_users}}</strong> Usuarios</li>
-									<li><strong>{{row.limit_documents}}</strong> Comprobantes</li>
-                                    <template v-for="(da, i) in row.documents_active">
-                                        <li :key="i">{{da}}</li>
+                                    <template v-if="row.locked">
+									    <li><strong>Usuarios</strong> ilimitados</li>
+									    <li><strong>Comprobantes</strong> ilimitados</li>
                                     </template>
-
-								</ul>
+                                    <template v-else>
+                                        <li><strong>{{row.limit_users}}</strong> usuarios</li>
+                                        <li><strong>{{row.limit_documents}}</strong> comprobantes</li>
+                                    </template>
+                                    <template v-for="(plan_document, i) in getDescriptions(row.plan_documents)">
+                                        <li :key="i" v-if="plan_document">{{plan_document.description}}</li>
+                                    </template>                                   
+								</ul>                                
                                 <div v-if="!row.locked">
                                     <button type="button" class="btn waves-effect waves-light btn-xs btn-danger float-right" style="margin-left:6px;" @click.prevent="clickDelete(row.id)"><i class="fas fa-trash"></i> </button>
                                     <button type="button" class="btn waves-effect waves-light btn-xs btn-primary float-right"  @click.prevent="clickCreate(row.id)"><i class="fas fa-edit"></i> </button><br>
@@ -44,6 +49,7 @@
             </div>
         </div>
         <system-plans-form :showDialog.sync="showDialog"
+                            :plan_documents="plan_documents"
                              :recordId="recordId"></system-plans-form>
     </div>
 </template>
@@ -61,21 +67,39 @@
                 showDialog: false,
                 resource: 'plans',
                 recordId: null,
-                records: [],
+                records: [],                
+                plan_documents: [] ,
+                aux:[]
             }
         },
-        created() {
+        created() {            
+                
             this.$eventHub.$on('reloadData', () => {
                 this.getData()
             })
             this.getData()
+            this.getPlanDocuments()
         },
         methods: {
+
+            getPlanDocuments(){
+                this.$http.get(`/${this.resource}/tables`).then(response => {
+                            this.plan_documents = response.data.plan_documents 
+                        })
+            },
             getData() {
                 this.$http.get(`/${this.resource}/records`)
                     .then(response => {
-                        this.records = response.data.data 
+                        this.records = response.data.data                         
                     })
+            },
+            getDescriptions(plan_documents){
+
+                let descriptions = []; 
+                Object.values(plan_documents).forEach((itm, i) => {                    
+                    descriptions.push(this.plan_documents[itm-1]) 
+                });
+                return descriptions
             },
             clickCreate(recordId = null) {
                 this.recordId = recordId

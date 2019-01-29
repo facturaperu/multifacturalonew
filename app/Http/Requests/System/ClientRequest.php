@@ -34,6 +34,10 @@ class ClientRequest extends FormRequest
             'subdomain' => [
                 'required'
             ],
+            'plan_id' => [
+                'required',
+                Rule::unique('system.clients')->ignore($id)
+            ],
         ];
     }
 }

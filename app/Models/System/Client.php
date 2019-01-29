@@ -2,22 +2,23 @@
 
 namespace App\Models\System;
 
-use Hyn\Tenancy\Models\Hostname;
+use Hyn\Tenancy\Models\Hostname; 
 use Hyn\Tenancy\Traits\UsesSystemConnection;
 use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
-{
+{ 
     use UsesSystemConnection;
 
-    protected $with = ['hostname'];
+    protected $with = ['hostname','plan'];
     protected $fillable = [
         'hostname_id',
         'number',
         'name',
         'email',
         'token',
-        'locked'
+        'locked',
+        'plan_id'
     ];
 
     public function hostname()
@@ -27,6 +28,6 @@ class Client extends Model
 
     public function plan()
     {
-        return $this->belongsTo(Plan::class);
+        return $this->belongsTo(Plan::class)->with(['clients']);
     }
 }

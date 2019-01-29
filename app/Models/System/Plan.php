@@ -1,26 +1,30 @@
 <?php
 
 namespace App\Models\System;
+use Hyn\Tenancy\Traits\UsesSystemConnection;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Plan extends Model
 {
+    use UsesSystemConnection;
+
+
     protected $fillable = [
         'name',
         'pricing',
         'limit_users',
         'limit_documents',
-        'documents_active', 
+        'plan_documents', 
         'locked', 
     ];
 
-    public function setDocumentsActiveAttribute($value)
+    public function setPlanDocumentsAttribute($value)
     {
-        $this->attributes['documents_active'] = (is_null($value))?null:json_encode($value);
+        $this->attributes['plan_documents'] = (is_null($value))?null:json_encode($value);
     }
 
-    public function getDocumentsActiveAttribute($value)
+    public function getPlanDocumentsAttribute($value)
     {
         return (is_null($value))?null:(object) json_decode($value);
     }

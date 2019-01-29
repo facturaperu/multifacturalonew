@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,15 +17,24 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => bcrypt('123456'),
         ]);
+ 
 
+        DB::table('plan_documents')->insert([
+            ['id' => 1, 'description' => 'Facturas, boletas, notas de débito y crédito, resúmenes y anulaciones' ],
+            ['id' => 2, 'description' => 'Guias de remisión' ],
+            ['id' => 3, 'description' => 'Retenciones'],
+            ['id' => 4, 'description' => 'Percepciones']
+        ]);
 
         App\Models\System\Plan::create([
             'name' => 'Ilimitado',
             'pricing' =>  99,
             'limit_users' => 9999999999,
             'limit_documents' =>  9999999999,
-            'documents_active' => ['Facturas, boletas, notas de débito y crédito, resúmenes y anulaciones','Guias de remisión','Retenciones','Percepciones'],
+            'plan_documents' => [1,2,3,4],
             'locked' => true
         ]);
+
+        
     }
 }

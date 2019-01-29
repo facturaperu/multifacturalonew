@@ -36,14 +36,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="form-group" :class="{'has-danger': (errors.documents_active)}">
-                            <label class="control-label">Activar documentos</label>
-                            
-                            <el-checkbox-group       v-model="form.documents_active"     :min="1" >
-                                <el-checkbox style="display:block; margin: 15px 0;" v-for="option in documents_active" :label="option" :key="option">{{option}}</el-checkbox>
-                            </el-checkbox-group> 
- 
-                            <small class="form-control-feedback" v-if="errors.documents_active" v-text="errors.documents_active[0]"></small> 
+                        <div class="form-group" :class="{'has-danger': (errors.plan_documents)}">
+                            <label class="control-label">Activar documentos</label> 
+
+                            <el-checkbox-group v-model="form.plan_documents"  >
+                                <el-checkbox v-for="(city,ind) in plan_documents" class="plan_documents" :label="city.id"  :key="ind">{{city.description}}</el-checkbox>
+                            </el-checkbox-group>
+
+                            <small class="form-control-feedback" v-if="errors.plan_documents" v-text="errors.plan_documents[0]"></small> 
                         </div>
                     </div>
                    
@@ -57,13 +57,16 @@
     </el-dialog>
 </template>
 
+<style>
+.plan_documents{ display:block ; margin: 15px 0 ;}
+</style>
 
 <script>
 
     import {EventBus} from '../../../helpers/bus'
 
     export default {
-        props: ['showDialog', 'recordId'],
+        props: ['showDialog', 'recordId','plan_documents'],
         data() {
             return {
                 loading_submit: false,
@@ -71,7 +74,6 @@
                 resource: 'plans',
                 error: {},
                 form: {}, 
-                documents_active: ["Facturas, boletas, notas de débito y crédito, resúmenes y anulaciones", "Guias de remisión", "Retenciones", "Percepciones"]
             }
         },
         created() {
@@ -86,21 +88,21 @@
                     pricing: null,
                     limit_users: null,
                     limit_documents: null,
-                    documents_active:[]
+                    plan_documents:[]
                 }
             },
             create() {
+
                 this.titleDialog = (this.recordId)? 'Editar plan':'Nuevo plan'
                 if (this.recordId) {
                     this.$http.get(`/${this.resource}/record/${this.recordId}`).then(response => {
                             this.form = response.data.data
-                            this.form.documents_active = Object.values(response.data.data.documents_active)
+                            this.form.plan_documents = Object.values(response.data.data.plan_documents)
                         })
                 }
             },
             submit() {
-                this.loading_submit = true 
-                
+                this.loading_submit = true  
                 this.$http.post(`${this.resource}`, this.form)
                     .then(response => {
                         if (response.data.success) {

@@ -173,6 +173,10 @@ return [
         'supplier_id' => 'proveedor',
         'date_of_issue' => 'fecha de emisión',
         'charge_discount_type_id' => 'tipo de cargo',
-        'percentage' => 'porcentaje',
+        'pricing' => 'precio',
+        'limit_users' => 'límite de usuarios',
+        'limit_documents' => 'límite de documentos',
+        'plan_documents' => 'documentos activos',
+        'plan_id' => 'plan',
     ],
 ];

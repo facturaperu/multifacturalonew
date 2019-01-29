@@ -45,6 +45,15 @@
                             <small class="form-control-feedback" v-if="errors.password" v-text="errors.password[0]"></small> 
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group" :class="{'has-danger': errors.plan_id}">
+                            <label class="control-label">Plan</label>
+                            <el-select v-model="form.plan_id">
+                                <el-option v-for="option in plans" :key="option.id" :value="option.id" :label="option.name"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.plan_id" v-text="errors.plan_id[0]"></small>
+                        </div>
+                    </div>
                    
                 </div>
             </div>
@@ -71,6 +80,7 @@
                 error: {},
                 form: {},
                 url_base: null,
+                plans:[]
             }
         },
         created() {
@@ -78,6 +88,8 @@
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.url_base = response.data.url_base
+                    this.plans = response.data.plans
+                    console.log(this.plans)
                 })
         },
         methods: {
@@ -88,7 +100,8 @@
                     name: null,
                     email: null,
                     number: null,
-                    password:null
+                    password:null,
+                    plan_id:null
                 }
             },
             create() {

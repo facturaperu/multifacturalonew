@@ -11,6 +11,7 @@ use App\Http\Resources\System\ClientCollection;
 use App\Http\Requests\System\ClientRequest;
 use Hyn\Tenancy\Environment;
 use App\Models\System\Client;
+use App\Models\System\Plan;
 use Hyn\Tenancy\Models\Hostname;
 use Hyn\Tenancy\Models\Website;
 use Illuminate\Support\Facades\DB;
@@ -30,13 +31,14 @@ class ClientController extends Controller
     public function tables()
     {
         $url_base = '.'.env('APP_URL_BASE');
+        $plans = Plan::all();
 
-        return compact('url_base');
+        return compact('url_base','plans');
     }
 
     public function records()
     {
-        $records = Client::all();
+        $records = Client::all(); 
         foreach ($records as &$row) {
             $tenancy = app(Environment::class);
             $tenancy->tenant($row->hostname->website);
@@ -113,6 +115,7 @@ class ClientController extends Controller
             $client->email = strtolower($request->input('email'));
             $client->name = $request->input('name');
             $client->number = $request->input('number');
+            $client->plan_id = $request->input('plan_id');
             $client->save();
 
             DB::connection('system')->commit();

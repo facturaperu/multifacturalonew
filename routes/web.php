@@ -287,6 +287,7 @@ if ($hostname) {
             //Planes
             Route::get('plans', 'System\PlanController@index')->name('system.plans.index');
             Route::get('plans/records', 'System\PlanController@records');
+            Route::get('plans/tables', 'System\PlanController@tables');
             Route::get('plans/record/{plan}', 'System\PlanController@record');
             Route::post('plans', 'System\PlanController@store');
             Route::delete('plans/{plan}', 'System\PlanController@destroy');
