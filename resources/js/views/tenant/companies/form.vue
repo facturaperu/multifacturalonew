@@ -43,6 +43,7 @@
                                         <el-button type="primary" icon="el-icon-upload"></el-button>
                                     </el-upload>
                                 </el-input>
+                                <div class="sub-title text-danger"><small>Se recomienda resoluciones 700x300</small></div>
                             </div>
                         </div>
                     </div>

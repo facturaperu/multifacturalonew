@@ -7,9 +7,9 @@
             <div class="invoice">
                 <header class="clearfix">
                     <div class="row">
-                        <div class="col-sm-2 mt-3">
+                        <div class="col-sm-2 mt-3 d-none d-sm-block">
                             <div class="ib">
-                                <img src="/logo/logocpe.png" alt="CPE" class="img-fluid" style="background-color: #0088CC">
+                                <img src="/logo/logo_cpe.png" alt="CPE" class="img-fluid" style="background-color: #0088CC;">
                             </div>
 
                         </div>
@@ -148,13 +148,13 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Descripción</th>
-                                                <th class="text-center">Unidad</th>
-                                                <th class="text-right">Cantidad</th>
-                                                <th class="text-right">Precio Unitario</th>
-                                                <th class="text-right">Descuento</th>
-                                                <th class="text-right">Cargo</th>
-                                                <th class="text-right">Total</th>
+                                                <th class="font-weight-bold">Descripción</th>
+                                                <th class="text-center font-weight-bold">Unidad</th>
+                                                <th class="text-right font-weight-bold">Cantidad</th>
+                                                <th class="text-right font-weight-bold">Precio Unitario</th>
+                                                <th class="text-right font-weight-bold">Descuento</th>
+                                                <th class="text-right font-weight-bold">Cargo</th>
+                                                <th class="text-right font-weight-bold">Total</th>
                                                 <th></th>
                                             </tr>
                                         </thead>

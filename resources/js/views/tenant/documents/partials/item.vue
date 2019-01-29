@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @open="create" @close="close">
+    <el-dialog :title="titleDialog" :visible="showDialog" @open="create" @close="close" top="8vh">
         <form autocomplete="off" @submit.prevent="clickAddItem">
             <div class="form-body">
                 <div class="row">
@@ -41,108 +41,111 @@
                         </div>
                     </div>
                     <div class="col-md-12 mt-3">
-                        Infomacion adicional atributos UBL 2.1 <button class="el-button el-button--primary el-button--small" v-on:click="isHidden = !isHidden">+</button>
-                    </div>
-                    <div v-if="!isHidden" class="col-md-12">
-                    <div class="col-md-12" v-if="discount_types.length > 0">
-                        <label class="control-label">
-                            Descuentos
-                            <a href="#" @click.prevent="clickAddDiscount">[+ Agregar]</a>
-                        </label>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Descripción</th>
-                                <th>Porcentaje</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(row, index) in form.discounts">
-                                <td>
-                                    <el-select v-model="row.discount_type_id" @change="changeDiscountType(index)">
-                                        <el-option v-for="option in discount_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                    </el-select>
-                                </td>
-                                <td>
-                                    <el-input v-model="row.description"></el-input>
-                                </td>
-                                <td>
-                                    <el-input v-model="row.percentage"></el-input>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger" @click.prevent="clickRemoveDiscount(index)">x</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-12" v-if="charge_types.length > 0">
-                        <label class="control-label">
-                            Cargos
-                            <a href="#" @click.prevent="clickAddCharge">[+ Agregar]</a>
-                        </label>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Descripción</th>
-                                <th>Porcentaje</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(row, index) in form.charges">
-                                <td>
-                                    <el-select v-model="row.charge_type_id" @change="changeChargeType(index)">
-                                        <el-option v-for="option in charge_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                    </el-select>
-                                </td>
-                                <td>
-                                    <el-input v-model="row.description"></el-input>
-                                </td>
-                                <td>
-                                    <el-input v-model="row.percentage"></el-input>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger" @click.prevent="clickRemoveCharge(index)">x</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        <button  type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-default mb-3">Información adicional atributos UBL 2.1</button>
+                        <div class="collapse" id="collapseExample">
 
-                    <div class="col-md-12" v-if="attribute_types.length > 0">
-                        <label class="control-label">
-                            Atributos
-                            <a href="#" @click.prevent="clickAddAttribute">[+ Agregar]</a>
-                        </label>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Descripción</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(row, index) in form.attributes">
-                                <td>
-                                    <el-select v-model="row.attribute_type_id" filterable @change="changeAttributeType(index)">
-                                        <el-option v-for="option in attribute_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                    </el-select>
-                                </td>
-                                <td>
-                                    <el-input v-model="row.value"></el-input>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger" @click.prevent="clickRemoveAttribute(index)">x</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                <div class="transition-box">
+                                    <div class="col-md-12" v-if="discount_types.length > 0">
+                                        <label class="control-label">
+                                            Descuentos
+                                            <a href="#" @click.prevent="clickAddDiscount">[+ Agregar]</a>
+                                        </label>
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Descripción</th>
+                                                <th>Porcentaje</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(row, index) in form.discounts">
+                                                <td>
+                                                    <el-select v-model="row.discount_type_id" @change="changeDiscountType(index)">
+                                                        <el-option v-for="option in discount_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                                    </el-select>
+                                                </td>
+                                                <td>
+                                                    <el-input v-model="row.description"></el-input>
+                                                </td>
+                                                <td>
+                                                    <el-input v-model="row.percentage"></el-input>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger" @click.prevent="clickRemoveDiscount(index)">x</button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-12" v-if="charge_types.length > 0">
+                                        <label class="control-label">
+                                            Cargos
+                                            <a href="#" @click.prevent="clickAddCharge">[+ Agregar]</a>
+                                        </label>
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Descripción</th>
+                                                <th>Porcentaje</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(row, index) in form.charges">
+                                                <td>
+                                                    <el-select v-model="row.charge_type_id" @change="changeChargeType(index)">
+                                                        <el-option v-for="option in charge_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                                    </el-select>
+                                                </td>
+                                                <td>
+                                                    <el-input v-model="row.description"></el-input>
+                                                </td>
+                                                <td>
+                                                    <el-input v-model="row.percentage"></el-input>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger" @click.prevent="clickRemoveCharge(index)">x</button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-12" v-if="attribute_types.length > 0">
+                                        <label class="control-label">
+                                            Atributos
+                                            <a href="#" @click.prevent="clickAddAttribute">[+ Agregar]</a>
+                                        </label>
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Descripción</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(row, index) in form.attributes">
+                                                <td>
+                                                    <el-select v-model="row.attribute_type_id" filterable @change="changeAttributeType(index)">
+                                                        <el-option v-for="option in attribute_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                                    </el-select>
+                                                </td>
+                                                <td>
+                                                    <el-input v-model="row.value"></el-input>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger" @click.prevent="clickRemoveAttribute(index)">x</button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -182,9 +185,7 @@
                 discount_types: [],
                 charge_types: [],
                 attribute_types: [],
-                use_price: 1,
-
-                isHidden: true
+                use_price: 1
             }
         },
         created() {
