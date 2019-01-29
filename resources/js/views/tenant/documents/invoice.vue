@@ -1,172 +1,205 @@
 <template>
     <div class="card mb-0 pt-2 pt-md-0">
-        <div class="card-header bg-info">
+        <!-- <div class="card-header bg-info">
             <h3 class="my-0">Nuevo Comprobante</h3>
-        </div>
+        </div> -->
         <div class="card-body">
-            <form autocomplete="off" @submit.prevent="submit">
-                <div class="form-body">
+            <div class="invoice">
+                <header class="clearfix">
                     <div class="row">
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.operation_type_id}">
-                                <label class="control-label">Tipo Operación</label>
-                                <el-select v-model="form.operation_type_id" @change="changeOperationType">
-                                    <el-option v-for="option in operation_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.operation_type_id" v-text="errors.operation_type_id[0]"></small>
+                        <div class="col-sm-2 mt-3 d-none d-sm-block">
+                            <div class="ib">
+                                <img src="/logo/logo_cpe.png" alt="CPE" class="img-fluid" style="background-color: #0088CC;">
+                            </div>
+
+                        </div>
+                        <div class="col-sm-8 text-right mt-3 mb-3">
+                            <address class="ib mr-2" >
+                                {{company.name}}
+                                <br>
+                                <div v-if="establishment.address != '-'">{{ establishment.address }}, </div> {{ establishment.district.description }}, {{ establishment.province.description }}, {{ establishment.department.description }} - {{ establishment.country.description }}
+                                <div v-if="establishment.telephone != '-'">
+                                    <br>
+                                    Teléfono{{ establishment.telephone }}
+                                </div>
+                                <br>
+                                {{establishment.email}}
+                            </address>
+                        </div>
+                        <div class="col-sm-2 text-right mt-3 mb-3">
+                            <div class="ib" v-if="company_logo != null">
+                                <img :src="'/storage/uploads/logos/' + company_logo" :alt="company_logo" class="img-fluid">
+                            </div>
+                            <div class="text-center" style="color:#CCC;" v-else>
+                                <i class="fa fa-circle fa-4x"></i>
                             </div>
                         </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.establishment_id}">
-                                <label class="control-label">Establecimiento</label>
-                                <el-select v-model="form.establishment_id" @change="changeEstablishment">
-                                    <el-option v-for="option in establishments" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.establishment_id" v-text="errors.establishment_id[0]"></small>
+                    </div>
+                </header>
+                <form autocomplete="off" @submit.prevent="submit">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.operation_type_id}">
+                                    <label class="control-label">Tipo Operación</label>
+                                    <el-select v-model="form.operation_type_id" @change="changeOperationType">
+                                        <el-option v-for="option in operation_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                    </el-select>
+                                    <small class="form-control-feedback" v-if="errors.operation_type_id" v-text="errors.operation_type_id[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.document_type_id}">
-                                <label class="control-label">Tipo de comprobante</label>
-                                <el-select v-model="form.document_type_id" @change="changeDocumentType">
-                                    <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.establishment_id}">
+                                    <label class="control-label">Establecimiento</label>
+                                    <el-select v-model="form.establishment_id" @change="changeEstablishment">
+                                        <el-option v-for="option in establishments" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                    </el-select>
+                                    <small class="form-control-feedback" v-if="errors.establishment_id" v-text="errors.establishment_id[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.series_id}">
-                                <label class="control-label">Serie</label>
-                                <el-select v-model="form.series_id">
-                                    <el-option v-for="option in series" :key="option.id" :value="option.id" :label="option.number"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.series_id" v-text="errors.series_id[0]"></small>
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.document_type_id}">
+                                    <label class="control-label">Tipo de comprobante</label>
+                                    <el-select v-model="form.document_type_id" @change="changeDocumentType">
+                                        <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                    </el-select>
+                                    <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.currency_type_id}">
-                                <label class="control-label">Moneda</label>
-                                <el-select v-model="form.currency_type_id" @change="changeCurrencyType">
-                                    <el-option v-for="option in currency_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.series_id}">
+                                    <label class="control-label">Serie</label>
+                                    <el-select v-model="form.series_id">
+                                        <el-option v-for="option in series" :key="option.id" :value="option.id" :label="option.number"></el-option>
+                                    </el-select>
+                                    <small class="form-control-feedback" v-if="errors.series_id" v-text="errors.series_id[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
-                                <label class="control-label">Fecha de emisión</label>
-                                <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false" @change="changeDateOfIssue"></el-date-picker>
-                                <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.currency_type_id}">
+                                    <label class="control-label">Moneda</label>
+                                    <el-select v-model="form.currency_type_id" @change="changeCurrencyType">
+                                        <el-option v-for="option in currency_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                    </el-select>
+                                    <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.date_of_due}">
-                                <label class="control-label">Fecha de vencimiento</label>
-                                <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
-                                <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
+                                    <label class="control-label">Fecha de emisión</label>
+                                    <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false" @change="changeDateOfIssue"></el-date-picker>
+                                    <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group" :class="{'has-danger': errors.customer_id}">
-                                <label class="control-label">
-                                    Cliente
-                                    <a href="#" @click.prevent="showDialogNewPerson = true">[+ Nuevo]</a>
-                                </label>
-                                <el-select v-model="form.customer_id" filterable>
-                                    <el-option v-for="option in customers" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                </el-select>
-                                <small class="form-control-feedback" v-if="errors.customer_id" v-text="errors.customer_id[0]"></small>
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.date_of_due}">
+                                    <label class="control-label">Fecha de vencimiento</label>
+                                    <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
+                                    <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.purchase_order}">
-                                <label class="control-label">Orden Compra</label>
-                                <el-input v-model="form.purchase_order"></el-input>
-                                <small class="form-control-feedback" v-if="errors.purchase_order" v-text="errors.purchase_order[0]"></small>
+                            <div class="col-lg-4">
+                                <div class="form-group" :class="{'has-danger': errors.customer_id}">
+                                    <label class="control-label">
+                                        Cliente
+                                        <a href="#" @click.prevent="showDialogNewPerson = true">[+ Nuevo]</a>
+                                    </label>
+                                    <el-select v-model="form.customer_id" filterable>
+                                        <el-option v-for="option in customers" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                    </el-select>
+                                    <small class="form-control-feedback" v-if="errors.customer_id" v-text="errors.customer_id[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
-                                <label class="control-label">Tipo de cambio</label>
-                                <el-input v-model="form.exchange_rate_sale"></el-input>
-                                <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.purchase_order}">
+                                    <label class="control-label">Orden Compra</label>
+                                    <el-input v-model="form.purchase_order"></el-input>
+                                    <small class="form-control-feedback" v-if="errors.purchase_order" v-text="errors.purchase_order[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label class="control-label">Formato de PDF</label>
-                                <el-select v-model="form.actions.format_pdf" >
-                                    <el-option key="a4" value="a4" label="Tamaño A4"></el-option>
-                                    <el-option key="ticket" value="ticket" label="Tamaño Ticket"></el-option>
-                                </el-select>
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
+                                    <label class="control-label">Tipo de cambio</label>
+                                    <el-input v-model="form.exchange_rate_sale"></el-input>
+                                    <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
+                                </div>
                             </div>
-                        </div>
-                        <!--<div class="col-lg-4 col-md-6">-->
-                            <!--<div class="form-group" :class="{'has-danger': errors.observations}">-->
-                                <!--<label class="control-label">Observaciones</label>-->
-                                <!--<el-input v-model="form.optional.observations" type="textarea" autosize></el-input>-->
-                                <!--<small class="form-control-feedback" v-if="errors.observations" v-text="errors.observations[0]"></small>-->
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="control-label">Formato de PDF</label>
+                                    <el-select v-model="form.actions.format_pdf" >
+                                        <el-option key="a4" value="a4" label="Tamaño A4"></el-option>
+                                        <el-option key="ticket" value="ticket" label="Tamaño Ticket"></el-option>
+                                    </el-select>
+                                </div>
+                            </div>
+                            <!--<div class="col-lg-4 col-md-6">-->
+                                <!--<div class="form-group" :class="{'has-danger': errors.observations}">-->
+                                    <!--<label class="control-label">Observaciones</label>-->
+                                    <!--<el-input v-model="form.optional.observations" type="textarea" autosize></el-input>-->
+                                    <!--<small class="form-control-feedback" v-if="errors.observations" v-text="errors.observations[0]"></small>-->
+                                <!--</div>-->
                             <!--</div>-->
-                        <!--</div>-->
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-2 col-md-6 d-flex align-items-end pt-2">
-                            <div class="form-group">
-                                <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Producto</button>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th class="font-weight-bold">Descripción</th>
+                                                <th class="text-center font-weight-bold">Unidad</th>
+                                                <th class="text-right font-weight-bold">Cantidad</th>
+                                                <th class="text-right font-weight-bold">Precio Unitario</th>
+                                                <th class="text-right font-weight-bold">Descuento</th>
+                                                <th class="text-right font-weight-bold">Cargo</th>
+                                                <th class="text-right font-weight-bold">Total</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody v-if="form.items.length > 0">
+                                            <tr v-for="(row, index) in form.items">
+                                                <td>{{ index + 1 }}</td>
+                                                <td>{{ row.item.description }}<br/><small>{{ row.affectation_igv_type.description }}</small></td>
+                                                <td class="text-center">{{ row.item.unit_type_id }}</td>
+                                                <td class="text-right">{{ row.quantity }}</td>
+                                                <td class="text-right">{{ currency_type.symbol }} {{ row.unit_price }}</td>
+                                                <td class="text-right">{{ currency_type.symbol }} {{ row.total_discount }}</td>
+                                                <td class="text-right">{{ currency_type.symbol }} {{ row.total_charge }}</td>
+                                                <td class="text-right">{{ currency_type.symbol }} {{ row.total }}</td>
+                                                <td class="text-right">
+                                                    <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickRemoveItem(index)">x</button>
+                                                </td>
+                                            </tr>
+                                            <tr><td colspan="9"></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                                <div class="col-lg-12 col-md-6 d-flex align-items-end">
+                                    <div class="form-group">
+                                        <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Producto</button>
+                                    </div>
+                                </div>
+                            <div class="col-md-12">
+                                <p class="text-right" v-if="form.total_exportation > 0">OP.EXPORTACIÓN: {{ currency_type.symbol }} {{ form.total_exportation }}</p>
+                                <p class="text-right" v-if="form.total_free > 0">OP.GRATUITAS: {{ currency_type.symbol }} {{ form.total_free }}</p>
+                                <p class="text-right" v-if="form.total_unaffected > 0">OP.INAFECTAS: {{ currency_type.symbol }} {{ form.total_unaffected }}</p>
+                                <p class="text-right" v-if="form.total_exonerated > 0">OP.EXONERADAS: {{ currency_type.symbol }} {{ form.total_exonerated }}</p>
+                                <p class="text-right" v-if="form.total_taxed > 0">OP.GRAVADA: {{ currency_type.symbol }} {{ form.total_taxed }}</p>
+                                <p class="text-right" v-if="form.total_igv > 0">IGV: {{ currency_type.symbol }} {{ form.total_igv }}</p>
+                                <h3 class="text-right" v-if="form.total > 0"><b>TOTAL A PAGAR: </b>{{ currency_type.symbol }} {{ form.total }}</h3>
                             </div>
                         </div>
+
                     </div>
-                    <div class="row" v-if="form.items.length > 0">
-                        <div class="col-md-12">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Descripción</th>
-                                        <th class="text-center">Unidad</th>
-                                        <th class="text-right">Cantidad</th>
-                                        <th class="text-right">Precio Unitario</th>
-                                        <th class="text-right">Descuento</th>
-                                        <th class="text-right">Cargo</th>
-                                        <th class="text-right">Total</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(row, index) in form.items">
-                                        <td>{{ index + 1 }}</td>
-                                        <td>{{ row.item.description }}<br/><small>{{ row.affectation_igv_type.description }}</small></td>
-                                        <td class="text-center">{{ row.item.unit_type_id }}</td>
-                                        <td class="text-right">{{ row.quantity }}</td>
-                                        <td class="text-right">{{ currency_type.symbol }} {{ row.unit_price }}</td>
-                                        <td class="text-right">{{ currency_type.symbol }} {{ row.total_discount }}</td>
-                                        <td class="text-right">{{ currency_type.symbol }} {{ row.total_charge }}</td>
-                                        <td class="text-right">{{ currency_type.symbol }} {{ row.total }}</td>
-                                        <td class="text-right">
-                                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickRemoveItem(index)">x</button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <p class="text-right" v-if="form.total_exportation > 0">OP.EXPORTACIÓN: {{ currency_type.symbol }} {{ form.total_exportation }}</p>
-                            <p class="text-right" v-if="form.total_free > 0">OP.GRATUITAS: {{ currency_type.symbol }} {{ form.total_free }}</p>
-                            <p class="text-right" v-if="form.total_unaffected > 0">OP.INAFECTAS: {{ currency_type.symbol }} {{ form.total_unaffected }}</p>
-                            <p class="text-right" v-if="form.total_exonerated > 0">OP.EXONERADAS: {{ currency_type.symbol }} {{ form.total_exonerated }}</p>
-                            <p class="text-right" v-if="form.total_taxed > 0">OP.GRAVADA: {{ currency_type.symbol }} {{ form.total_taxed }}</p>
-                            <p class="text-right" v-if="form.total_igv > 0">IGV: {{ currency_type.symbol }} {{ form.total_igv }}</p>
-                            <h3 class="text-right" v-if="form.total > 0"><b>TOTAL A PAGAR: </b>{{ currency_type.symbol }} {{ form.total }}</h3>
-                        </div>
+                    <div class="form-actions text-right mt-4">
+                        <el-button @click.prevent="close()">Cancelar</el-button>
+                        <el-button type="primary" native-type="submit" :loading="loading_submit" v-if="form.items.length > 0">Generar</el-button>
                     </div>
-                </div>
-                <div class="form-actions text-right mt-4">
-                    <el-button @click.prevent="close()">Cancelar</el-button>
-                    <el-button type="primary" native-type="submit" :loading="loading_submit" v-if="form.items.length > 0">Generar</el-button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
 
         <document-form-item :showDialog.sync="showDialogAddItem"
@@ -204,7 +237,7 @@
                 showDialogOptions: false,
                 loading_submit: false,
                 errors: {},
-                form: {}, 
+                form: {},
                 document_types: [],
                 currency_types: [],
                 discount_types: [],
@@ -212,8 +245,10 @@
                 all_customers: [],
                 customers: [],
                 company: null,
+                company_logo: null,
                 operation_types: [],
                 establishments: [],
+                establishment: [],
                 all_series: [],
                 series: [],
                 currency_type: {},
@@ -242,6 +277,10 @@
                     this.changeDateOfIssue()
                     this.changeDocumentType()
                     this.changeCurrencyType()
+
+                    this.establishment = (this.establishments.length > 0)?this.establishments[0]:null
+                    this.company = response.data.company
+                    this.company_logo = response.data.company.logo
                 })
             this.$eventHub.$on('reloadDataPersons', (customer_id) => {
                 this.reloadDataCustomers(customer_id)
@@ -336,7 +375,7 @@
             },
             clickRemoveItem(index) {
                 this.form.items.splice(index, 1)
-                this.calculateTotal()  
+                this.calculateTotal()
             },
             changeCurrencyType() {
                 this.currency_type = _.find(this.currency_types, {'id': this.form.currency_type_id})
@@ -394,7 +433,7 @@
                 this.form.total = _.round(total, 2)
              },
             submit() {
-                this.loading_submit = true 
+                this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form)
                     .then(response => {
                         console.log(response)

@@ -14,9 +14,9 @@
                             <div class="d-flex">
                                 <h2 class="mr-3">Documentos</h2>
                                 <el-select v-model="year">
-                                    <el-option value="2018" label="2018"></el-option>
+                                    <!--<el-option value="2018" label="2018"></el-option>-->
                                     <el-option value="2019" label="2019"></el-option>
-                                    <el-option value="2020" label="2020"></el-option>
+                                    <!--<el-option value="2020" label="2020"></el-option>-->
                                 </el-select>
                             </div>
                             <div class="chart-data-selector-items mt-3">
