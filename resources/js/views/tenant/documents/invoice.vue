@@ -27,8 +27,11 @@
                             </address>
                         </div>
                         <div class="col-sm-2 text-right mt-3 mb-3">
-                            <div class="ib">
+                            <div class="ib" v-if="company_logo != null">
                                 <img :src="'/storage/uploads/logos/' + company_logo" :alt="company_logo" class="img-fluid">
+                            </div>
+                            <div class="text-center" style="color:#CCC;" v-else>
+                                <i class="fa fa-circle fa-4x"></i>
                             </div>
                         </div>
                     </div>
