@@ -161,19 +161,29 @@ if ($hostname) {
             Route::get('dispatches', 'Tenant\DispatchController@index')->name('tenant.dispatches.index');
             Route::get('dispatches/columns', 'Tenant\DispatchController@columns');
             Route::get('dispatches/records', 'Tenant\DispatchController@records');
-            
+
             Route::get('reports', 'Tenant\ReportController@index')->name('tenant.reports.index');
             Route::post('reports/search', 'Tenant\ReportController@search')->name('tenant.search');
             Route::post('reports/pdf', 'Tenant\ReportController@pdf')->name('tenant.report_pdf');
             Route::post('reports/excel', 'Tenant\ReportController@excel')->name('tenant.report_excel');
-            
+
             Route::get('reports/purchases', 'Tenant\ReportPurchaseController@index')->name('tenant.reports.purchases.index');
             Route::post('reports/purchases/search', 'Tenant\ReportPurchaseController@search')->name('tenant.reports.purchases.search');
             Route::post('reports/purchases/pdf', 'Tenant\ReportPurchaseController@pdf')->name('tenant.report.purchases.pdf');
             Route::post('reports/purchases/excel', 'Tenant\ReportPurchaseController@excel')->name('tenant.report.purchases.report_excel');
+
+            Route::get('reports/inventories', 'Tenant\ReportInventoryController@index')->name('tenant.reports.inventories.index');
+            Route::post('reports/inventories/search', 'Tenant\ReportInventoryController@search')->name('tenant.reports.inventories.search');
+            Route::post('reports/inventories/pdf', 'Tenant\ReportInventoryController@pdf')->name('tenant.report.inventories.pdf');
+            Route::post('reports/purchases/excel', 'Tenant\ReportInventoryController@excel')->name('tenant.report.inventories.report_excel');
             
+            Route::get('reports/kardex', 'Tenant\ReportKardexController@index')->name('tenant.reports.kardex.index');
+            Route::post('reports/kardex/search', 'Tenant\ReportKardexController@search')->name('tenant.reports.kardex.search');
+            Route::post('reports/kardex/pdf', 'Tenant\ReportKardexController@pdf')->name('tenant.report.kardex.pdf');
+            Route::post('reports/kardex/excel', 'Tenant\ReportKardexController@excel')->name('tenant.report.kardex.report_excel');
+
             Route::post('options/delete_documents', 'Tenant\OptionController@deleteDocuments');
-            
+
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
             Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
             Route::post('services/exchange_rate', 'Tenant\Api\ServiceController@exchange_rate');
@@ -224,17 +234,17 @@ if ($hostname) {
             Route::get('perceptions/item/tables', 'Tenant\PerceptionController@item_tables');
 
 
-            //Tribute Concept Type 
-            Route::get('tribute_concept_types/records', 'Tenant\TributeConceptTypeController@records'); 
+            //Tribute Concept Type
+            Route::get('tribute_concept_types/records', 'Tenant\TributeConceptTypeController@records');
             Route::get('tribute_concept_types/record/{id}', 'Tenant\TributeConceptTypeController@record');
-            Route::post('tribute_concept_types', 'Tenant\TributeConceptTypeController@store'); 
+            Route::post('tribute_concept_types', 'Tenant\TributeConceptTypeController@store');
             Route::delete('tribute_concept_types/{id}', 'Tenant\TributeConceptTypeController@destroy');
 
             //purchases
             Route::get('purchases', 'Tenant\PurchaseController@index')->name('tenant.purchases.index');
             Route::get('purchases/columns', 'Tenant\PurchaseController@columns');
             Route::get('purchases/records', 'Tenant\PurchaseController@records');
-            Route::get('purchases/create', 'Tenant\PurchaseController@create');
+            Route::get('purchases/create', 'Tenant\PurchaseController@create')->name('tenant.purchases.create');
             Route::get('purchases/tables', 'Tenant\PurchaseController@tables');
             Route::get('purchases/table/{table}', 'Tenant\PurchaseController@table');
             Route::post('purchases', 'Tenant\PurchaseController@store');
@@ -269,6 +279,15 @@ if ($hostname) {
             Route::post('clients', 'System\ClientController@store');
             Route::delete('clients/{client}', 'System\ClientController@destroy');
             Route::post('clients/password/{client}', 'System\ClientController@password');
+
+            //Planes
+            Route::get('plans', 'System\PlanController@index')->name('system.plans.index');
+            Route::get('plans/records', 'System\PlanController@records');
+            Route::get('plans/record/{plan}', 'System\PlanController@record');
+            Route::post('plans', 'System\PlanController@store');
+            Route::delete('plans/{plan}', 'System\PlanController@destroy');
+
+
 
             //Users
             Route::get('users/create', 'System\UserController@create')->name('system.users.create');

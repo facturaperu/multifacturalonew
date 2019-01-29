@@ -125,6 +125,11 @@ class ReportPurchaseController extends Controller
         return $pdf->download($filename.'.pdf');
     }
     
+    /**
+     * Excel
+     * @param  Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function excel(Request $request) {
         $company = Company::first();
         $establishment = Establishment::first();
