@@ -10,6 +10,11 @@ use App\Http\Resources\Tenant\UserCollection;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        return view('tenant.users.index');
+    }
+
     public function record($id)
     {
         $record = new UserResource(User::findOrFail($id));

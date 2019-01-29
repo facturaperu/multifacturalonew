@@ -19,6 +19,8 @@ if ($hostname) {
                 return redirect()->route('tenant.documents.create');
             });
             Route::get('dashboard', 'Tenant\HomeController@index')->name('tenant.dashboard');
+            Route::get('catalogs', 'Tenant\CatalogController@index')->name('tenant.catalogs.index');
+            Route::get('advanced', 'Tenant\AdvancedController@index')->name('tenant.advanced.index');
 
             //Company
             Route::get('companies/create', 'Tenant\CompanyController@create')->name('tenant.companies.create');
@@ -38,6 +40,7 @@ if ($hostname) {
             Route::delete('certificates', 'Tenant\CertificateController@destroy');
 
             //Establishments
+            Route::get('establishments', 'Tenant\EstablishmentController@index')->name('tenant.establishments.index');
             Route::get('establishments/create', 'Tenant\EstablishmentController@create');
             Route::get('establishments/tables', 'Tenant\EstablishmentController@tables');
             Route::get('establishments/record/{establishment}', 'Tenant\EstablishmentController@record');
@@ -62,6 +65,7 @@ if ($hostname) {
             Route::delete('series/{series}', 'Tenant\SeriesController@destroy');
 
             //Users
+            Route::get('users', 'Tenant\UserController@index')->name('tenant.users.index');
             Route::get('users/create', 'Tenant\UserController@create')->name('tenant.users.create');
             Route::get('users/tables', 'Tenant\UserController@tables');
             Route::get('users/record/{user}', 'Tenant\UserController@record');
@@ -275,9 +279,19 @@ if ($hostname) {
             Route::get('clients/records', 'System\ClientController@records');
             Route::get('clients/create', 'System\ClientController@create');
             Route::get('clients/tables', 'System\ClientController@tables');
+            Route::get('clients/charts', 'System\ClientController@charts');
             Route::post('clients', 'System\ClientController@store');
             Route::delete('clients/{client}', 'System\ClientController@destroy');
             Route::post('clients/password/{client}', 'System\ClientController@password');
+
+            //Planes
+            Route::get('plans', 'System\PlanController@index')->name('system.plans.index');
+            Route::get('plans/records', 'System\PlanController@records');
+            Route::get('plans/record/{plan}', 'System\PlanController@record');
+            Route::post('plans', 'System\PlanController@store');
+            Route::delete('plans/{plan}', 'System\PlanController@destroy');
+
+
 
             //Users
             Route::get('users/create', 'System\UserController@create')->name('system.users.create');

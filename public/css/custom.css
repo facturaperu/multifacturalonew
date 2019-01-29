@@ -37,3 +37,8 @@ html {
     font-size: 13px;
 }
 
+
+.checkbox{
+    display:block;
+    margin: 15px 0;
+}
