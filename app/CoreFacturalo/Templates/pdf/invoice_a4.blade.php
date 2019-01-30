@@ -76,11 +76,11 @@
 <table class="full-width mt-10 mb-10">
     <thead class="">
     <tr class="bg-grey">
-        <th class="border-top-bottom text-center"><h6>CANT.</h6></th>
-        <th class="border-top-bottom text-center"><h6>UNIDAD</h6></th>
-        <th class="border-top-bottom text-left"><h6>DESCRIPCIÓN</h6></th>
-        <th class="border-top-bottom text-right"><h6>P.UNIT</h6></th>
-        <th class="border-top-bottom text-right"><h6>TOTAL</h6></th>
+        <th class="border-top-bottom text-center py-2">CANT.</th>
+        <th class="border-top-bottom text-center py-2">UNIDAD</th>
+        <th class="border-top-bottom text-left py-2">DESCRIPCIÓN</th>
+        <th class="border-top-bottom text-right py-2">P.UNIT</th>
+        <th class="border-top-bottom text-right py-2">TOTAL</th>
     </tr>
     </thead>
     <tbody>

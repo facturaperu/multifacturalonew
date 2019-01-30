@@ -23,4 +23,10 @@ class Template
         view()->addLocation(__DIR__.'/Templates');
         return view($view, compact('company', 'document'))->render();
     }
+
+    public function pdfFooter()
+    {
+        view()->addLocation(__DIR__.'/Templates');
+        return view('pdf.partials.footer')->render();
+    }
 }
