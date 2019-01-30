@@ -62,7 +62,7 @@ class Functions
                 'item_code_gs1' => $inputs['item_code_gs1'],
                 'unit_type_id' => $inputs['unit_type_id'],
                 'currency_type_id' => $inputs['currency_type_id'],
-                'unit_price' =>  $inputs['unit_price'],
+                'sale_unit_price' =>  $inputs['unit_price'],
                 'sale_affectation_igv_type_id' => $inputs['affectation_igv_type_id'],
                 'purchase_affectation_igv_type_id' => $inputs['affectation_igv_type_id'],
             ]
