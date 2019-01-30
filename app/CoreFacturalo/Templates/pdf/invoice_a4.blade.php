@@ -48,10 +48,10 @@
                     <td width="50%">{{ $document->date_of_issue->format('Y-m-d') }}</td>
                 </tr>
                 @if($invoice->date_of_due)
-                    <tr>
-                        <td width="50%">Fecha de vencimiento: </td>
-                        <td width="50%">{{ $invoice->date_of_due->format('Y-m-d') }}</td>
-                    </tr>
+                <tr>
+                    <td width="50%">Fecha de vencimiento: </td>
+                    <td width="50%">{{ $invoice->date_of_due->format('Y-m-d') }}</td>
+                </tr>
                 @endif
                 <tr>
                     <td width="20%">Cliente:</td>
@@ -62,10 +62,10 @@
                     <td width="80%">{{ $customer->number }}</td>
                 </tr>
                 @if ($customer->address !== '')
-                    <tr>
-                        <td width="20%">Dirección:</td>
-                        <td width="80%">{{ $customer->address }}</td>
-                    </tr>
+                <tr>
+                    <td width="20%">Dirección:</td>
+                    <td width="80%">{{ $customer->address }}</td>
+                </tr>
                 @endif
                 </tbody>
             </table>

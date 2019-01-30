@@ -199,11 +199,25 @@ class Facturalo
 
     public function createPdf()
     {
+        $format_pdf = $this->actions['format_pdf'];
         $template = new Template();
-        $html = $template->pdf($this->type, $this->company, $this->document, $this->actions['format_pdf']);
+        $html = $template->pdf($this->type, $this->company, $this->document, $format_pdf);
 
-        $pdf = new Mpdf();
+        if($format_pdf === 'ticket') {
+            $quantity_rows = count($this->document->items);
+            $pdf = new Mpdf(['mode' => 'utf-8',
+                             'format' => [78, 120 + ($quantity_rows * 10)],
+                             'margin_top' => 2,
+                             'margin_right' => 5,
+                             'margin_bottom' => 0,
+                             'margin_left' => 5]);
+        } else {
+            $pdf = new Mpdf();
+        }
         $pdf->WriteHTML($html);
+
+        $html_footer = $template->pdfFooter();
+        $pdf->SetHTMLFooter($html_footer);
         $this->uploadFile($pdf->output('', 'S'), 'pdf');
     }
 
