@@ -8,12 +8,12 @@
                 <div class="form-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group" :class="{'has-danger': errors.document_type_code}">
+                            <div class="form-group" :class="{'has-danger': errors.document_type_id}">
                                 <label class="control-label">Tipo Documento</label>
-                                <el-select v-model="form.document_type_code">
-                                    <el-option v-for="option in document_types" :key="option.code" :value="option.code" :label="option.description"></el-option>
+                                <el-select v-model="form.document_type_id">
+                                    <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
-                                <small class="form-control-feedback" v-if="errors.document_type_code" v-text="errors.document_type_code[0]"></small>
+                                <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -112,7 +112,7 @@
                 this.errors = {}
                 this.form = {
                     id: null,
-                    document_type_code: '01',
+                    document_type_id: '01',
                     customer_number: null,
                     series: null,
                     number: null,
@@ -133,7 +133,7 @@
                     })
                     .catch(error => {
                         if (error.response.status === 422) {
-                            this.errors = error.response.data.errors
+                            this.errors = error.response.data
                         } else {
                             this.$message.error(error.response.data.message)
                         }

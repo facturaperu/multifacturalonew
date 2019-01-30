@@ -15,7 +15,7 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'document_type_code' => [
+            'document_type_id' => [
                 'required',
             ],
             'series' => [
