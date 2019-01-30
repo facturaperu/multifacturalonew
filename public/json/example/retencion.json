@@ -5,11 +5,6 @@
   "hora_de_emision": "10:11:11",
   "codigo_tipo_documento": "20",
   "datos_del_emisor": {
-    "codigo_pais": "PE",
-    "ubigeo": "150101",
-    "direccion": "Av. 2 de Mayo",
-    "correo_electronico": "demo@gmail.com",
-    "telefono": "427-1148",
     "codigo_del_domicilio_fiscal": "0000"
   },
   "datos_del_proveedor":{
