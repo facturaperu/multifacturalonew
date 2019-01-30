@@ -11,7 +11,7 @@ class RetentionValidation
 
         Functions::validateSeries($inputs);
 
-        $inputs['supplier_id'] = Functions::person($inputs['supplier'], 'supplier');
+        $inputs['supplier_id'] = Functions::person($inputs['supplier'], 'suppliers');
         unset($inputs['supplier']);
 
         return $inputs;
