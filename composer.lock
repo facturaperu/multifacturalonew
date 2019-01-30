@@ -1162,16 +1162,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.7.22",
+            "version": "v5.7.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "64a7749bd9e8df68addce1d01a54bcf606141f29"
+                "reference": "2ede55db4b8201ed0450fa7e7a4d7220aa29bc34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/64a7749bd9e8df68addce1d01a54bcf606141f29",
-                "reference": "64a7749bd9e8df68addce1d01a54bcf606141f29",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/2ede55db4b8201ed0450fa7e7a4d7220aa29bc34",
+                "reference": "2ede55db4b8201ed0450fa7e7a4d7220aa29bc34",
                 "shasum": ""
             },
             "require": {
@@ -1304,7 +1304,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2019-01-22T15:08:35+00:00"
+            "time": "2019-01-29T22:13:46+00:00"
         },
         {
             "name": "laravel/nexmo-notification-channel",
@@ -4417,16 +4417,16 @@
         },
         {
             "name": "thiagoalessio/tesseract_ocr",
-            "version": "2.7.2",
+            "version": "2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thiagoalessio/tesseract-ocr-for-php.git",
-                "reference": "3df8862309e049a25828b6db181d18ddddd8cdb0"
+                "reference": "b369b5496b6e809d012aacf06cbf2db5f6b29f76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thiagoalessio/tesseract-ocr-for-php/zipball/3df8862309e049a25828b6db181d18ddddd8cdb0",
-                "reference": "3df8862309e049a25828b6db181d18ddddd8cdb0",
+                "url": "https://api.github.com/repos/thiagoalessio/tesseract-ocr-for-php/zipball/b369b5496b6e809d012aacf06cbf2db5f6b29f76",
+                "reference": "b369b5496b6e809d012aacf06cbf2db5f6b29f76",
                 "shasum": ""
             },
             "require": {
@@ -4458,7 +4458,7 @@
                 "Tesseract",
                 "text recognition"
             ],
-            "time": "2018-12-11T19:38:54+00:00"
+            "time": "2019-01-30T19:47:33+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
