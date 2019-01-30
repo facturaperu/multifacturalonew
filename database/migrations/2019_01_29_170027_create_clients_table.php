@@ -21,12 +21,12 @@ class CreateClientsTable extends Migration
             $table->string('email');
             $table->string('token');
             $table->boolean('locked')->default(false);
-            $table->unsignedInteger('plan_id')->nullable();
+            $table->unsignedInteger('plan_id');
 
             $table->timestamps();
 
             $table->foreign('hostname_id')->references('id')->on('hostnames')->onDelete('cascade');
-            $table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
+            $table->foreign('plan_id')->references('id')->on('plans');
         });
     }
 
