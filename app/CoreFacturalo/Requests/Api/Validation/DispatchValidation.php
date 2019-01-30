@@ -14,7 +14,7 @@ class DispatchValidation
 
         Functions::validateSeries($inputs);
 
-        $inputs['customer_id'] = Functions::person($inputs['customer'], 'customer');
+        $inputs['customer_id'] = Functions::person($inputs['customer'], 'customers');
         unset($inputs['customer']);
 
         $inputs['items'] = self::items($inputs['items']);

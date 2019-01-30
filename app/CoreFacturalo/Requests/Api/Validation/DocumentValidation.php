@@ -17,7 +17,7 @@ class DocumentValidation
             unset($inputs['affected_document_external_id']);
         }
 
-        $inputs['customer_id'] = Functions::person($inputs['customer'], 'customer');
+        $inputs['customer_id'] = Functions::person($inputs['customer'], 'customers');
         unset($inputs['customer']);
 
         $inputs['items'] = self::items($inputs['items']);
