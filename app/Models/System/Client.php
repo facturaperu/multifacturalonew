@@ -10,7 +10,7 @@ class Client extends Model
 { 
     use UsesSystemConnection;
 
-    protected $with = ['hostname'];
+    protected $with = ['hostname','plan'];
     protected $fillable = [
         'hostname_id',
         'number',

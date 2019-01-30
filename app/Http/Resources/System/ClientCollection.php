@@ -22,6 +22,7 @@ class ClientCollection extends ResourceCollection
                 'email' => $row->email,
                 'token' => $row->token,
                 'number' => $row->number,
+                'plan' => $row->plan->name,
                 'count_doc' => $row->count_doc,
                 'locked' => (bool) $row->locked,
                 'created_at' => $row->created_at->format('Y-m-d H:i:s'),

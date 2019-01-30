@@ -147,6 +147,7 @@
                             <th>Hostname</th>
                             <th>Nombre</th>
                             <th>RUC</th>
+                            <th>Plan</th>
                             <th>Correo</th>
                             <th class="text-right">Contador</th>
                             <th class="text-right">Acciones</th>
@@ -158,6 +159,7 @@
                             <td>{{ row.hostname }}</td>
                             <td>{{ row.name }}</td>
                             <td>{{ row.number }}</td> 
+                            <td>{{ row.plan }}</td> 
                             <td>{{ row.email }}</td>
                             <td class="text-right">{{ row.count_doc }}</td>
                             <td class="text-right">
