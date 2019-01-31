@@ -60,6 +60,7 @@ class SummaryController extends Controller
 
         $facturalo = new Facturalo();
         $facturalo->setDocument($summary);
+        $facturalo->setType('summary');
         $facturalo->statusSummary($summary->ticket);
 
         $response = $facturalo->getResponse();
