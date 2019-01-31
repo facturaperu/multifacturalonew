@@ -151,6 +151,10 @@ p {
     font-size: 12px !important;
 }
 
+.desc {
+  font-size: 10px !important;
+}
+
 
 .m-0 {
   margin: 0 !important;
