@@ -91,32 +91,32 @@
 
 <table class="full-width mt-3">
     <tr>
-        <td width="20%">Documento Afectado:</td>
+        <td width="25%">Documento Afectado:</td>
         <td width="20%">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
-        <td width="25%">Tipo de nota:</td>
-        <td width="35%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
+        <td width="15%">Tipo de nota:</td>
+        <td width="40%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
     </tr>
     <tr>
         <td class="align-top">Descripción:</td>
-        <td class="text-left">{{ $document_base->note_description }}</td>
+        <td class="text-left" colspan="3">{{ $document_base->note_description }}</td>
     </tr>
 </table>
-<table class="voucher-details">
-    <thead>
-    <tr>
-        <th class="text-center" width="80px">CANTIDAD</th>
-        <th width="60px">UNIDAD</th>
-        <th>DESCRIPCIÓN</th>
-        <th class="text-right" width="80px">P.UNIT</th>
-        <th class="text-right" width="80px">TOTAL</th>
+<table class="full-width mt-10 mb-10">
+    <thead class="">
+    <tr class="bg-grey">
+        <th class="border-top-bottom text-center py-2">CANT.</th>
+        <th class="border-top-bottom text-center py-2">UNIDAD</th>
+        <th class="border-top-bottom text-left py-2">DESCRIPCIÓN</th>
+        <th class="border-top-bottom text-right py-2">P.UNIT</th>
+        <th class="border-top-bottom text-right py-2">TOTAL</th>
     </tr>
     </thead>
     <tbody>
     @foreach($document->items as $row)
         <tr>
             <td class="text-center">{{ $row->quantity }}</td>
-            <td>{{ $row->item->unit_type_id }}</td>
-            <td>
+            <td class="text-center">{{ $row->item->unit_type_id }}</td>
+            <td class="text-left">
                 {!! $row->item->description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
@@ -124,14 +124,55 @@
                     @endforeach
                 @endif
             </td>
-            <td  class="text-right" >{{ number_format($row->unit_price, 2) }}</td>
+            <td class="text-right">{{ number_format($row->unit_price, 2) }}</td>
             <td class="text-right">{{ number_format($row->total, 2) }}</td>
         </tr>
+        <tr>
+            <td colspan="5" class="border-bottom"></td>
+        </tr>
     @endforeach
+        @if($document->total_exportation > 0)
+            <tr>
+                <td colspan="4" class="text-right font-bold">OP. EXPORTACIÓN: {{ $document->currency_type->symbol }}</td>
+                <td class="text-right font-bold">{{ number_format($document->total_exportation, 2) }}</td>
+            </tr>
+        @endif
+        @if($document->total_free > 0)
+            <tr>
+                <td colspan="4" class="text-right font-bold">OP. GRATUITAS: {{ $document->currency_type->symbol }}</td>
+                <td class="text-right font-bold">{{ number_format($document->total_free, 2) }}</td>
+            </tr>
+        @endif
+        @if($document->total_unaffected > 0)
+            <tr>
+                <td colspan="4" class="text-right font-bold">OP. INAFECTAS: {{ $document->currency_type->symbol }}</td>
+                <td class="text-right font-bold">{{ number_format($document->total_unaffected, 2) }}</td>
+            </tr>
+        @endif
+        @if($document->total_exonerated > 0)
+            <tr>
+                <td colspan="4" class="text-right font-bold">OP. EXONERADAS: {{ $document->currency_type->symbol }}</td>
+                <td class="text-right font-bold">{{ number_format($document->total_exonerated, 2) }}</td>
+            </tr>
+        @endif
+        @if($document->total_taxed > 0)
+            <tr>
+                <td colspan="4" class="text-right font-bold">OP. GRAVADAS: {{ $document->currency_type->symbol }}</td>
+                <td class="text-right font-bold">{{ number_format($document->total_taxed, 2) }}</td>
+            </tr>
+        @endif
+        <tr>
+            <td colspan="4" class="text-right font-bold">IGV: {{ $document->currency_type->symbol }}</td>
+            <td class="text-right font-bold">{{ number_format($document->total_igv, 2) }}</td>
+        </tr>
+        <tr>
+            <td colspan="4" class="text-right font-bold">TOTAL A PAGAR: {{ $document->currency_type->symbol }}</td>
+            <td class="text-right font-bold">{{ number_format($document->total, 2) }}</td>
+        </tr>
     </tbody>
     <tfoot style="border-top: 1px solid #333;">
     <tr>
-        <td colspan="5" class="font-lg font-bold"  style="padding-top: 2rem;">Son: {{ $document->number_to_letter }} {{ $document->currency_type->description }}</td>
+        <td colspan="5" class="font-lg"  style="padding-top: 2rem;">Son: <span class="font-bold">{{ $document->number_to_letter }} {{ $document->currency_type->description }}</span></td>
     </tr>
     @if(isset($document->optional->observations))
         <tr>
@@ -145,73 +186,14 @@
     @endif
     </tfoot>
 </table>
-<table class="voucher-totals">
-    <tbody>
+
+<table class="full-width">
     <tr>
-        <td width="35%">
-            <table class="voucher-totals-left">
-                {{--<tbody>--}}
-                <tr><td class="text-center">
-                        <img class="qr_code" src="data:image/png;base64, {{ $document->qr }}" /></td>
-                </tr>
-                <tr><td class="text-center">{{ $document->hash }}</td></tr>
-                <tr><td class="text-center">Código Hash</td></tr>
-                {{--</tbody>--}}
-            </table>
-        </td>
         <td width="65%">
-            <table class="voucher-totals-right">
-                <tbody>
-                @if($document->total_exportation > 0)
-                    <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. EXPORTACIÓN: {{ $document->currency_type->symbol }}</td>
-                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_exportation, 2) }}</td>
-                    </tr>
-                @endif
-                @if($document->total_free > 0)
-                    <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. GRATUITAS: {{ $document->currency_type->symbol }}</td>
-                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_free, 2) }}</td>
-                    </tr>
-                @endif
-                @if($document->total_unaffected > 0)
-                    <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. INAFECTAS: {{ $document->currency_type->symbol }}</td>
-                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_unaffected, 2) }}</td>
-                    </tr>
-                @endif
-                @if($document->total_exonerated > 0)
-                    <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. EXONERADAS: {{ $document->currency_type->symbol }}</td>
-                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_exonerated, 2) }}</td>
-                    </tr>
-                @endif
-                @if($document->total_taxed > 0)
-                    <tr>
-                        <td class="text-right font-lg font-bold" width="70%">OP. GRAVADAS: {{ $document->currency_type->symbol }}</td>
-                        <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_taxed, 2) }}</td>
-                    </tr>
-                @endif
-                <tr>
-                    <td class="text-right font-lg font-bold" width="70%">IGV: {{ $document->currency_type->symbol }}</td>
-                    <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total_igv, 2) }}</td>
-                </tr>
-                <tr>
-                    <td class="text-right font-lg font-bold" width="70%">TOTAL A PAGAR: {{ $document->currency_type->symbol }}</td>
-                    <td class="text-right font-lg font-bold" width="30%">{{ number_format($document->total, 2) }}</td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="text-left"><img class="qr_code" src="data:image/png;base64, {{ $document->qr }}" /></div>
+            <p>Código Hash: {{ $document->hash }}</p>
         </td>
     </tr>
-    </tbody>
-</table>
-<table class="voucher-footer">
-    <tbody>
-    <tr>
-        {{--<td class="text-center font-sm">Para consultar el comprobante ingresar a {{ $company->cpe_url }}</td>--}}
-    </tr>
-    </tbody>
 </table>
 </body>
 </html>

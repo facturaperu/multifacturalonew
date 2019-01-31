@@ -84,19 +84,19 @@
 <table class="full-width mt-10 mb-10">
     <thead class="">
     <tr>
-        <th class="border-top-bottom desc">CANT.</th>
-        <th class="border-top-bottom desc">UNIDAD</th>
-        <th class="border-top-bottom desc">DESCRIPCIÓN</th>
-        <th class="border-top-bottom desc">P.UNIT</th>
-        <th class="border-top-bottom desc">TOTAL</th>
+        <th class="border-top-bottom desc-9 text-left">CANT.</th>
+        <th class="border-top-bottom desc-9 text-left">UNIDAD</th>
+        <th class="border-top-bottom desc-9 text-left">DESCRIPCIÓN</th>
+        <th class="border-top-bottom desc-9 text-left">P.UNIT</th>
+        <th class="border-top-bottom desc-9 text-left">TOTAL</th>
     </tr>
     </thead>
     <tbody>
     @foreach($document->items as $row)
         <tr>
-            <td class="text-center desc">{{ $row->quantity }}</td>
-            <td class="text-center desc">{{ $row->item->unit_type_id }}</td>
-            <td class="text-center desc">
+            <td class="text-center desc-9 align-top">{{ $row->quantity }}</td>
+            <td class="text-center desc-9 align-top">{{ $row->item->unit_type_id }}</td>
+            <td class="text-left desc-9 align-top">
                 {!! $row->item->description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
@@ -104,8 +104,8 @@
                     @endforeach
                 @endif
             </td>
-            <td class="text-right desc">{{ number_format($row->unit_price, 2) }}</td>
-            <td class="text-right desc">{{ number_format($row->total, 2) }}</td>
+            <td class="text-right desc-9 align-top">{{ number_format($row->unit_price, 2) }}</td>
+            <td class="text-right desc-9 align-top">{{ number_format($row->total, 2) }}</td>
         </tr>
         <tr>
             <td colspan="5" class="border-bottom"></td>
