@@ -3,16 +3,11 @@ namespace App\Http\Controllers\Tenant\Api;
 
 use App\CoreFacturalo\Services\Dni\Dni;
 use App\CoreFacturalo\Services\Extras\ExchangeRate;
-use App\CoreFacturalo\Services\Extras\ExchangeRateService;
 use App\CoreFacturalo\Services\Ruc\Sunat;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
-use App\Models\Tenant\Document;
-//use App\Models\Tenant\ExchangeRate;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class ServiceController extends Controller
 {
