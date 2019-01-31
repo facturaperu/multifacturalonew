@@ -2,90 +2,70 @@
     $establishment = $document->establishment;
     $supplier = $document->supplier;
     $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
+
+    $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
 @endphp
 <html>
 <head>
-    <title>{{ $document->number_full }}</title>
+    <title>{{ $document_number }}</title>
     <link href="{{ $path_style }}" rel="stylesheet" />
 </head>
 <body>
 <table class="full-width">
     <tr>
         @if($company->logo)
-            <td width="25%">
-                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="logo">
+            <td width="10%">
+                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" alt="{{ $company->name }}" style="max-width: 200px">
             </td>
         @endif
-        <td width="100%">
-            <table class="">
-                <tbody>
-                <tr><td class="text-left font-xlg font-bold">{{ $company->name }}</td></tr>
-                <tr><td class="text-left font-md">{{ $establishment->address }}</td></tr>
-                <tr><td class="text-left font-md">{{ ($establishment->email != '-')? $establishment->email : '' }}</td></tr>
-                <tr><td class="text-left font-md font-bold">{{ ($establishment->telephone != '-')? $establishment->telephone : '' }}</td></tr>
-                </tbody>
-            </table>
+        <td width="50%" class="pl-3">
+            <div class="text-left">
+                <h3 class="">{{ $company->name }}</h3>
+                <h4>{{ 'RUC '.$company->number }}</h4>
+                <h5>{{ ($establishment->address !== '-')? $establishment->address : '' }}</h5>
+                <h5>{{ ($establishment->email !== '-')? $establishment->email : '' }}</h5>
+                <h5>{{ ($establishment->telephone !== '-')? $establishment->telephone : '' }}</h5>
+            </div>
         </td>
-        <td width="30%">
-            <table class="border-box">
-                <tr><td class="text-center font-lg  font-bold pt-20">{{ 'RUC '.$company->number }}</td></tr>
-                <tr><td class="text-center font-lg  font-bold">{{ $document->document_type->description }}</td></tr>
-                <tr><td class="text-center font-xlg font-bold pb-20">{{ $document->number_full }}</td></tr>
-            </table>
+        <td width="40%" class="border-box p-3 text-center">
+            <h4 class="text-center">{{ $document->document_type->description }}</h4>
+            <h3 class="text-center">{{ $document_number }}</h3>
         </td>
     </tr>
 </table>
-<table class="full-width">
+<table class="full-width mt-5">
     <tr>
-        <td width="55%" class="align-top">
-            <table class="">
-                <tbody>
-                <tr>
-                    <td width="30%">Señor(es):</td>
-                    <td width="70%">{{ $supplier->name }}</td>
-                </tr>
-                <tr>
-                    <td width="30%">{{ $supplier->identity_document_type->description }}:</td>
-                    <td width="70%">{{ $supplier->number }}</td>
-                </tr>
-                <tr>
-                    <td width="30%">Dirección:</td>
-                    <td width="70%">{{ $supplier->address }}</td>
-                </tr>
-                <tr>
-                    <td width="30%">Régimen de retención:</td>
-                    <td width="70%">{{ $document->retention_type->description }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-        <td width="45%" class="align-top">
-            <table class="">
-                <tbody>
-                <tr>
-                    <td width="40%">Fecha de emisión: </td>
-                    <td width="60%">{{ $document->date_of_issue->format('d/m/Y') }}</td>
-                </tr>
-                <tr>
-                    <td width="40%">Moneda: </td>
-                    <td width="60%">{{ $document->currency_type_id }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
+        <td width="25%">Señor(es):</td>
+        <td width="45%">{{ $supplier->name }}</td>
+        <td width="15%">Fecha de emisión:</td>
+        <td width="15%">{{ $document->date_of_issue->format('d/m/Y') }}</td>
+    </tr>
+    <tr>
+        <td>{{ $supplier->identity_document_type->description }}:</td>
+        <td>{{ $supplier->number }}</td>
+        <td>Moneda:</td>
+        <td>{{ $document->currency_type_id }}</td>
+    </tr>
+    <tr>
+        <td>Dirección:</td>
+        <td colspan="3">{{ $supplier->address }}</td>
+    </tr>
+    <tr>
+        <td>Régimen de retención:</td>
+        <td colspan="3">{{ $document->retention_type->description }}</td>
     </tr>
 </table>
 <table class="full-width mt-10 mb-10">
     <thead class="">
-    <tr>
-        <th class="border-top-bottom text-center">Tipo<br/>Comprobante</th>
-        <th class="border-top-bottom text-center">Número<br/>Comprobante</th>
-        <th class="border-top-bottom text-center">Fecha de<br/>Emisión</th>
-        <th class="border-top-bottom text-center">Moneda<br/>Comprobante</th>
-        <th class="border-top-bottom text-center">Total<br/>Comprobante</th>
-        <th class="border-top-bottom text-center">Tasa %</th>
-        <th class="border-top-bottom text-center">Importe<br/>Retención</th>
-        <th class="border-top-bottom text-center">Tipo<br/>Cambio</th>
+    <tr class="bg-grey">
+        <th class="border-top-bottom text-center desc">Tipo<br/>Comprobante</th>
+        <th class="border-top-bottom text-center desc">Número<br/>Comprobante</th>
+        <th class="border-top-bottom text-center desc">Fecha de<br/>Emisión</th>
+        <th class="border-top-bottom text-center desc">Moneda<br/>Comprobante</th>
+        <th class="border-top-bottom text-center desc">Total<br/>Comprobante</th>
+        <th class="border-top-bottom text-center desc">Tasa %</th>
+        <th class="border-top-bottom text-center desc">Importe<br/>Retención</th>
+        <th class="border-top-bottom text-center desc">Tipo<br/>Cambio</th>
     </tr>
     </thead>
     <tbody>
@@ -113,9 +93,11 @@
     </tfoot>
 </table>
 <table class="full-width">
+    @if($document->hash)
     <tr>
         <td>Código Hash: {{ $document->hash }}</td>
     </tr>
+    @endif
     @foreach($document->legends as $row)
         <tr>
             <td class="font-bold">{{ $row->value }}</td>
