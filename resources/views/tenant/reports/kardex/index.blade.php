@@ -16,7 +16,7 @@
                             <div class="box ">
                                 <div class="box-body no-padding">
                                     {{Form::label('item_id', 'Producto')}}
-                                    {{Form::select('item_id', $items->pluck('description', 'id'), old('item_id', request()->item_id), ['class' => 'form-control'])}}
+                                    {{Form::select('item_id', $items->pluck('description', 'id'), old('item_id', request()->item_id), ['class' => 'form-control col-md-6'])}}
                                 </div>
                                 <div class="el-form-item col-xs-12">
                                     <div class="el-form-item__content">
