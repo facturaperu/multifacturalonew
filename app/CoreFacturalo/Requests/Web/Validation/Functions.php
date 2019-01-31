@@ -20,20 +20,19 @@ class Functions
         }
         throw new Exception("El código ingresado del establecimiento es incorrecto.");
     }
-
-    public static function person($inputs, $type)
-    {
+    
+    public static function person($inputs, $type) {
+        if (isset($inputs['id'])) return Person::find($inputs['id'])->id;
+        
         $district_id = $inputs['district_id'];
-        $province_id = ($district_id)?substr($district_id, 0 ,4):null;
-        $department_id = ($district_id)?substr($district_id, 0 ,2):null;
-
-        $person = Person::updateOrCreate(
-            [
+        $province_id = ($district_id) ? substr($district_id, 0 ,4) : null;
+        $department_id = ($district_id) ? substr($district_id, 0 ,2) : null;
+        
+        $person = Person::updateOrCreate( [
                 'type' => $type,
                 'identity_document_type_id' => $inputs['identity_document_type_id'],
                 'number' => $inputs['number'],
-            ],
-            [
+            ], [
                 'name' => $inputs['name'],
                 'trade_name' => $inputs['trade_name'],
                 'country_id' => $inputs['country_id'],
@@ -43,9 +42,8 @@ class Functions
                 'address' => $inputs['address'],
                 'email' => $inputs['email'],
                 'telephone' => $inputs['telephone'],
-            ]
-        );
-
+        ]);
+        
         return $person->id;
     }
 
