@@ -60,6 +60,7 @@ class VoidedController extends Controller
 
         $facturalo = new Facturalo();
         $facturalo->setDocument($summary);
+        $facturalo->setType('voided');
         $facturalo->statusSummary($summary->ticket);
 
         $response = $facturalo->getResponse();

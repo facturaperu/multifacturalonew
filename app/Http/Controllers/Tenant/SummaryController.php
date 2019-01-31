@@ -80,6 +80,7 @@ class SummaryController extends Controller
         $fact = DB::connection('tenant')->transaction(function () use($document) {
             $facturalo = new Facturalo();
             $facturalo->setDocument($document);
+            $facturalo->setType('summary');
             $facturalo->statusSummary($document->ticket);
             return $facturalo;
         });

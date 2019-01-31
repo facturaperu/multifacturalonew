@@ -66,6 +66,11 @@ class Facturalo
         return $this->document;
     }
 
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
     public function getResponse()
     {
         return $this->response;
@@ -206,7 +211,7 @@ class Facturalo
         if($format_pdf === 'ticket') {
             $quantity_rows = count($this->document->items);
             $pdf = new Mpdf(['mode' => 'utf-8',
-                             'format' => [78, 120 + ($quantity_rows * 10)],
+                             'format' => [78, 220 + ($quantity_rows * 10)],
                              'margin_top' => 2,
                              'margin_right' => 5,
                              'margin_bottom' => 0,
