@@ -28,8 +28,8 @@ class TenantKardexTable extends Migration
  
             $table->timestamps();
 
-            $table->foreign('purchase_id')->references('id')->on('purchases');
-            $table->foreign('document_id')->references('id')->on('documents');
+            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
+            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->foreign('item_id')->references('id')->on('items'); 
         });
     }
