@@ -66,6 +66,11 @@ class Facturalo
         return $this->document;
     }
 
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
     public function getResponse()
     {
         return $this->response;
