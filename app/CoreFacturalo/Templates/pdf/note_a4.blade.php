@@ -17,264 +17,88 @@
         '6' => 'RUC',
     ];
 
-
-    //$note = $document->note;
-    //$establishment = $document->establishment;
-    //$customer = $document->customer;
-    //$details = $document->details;
-    //$optional = $document->optional;
-    //$document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
-    //$document_type_description_array = [
-    //    '01' => 'FACTURA',
-    //    '03' => 'BOLETA DE VENTA',
-    //    '07' => 'NOTA DE CREDITO',
-    //    '08' => 'NOTA DE DEBITO',
-    //];
-    //$identity_document_type_description_array = [
-    //    '-' => 'S/D',
-    //    '0' => 'S/D',
-    //    '1' => 'DNI',
-    //    '6' => 'RUC',
-    //];
-    //$document_type_description = $document_type_description_array[$document->document_type_code];
-    //$currency = \App\Models\Tenant\Catalogs\Code::byCatalogAndCode('02', $document->currency_type->description);
+    $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
 @endphp
 <html>
 <head>
     <title>{{ $document_number }}</title>
-    <style>
-        html {
-            font-family: sans-serif;
-            font-size: 12px;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .font-xsm {
-            font-size: 10px;
-        }
-        .font-sm {
-            font-size: 12px;
-        }
-        .font-lg {
-            font-size: 13px;
-        }
-        .font-xlg {
-            font-size: 16px;
-        }
-        .font-xxlg {
-            font-size: 22px;
-        }
-        .font-bold {
-            font-weight: bold;
-        }
-        table {
-            width: 100%;
-            border-spacing: 0;
-        }
-        .voucher-company-right {
-            border: 1px solid #333;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            margin-bottom: 10px;
-        }
-        .voucher-company-right tbody tr:first-child td {
-            padding-top: 10px;
-        }
-        .voucher-company-right tbody tr:last-child td {
-            padding-bottom: 10px;
-        }
-        .voucher-information {
-            border: 1px solid #333;
-        }
-        .voucher-information.top-note, .voucher-information.top-note tbody tr td {
-            border-top: 0;
-        }
-        .voucher-information tbody tr td {
-            padding-top: 5px;
-            padding-bottom: 5px;
-            vertical-align: top;
-        }
-        .voucher-information-left tbody tr td {
-            padding: 3px 10px;
-            vertical-align: top;
-        }
-        .voucher-information-right tbody tr td {
-            padding: 3px 10px;
-            vertical-align: top;
-        }
-        .voucher-details {
-        }
-        .voucher-details thead {
-            background-color: #f5f5f5;
-        }
-        .voucher-details thead tr th {
-            /*border-top: 1px solid #333;*/
-            /*border-bottom: 1px solid #333;*/
-            padding: 5px 10px;
-        }
-        .voucher-details thead tr th:first-child {
-            border-left: 1px solid #333;
-        }
-        .voucher-details thead tr th:last-child {
-            border-right: 1px solid #333;
-        }
-        .voucher-details tbody tr td {
-            /*border-bottom: 1px solid #333;*/
-        }
-        .voucher-details tbody tr td:first-child {
-            border-left: 1px solid #333;
-        }
-        .voucher-details tbody tr td:last-child {
-            border-right: 1px solid #333;
-        }
-        .voucher-details tbody tr td {
-            padding: 5px 10px;
-            vertical-align: middle;
-        }
-        .voucher-details tfoot tr td {
-            padding: 3px 10px;
-        }
-        .voucher-totals {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        .voucher-totals tbody tr td {
-            padding: 3px 10px;
-            vertical-align: top;
-        }
-        .voucher-footer {
-            margin-bottom: 30px;
-        }
-        .voucher-footer tbody tr td{
-            border-top: 1px solid #333;
-            padding: 3px 10px;
-        }
-        .company_logo {
-            min-width: 150px;
-            max-width: 100%;
-            height: auto;
-        }
-        .pt-1 {
-            padding-top: 1rem;
-        }
-    </style>
+    <link href="{{ $path_style }}" rel="stylesheet" />
 </head>
 <body>
-{{--<script type="text/php">--}}
-{{--if (isset($pdf)) {--}}
-{{--$pdf->page_text(120, 740, "Para consultar el comprobante ingresar a {!! url('/') !!}/search", "Arial", 8, array(0, 0, 0));--}}
-{{--$font = $fontMetrics->getFont("Arial", "bold");--}}
-{{--$pdf->page_text(530, 740, "Página {PAGE_NUM} de {PAGE_COUNT}", $font, 7, array(0, 0, 0));--}}
-{{--}--}}
-{{--</script>--}}
-<table class="voucher-company">
+
+<table class="full-width">
     <tr>
         @if($company->logo)
-            <td width="25%">
-                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo">
+            <td width="20%">
+                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="{{ $company->name }}" style="max-width: 300px">
             </td>
         @endif
-        <td width="100%">
-            <table class="voucher-company-left">
-                <tbody>
-                <tr><td class="text-left font-xxlg font-bold">{{ $company->name }}</td></tr>
-                <tr><td class="text-left font-xl font-bold">{{ 'RUC '.$company->number }}</td></tr>
-                @if($establishment)
-                    <tr><td class="text-left font-lg">{{ $establishment->address }}</td></tr>
-                    <tr><td class="text-left font-lg">{{ ($establishment->email != '-')? $establishment->email : '' }}</td></tr>
-                    <tr><td class="text-left font-lg font-bold">{{ ($establishment->telephone != '-')? $establishment->telephone : '' }}</td></tr>
-                @endif
-                </tbody>
-            </table>
+        <td width="80%" class="pl-3">
+            <div class="text-left">
+                <h2 class="">{{ $company->name }}</h2>
+                <h3>{{ 'RUC '.$company->number }}</h3>
+                <h4>{{ ($establishment->address !== '-')? $establishment->address : '' }}</h4>
+                <h4>{{ ($establishment->email !== '-')? $establishment->email : '' }}</h4>
+                <h4>{{ ($establishment->telephone !== '-')? $establishment->telephone : '' }}</h4>
+            </div>
         </td>
-        <td width="30%">
-            <table class="voucher-company-right">
-                <tbody>
-                <tr><td class="text-center font-lg">{{ $document->document_type->description }}</td></tr>
-                <tr><td class="text-center font-xlg font-bold">{{ $document_number }}</td></tr>
-                </tbody>
-            </table>
+        <td width="45%" class="border-box p-4 text-center">
+            <h3 class="text-center">{{ $document->document_type->description }}</h3>
+            <h2 class="text-center">{{ $document_number }}</h2>
         </td>
     </tr>
 </table>
-<table class="voucher-information">
+
+<table class="full-width mt-5">
     <tr>
-        <td width="55%">
-            <table class="voucher-information-left">
-                <tbody>
-                <tr>
-                    <td width="50%">Fecha de emisión: </td>
-                    <td width="50%">{{ $document->date_of_issue->format('d/m/Y') }}</td>
-                </tr>
-                <tr>
-                    <td width="20%">Cliente:</td>
-                    <td width="80%">{{ $customer->name }}</td>
-                </tr>
-                <tr>
-                    <td width="20%">{{ $customer->identity_document_type->description }}:</td>
-                    <td width="80%">{{ $customer->number }}</td>
-                </tr>
-                @if ($customer->address !== '')
-                    <tr>
-                        <td width="20%">Dirección:</td>
-                        <td width="80%">{{ $customer->address }}</td>
-                    </tr>
-                @endif
-                </tbody>
-            </table>
-        </td>
-        <td width="45%">
-            <table class="voucher-information-right">
-                <tbody>
-                @if ($document->purchase_order)
-                    <tr>
-                        <td width="50%">Orden de Compra: </td>
-                        <td width="50%">{{ $document->purchase_order }}</td>
-                    </tr>
-                @endif
-                @if ($document->guides)
-                    @foreach($document->guides as $guide)
-                        <tr>
-                            <td>{{ $guide->document_type_id }}</td>
-                            <td>{{ $guide->number }}</td>
-                        </tr>
-                    @endforeach
-                @endif
-                </tbody>
-            </table>
-        </td>
+        <td width="15%">Cliente:</td>
+        <td width="45%">{{ $customer->name }}</td>
+        <td width="25%">Fecha de emisión:</td>
+        <td width="15%">{{ $document->date_of_issue->format('Y-m-d') }}</td>
     </tr>
+    <tr>
+        <td>{{ $customer->identity_document_type->description }}:</td>
+        <td>{{ $customer->number }}</td>
+        @if($document->date_of_due)
+        <td>Fecha de vencimiento:</td>
+        <td>{{ $document->date_of_due->format('Y-m-d') }}</td>
+        @endif
+    </tr>
+    @if ($customer->address !== '')
+    <tr>
+        <td class="align-top">Dirección:</td>
+        <td colspan="3">{{ $customer->address }}</td>
+    </tr>
+    @endif
 </table>
-<table class="voucher-information top-note">
+
+<table class="full-width mt-3">
+    @if ($document->purchase_order)
+        <tr>
+            <td width="25%">Orden de Compra: </td>
+            <td class="text-left">{{ $document->purchase_order }}</td>
+        </tr>
+    @endif
+    @if ($document->guides)
+        @foreach($document->guides as $guide)
+            <tr>
+                <td>{{ $guide->document_type_id }}</td>
+                <td>{{ $guide->number }}</td>
+            </tr>
+        @endforeach
+    @endif
+</table>
+
+<table class="full-width mt-3">
     <tr>
-        <td>
-            <table class="voucher-information-left">
-                <tbody>
-                <tr>
-                    <td width="20%">Documento Afectado:</td>
-                    <td width="20%">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
-                    <td width="25%" class="text-right">Tipo de nota:</td>
-                    <td width="35%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
+        <td width="20%">Documento Afectado:</td>
+        <td width="20%">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
+        <td width="25%">Tipo de nota:</td>
+        <td width="35%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
     </tr>
     <tr>
-        <td width="100%">
-            <table class="voucher-information-left">
-                <tbody>
-                <tr>
-                    <td width="20%">Descripción:</td>
-                    <td width="80%" class="text-left">{{ $document_base->note_description }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
+        <td class="align-top">Descripción:</td>
+        <td class="text-left">{{ $document_base->note_description }}</td>
     </tr>
 </table>
 <table class="voucher-details">
