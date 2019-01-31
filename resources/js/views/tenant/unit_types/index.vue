@@ -1,9 +1,18 @@
 <template>
-    <div class="card">
+    <div class="card card-collapsed">
         <div class="card-header bg-info">
             <h3 class="my-0">Listado de unidades</h3>
+            <div class="card-actions white-text">
+                <a href="#" class="card-action card-action-toggle text-white" data-card-toggle=""></a>
+                <a href="#" class="card-action card-action-dismiss text-white" data-card-dismiss=""></a>
+            </div>
         </div>
         <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>

@@ -36,10 +36,13 @@ class KardexServiceProvider extends ServiceProvider
                     'purchase_id' => null,
                     'quantity' => $document_item->quantity,
                 ]);
-
-                $item = Item::find($document_item->item_id);
-                $item->stock -= $kardex->quantity;
-                $item->save();
+                
+                if($document->state_type_id != 11){
+                    $item = Item::find($document_item->item_id);
+                    $item->stock -= $kardex->quantity;
+                    $item->save();
+                }
+                
             }
         });
     }
