@@ -232,10 +232,9 @@
                 all_customers: [],
                 customers: [],
                 company: null,
-                // company_logo: null,
                 operation_types: [],
                 establishments: [],
-                establishment: [],
+                establishment: null,
                 all_series: [],
                 series: [],
                 currency_type: {},
@@ -243,9 +242,7 @@
             }
         },
         async created() {
-            console.log(1)
             await this.initForm()
-            console.log(2)
             await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.document_types = response.data.document_types_invoice
@@ -256,6 +253,7 @@
                     this.all_customers = response.data.customers
                     this.discount_types = response.data.discount_types
                     this.charges_types = response.data.charges_types
+                    this.company = response.data.company
 
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
@@ -266,14 +264,8 @@
                     this.changeDateOfIssue()
                     this.changeDocumentType()
                     this.changeCurrencyType()
-
-                    this.establishment = (this.establishments.length > 0)?this.establishments[0]:null
-                    this.company = response.data.company
-                    // this.company_logo = response.data.company.logo
                 })
-            console.log(3)
             this.loading_form = true
-            console.log(4)
             this.$eventHub.$on('reloadDataPersons', (customer_id) => {
                 this.reloadDataCustomers(customer_id)
             })
@@ -335,6 +327,7 @@
 
             },
             changeEstablishment() {
+                this.establishment = _.find(this.establishments, {'id': this.form.establishment_id})
                 this.filterSeries()
             },
             changeDocumentType() {
@@ -358,7 +351,7 @@
                 if(this.form.document_type_id === '01') {
                     this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
                 } else {
-                    this.customers = this.all_customers
+                    this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
                 }
             },
             addRow(row) {
