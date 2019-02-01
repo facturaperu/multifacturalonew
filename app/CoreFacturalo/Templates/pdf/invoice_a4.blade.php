@@ -43,7 +43,7 @@
     <tr>
         <td>{{ $customer->identity_document_type->description }}:</td>
         <td>{{ $customer->number }}</td>
-        @if($invoice->date_of_due)
+        @if($invoice)
         <td>Fecha de vencimiento:</td>
         <td>{{ $invoice->date_of_due->format('Y-m-d') }}</td>
         @endif
