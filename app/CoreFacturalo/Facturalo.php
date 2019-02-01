@@ -215,25 +215,15 @@ class Facturalo
             $total_exonerated  = $this->document->total_exonerated != '' ? '10' : '0';
             $total_taxed       = $this->document->total_taxed != '' ? '10' : '0';
             $p_order           = $this->document->purchase_order != '' ? '10' : '0';
-            $company_name      = strlen($this->company->name) > '20' ? '10' : '0';
-            $customer_name     = strlen($this->document->customer->name) > '25' ? '10' : '0';
-            if (strlen($this->document->customer->address) > 25 && strlen($this->document->customer->address) < 50) {
-                $customer_address = '20';
-            } elseif (strlen($this->document->customer->address) > 50 && strlen($this->document->customer->address) < 100) {
-                $customer_address = '40';
-            } elseif (strlen($this->document->customer->address) > 100 && strlen($this->document->customer->address) < 150) {
-                $customer_address = '60';
-            } elseif (strlen($this->document->customer->address) > 150) {
-                $customer_address = '80';
-            } else {
-                $customer_address = '10';
-            }
+            $company_name      = strlen($this->company->name) > '20' ? '20' : '0';
+            $customer_name     = strlen($this->document->customer->name) > '25' ? '20' : '0';
+            $customer_address = strlen($this->document->customer->name) > '25' ? '100' : '0';
             $customer_address  = strlen($this->document->customer->address) > '25' ? '20' : '0';
             $quantity_rows     = count($this->document->items);
             $legends           = $this->document->legends != '' ? '10' : '0';
 
             $pdf = new Mpdf(['mode' => 'utf-8',
-                             'format' => [78, 200 + ($quantity_rows * 10) + $p_order + $company_name + $legends + $total_exportation + $total_free + $total_unaffected + $total_exonerated + $total_taxed + $customer_name + $customer_address],
+                             'format' => [78, 280 + ($quantity_rows * 10) + $p_order + $company_name + $legends + $total_exportation + $total_free + $total_unaffected + $total_exonerated + $total_taxed + $customer_name + $customer_address],
                              'margin_top' => 2,
                              'margin_right' => 5,
                              'margin_bottom' => 0,

@@ -20,10 +20,10 @@
         @endif
     </tr>
     <tr>
-        <td class="text-center"><h3>{{ $company->name }}</h3></td>
+        <td class="text-center"><h4>{{ $company->name }}</h4></td>
     </tr>
     <tr>
-        <td class="text-center"><h4>{{ 'RUC '.$company->number }}</h4></td>
+        <td class="text-center"><h5>{{ 'RUC '.$company->number }}</h5></td>
     </tr>
     <tr>
         <td class="text-center">{{ ($establishment->address !== '-')? $establishment->address : '' }}</td>
@@ -46,14 +46,14 @@
         <td width="45%" class="pt-3"><p class="desc">Fecha de emisión:</p></td>
         <td width="" class="pt-3"><p class="desc">{{ $document->date_of_issue->format('Y-m-d') }}</p></td>
     </tr>
-    
+
     @isset($invoice->date_of_due)
     <tr>
         <td><p class="desc">Fecha de vencimiento:</p></td>
         <td><p class="desc">{{ $invoice->date_of_due->format('Y-m-d') }}</p></td>
-    </tr>  
+    </tr>
     @endisset
-   
+
     <tr>
         <td class="align-top"><p class="desc">Cliente:</p></td>
         <td><p class="desc">{{ $customer->name }}</p></td>
@@ -160,7 +160,7 @@
         @endforeach
     </tr>
     <tr>
-        <td class="text-center pt-5"><img class="qr_code" src="data:image/png;base64, {{ $document->qr }}" /></td>
+        <td class="text-center pt-3"><img class="qr_code" src="data:image/png;base64, {{ $document->qr }}" /></td>
     </tr>
     <tr>
         <td class="text-center desc">Código Hash: {{ $document->hash }}</td>
