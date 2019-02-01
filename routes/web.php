@@ -12,8 +12,8 @@ if ($hostname) {
         Route::get('search/tables', 'Tenant\SearchController@tables');
         Route::post('search', 'Tenant\SearchController@store');
 
-        Route::get('downloads/{model}/{type}/{external_id}', 'Tenant\DownloadController@downloadExternal')->name('tenant.download.external_id');
-        Route::get('print/{model}/{external_id}', 'Tenant\DownloadController@toPrint');
+        Route::get('downloads/{model}/{type}/{external_id}/{format?}', 'Tenant\DownloadController@downloadExternal')->name('tenant.download.external_id');
+        Route::get('print/{model}/{external_id}/{format?}', 'Tenant\DownloadController@toPrint');
 
         Route::middleware(['auth', 'module'])->group(function() {
             Route::get('/', function () {
