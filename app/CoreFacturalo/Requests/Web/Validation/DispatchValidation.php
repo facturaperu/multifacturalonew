@@ -25,9 +25,10 @@ class DispatchValidation
         $items = [];
         
         foreach ($inputs as $row) {
-            $item = Item::where('internal_id', $row['internal_id'])->first();
+
+            // $item = Item::where('internal_id', $row['internal_id'])->first();
             
-            if (!$item) throw new Exception("El código interno {$row['internal_id']} no fue encontrado.");
+            // if (!$item) throw new Exception("El código interno {$row['internal_id']} no fue encontrado.");
             
             $items[] = [
                 'item_id' => $row['id'],
