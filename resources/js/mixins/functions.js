@@ -74,7 +74,7 @@ export const functions = {
 export const exchangeRate = {
     methods: {
         async searchExchangeRateByDate(exchange_rate_date) {
-            let response = await this.$http.post(`/services/search_exchange_rate`, {
+            let response = await this.$http.post(`/api/services/search_exchange_rate`, {
                 exchange_rate_date: exchange_rate_date
             })
             if (response.data.success) {

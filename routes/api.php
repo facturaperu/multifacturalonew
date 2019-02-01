@@ -1,6 +1,6 @@
 <?php
 
-Route::get('services/exchange_rate', 'Tenant\Api\ServiceController@exchangeRate');
+Route::post('services/search_exchange_rate', 'Tenant\Api\ServiceController@exchangeRate');
 $hostname = app(Hyn\Tenancy\Contracts\CurrentHostname::class);
 
 if ($hostname) {
