@@ -59,10 +59,12 @@
     <tr>
         <td>{{ $customer->identity_document_type->description }}:</td>
         <td>{{ $customer->number }}</td>
-        @if($document->date_of_due)
-        <td>Fecha de vencimiento:</td>
-        <td>{{ $document->date_of_due->format('Y-m-d') }}</td>
-        @endif
+       
+        @isset($document->date_of_due)            
+            <td>Fecha de vencimiento:</td>
+            <td>{{ $document->date_of_due->format('Y-m-d') }}</td>
+        @endisset
+        
     </tr>
     @if ($customer->address !== '')
     <tr>
