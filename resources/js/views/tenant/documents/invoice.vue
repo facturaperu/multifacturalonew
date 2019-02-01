@@ -40,12 +40,12 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="col-lg-2">
-                                <div class="form-group" :class="{'has-danger': errors.operation_type_id}">
-                                    <label class="control-label">Tipo Operación</label>
-                                    <el-select v-model="form.operation_type_id" @change="changeOperationType">
-                                        <el-option v-for="option in operation_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                <div class="form-group" :class="{'has-danger': errors.document_type_id}">
+                                    <label class="control-label">Tipo de comprobante</label>
+                                    <el-select v-model="form.document_type_id" @change="changeDocumentType">
+                                        <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
-                                    <small class="form-control-feedback" v-if="errors.operation_type_id" v-text="errors.operation_type_id[0]"></small>
+                                    <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
                                 </div>
                             </div>
                             <div class="col-lg-2">
@@ -58,12 +58,12 @@
                                 </div>
                             </div>
                             <div class="col-lg-2">
-                                <div class="form-group" :class="{'has-danger': errors.document_type_id}">
-                                    <label class="control-label">Tipo de comprobante</label>
-                                    <el-select v-model="form.document_type_id" @change="changeDocumentType">
-                                        <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                <div class="form-group" :class="{'has-danger': errors.operation_type_id}">
+                                    <label class="control-label">Tipo Operación</label>
+                                    <el-select v-model="form.operation_type_id" @change="changeOperationType">
+                                        <el-option v-for="option in operation_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
-                                    <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
+                                    <small class="form-control-feedback" v-if="errors.operation_type_id" v-text="errors.operation_type_id[0]"></small>
                                 </div>
                             </div>
                             <div class="col-lg-2">
@@ -85,20 +85,15 @@
                                 </div>
                             </div>
                             <div class="col-lg-2">
-                                <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
-                                    <label class="control-label">Fecha de emisión</label>
-                                    <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false" @change="changeDateOfIssue"></el-date-picker>
-                                    <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
+                                <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
+                                    <label class="control-label">Tipo de cambio</label>
+                                    <el-input v-model="form.exchange_rate_sale"></el-input>
+                                    <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
                                 </div>
                             </div>
-                            <div class="col-lg-2">
-                                <div class="form-group" :class="{'has-danger': errors.date_of_due}">
-                                    <label class="control-label">Fecha de vencimiento</label>
-                                    <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
-                                    <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
                                 <div class="form-group" :class="{'has-danger': errors.customer_id}">
                                     <label class="control-label">
                                         Cliente
@@ -118,28 +113,19 @@
                                 </div>
                             </div>
                             <div class="col-lg-2">
-                                <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
-                                    <label class="control-label">Tipo de cambio</label>
-                                    <el-input v-model="form.exchange_rate_sale"></el-input>
-                                    <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
+                                <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
+                                    <label class="control-label">Fecha de emisión</label>
+                                    <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false" @change="changeDateOfIssue"></el-date-picker>
+                                    <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
                                 </div>
                             </div>
                             <div class="col-lg-2">
-                                <div class="form-group">
-                                    <label class="control-label">Formato de PDF</label>
-                                    <el-select v-model="form.actions.format_pdf" >
-                                        <el-option key="a4" value="a4" label="Tamaño A4"></el-option>
-                                        <el-option key="ticket" value="ticket" label="Tamaño Ticket"></el-option>
-                                    </el-select>
+                                <div class="form-group" :class="{'has-danger': errors.date_of_due}">
+                                    <label class="control-label">Fecha de vencimiento</label>
+                                    <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
+                                    <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
                                 </div>
                             </div>
-                            <!--<div class="col-lg-4 col-md-6">-->
-                                <!--<div class="form-group" :class="{'has-danger': errors.observations}">-->
-                                    <!--<label class="control-label">Observaciones</label>-->
-                                    <!--<el-input v-model="form.optional.observations" type="textarea" autosize></el-input>-->
-                                    <!--<small class="form-control-feedback" v-if="errors.observations" v-text="errors.observations[0]"></small>-->
-                                <!--</div>-->
-                            <!--</div>-->
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-12">
@@ -440,27 +426,28 @@
              },
             submit() {
                 this.loading_submit = true
-                this.$http.post(`/${this.resource}`, this.form)
-                    .then(response => {
-                        console.log(response)
-                        if (response.data.success) {
-                            this.resetForm()
-                            this.documentNewId = response.data.data.id
-                            this.showDialogOptions = true
-                        } else {
-                            this.$message.error(response.data.message)
-                        }
-                    })
-                    .catch(error => {
-                        if (error.response.status === 422) {
-                            this.errors = error.response.data
-                        } else {
-                            this.$message.error(error.response.data.message)
-                        }
-                    })
-                    .then(() => {
-                        this.loading_submit = false
-                    })
+                this.$http.post(`/${this.resource}`, this.form).then(response => {
+                    console.log(response);
+                    
+                    if (response.data.success) {
+                        this.resetForm();
+                        
+                        this.documentNewId = response.data.data.id;
+                        this.showDialogOptions = true;
+                    }
+                    else {
+                        this.$message.error(response.data.message);
+                    }
+                }).catch(error => {
+                    if (error.response.status === 422) {
+                        this.errors = error.response.data;
+                    }
+                    else {
+                        this.$message.error(error.response.data.message);
+                    }
+                }).then(() => {
+                    this.loading_submit = false;
+                });
             },
             close() {
                 location.href = '/documents'
