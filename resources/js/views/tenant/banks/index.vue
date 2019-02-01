@@ -2,6 +2,10 @@
     <div class="card">
         <div class="card-header bg-info">
             <h3 class="my-0">Listado de bancos</h3>
+            <div class="card-actions white-text">
+                <a href="#" class="card-action card-action-toggle text-white" data-card-toggle=""></a>
+                <a href="#" class="card-action card-action-dismiss text-white" data-card-dismiss=""></a>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">

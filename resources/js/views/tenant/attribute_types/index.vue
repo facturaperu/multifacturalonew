@@ -1,17 +1,26 @@
 <template>
-    <div class="card">
+    <div class="card card-collapsed">
         <div class="card-header bg-info">
             <h3 class="my-0">Listado de Atributos</h3>
+            <div class="card-actions">
+                <a href="#" class="card-action card-action-toggle text-white" data-card-toggle=""></a>
+                <a href="#" class="card-action card-action-dismiss text-white" data-card-dismiss=""></a>
+            </div>
         </div>
         <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                     <tr width="100%">
                         <th width="5%">#</th>
                         <th width="10%">Código</th>
-                        <th width="50%">Descripción</th> 
-                        <th width="5%">Activo</th> 
+                        <th width="50%">Descripción</th>
+                        <th width="5%">Activo</th>
                         <th width="30%" class="text-right">Acciones</th>
                     </tr>
                     </thead>
@@ -35,8 +44,8 @@
                 </div>
             </div>
         </div>
-  
-  
+
+
         <tribute-concept-types-form :showDialog.sync="showDialog"
                                     :recordId="recordId"></tribute-concept-types-form>
     </div>
@@ -46,13 +55,13 @@
 
     import TributeConceptTypesForm from './form.vue'
     import {deletable} from '../../../mixins/deletable'
-    
-    export default { 
+
+    export default {
         mixins: [deletable],
         components: {TributeConceptTypesForm},
         data() {
-            return { 
-                
+            return {
+
                 showDialog: false,
                 resource: 'tribute_concept_types',
                 recordId: null,
@@ -65,11 +74,11 @@
             })
             this.getData()
         },
-        methods: { 
+        methods: {
             getData() {
                 this.$http.get(`/${this.resource}/records`)
                     .then(response => {
-                        this.records = response.data.data 
+                        this.records = response.data.data
                     })
             },
             clickCreate(recordId = null) {

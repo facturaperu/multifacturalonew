@@ -3,7 +3,7 @@
         <!-- <div class="card-header bg-info">
             <h3 class="my-0">Nuevo Comprobante</h3>
         </div> -->
-        <div class="card-body">
+        <div class="card-body" v-if="loading_form">
             <div class="invoice">
                 <header class="clearfix">
                     <div class="row">
@@ -27,8 +27,8 @@
                             </address>
                         </div>
                         <div class="col-sm-2 text-right mt-3 mb-3">
-                            <div class="ib" v-if="company_logo != null">
-                                <img :src="'/storage/uploads/logos/' + company_logo" :alt="company_logo" class="img-fluid">
+                            <div class="ib" v-if="company.logo">
+                                <img :src="'/storage/uploads/logos/' + company.logo" :alt="company.logo" class="img-fluid">
                             </div>
                             <div class="text-center" style="color:#CCC;" v-else>
                                 <i class="fa fa-circle fa-4x"></i>
@@ -236,6 +236,7 @@
                 showDialogNewPerson: false,
                 showDialogOptions: false,
                 loading_submit: false,
+                loading_form: false,
                 errors: {},
                 form: {},
                 document_types: [],
@@ -245,7 +246,7 @@
                 all_customers: [],
                 customers: [],
                 company: null,
-                company_logo: null,
+                // company_logo: null,
                 operation_types: [],
                 establishments: [],
                 establishment: [],
@@ -255,9 +256,11 @@
                 documentNewId: null
             }
         },
-        created() {
-            this.initForm()
-            this.$http.get(`/${this.resource}/tables`)
+        async created() {
+            console.log(1)
+            await this.initForm()
+            console.log(2)
+            await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.document_types = response.data.document_types_invoice
                     this.currency_types = response.data.currency_types
@@ -280,8 +283,11 @@
 
                     this.establishment = (this.establishments.length > 0)?this.establishments[0]:null
                     this.company = response.data.company
-                    this.company_logo = response.data.company.logo
+                    // this.company_logo = response.data.company.logo
                 })
+            console.log(3)
+            this.loading_form = true
+            console.log(4)
             this.$eventHub.$on('reloadDataPersons', (customer_id) => {
                 this.reloadDataCustomers(customer_id)
             })
