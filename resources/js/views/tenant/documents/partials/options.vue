@@ -31,6 +31,12 @@
                 <small class="form-control-feedback" v-if="errors.customer_email" v-text="errors.customer_email[0]"></small>
             </div>
         </div>
+        <div class="row mt-4">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn waves-effect waves-light btn-outline-primary"
+                        @click.prevent="clickConsultCdr(form.id)">Consultar CDR</button>
+            </div>
+        </div>
         <span slot="footer" class="dialog-footer">
             <template v-if="showClose">
                 <el-button @click="clickClose">Cerrar</el-button>
@@ -106,6 +112,20 @@
                     })
                     .then(() => {
                         this.loading = false
+                    })
+            },
+            clickConsultCdr(document_id) {
+                this.$http.get(`/${this.resource}/consult_cdr/${document_id}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            this.$message.success(response.data.message)
+                            this.$eventHub.$emit('reloadData')
+                        } else {
+                            this.$message.error(response.data.message)
+                        }
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data.message)
                     })
             },
             clickFinalize() {
