@@ -10,8 +10,8 @@
                         <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.establishment}">
                                 <label class="control-label">Establecimiento</label>
-                                <el-select v-model="form.establishment" @change="changeEstablishment">
-                                    <el-option v-for="option in establishments" :key="option.id" :value="option" :label="option.description"></el-option>
+                                <el-select v-model="form.establishment_id" @change="changeEstablishment">
+                                    <el-option v-for="option in establishments" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
                                 <small class="form-control-feedback" v-if="errors.establishment" v-text="errors.establishment[0]"></small>
                             </div>
@@ -384,12 +384,12 @@
         methods: {
             changeEstablishment() {
                 this.series = _.filter(this.seriesAll, {
-                    'establishment_id': this.form.establishment.id,
+                    'establishment_id': this.form.establishment_id,
                     'document_type_id': this.form.document_type_id
                 });
                 
-                this.code = this.form.establishment.id;
-                this.establishment_id = this.form.establishment.id;
+                this.code = this.form.establishment_id;
+                this.establishment_id = this.form.establishment_id;
             },
             filterProvince(origin = true) {
                 if (origin) {
@@ -428,7 +428,7 @@
                 this.$set(this.form.delivery, 'location_id', null);
             },
             addItem(form) {
-                let exist = this.form.items.find((item) => item.internal_id == form.item.id);
+                let exist = this.form.items.find((item) => item.internal_id == form.item.internal_id);
                 
                 if (exist) {
                     exist.quantity += form.quantity;
@@ -438,8 +438,9 @@
                 
                 this.form.items.push({
                     'description': form.item.description,
-                    'id': form.item.id,
-                    'quantity': form.quantity
+                    'internal_id': form.item.internal_id,
+                    'quantity': form.quantity,
+                    'id': form.item.id
                 });
             },
             clickRemoveItem(index) {
