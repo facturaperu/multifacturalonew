@@ -217,8 +217,18 @@ class Facturalo
             $p_order           = $this->document->purchase_order != '' ? '10' : '0';
             $company_name      = strlen($this->company->name) > '20' ? '10' : '0';
             $customer_name     = strlen($this->document->customer->name) > '25' ? '10' : '0';
+            if (strlen($this->document->customer->address) > 25 && strlen($this->document->customer->address) < 50) {
+                $customer_address = '20';
+            } elseif (strlen($this->document->customer->address) > 50 && strlen($this->document->customer->address) < 100) {
+                $customer_address = '40';
+            } elseif (strlen($this->document->customer->address) > 100 && strlen($this->document->customer->address) < 150) {
+                $customer_address = '60';
+            } elseif (strlen($this->document->customer->address) > 150) {
+                $customer_address = '80';
+            } else {
+                $customer_address = '10';
+            }
             $customer_address  = strlen($this->document->customer->address) > '25' ? '20' : '0';
-            $customer_address  = strlen($this->document->customer->address) > '50' ? '40' : '0';
             $quantity_rows     = count($this->document->items);
             $legends           = $this->document->legends != '' ? '10' : '0';
 
