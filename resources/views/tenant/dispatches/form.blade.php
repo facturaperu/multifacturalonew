@@ -1,5 +1,5 @@
 @extends('tenant.layouts.app')
 
 @section('content')
-    <tenant-dispatches-index></tenant-dispatches-index>
+    <tenant-dispatches-form></tenant-dispatches-form>
 @endsection

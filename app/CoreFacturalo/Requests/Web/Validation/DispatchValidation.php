@@ -7,18 +7,17 @@ use Exception;
 
 class DispatchValidation
 {
-    public static function validation($inputs)
-    {
+    public static function validation($inputs) {
         $inputs['establishment_id'] = Functions::establishment($inputs['establishment']);
         unset($inputs['establishment']);
-
+        
         Functions::validateSeries($inputs);
-
-        $inputs['customer_id'] = Functions::person($inputs['customer'], 'customer');
+        
+        $inputs['customer_id'] ?? (Functions::person($inputs['customer'], 'customer'));
         unset($inputs['customer']);
-
+        
         $inputs['items'] = self::items($inputs['items']);
-
+        
         return $inputs;
     }
 
