@@ -11,9 +11,9 @@ class DispatchValidation
         $inputs['establishment_id'] = Functions::establishment($inputs['establishment']);
         unset($inputs['establishment']);
         
-        // Functions::validateSeries($inputs);
+        Functions::validateSeries($inputs);
         
-        $inputs['customer_id'] = Functions::person($inputs['customer'], 'customer');
+        $inputs['customer_id'] ?? (Functions::person($inputs['customer'], 'customer'));
         unset($inputs['customer']);
         
         $inputs['items'] = self::items($inputs['items']);

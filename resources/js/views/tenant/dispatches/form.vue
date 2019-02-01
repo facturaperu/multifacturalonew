@@ -20,7 +20,7 @@
                             <div class="form-group" :class="{'has-danger': errors.series}">
                                 <label class="control-label">Serie</label>
                                 <el-select v-model="form.series">
-                                    <el-option v-for="option in series" :key="option.id" :value="option.id" :label="option.number"></el-option>
+                                    <el-option v-for="option in series" :key="option.id" :value="option.number" :label="option.number"></el-option>
                                 </el-select>
                                 <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
                             </div>
@@ -38,8 +38,8 @@
                                     Cliente
                                     <a href="#" @click.prevent="showDialogNewPerson = true">[+ Nuevo]</a>
                                 </label>
-                                <el-select v-model="form.customer" filterable>
-                                    <el-option v-for="option in customers" :key="option.id" :value="option" :label="option.description"></el-option>
+                                <el-select v-model="form.customer_id" filterable>
+                                    <el-option v-for="option in customers" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
                                 <small class="form-control-feedback" v-if="errors.customer" v-text="errors.customer[0]"></small>
                             </div>
@@ -252,8 +252,8 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group" :class="{'has-danger': errors.dispatcher}">
-                                <label class="control-label">Nombre y/o razon social</label>
-                                <el-input v-model="form.dispatcher.name" :maxlength="100" placeholder="Nombre y/o razon social..."></el-input>
+                                <label class="control-label">Nombre y/o razón social</label>
+                                <el-input v-model="form.dispatcher.name" :maxlength="100" placeholder="Nombre y/o razón social..."></el-input>
                                 <small class="form-control-feedback" v-if="errors.dispatcher" v-text="errors.dispatcher.name[0]"></small>
                             </div>
                         </div>
@@ -361,27 +361,12 @@
                 errors: {
                     errors: {}
                 },
-                form: {
-                    time_of_issue: moment().format('HH:mm:ss'),
-                    dispatcher: {
-                        identity_document_type_id: null
-                    },
-                    driver: {
-                        identity_document_type_id: null
-                    },
-                    document_type_id: '09',
-                    delivery: {
-                        country_id: 'PE'
-                    },
-                    origin: {
-                        country_id: 'PE'
-                    },
-                    number: '#',
-                    items: []
-                }
+                form: {}
             }
         },
         created() {
+            this.clean();
+            
             this.$http.post(`/${this.resource}/tables`).then(response => {
                 this.identityDocumentTypes = response.data.identityDocumentTypes;
                 this.transferReasonTypes = response.data.transferReasonTypes;
@@ -412,12 +397,18 @@
                         'department_id': this.form.origin.department_id
                     });
                     
+                    this.$set(this.form.origin, 'province_id', null);
+                    this.$set(this.form.origin, 'location_id', null);
+                    
                     return;
                 }
                 
                 this.provincesDelivery = _.filter(this.provincesAll, {
                     'department_id': this.form.delivery.department_id
                 });
+                
+                this.$set(this.form.delivery, 'province_id', null);
+                this.$set(this.form.delivery, 'location_id', null);
             },
             filterDistrict(origin = true) {
                 if (origin) {
@@ -425,16 +416,19 @@
                         'province_id': this.form.origin.province_id
                     });
                     
+                    this.$set(this.form.origin, 'location_id', null);
+                    
                     return;
                 }
                 
                 this.districtsDelivery = _.filter(this.districtsAll, {
                     'province_id': this.form.delivery.province_id
                 });
+                
+                this.$set(this.form.delivery, 'location_id', null);
             },
             addItem(form) {
                 let exist = this.form.items.find((item) => item.internal_id == form.item.id);
-                this.showDialogAddItems = false;
                 
                 if (exist) {
                     exist.quantity += form.quantity;
@@ -455,16 +449,17 @@
                 this.loading_submit = true;
                 
                 this.$http.post(`/${this.resource}`, this.form).then(response => {
-                        console.log(response);
-                        
                         if (response.data.success) {
-                            console.log('Ok');
-                            // this.resetForm();
+                            this.clean();
+                            
+                            this.$message.success(response.data.message)
                         }
                         else {
                             this.$message.error(response.data.message);
                         }
                     }).catch(error => {
+                        this.loading_submit = false;
+                        
                         if (error.response.status === 422) {
                             this.errors = error.response.data;
                         }
@@ -474,6 +469,29 @@
                     }).then(() => {
                         this.loading_submit = false;
                     });
+            },
+            clean() {
+                this.form = {
+                    time_of_issue: moment().format('HH:mm:ss'),
+                    dispatcher: {
+                        identity_document_type_id: null
+                    },
+                    driver: {
+                        identity_document_type_id: null
+                    },
+                    document_type_id: '09',
+                    delivery: {
+                        country_id: 'PE'
+                    },
+                    origin: {
+                        country_id: 'PE'
+                    },
+                    number: '#',
+                    items: [],
+                    total_weight: null,
+                    packages_number: null,
+                    container_number: null
+                }
             },
             close() {
                 location.href = '/dispatches';

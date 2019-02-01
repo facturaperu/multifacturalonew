@@ -71,9 +71,7 @@ class DispatchController extends Controller
         
         return [
             'success' => true,
-            'data' => [
-                'id' => $document->id,
-            ],
+            'message' => "Se creo la guía de remisión {$document->series}-{$document->number}",
         ];
     }
     
@@ -104,22 +102,27 @@ class DispatchController extends Controller
                 ];
             });
         
-        $customers = Person::whereType('customers')->orderBy('name')->get()->transform(function($row) {
-            return [
-                'id' => $row->id,
-                'description' => $row->number.' - '.$row->name,
-                'name' => $row->name,
-                'trade_name' => $row->trade_name,
-                'country_id' => $row->country_id,
-                'address' => $row->address,
-                'email' => $row->email,
-                'telephone' => $row->telephone,
-                'number' => $row->number,
-                'district_id' => $row->district_id,
-                'identity_document_type_id' => $row->identity_document_type_id,
-                'identity_document_type_code' => $row->identity_document_type->code
-            ];
-        });
+        $customers = Person::query()
+            ->whereIn('identity_document_type_id', [6])
+            ->whereType('customers')
+            ->orderBy('name')
+            ->get()
+            ->transform(function($row) {
+                return [
+                    'id' => $row->id,
+                    'description' => $row->number.' - '.$row->name,
+                    'name' => $row->name,
+                    'trade_name' => $row->trade_name,
+                    'country_id' => $row->country_id,
+                    'address' => $row->address,
+                    'email' => $row->email,
+                    'telephone' => $row->telephone,
+                    'number' => $row->number,
+                    'district_id' => $row->district_id,
+                    'identity_document_type_id' => $row->identity_document_type_id,
+                    'identity_document_type_code' => $row->identity_document_type->code
+                ];
+            });
         
         $identityDocumentTypes = IdentityDocumentType::whereActive()->get();
         $transferReasonTypes = TransferReasonType::whereActive()->get();
