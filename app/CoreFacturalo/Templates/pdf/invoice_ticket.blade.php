@@ -53,7 +53,7 @@
     </tr>
     @endif
     <tr>
-        <td><p class="desc">Cliente:</p></td>
+        <td><p class="desc align-top">Cliente:</p></td>
         <td><p class="desc">{{ $customer->name }}</p></td>
     </tr>
     <tr>

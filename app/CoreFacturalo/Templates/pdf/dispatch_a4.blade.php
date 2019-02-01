@@ -15,21 +15,21 @@
     <tr>
         @if($company->logo)
             <td width="10%">
-                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="{{ $company->name }}" style="max-width: 300px">
+                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" alt="{{ $company->name }}"  class="company_logo" style="max-width: 300px">
             </td>
         @endif
         <td width="50%" class="pl-3">
             <div class="text-left">
-                <h2 class="">{{ $company->name }}</h2>
-                <h3>{{ 'RUC '.$company->number }}</h3>
-                <h4>{{ ($establishment->address !== '-')? $establishment->address : '' }}</h4>
-                <h4>{{ ($establishment->email !== '-')? $establishment->email : '' }}</h4>
-                <h4>{{ ($establishment->telephone !== '-')? $establishment->telephone : '' }}</h4>
+                <h3 class="">{{ $company->name }}</h3>
+                <h4>{{ 'RUC '.$company->number }}</h4>
+                <h5>{{ ($establishment->address !== '-')? $establishment->address : '' }}</h5>
+                <h5>{{ ($establishment->email !== '-')? $establishment->email : '' }}</h5>
+                <h5>{{ ($establishment->telephone !== '-')? $establishment->telephone : '' }}</h5>
             </div>
         </td>
         <td width="40%" class="border-box p-4 text-center">
-            <h3 class="text-center">{{ $document->document_type->description }}</h3>
-            <h2 class="text-center">{{ $document_number }}</h2>
+            <h4 class="text-center">{{ $document->document_type->description }}</h4>
+            <h3 class="text-center">{{ $document_number }}</h3>
         </td>
     </tr>
 </table>

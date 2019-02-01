@@ -37,7 +37,7 @@
     <tr>
         @if($company->logo)
             <td class="text-center px-5 pt-5 pb-3">
-                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo">
+                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" alt="{{ $company->name }}" class="company_logo">
             </td>
         @endif
     </tr>

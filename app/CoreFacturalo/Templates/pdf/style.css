@@ -19,6 +19,9 @@ table {
     font-weight: bold;
 }
 
+.company_logo {
+  max-height: 100px;
+}
 
 .text-right {
     text-align: right !important;

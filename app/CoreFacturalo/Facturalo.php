@@ -209,9 +209,20 @@ class Facturalo
         $html = $template->pdf($this->type, $this->company, $this->document, $format_pdf);
 
         if($format_pdf === 'ticket') {
-            $quantity_rows = count($this->document->items);
+            $total_exportation = $this->document->total_exportation != '' ? '10' : '0';
+            $total_free        = $this->document->total_free != '' ? '10' : '0';
+            $total_unaffected  = $this->document->total_unaffected != '' ? '10' : '0';
+            $total_exonerated  = $this->document->total_exonerated != '' ? '10' : '0';
+            $total_taxed       = $this->document->total_taxed != '' ? '10' : '0';
+            $p_order           = $this->document->purchase_order != '' ? '10' : '0';
+            $company_name      = strlen($this->company->name) > '20' ? '10' : '0';
+            $customer_name     = strlen($this->document->customer->name) > '25' ? '10' : '0';
+            $customer_address  = strlen($this->document->customer->address) > '25' ? '10' : '0';
+            $quantity_rows     = count($this->document->items);
+            $legends           = $this->document->legends != '' ? '10' : '0';
+
             $pdf = new Mpdf(['mode' => 'utf-8',
-                             'format' => [78, 220 + ($quantity_rows * 10)],
+                             'format' => [78, 150 + ($quantity_rows * 10) + $p_order + $company_name + $legends + $total_exportation + $total_free + $total_unaffected + $total_exonerated + $total_taxed + $customer_name + $customer_address],
                              'margin_top' => 2,
                              'margin_right' => 5,
                              'margin_bottom' => 0,

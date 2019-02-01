@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-sm-2 text-right mt-3 mb-3">
                             <div class="ib" v-if="company.logo">
-                                <img :src="'/storage/uploads/logos/' + company.logo" :alt="company.logo" class="img-fluid">
+                                <img :src="'/storage/uploads/logos/' + company.logo" :alt="company.logo" class="img-fluid" style="max-height: 70px;">
                             </div>
                             <div class="text-center" style="color:#CCC;" v-else>
                                 <i class="fa fa-circle fa-4x"></i>

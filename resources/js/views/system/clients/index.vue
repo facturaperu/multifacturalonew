@@ -29,101 +29,59 @@
             <div class="col-lg-6">
                 <div class="row mb-3">
                     <div class="col-xl-6">
-                        <section class="card card-featured-left card-featured-secondary">
-                            <div class="card-body">
-                                <div class="widget-summary">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-secondary">
-                                            <i class="fa fa-building"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Total Clientes</h4>
-                                            <div class="info">
-                                                <strong class="amount">{{ records.length }}</strong>
-                                            </div>
-                                        </div>
-                                        <!--<div class="summary-footer">-->
-                                            <!--<a class="text-muted text-uppercase" href="#">(withdraw)</a>-->
-                                        <!--</div>-->
-                                    </div>
+                        <section class="card card-horizontal">
+                            <header class="card-header bg-success">
+                                <div class="card-header-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </header>
+                            <div class="card-body p-4 text-center">
+                                <p class="font-weight-semibold mb-0">Total Clientes</p>
+                                <h2 class="font-weight-semibold mt-0">{{ records.length }}</h2>
+                                <div class="summary-footer">
+                                    <a class="text-muted text-uppercase" href="#client-list">Ver todos</a>
                                 </div>
                             </div>
                         </section>
                     </div>
                     <div class="col-xl-6">
-                        <section class="card card-featured-left card-featured-primary mb-3">
-                            <div class="card-body">
-                                <div class="widget-summary">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-primary">
-                                            <i class="fas fa-file"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Total Comprobantes</h4>
-                                            <div class="info">
-                                                <strong class="amount">{{ total_documents }}</strong>
-                                                <!--<span class="text-primary">(14 unread)</span>-->
-                                            </div>
-                                        </div>
-                                        <!--<div class="summary-footer">-->
-                                        <!--<a class="text-muted text-uppercase" href="#">(view all)</a>-->
-                                        <!--</div>-->
-                                    </div>
+                        <section class="card card-horizontal">
+                            <header class="card-header bg-secondary">
+                                <div class="card-header-icon">
+                                    <i class="fas fa-dollar-sign"></i>
                                 </div>
+                            </header>
+                            <div class="card-body p-4 text-center">
+                                <p class="font-weight-semibold mb-0 mt-3">Total Venta en Planes</p>
+                                <h2 class="font-weight-semibold mt-0 mb-3">2</h2>
                             </div>
                         </section>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-6">
-                        <section class="card card-featured-left card-featured-tertiary mb-3">
-                            <div class="card-body">
-                                <div class="widget-summary">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-warning">
-                                            <i class="fas fa-file"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Total Facturas</h4>
-                                            <div class="info">
-                                                <strong class="amount">{{ total_documents }}</strong>
-                                            </div>
-                                        </div>
-                                        <!--<div class="summary-footer">-->
-                                            <!--<a class="text-muted text-uppercase" href="#">(statement)</a>-->
-                                        <!--</div>-->
-                                    </div>
+                        <section class="card card-horizontal">
+                            <header class="card-header bg-megna">
+                                <div class="card-header-icon">
+                                    <i class="fas fa-file"></i>
                                 </div>
+                            </header>
+                            <div class="card-body p-4 text-center">
+                                <p class="font-weight-semibold mb-0 mt-3">Total Facturas</p>
+                                <h2 class="font-weight-semibold mt-0 mb-3">{{ total_documents }}</h2>
                             </div>
                         </section>
                     </div>
                     <div class="col-xl-6">
-                        <section class="card card-featured-left card-featured-quaternary">
-                            <div class="card-body">
-                                <div class="widget-summary">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-danger">
-                                            <i class="fas fa-dollar-sign"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Total Venta en Planes</h4>
-                                            <div class="info">
-                                                <strong class="amount">2</strong>
-                                            </div>
-                                        </div>
-                                        <!--<div class="summary-footer">-->
-                                            <!--<a class="text-muted text-uppercase" href="#">(report)</a>-->
-                                        <!--</div>-->
-                                    </div>
+                        <section class="card card-horizontal">
+                            <header class="card-header bg-info">
+                                <div class="card-header-icon">
+                                    <i class="fas fa-file-alt"></i>
                                 </div>
+                            </header>
+                            <div class="card-body p-4 text-center">
+                                <p class="font-weight-semibold mb-0 mt-3">Total Comprobantes</p>
+                                <h2 class="font-weight-semibold mt-0 mb-3">{{ total_documents }}</h2>
                             </div>
                         </section>
                     </div>
@@ -131,14 +89,16 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="client-list">
             <div class="card-header bg-info">
                 Listado de Clientes
-                <div class="right-wrapper pull-right">
-                    <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
-                </div>
             </div>
             <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2 mb-3" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -158,8 +118,8 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ row.hostname }}</td>
                             <td>{{ row.name }}</td>
-                            <td>{{ row.number }}</td> 
-                            <td>{{ row.plan }}</td> 
+                            <td>{{ row.number }}</td>
+                            <td>{{ row.plan }}</td>
                             <td>{{ row.email }}</td>
                             <td class="text-right">{{ row.count_doc }}</td>
                             <td class="text-right">
