@@ -217,7 +217,7 @@ class Facturalo
             $p_order           = $this->document->purchase_order != '' ? '10' : '0';
             $company_name      = strlen($this->company->name) > '20' ? '10' : '0';
             $customer_name     = strlen($this->document->customer->name) > '25' ? '10' : '0';
-            $customer_address  = strlen($this->document->customer->address) > '25' ? '10' : '0';
+            $customer_address  = strlen($this->document->customer->address) > '25' ? '15' : '0';
             $quantity_rows     = count($this->document->items);
             $legends           = $this->document->legends != '' ? '10' : '0';
 
