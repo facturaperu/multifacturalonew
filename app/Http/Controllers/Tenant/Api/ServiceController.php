@@ -124,8 +124,15 @@ class ServiceController extends Controller
 
     public function exchangeRate()
     {
-        $date_of_exchange_rate = '2018-12-08';//$request->input('date_of_exchange_rate');
-        $exchange_rate = new  ExchangeRate();
-        $response = $exchange_rate->search($date_of_exchange_rate);
+        //$date_of_exchange_rate = '2018-12-08';//$request->input('date_of_exchange_rate');
+        //$exchange_rate = new  ExchangeRate();
+       // $response = $exchange_rate->search($date_of_exchange_rate);
+
+       return [
+            'success' => true,
+            'data' => [
+            'sell' => 1
+            ]
+       ];
     }
 }

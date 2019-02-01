@@ -22,9 +22,12 @@ class ExchangeRate
         $response = $client->request('GET', 'tcS01Alias?mes=01&anho=2019');
         if ($response->getStatusCode() == 200 && $response != "") {
             $html = $response->getBody()->getContents();
-            echo($html);
+            $xp = new DiDom($html);
+            $sub_headings = $xp->find('.form-table tbody tr');
+            dd($sub_headings);
+//            echo($html);
 //            $xp = new DiDom($html);
-//            dd($xp);
+
         }
 //        $response = $this->client->request('GET', self::URL_CONSULT, [
 //            'form_params' => [
