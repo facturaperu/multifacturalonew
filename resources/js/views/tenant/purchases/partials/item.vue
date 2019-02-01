@@ -27,7 +27,7 @@
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.quantity}">
                             <label class="control-label">Cantidad</label>
-                            <el-input-number v-model="form.quantity" :min="1"></el-input-number>
+                            <el-input-number v-model="form.quantity" :min="0.01"></el-input-number>
                             <small class="form-control-feedback" v-if="errors.quantity" v-text="errors.quantity[0]"></small>
                         </div>
                     </div>

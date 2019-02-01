@@ -2,11 +2,13 @@
 
 namespace App\CoreFacturalo\Requests\Web\Validation;
 
-use App\Models\Tenant\Document;
-use App\Models\Tenant\Establishment;
-use App\Models\Tenant\Item;
-use App\Models\Tenant\Person;
-use App\Models\Tenant\Series;
+use App\Models\Tenant\{
+    Establishment,
+    Document,
+    Series,
+    Person,
+    Item
+};
 use Exception;
 
 class Functions
@@ -91,5 +93,15 @@ class Functions
     
     public static function findAffectedDocument($inputs) {
         return Document::find($inputs['affected_document_id']);
+    }
+    
+    public static function DNI($inputs){
+        if (($inputs['document_type_id'] == '03') && ($inputs['total']) > 700) {
+            $person = Person::query()
+                ->with('identity_document_type')
+                ->find($inputs['customer_id']);
+            
+            if (!in_array($person->identity_document_type_id, ['01'])) throw new Exception("El tipo doc. identidad {$person->identity_document_type->description} del cliente no es valido.");
+        }
     }
 }

@@ -15,7 +15,7 @@ class DispatchValidation
         
         $inputs['customer_id'] ?? (Functions::person($inputs['customer'], 'customer'));
         unset($inputs['customer']);
-        
+
         $inputs['items'] = self::items($inputs['items']);
         
         return $inputs;
@@ -26,12 +26,12 @@ class DispatchValidation
         $items = [];
         foreach ($inputs as $row)
         {
-            $item = Item::where('internal_id', $row['internal_id'])->first();
-            if(!$item) {
-                throw new Exception("El código interno {$row['internal_id']} no fue encontrado.");
-            }
+//            $item = Item::where('internal_id', $row['internal_id'])->first();
+//            if(!$item) {
+//                throw new Exception("El código interno {$row['internal_id']} no fue encontrado.");
+//            }
             $items[] = [
-                'item_id' => $item->id,
+                'item_id' => $row['id'],
                 'quantity' => $row['quantity']
             ];
         }

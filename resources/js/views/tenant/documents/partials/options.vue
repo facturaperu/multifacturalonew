@@ -1,8 +1,16 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @open="create" width="30%"
-               :close-on-click-modal="false"
-               :close-on-press-escape="false"
-               :show-close="false">
+    <el-dialog :title="titleDialog" :visible="showDialog" @open="create" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label class="control-label">Formato de PDF</label>
+                    <el-select v-model="format" >
+                        <el-option key="a4" value="a4" label="Tamaño A4"></el-option>
+                        <el-option key="ticket" value="ticket" label="Tamaño Ticket"></el-option>
+                    </el-select>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-6 mt-2">
                 <button type="button" class="btn waves-effect waves-light btn-lg btn-info pull-right" @click="clickPrint">
@@ -44,8 +52,9 @@
                 titleDialog: null,
                 loading: false,
                 resource: 'documents',
+                format: null,
                 errors: {},
-                form: {},
+                form: {}
             }
         },
         created() {
@@ -53,27 +62,27 @@
         },
         methods: {
             initForm() {
-                this.errors = {}
+                this.format = 'a4';
+                this.errors = {};
                 this.form = {
-                    id: null,
+                    customer_email: null,
+                    download_pdf: null,
                     external_id: null,
                     number: null,
-                    customer_email: null,
-                    download_pdf: null
-                }
+                    id: null
+                };
             },
             create() {
-                this.$http.get(`/${this.resource}/record/${this.recordId}`)
-                    .then(response => {
-                        this.form = response.data.data
-                        this.titleDialog = 'Comprobante: '+this.form.number
-                    })
+                this.$http.get(`/${this.resource}/record/${this.recordId}`).then(response => {
+                    this.form = response.data.data;
+                    this.titleDialog = 'Comprobante: '+this.form.number;
+                });
             },
             clickPrint(){
-                window.open(`/print/document/${this.form.external_id}`, '_blank');
+                window.open(`/print/document/${this.form.external_id}/${this.format}`, '_blank');
             },
             clickDownload() {
-                window.open(this.form.download_pdf, '_blank');
+                window.open(`${this.form.download_pdf}/${this.format}`, '_blank');
             },
             clickSendEmail() {
                 this.loading = true
