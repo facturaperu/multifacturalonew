@@ -438,7 +438,7 @@
                 
                 this.form.items.push({
                     'description': form.item.description,
-                    'internal_id': form.item.id,
+                    'internal_id': form.item.internal_id,
                     'quantity': form.quantity
                 });
             },
