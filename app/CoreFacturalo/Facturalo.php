@@ -233,7 +233,7 @@ class Facturalo
             $legends           = $this->document->legends != '' ? '10' : '0';
 
             $pdf = new Mpdf(['mode' => 'utf-8',
-                             'format' => [78, 150 + ($quantity_rows * 10) + $p_order + $company_name + $legends + $total_exportation + $total_free + $total_unaffected + $total_exonerated + $total_taxed + $customer_name + $customer_address],
+                             'format' => [78, 200 + ($quantity_rows * 10) + $p_order + $company_name + $legends + $total_exportation + $total_free + $total_unaffected + $total_exonerated + $total_taxed + $customer_name + $customer_address],
                              'margin_top' => 2,
                              'margin_right' => 5,
                              'margin_bottom' => 0,
