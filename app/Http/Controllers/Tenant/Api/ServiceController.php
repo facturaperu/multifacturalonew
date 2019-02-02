@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
+use Carbon\Carbon;
+use Dompdf\Exception;
 
 class ServiceController extends Controller
 {
@@ -121,6 +123,44 @@ class ServiceController extends Controller
 //            ];
 //        }
 //    }
+
+    public function exchangeRateTest()
+    {
+        $date_of_exchange_rate = Carbon::parse('2019-01-25');
+        $exchange_rate = \App\Models\Tenant\ExchangeRate::where('date', $date_of_exchange_rate->format('Y-m-d'))->first();
+        if(!$exchange_rate) {
+            $year = $date_of_exchange_rate->year;
+            $month = $date_of_exchange_rate->month;
+            $exchange_rate = new  ExchangeRate();
+            $exchange_rates = $exchange_rate->search($month, $year);
+            if($exchange_rates) {
+                dd($exchange_rates[2]);
+                foreach ($exchange_rates as $row)
+                {
+                    dd($row);
+//                    dd($row[0]);
+//                    $date = Carbon::parse($year.'-'.$month.'-'.$row['0'])->format('Y-m-d');
+//                    var_dump($year.'-'.$month.'-'.$row[0]);
+//                    \App\Models\Tenant\ExchangeRate::firstOrCreate([
+//                        'date' => $date
+//                    ],[
+//                        'buy' => $row[1],
+//                        'sell' => $row[2],
+//                        'date_original' => $date
+//                    ]);
+                    //dd('aca');
+                }
+            }
+            //$exchange_rate = \App\Models\Tenant\ExchangeRate::where('date', $date_of_exchange_rate->format('Y-m-d'))->first();
+        }
+
+//        if(!$exchange_rate) {
+//            $exchange_rate = \App\Models\Tenant\ExchangeRate::where('date', $date_of_exchange_rate->addDay(-1)->format('Y-m-d'))->first();
+//        }
+
+        dd($exchange_rate);
+
+    }
 
     public function exchangeRate()
     {
