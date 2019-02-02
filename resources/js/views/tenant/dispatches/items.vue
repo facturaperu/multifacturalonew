@@ -10,7 +10,7 @@
                             <a href="#" @click.prevent="showDialogNewItem = true">[+ Nuevo]</a>
                         </label>
                         <el-select v-model="form.item" filterable>
-                            <el-option v-for="option in items" :key="option.id" :value="option" :label="option.full_description"></el-option>
+                            <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.full_description"></el-option>
                         </el-select>
                         <small class="form-control-feedback" v-if="errors.items" v-text="errors.items[0]"></small>
                     </div>
@@ -64,7 +64,10 @@
                 this.errors = {};
                 
                 if ((this.form.item != null) && (this.form.quantity != null)) {
-                    this.$emit('addItem', this.form)
+                    this.$emit('addItem', {
+                        item: this.items.find((item) => item.id == this.form.item),
+                        quantity: this.form.quantity
+                    });
                     
                     this.form = {};
                     

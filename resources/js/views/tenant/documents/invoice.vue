@@ -39,7 +39,7 @@
                 <form autocomplete="off" @submit.prevent="submit">
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-lg-2">
+                            <div class="col-lg-2 pb-2 border border-custom rounded">
                                 <div class="form-group" :class="{'has-danger': errors.document_type_id}">
                                     <label class="control-label">Tipo de comprobante</label>
                                     <el-select v-model="form.document_type_id" @change="changeDocumentType">
@@ -92,8 +92,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6">
+                        <div class="row mt-1">
+                            <div class="col-lg-6 border border-custom rounded pb-2">
                                 <div class="form-group" :class="{'has-danger': errors.customer_id}">
                                     <label class="control-label">
                                         Cliente

@@ -5,6 +5,9 @@
         .v-modal {
             opacity: 0.2 !important;
         }
+        .border-custom {
+            border-color: rgba(0,136,204, .5) !important;
+        }
     </style>
 @endpush
 

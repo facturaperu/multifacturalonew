@@ -203,7 +203,7 @@
                     {{--</li>--}}
                     <li class="nav-parent {{  (($path[0] === 'reports') && in_array($path[1], ['', 'purchases', 'kardex', 'inventories'])) ? 'nav-active nav-expanded' : ''}}">
                         <a class="nav-link" href="#">
-                            <i class="fas fa-file-alt" aria-hidden="true"></i>
+                            <i class="fas fa-chart-area" aria-hidden="true"></i>
                             <span>Reportes</span>
                         </a>
                         <ul class="nav nav-children" style="">
