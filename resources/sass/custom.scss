@@ -41,3 +41,20 @@
   height: 40px!important;
   min-height: 40px!important;
 }
+
+.chart-data-selector {
+  height: 146px;
+}
+
+.chartjs-render-monitor {
+  height: 134px!important;
+}
+
+.title-chart {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  justify-content: center;
+  height: 100%;
+  transform: rotate(-45deg);
+}

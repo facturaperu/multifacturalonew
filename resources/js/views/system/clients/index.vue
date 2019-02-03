@@ -9,18 +9,19 @@
         <div class="row">
             <div class="col-lg-6 mb-3">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="chart-data-selector ready">
-                            <div class="d-flex">
-                                <h2 class="mr-3">Documentos</h2>
-                                <el-select v-model="year">
-                                    <!--<el-option value="2018" label="2018"></el-option>-->
-                                    <el-option value="2019" label="2019"></el-option>
-                                    <!--<el-option value="2020" label="2020"></el-option>-->
-                                </el-select>
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <div class="chart-data-selector ready">
+                                    <div class="chart-data-selector-items">
+                                        <chart-line :data="dataChartLine" v-if="loaded"></chart-line>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="chart-data-selector-items mt-3">
-                                <chart-line :data="dataChartLine" v-if="loaded"></chart-line>
+                            <div class="col-auto">
+                                <div class="title-chart">
+                                    Comprobantes
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -46,34 +47,6 @@
                     </div>
                     <div class="col-xl-6">
                         <section class="card card-horizontal">
-                            <header class="card-header bg-secondary">
-                                <div class="card-header-icon">
-                                    <i class="fas fa-dollar-sign"></i>
-                                </div>
-                            </header>
-                            <div class="card-body p-4 text-center">
-                                <p class="font-weight-semibold mb-0 mt-3">Total Venta en Planes</p>
-                                <h2 class="font-weight-semibold mt-0 mb-3">2</h2>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-6">
-                        <section class="card card-horizontal">
-                            <header class="card-header bg-megna">
-                                <div class="card-header-icon">
-                                    <i class="fas fa-file"></i>
-                                </div>
-                            </header>
-                            <div class="card-body p-4 text-center">
-                                <p class="font-weight-semibold mb-0 mt-3">Total Facturas</p>
-                                <h2 class="font-weight-semibold mt-0 mb-3">{{ total_documents }}</h2>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-xl-6">
-                        <section class="card card-horizontal">
                             <header class="card-header bg-info">
                                 <div class="card-header-icon">
                                     <i class="fas fa-file-alt"></i>
@@ -85,7 +58,48 @@
                             </div>
                         </section>
                     </div>
+                    <!--<div class="col-xl-6">-->
+                        <!--<section class="card card-horizontal">-->
+                            <!--<header class="card-header bg-secondary">-->
+                                <!--<div class="card-header-icon">-->
+                                    <!--<i class="fas fa-dollar-sign"></i>-->
+                                <!--</div>-->
+                            <!--</header>-->
+                            <!--<div class="card-body p-4 text-center">-->
+                                <!--<p class="font-weight-semibold mb-0 mt-3">Total Venta en Planes</p>-->
+                                <!--<h2 class="font-weight-semibold mt-0 mb-3">2</h2>-->
+                            <!--</div>-->
+                        <!--</section>-->
+                    <!--</div>-->
                 </div>
+                <!--<div class="row">-->
+                    <!--<div class="col-xl-6">-->
+                        <!--<section class="card card-horizontal">-->
+                            <!--<header class="card-header bg-megna">-->
+                                <!--<div class="card-header-icon">-->
+                                    <!--<i class="fas fa-file"></i>-->
+                                <!--</div>-->
+                            <!--</header>-->
+                            <!--<div class="card-body p-4 text-center">-->
+                                <!--<p class="font-weight-semibold mb-0 mt-3">Total Facturas</p>-->
+                                <!--<h2 class="font-weight-semibold mt-0 mb-3">{{ total_documents }}</h2>-->
+                            <!--</div>-->
+                        <!--</section>-->
+                    <!--</div>-->
+                    <!--<div class="col-xl-6">-->
+                        <!--<section class="card card-horizontal">-->
+                            <!--<header class="card-header bg-info">-->
+                                <!--<div class="card-header-icon">-->
+                                    <!--<i class="fas fa-file-alt"></i>-->
+                                <!--</div>-->
+                            <!--</header>-->
+                            <!--<div class="card-body p-4 text-center">-->
+                                <!--<p class="font-weight-semibold mb-0 mt-3">Total Comprobantes</p>-->
+                                <!--<h2 class="font-weight-semibold mt-0 mb-3">{{ total_documents }}</h2>-->
+                            <!--</div>-->
+                        <!--</section>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
         </div>
 
@@ -109,7 +123,8 @@
                             <th>RUC</th>
                             <th>Plan</th>
                             <th>Correo</th>
-                            <th class="text-right">Contador</th>
+                            <th class="text-center">Comprobantes</th>
+                            <th class="text-center">Usuarios</th>
                             <th class="text-right">Acciones</th>
                         </tr>
                         </thead>
@@ -121,7 +136,14 @@
                             <td>{{ row.number }}</td>
                             <td>{{ row.plan }}</td>
                             <td>{{ row.email }}</td>
-                            <td class="text-right">{{ row.count_doc }}</td>
+                            <td class="text-center">{{ row.count_doc }}/
+                                <template v-if="row.max_documents > 9999"><i class="fas fa-infinity"></i></template>
+                                <template v-else>{{ row.max_documents }}</template>
+                            </td>
+                            <td class="text-center">{{ row.count_user }}/
+                                <template v-if="row.max_users > 9999"><i class="fas fa-infinity"></i></template>
+                                <template v-else>{{ row.max_users }}</template>
+                            </td>
                             <td class="text-right">
                                 <template v-if="!row.locked">
                                     <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickPassword(row.id)">Clave</button>

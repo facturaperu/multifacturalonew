@@ -43,6 +43,7 @@ class ClientController extends Controller
             $tenancy = app(Environment::class);
             $tenancy->tenant($row->hostname->website);
             $row->count_doc = DB::connection('tenant')->table('documents')->count();
+            $row->count_user = DB::connection('tenant')->table('users')->count();
         }
         return new ClientCollection($records);
     }
