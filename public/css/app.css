@@ -102386,11 +102386,11 @@ a.link:focus {
 }
 
 .chart-data-selector {
-  height: 146px;
+  height: 274px;
 }
 
 .chartjs-render-monitor {
-  height: 134px !important;
+  height: 261px !important;
 }
 
 .title-chart {
@@ -102407,5 +102407,9 @@ a.link:focus {
   height: 100%;
   -webkit-transform: rotate(-45deg);
           transform: rotate(-45deg);
+}
+
+.m-1__2 {
+  margin: 0.10rem !important;
 }
 

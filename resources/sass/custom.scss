@@ -43,11 +43,11 @@
 }
 
 .chart-data-selector {
-  height: 146px;
+  height: 274px;
 }
 
 .chartjs-render-monitor {
-  height: 134px!important;
+  height: 261px!important;
 }
 
 .title-chart {
@@ -57,4 +57,8 @@
   justify-content: center;
   height: 100%;
   transform: rotate(-45deg);
+}
+
+.m-1__2 {
+  margin: 0.10rem !important;
 }
