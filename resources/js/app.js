@@ -29,6 +29,7 @@ Vue.prototype.$http = Axios
 // Vue.component('table-column', TableColumn);
 
 Vue.component('tenant-companies-form', require('./views/tenant/companies/form.vue'));
+Vue.component('tenant-companies-logo', require('./views/tenant/companies/logo.vue'));
 Vue.component('tenant-certificates-index', require('./views/tenant/certificates/index.vue'));
 Vue.component('tenant-certificates-form', require('./views/tenant/certificates/form.vue'));
 Vue.component('tenant-configurations-form', require('./views/tenant/configurations/form.vue'));
@@ -78,5 +79,3 @@ Vue.component('system-plans-form', require('./views/system/plans/form.vue'));
 const app = new Vue({
     el: '#main-wrapper'
 });
-
-

@@ -8,12 +8,7 @@
                 <header class="clearfix">
                     <div class="row">
                         <div class="col-sm-2 text-right mt-3 mb-3">
-                            <div class="ib" v-if="company.logo">
-                                <img :src="'/storage/uploads/logos/' + company.logo" :alt="company.logo" class="img-fluid" style="max-height: 70px;">
-                            </div>
-                            <div class="text-center" style="color:#CCC;" v-else>
-                                <i class="fa fa-circle fa-4x"></i>
-                            </div>
+                            <logo url="/" :path_logo="(company.logo != null) ? `/storage/uploads/logos/${company.logo}` : ''" ></logo>
                         </div>
                         <div class="col-sm-10 text-left mt-3 mb-3">
                             <address class="ib mr-2" >
@@ -199,15 +194,15 @@
 </template>
 
 <script>
-
     import DocumentFormItem from './partials/item.vue'
     import PersonForm from '../persons/form.vue'
     import DocumentOptions from '../documents/partials/options.vue'
     import {functions, exchangeRate} from '../../../mixins/functions'
     import {calculateRowItem} from '../../../helpers/functions'
+    import Logo from '../companies/logo.vue'
 
     export default {
-        components: {DocumentFormItem, PersonForm, DocumentOptions},
+        components: {DocumentFormItem, PersonForm, DocumentOptions, Logo},
         mixins: [functions, exchangeRate],
         data() {
             return {
