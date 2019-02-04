@@ -11,14 +11,14 @@
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="row">
-                            <div class="col-lg-10">
+                            <div class="col-lg-9 col-md-9 col-sm-8 col-8">
                                 <div class="chart-data-selector ready">
                                     <div class="chart-data-selector-items">
                                         <chart-line :data="dataChartLine" v-if="loaded"></chart-line>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-lg-3 col-md-3 col-sm-4 col-4">
                                 <div class="title-chart">
                                     Comprobantes
                                 </div>
