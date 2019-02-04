@@ -37,6 +37,11 @@ class DocumentRequest extends FormRequest
             'note.note_description' => [
                 'required_if:document_type_id,"07", "08"',
             ],
+            'exchange_rate_sale' => [
+                'required',
+                'numeric',
+                'min:0.01'
+            ],
         ];
     }
 }

@@ -178,5 +178,11 @@ return [
         'limit_documents' => 'límite de documentos',
         'plan_documents' => 'documentos activos',
         'plan_id' => 'plan',
+
+        'note.note_credit_type_id' => 'tipo de nota de crédito',
+        'note.note_debit_type_id' => 'tipo de nota de débito',
+        'note.note_description' => 'descripción',
+        'exchange_rate_sale' => 'tipo de cambio',
+      
     ],
 ];
