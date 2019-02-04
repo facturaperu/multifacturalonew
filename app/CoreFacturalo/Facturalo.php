@@ -201,14 +201,20 @@ class Facturalo
         $qr = $qrCode->displayPNGBase64($text);
         return $qr;
     }
-
-    public function createPdf()
-    {
-        $format_pdf = $this->actions['format_pdf'];
+    
+    public function createPdf($document = null, $type = null, $format = null) {
         $template = new Template();
+        $pdf = new Mpdf();
+        
+        $format_pdf = $this->actions['format_pdf'];
+        
+        $this->document = ($document != null) ? $document : $this->document;
+        $format_pdf = ($format != null) ? $format : $format_pdf;
+        $this->type = ($type != null) ? $type : $this->type;
+        
         $html = $template->pdf($this->type, $this->company, $this->document, $format_pdf);
-
-        if($format_pdf === 'ticket') {
+        
+        if ($format_pdf === 'ticket') {
             $total_exportation = $this->document->total_exportation != '' ? '10' : '0';
             $total_free        = $this->document->total_free != '' ? '10' : '0';
             $total_unaffected  = $this->document->total_unaffected != '' ? '10' : '0';
@@ -221,23 +227,24 @@ class Facturalo
             $customer_address  = strlen($this->document->customer->address) > '25' ? '20' : '0';
             $quantity_rows     = count($this->document->items);
             $legends           = $this->document->legends != '' ? '10' : '0';
-
-            $pdf = new Mpdf(['mode' => 'utf-8',
-                             'format' => [78, 280 + ($quantity_rows * 10) + $p_order + $company_name + $legends + $total_exportation + $total_free + $total_unaffected + $total_exonerated + $total_taxed + $customer_name + $customer_address],
-                             'margin_top' => 2,
-                             'margin_right' => 5,
-                             'margin_bottom' => 0,
-                             'margin_left' => 5]);
-        } else {
-            $pdf = new Mpdf();
+            
+            $pdf = new Mpdf([
+                'mode' => 'utf-8',
+                'format' => [78, 280 + ($quantity_rows * 10) + $p_order + $company_name + $legends + $total_exportation + $total_free + $total_unaffected + $total_exonerated + $total_taxed + $customer_name + $customer_address],
+                'margin_top' => 2,
+                'margin_right' => 5,
+                'margin_bottom' => 0,
+                'margin_left' => 5
+            ]);
         }
+        
         $pdf->WriteHTML($html);
-
+        
         $html_footer = $template->pdfFooter();
         $pdf->SetHTMLFooter($html_footer);
         $this->uploadFile($pdf->output('', 'S'), 'pdf');
     }
-
+    
     public function loadXmlSigned()
     {
         $this->xmlSigned = $this->getStorage($this->document->filename, 'signed');

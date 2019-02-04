@@ -1,25 +1,26 @@
 <template>
     <el-dialog :title="titleDialog" :visible="showDialog" @open="create" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
         <div class="row mt-4">
-            <div class="col-lg-12">
-                <div class="form-group">
-                    <label class="control-label">Formato de PDF</label>
-                    <el-select v-model="format" >
-                        <el-option key="a4" value="a4" label="Tamaño A4"></el-option>
-                        <el-option key="ticket" value="ticket" label="Tamaño Ticket"></el-option>
-                    </el-select>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6 mt-2">
-                <button type="button" class="btn waves-effect waves-light btn-lg btn-info pull-right" @click="clickPrint">
-                    <i class="fa fa-print"></i>&nbsp;&nbsp;Imprimir
+            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+                <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickPrint('a4')">
+                    <i class="fa fa-print"></i>&nbsp;&nbsp;Imprimir A4
                 </button>
             </div>
-            <div class="col-6 mt-2">
-                <button type="button" class="btn waves-effect waves-light btn-outline-secondary" @click="clickDownload">
-                    <i class="fa fa-download"></i>&nbsp;&nbsp;Descargar
+            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+                <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickPrint('ticket')">
+                    <i class="fa fa-print"></i>&nbsp;&nbsp;Imprimir Ticket
+                </button>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+                <button type="button" class="btn btn-lg waves-effect waves-light btn-outline-secondary" @click="clickDownload('a4')">
+                    <i class="fa fa-download"></i>&nbsp;&nbsp;Descargar A4
+                </button>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+                <button type="button" class="btn btn-lg waves-effect waves-light btn-outline-secondary" @click="clickDownload('ticket')">
+                    <i class="fa fa-download"></i>&nbsp;&nbsp;Descargar Ticket
                 </button>
             </div>
         </div>
@@ -50,7 +51,6 @@
 </template>
 
 <script>
-
     export default {
         props: ['showDialog', 'recordId', 'showClose'],
         data() {
@@ -58,7 +58,6 @@
                 titleDialog: null,
                 loading: false,
                 resource: 'documents',
-                format: null,
                 errors: {},
                 form: {}
             }
@@ -68,7 +67,6 @@
         },
         methods: {
             initForm() {
-                this.format = 'a4';
                 this.errors = {};
                 this.form = {
                     customer_email: null,
@@ -84,11 +82,11 @@
                     this.titleDialog = 'Comprobante: '+this.form.number;
                 });
             },
-            clickPrint(){
-                window.open(`/print/document/${this.form.external_id}/${this.format}`, '_blank');
+            clickPrint(format){
+                window.open(`/print/document/${this.form.external_id}/${format}`, '_blank');
             },
-            clickDownload() {
-                window.open(`${this.form.download_pdf}/${this.format}`, '_blank');
+            clickDownload(format) {
+                window.open(`${this.form.download_pdf}/${format}`, '_blank');
             },
             clickSendEmail() {
                 this.loading = true

@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
+use App\CoreFacturalo\Facturalo;
 use App\CoreFacturalo\Template;
 use App\Models\Tenant\Company;
 use Mpdf\Mpdf;
@@ -18,7 +19,7 @@ class DownloadController extends Controller
         
         if (!$document) throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
         
-        if ($format != null) $this->reloadPDF($document, $format);
+        if ($format != null) $this->reloadPDF($document, 'invoice', $format);
         
         return $this->download($type, $document);
     }
@@ -47,7 +48,7 @@ class DownloadController extends Controller
         
         if (!$document) throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");
         
-        if ($format != null) $this->reloadPDF($document, $format);
+        if ($format != null) $this->reloadPDF($document, 'invoice', $format);
         
         $temp = tempnam(sys_get_temp_dir(), 'pdf');
         file_put_contents($temp, $this->getStorage($document->filename, 'pdf'));
@@ -61,29 +62,7 @@ class DownloadController extends Controller
      * @param  string $format
      * @return void
      */
-    private function reloadPDF($document, $format) {
-        $company = Company::active();
-        $template = new Template();
-        $pdf = new Mpdf();
-        
-        $html = $template->pdf('invoice', $company, $document, $format);
-        
-        if ($format === 'ticket') {
-            $quantity_rows = count($document->items);
-            $pdf = new Mpdf([
-                'mode' => 'utf-8',
-                'format' => [78, 220 + ($quantity_rows * 10)],
-                'margin_top' => 2,
-                'margin_right' => 5,
-                'margin_bottom' => 0,
-                'margin_left' => 5
-            ]);
-        }
-        
-        $pdf->WriteHTML($html);
-        $html_footer = $template->pdfFooter();
-        $pdf->SetHTMLFooter($html_footer);
-        
-        $this->uploadStorage($document->filename, $pdf->output('', 'S'), 'pdf');
+    private function reloadPDF($document, $type, $format) {
+        (new Facturalo)->createPdf($document, $type, $format);
     }
 }
