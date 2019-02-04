@@ -15,14 +15,21 @@ class PersonRequest extends FormRequest
     public function rules()
     {
         $id = $this->input('id');
+        $type = $this->input('type');
         return [
             'number' => [
                 'required',
-                Rule::unique('tenant.persons')->ignore($id),
+                Rule::unique('tenant.persons')->where(function ($query) use($id, $type) {
+                    return $query->where('type', $type)
+                                 ->where('id', '<>' ,$id);
+                })
             ],
             'name' => [
                 'required',
-                Rule::unique('tenant.persons')->ignore($id),
+                Rule::unique('tenant.persons')->where(function ($query) use($id, $type) {
+                    return $query->where('type', $type)
+                                 ->where('id', '<>' ,$id);
+                })
             ],
             'identity_document_type_id' => [
                 'required',
