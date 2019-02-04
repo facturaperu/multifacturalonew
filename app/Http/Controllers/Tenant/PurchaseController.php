@@ -61,8 +61,9 @@ class PurchaseController extends Controller
         $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();        
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
+        $company = Company::active();
 
-        return compact('suppliers', 'establishment','currency_types', 'discount_types', 'charge_types', 'document_types_invoice');
+        return compact('suppliers', 'establishment','currency_types', 'discount_types', 'charge_types', 'document_types_invoice','company');
     }
 
     public function item_tables()

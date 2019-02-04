@@ -176,6 +176,7 @@
                 loading_submit: false,
                 errors: {},
                 form: {}, 
+                aux_supplier_id:null,
                 document_types: [],
                 currency_types: [],
                 discount_types: [],
@@ -210,11 +211,31 @@
                     this.changeDocumentType()
                     this.changeCurrencyType()
                 })
+
             this.$eventHub.$on('reloadDataPersons', (supplier_id) => {
-                this.reloadDataSuppliers(supplier_id)
-            })
+                this.reloadDataSuppliers(supplier_id)   
+           })
         },
         methods: {
+            
+            filterSuppliers() {
+ 
+                if(this.form.document_type_id === '01') {
+                    this.suppliers = _.filter(this.all_suppliers, {'identity_document_type_id': '6'})
+                    this.selectSupplier()                    
+
+                } else {                    
+                    this.suppliers = _.filter(this.all_suppliers, (c) => { return c.identity_document_type_id !== '6' }) 
+                    this.selectSupplier()
+                }
+            },
+            selectSupplier(){
+
+                let supplier = _.find(this.suppliers, {'id': this.aux_supplier_id})
+                this.form.supplier_id = (supplier) ? supplier.id : null
+                this.aux_supplier_id = null 
+
+            },
             initForm() {
                 this.errors = {}
                 this.form = {
@@ -271,14 +292,6 @@
             },
             changeDocumentType() {
                 this.filterSuppliers()
-            },
-            filterSuppliers() {
-                this.form.supplier_id = null
-                if(this.form.document_type_id === '01') {
-                    this.suppliers = _.filter(this.all_suppliers, {'identity_document_type_id': '6'})
-                } else {
-                    this.suppliers = this.all_suppliers
-                }
             },
             addRow(row) {
                 this.form.items.push(row)
@@ -372,9 +385,13 @@
                 location.href = '/purchases'
             },
             reloadDataSuppliers(supplier_id) {
+
                 this.$http.get(`/${this.resource}/table/suppliers`).then((response) => {
-                    this.suppliers = response.data
-                    this.form.supplier_id = supplier_id
+
+                    this.aux_supplier_id = supplier_id
+                    this.all_suppliers = response.data
+                    this.filterSuppliers() 
+ 
                 })
             },
         }
