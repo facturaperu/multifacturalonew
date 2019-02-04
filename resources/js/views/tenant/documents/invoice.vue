@@ -7,7 +7,7 @@
             <div class="invoice">
                 <header class="clearfix">
                     <div class="row">
-                        <div class="col-sm-2 text-right mt-3 mb-3">
+                        <div class="col-sm-2 text-center mt-3 mb-3">
                             <logo url="/" :path_logo="(company.logo != null) ? `/storage/uploads/logos/${company.logo}` : ''" ></logo>
                         </div>
                         <div class="col-sm-10 text-left mt-3 mb-3">

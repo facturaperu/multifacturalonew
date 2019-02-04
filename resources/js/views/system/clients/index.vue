@@ -7,29 +7,30 @@
             </ol>
         </header>
         <div class="row">
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-8 mb-3">
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="row">
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-8">
-                                <div class="chart-data-selector ready">
+                            <div class="col-lg-12">
+                                <div class="chart-data-selector ready pl-3 pr-4 pt-4">
                                     <div class="chart-data-selector-items">
                                         <chart-line :data="dataChartLine" v-if="loaded"></chart-line>
                                     </div>
                                 </div>
+                                <p class="text-right pr-4 pt-1 font-weight-semibold">Comprobantes generados por mes</p>
                             </div>
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-4">
+                            <!-- <div class="col-lg-3 col-md-3 col-sm-4 col-4">
                                 <div class="title-chart">
                                     Comprobantes
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="row mb-3">
-                    <div class="col-xl-6">
+                    <div class="col-md-12">
                         <section class="card card-horizontal">
                             <header class="card-header bg-success">
                                 <div class="card-header-icon">
@@ -37,7 +38,7 @@
                                 </div>
                             </header>
                             <div class="card-body p-4 text-center">
-                                <p class="font-weight-semibold mb-0">Total Clientes</p>
+                                <p class="font-weight-semibold mb-0 mx-4">Total Clientes</p>
                                 <h2 class="font-weight-semibold mt-0">{{ records.length }}</h2>
                                 <div class="summary-footer">
                                     <a class="text-muted text-uppercase" href="#client-list">Ver todos</a>
@@ -45,7 +46,7 @@
                             </div>
                         </section>
                     </div>
-                    <div class="col-xl-6">
+                    <div class="col-md-12">
                         <section class="card card-horizontal">
                             <header class="card-header bg-info">
                                 <div class="card-header-icon">

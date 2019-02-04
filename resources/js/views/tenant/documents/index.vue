@@ -30,7 +30,17 @@
                         <!--<th class="text-center">Anulación</th>-->
                         <th class="text-right">Acciones</th>
                     <tr>
-                    <tr slot-scope="{ index, row }" :class="{'text-danger': (row.state_type_id === '11'), 'text-warning': (row.state_type_id === '13')}">
+                    <tr slot-scope="{ index, row }" :class="{
+                                                    'text-danger': (row.state_type_id === '11'),
+                                                    'text-warning': (row.state_type_id === '13'),
+                                                    'border-left border-light': (row.state_type_id === '01'),
+                                                    'border-left border-info': (row.state_type_id === '03'),
+                                                    'border-left border-success': (row.state_type_id === '05'),
+                                                    'border-left border-secondary': (row.state_type_id === '07'),
+                                                    'border-left border-dark': (row.state_type_id === '09'),
+                                                    'border-left border-danger': (row.state_type_id === '11'),
+                                                    'border-left border-warning': (row.state_type_id === '13')
+                    }">
                         <td>{{ index }}</td>
                         <td class="text-center">{{ row.date_of_issue }}</td>
                         <td>{{ row.customer_name }}<br/><small v-text="row.customer_number"></small></td>
@@ -48,13 +58,13 @@
                         <td class="text-right">{{ row.total_igv }}</td>
                         <td class="text-right">{{ row.total }}</td>
                         <td class="text-center">
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                            <button type="button" style="min-width: 41px" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickDownload(row.download_xml)"
                                     v-if="row.has_xml">XML</button>
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                            <button type="button" style="min-width: 41px" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickDownload(row.download_pdf)"
                                     v-if="row.has_pdf">PDF</button>
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                            <button type="button" style="min-width: 41px" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickDownload(row.download_cdr)"
                                     v-if="row.has_cdr">CDR</button>
                         </td>
@@ -70,15 +80,15 @@
                                     <!--v-if="row.btn_ticket">Consultar</button>-->
                         <!--</td>-->
                         <td class="text-right">
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger m-1__2"
                                     @click.prevent="clickVoided(row.id)"
                                     v-if="row.btn_voided">Anular</button>
-                            <a :href="`/${resource}/note/${row.id}`" class="btn waves-effect waves-light btn-xs btn-warning"
+                            <a :href="`/${resource}/note/${row.id}`" class="btn waves-effect waves-light btn-xs btn-warning m-1__2"
                                v-if="row.btn_note">Nota</a>
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickResend(row.id)"
                                     v-if="row.btn_resend">Reenviar</button>
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickOptions(row.id)">Opciones</button>
                         </td>
                     </tr>
