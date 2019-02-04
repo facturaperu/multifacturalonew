@@ -10,6 +10,10 @@ class PersonInput
     {
         $person = PersonModel::find($person_id);
 
+        if(!$person) {
+            return null;
+        }
+
         return [
             'identity_document_type_id' => $person->identity_document_type_id,
             'identity_document_type' => [

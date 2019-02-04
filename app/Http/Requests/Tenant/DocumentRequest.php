@@ -28,13 +28,13 @@ class DocumentRequest extends FormRequest
             'date_of_issue' => [
                 'required',
             ],
-            'note.note_credit_type_id' => [
+            'note_credit_type_id' => [
                 'required_if:document_type_id, "07"',
             ],
-            'note.note_debit_type_id' => [
+            'note_debit_type_id' => [
                 'required_if:document_type_id, "08"',
             ],
-            'note.note_description' => [
+            'note_description' => [
                 'required_if:document_type_id,"07", "08"',
             ],
         ];

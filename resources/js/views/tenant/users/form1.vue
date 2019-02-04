@@ -41,15 +41,11 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">Módulos</label>
-                            <el-select v-model="form.modules" multiple>
-                                <el-option
-                                        v-for="module in modules"
-                                        :key="module.id"
-                                        :label="module.description"
-                                        :value="module.id">
-                                </el-option>
-                            </el-select>
-                            <!--<el-switch v-model="form.modules.id" active-text="Si" inactive-text="No"></el-switch>-->
+                            <div class="row">
+                                <div class="col-4" v-for="module in form.modules">
+                                    <el-checkbox v-model="module.checked">{{ module.description }}</el-checkbox>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,12 +75,12 @@
                 modules: []
             }
         },
-        created() {
-            this.initForm()
-            this.$http.get(`/${this.resource}/tables`)
+        async created() {
+            await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.modules = response.data.modules
                 })
+            await this.initForm()
         },
         methods: {
             initForm() {
@@ -98,6 +94,14 @@
                     password_confirmation: null,
                     modules: []
                 }
+
+                this.modules.forEach(module => {
+                    this.form.modules.push({
+                        id: module.id,
+                        description: module.description,
+                        checked: false
+                    })
+                })
             },
             create() {
                 this.titleDialog = (this.recordId)? 'Editar Usuario':'Nuevo Usuario'

@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function tables()
     {
-        $modules = Module::all();
+        $modules = Module::orderBy('description')->get();
 
         return compact('modules');
     }
@@ -46,7 +46,8 @@ class UserController extends Controller
         }
         $user->save();
 
-        $user->modules()->sync($request->input('modules'));
+        $modules = collect($request->input('modules'))->where('checked', true)->pluck('id')->toArray();
+        $user->modules()->sync($modules);
 
         return [
             'success' => true,

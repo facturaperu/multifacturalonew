@@ -148,7 +148,7 @@ class DocumentController extends Controller
         return $record;
     }
 
-    public function store(Request $request)
+    public function store(DocumentRequest $request)
     {
         $fact = DB::connection('tenant')->transaction(function () use ($request) {
             $facturalo = new Facturalo();
