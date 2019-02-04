@@ -8,9 +8,11 @@ use App\Models\Tenant\Document;
 use App\Models\Tenant\PurchaseItem; 
 use App\Models\Tenant\Kardex;
 use Illuminate\Support\ServiceProvider;
+use App\Traits\KardexTrait;
 
 class KardexServiceProvider extends ServiceProvider
 {
+    use KardexTrait;
      
     public function boot()
     {        
@@ -28,14 +30,8 @@ class KardexServiceProvider extends ServiceProvider
         DocumentItem::created(function ($document_item) {
             $document = Document::whereIn('document_type_id',['01','03'])->find($document_item->document_id);
             if($document){
-                $kardex = Kardex::create([
-                    'type' => 'sale',
-                    'date_of_issue' => date('Y-m-d'),
-                    'item_id' => $document_item->item_id,
-                    'document_id' => $document_item->document_id,
-                    'purchase_id' => null,
-                    'quantity' => $document_item->quantity,
-                ]);
+
+                $kardex = $this->saveKardex('sale', $document_item->item_id, $document_item->document_id, $document_item->quantity);
                 
                 if($document->state_type_id != 11){
                     $item = Item::find($document_item->item_id);
@@ -50,14 +46,8 @@ class KardexServiceProvider extends ServiceProvider
     private function purchase()
     {
         PurchaseItem::created(function ($purchase_item) {
-            $kardex = Kardex::create([
-                'type' => 'purchase',
-                'date_of_issue' => date('Y-m-d'),
-                'item_id' => $purchase_item->item_id,
-                'document_id' => null,
-                'purchase_id' => $purchase_item->purchase_id,
-                'quantity' => $purchase_item->quantity,
-            ]); 
+
+            $kardex = $this->saveKardex('purchase', $purchase_item->item_id, $purchase_item->purchase_id, $purchase_item->quantity);             
 
             $item = Item::find($purchase_item->item_id);
             $item->stock += $kardex->quantity;
