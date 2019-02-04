@@ -3,19 +3,21 @@
         <!-- <div class="card-header bg-info">
             <h3 class="my-0">Nuevo Comprobante</h3>
         </div> -->
-        <div class="card-body" v-if="loading_form">
+        <div class="tab-content" v-if="loading_form">
             <div class="invoice">
                 <header class="clearfix">
                     <div class="row">
-                        <div class="col-sm-2 mt-3 d-none d-sm-block">
-                            <div class="ib">
-                                <img src="/logo/logo_cpe.png" alt="CPE" class="img-fluid" style="background-color: #0088CC;">
+                        <div class="col-sm-2 text-right mt-3 mb-3">
+                            <div class="ib" v-if="company.logo">
+                                <img :src="'/storage/uploads/logos/' + company.logo" :alt="company.logo" class="img-fluid" style="max-height: 70px;">
                             </div>
-
+                            <div class="text-center" style="color:#CCC;" v-else>
+                                <i class="fa fa-circle fa-4x"></i>
+                            </div>
                         </div>
-                        <div class="col-sm-8 text-right mt-3 mb-3">
+                        <div class="col-sm-10 text-left mt-3 mb-3">
                             <address class="ib mr-2" >
-                                {{company.name}}
+                                <span class="font-weight-bold">{{company.name}}</span>
                                 <br>
                                 <div v-if="establishment.address != '-'">{{ establishment.address }}, </div> {{ establishment.district.description }}, {{ establishment.province.description }}, {{ establishment.department.description }} - {{ establishment.country.description }}
                                 <div v-if="establishment.telephone != '-'">
@@ -26,23 +28,15 @@
                                 {{establishment.email}}
                             </address>
                         </div>
-                        <div class="col-sm-2 text-right mt-3 mb-3">
-                            <div class="ib" v-if="company.logo">
-                                <img :src="'/storage/uploads/logos/' + company.logo" :alt="company.logo" class="img-fluid" style="max-height: 70px;">
-                            </div>
-                            <div class="text-center" style="color:#CCC;" v-else>
-                                <i class="fa fa-circle fa-4x"></i>
-                            </div>
-                        </div>
                     </div>
                 </header>
                 <form autocomplete="off" @submit.prevent="submit">
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-lg-2 pb-2 border border-custom rounded">
+                            <div class="col-lg-2 pb-2">
                                 <div class="form-group" :class="{'has-danger': errors.document_type_id}">
-                                    <label class="control-label">Tipo de comprobante</label>
-                                    <el-select v-model="form.document_type_id" @change="changeDocumentType">
+                                    <label class="control-label font-weight-bold text-info">Tipo de comprobante</label>
+                                    <el-select v-model="form.document_type_id" @change="changeDocumentType" class="border-left rounded-left border-info">
                                         <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
                                     <small class="form-control-feedback" v-if="errors.document_type_id" v-text="errors.document_type_id[0]"></small>
@@ -93,13 +87,13 @@
                             </div>
                         </div>
                         <div class="row mt-1">
-                            <div class="col-lg-6 border border-custom rounded pb-2">
+                            <div class="col-lg-6 pb-2">
                                 <div class="form-group" :class="{'has-danger': errors.customer_id}">
-                                    <label class="control-label">
+                                    <label class="control-label font-weight-bold text-info">
                                         Cliente
                                         <a href="#" @click.prevent="showDialogNewPerson = true">[+ Nuevo]</a>
                                     </label>
-                                    <el-select v-model="form.customer_id" filterable>
+                                    <el-select v-model="form.customer_id" filterable class="border-left rounded-left border-info">
                                         <el-option v-for="option in customers" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
                                     <small class="form-control-feedback" v-if="errors.customer_id" v-text="errors.customer_id[0]"></small>

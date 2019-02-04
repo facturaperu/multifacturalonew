@@ -13,7 +13,7 @@
                     <div>
                         <form action="{{route('tenant.reports.purchases.search')}}" class="el-form demo-form-inline el-form--inline" method="POST">
                             {{csrf_field()}}
-                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}"></tenant-calendar>
+                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}" data_d="{{$d ?? ''}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}"></tenant-calendar>
                         </form>
                     </div>
                     @if(!empty($reports) && $reports->count())
