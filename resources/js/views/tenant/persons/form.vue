@@ -6,7 +6,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.identity_document_type_id}">
                             <label class="control-label">Tipo Doc. Identidad</label>
-                            <el-select v-model="form.identity_document_type_id" filterable>
+                            <el-select v-model="form.identity_document_type_id" filterable dusk="identity_document_type_id">
                                 <el-option v-for="option in identity_document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.identity_document_type_id" v-text="errors.identity_document_type_id[0]"></small>
@@ -15,7 +15,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">Número</label>
-                            <el-input v-model="form.number" :maxlength="maxLength">
+                            <el-input v-model="form.number" :maxlength="maxLength" dusk="number">
                                 <template v-if="form.identity_document_type_id === '6' || form.identity_document_type_id === '1'">
                                     <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchCustomer"></el-button>
                                 </template>
@@ -28,14 +28,14 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.name}">
                             <label class="control-label">Nombre</label>
-                            <el-input v-model="form.name"></el-input>
+                            <el-input v-model="form.name" dusk="name"></el-input>
                             <small class="form-control-feedback" v-if="errors.name" v-text="errors.name[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.trade_name}">
                             <label class="control-label">Nombre comercial</label>
-                            <el-input v-model="form.trade_name"></el-input>
+                            <el-input v-model="form.trade_name" dusk="trade_name"></el-input>
                             <small class="form-control-feedback" v-if="errors.trade_name" v-text="errors.trade_name[0]"></small>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                     <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.country_id}">
                             <label class="control-label">País</label>
-                            <el-select v-model="form.country_id" filterable>
+                            <el-select v-model="form.country_id" filterable dusk="country_id">
                                 <el-option v-for="option in countries" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.country_id" v-text="errors.country_id[0]"></small>
@@ -53,7 +53,7 @@
                     <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.department_id}">
                             <label class="control-label">Departamento</label>
-                            <el-select v-model="form.department_id" filterable @change="filterProvince">
+                            <el-select v-model="form.department_id" filterable @change="filterProvince" popper-class="el-select-departments" dusk="department_id">
                                 <el-option v-for="option in all_departments" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.department_id" v-text="errors.department_id[0]"></small>
@@ -62,7 +62,7 @@
                     <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.province_id}">
                             <label class="control-label">Provincia</label>
-                            <el-select v-model="form.province_id" filterable @change="filterDistrict">
+                            <el-select v-model="form.province_id" filterable @change="filterDistrict" popper-class="el-select-provinces" dusk="province_id">
                                 <el-option v-for="option in provinces" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.province_id" v-text="errors.province_id[0]"></small>
@@ -73,7 +73,7 @@
                     <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.province_id}">
                             <label class="control-label">Distrito</label>
-                            <el-select v-model="form.district_id" filterable>
+                            <el-select v-model="form.district_id" filterable popper-class="el-select-districts" dusk="district_id">
                                 <el-option v-for="option in districts" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.district_id" v-text="errors.district_id[0]"></small>
@@ -82,7 +82,7 @@
                     <div class="col-md-8">
                         <div class="form-group" :class="{'has-danger': errors.address}">
                             <label class="control-label">Dirección</label>
-                            <el-input v-model="form.address"></el-input>
+                            <el-input v-model="form.address" dusk="address"></el-input>
                             <small class="form-control-feedback" v-if="errors.address" v-text="errors.address[0]"></small>
                         </div>
                     </div>
@@ -91,14 +91,14 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.telephone}">
                             <label class="control-label">Teléfono</label>
-                            <el-input v-model="form.telephone"></el-input>
+                            <el-input v-model="form.telephone" dusk="telephone"></el-input>
                             <small class="form-control-feedback" v-if="errors.telephone" v-text="errors.telephone[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.email}">
                             <label class="control-label">Correo electrónico</label>
-                            <el-input v-model="form.email"></el-input>
+                            <el-input v-model="form.email" dusk="email"></el-input>
                             <small class="form-control-feedback" v-if="errors.email" v-text="errors.email[0]"></small>
                         </div>
                     </div>

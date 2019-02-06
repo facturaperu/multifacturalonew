@@ -6,14 +6,14 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">RUC</label>
-                            <el-input v-model="form.number" :maxlength="11"></el-input>
+                            <el-input v-model="form.number" :maxlength="11" dusk="number"></el-input>
                             <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.name}">
                             <label class="control-label">Nombre de la Empresa</label>
-                            <el-input v-model="form.name"></el-input>
+                            <el-input v-model="form.name" dusk="name"></el-input>
                             <small class="form-control-feedback" v-if="errors.name" v-text="errors.name[0]"></small>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': (errors.subdomain || errors.uuid)}">
                             <label class="control-label">Nombre de Subdominio</label>
-                            <el-input v-model="form.subdomain">
+                            <el-input v-model="form.subdomain" dusk="subdomain">
                                 <template slot="append">{{ url_base }}</template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.subdomain" v-text="errors.subdomain[0]"></small>
@@ -32,7 +32,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.email}">
                             <label class="control-label">Correo de Acceso</label>
-                            <el-input v-model="form.email"></el-input>
+                            <el-input v-model="form.email" dusk="email"></el-input>
                             <small class="form-control-feedback" v-if="errors.email" v-text="errors.email[0]"></small>
                         </div>
                     </div>
@@ -41,14 +41,14 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': (errors.password)}">
                             <label class="control-label">Contraseña</label>
-                            <el-input type="password" v-model="form.password"></el-input>
+                            <el-input type="password" v-model="form.password" dusk="password"></el-input>
                             <small class="form-control-feedback" v-if="errors.password" v-text="errors.password[0]"></small> 
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.plan_id}">
                             <label class="control-label">Plan</label>
-                            <el-select v-model="form.plan_id">
+                            <el-select v-model="form.plan_id" dusk="plan_id">
                                 <el-option v-for="option in plans" :key="option.id" :value="option.id" :label="option.name"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.plan_id" v-text="errors.plan_id[0]"></small>
@@ -59,7 +59,7 @@
             </div>
             <div class="form-actions text-right pt-2">
                 <el-button @click.prevent="close()">Cancelar</el-button>
-                <el-button type="primary" native-type="submit" :loading="loading_submit">Guardar</el-button>
+                <el-button type="primary" native-type="submit" :loading="loading_submit" dusk="submit">Guardar</el-button>
             </div>
         </form>
     </el-dialog>

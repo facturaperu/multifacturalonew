@@ -9,7 +9,7 @@
                                 Producto/Servicio
                                 <a href="#" @click.prevent="showDialogNewItem = true">[+ Nuevo]</a>
                             </label>
-                            <el-select v-model="form.item_id" @change="changeItem" filterable>
+                            <el-select v-model="form.item_id" @change="changeItem" filterable popper-class="el-select-items" dusk="item_id">
                                 <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.full_description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.item_id" v-text="errors.item_id[0]"></small>
@@ -161,7 +161,7 @@
             </div>
             <div class="form-actions text-right pt-2">
                 <el-button @click.prevent="close()">Cerrar</el-button>
-                <el-button type="primary" native-type="submit">Agregar</el-button>
+                <el-button class="add" type="primary" native-type="submit">Agregar</el-button>
             </div>
         </form>
         <item-form :showDialog.sync="showDialogNewItem"
