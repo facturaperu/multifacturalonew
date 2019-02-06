@@ -72,9 +72,9 @@
     <tr>
         <td><p class="desc">Fecha de vencimiento:</p></td>
         <td><p class="desc">{{ $document->date_of_due->format('Y-m-d') }}</p></td>
-    </tr> 
+    </tr>
     @endisset
-    
+
     <tr>
         <td><p class="desc">Cliente:</p></td>
         <td><p class="desc">{{ $customer->name }}</p></td>
@@ -156,6 +156,11 @@
                         <br/>{!! $attr->description !!} : {{ $attr->value }}
                     @endforeach
                 @endif
+                @if($row->discounts)
+                    @foreach($row->discounts as $dtos)
+                        <br/><small>{{ $dtos->factor * 100 }}% {{$dtos->description }}</small>
+                    @endforeach
+                @endif
             </td>
             <td class="text-right desc-9 align-top">{{ number_format($row->unit_price, 2) }}</td>
             <td class="text-right desc-9 align-top">{{ number_format($row->total, 2) }}</td>
@@ -192,6 +197,12 @@
             <tr>
                 <td colspan="4" class="text-right font-bold desc">OP. GRAVADAS: {{ $document->currency_type->symbol }}</td>
                 <td class="text-right font-bold desc">{{ number_format($document->total_taxed, 2) }}</td>
+            </tr>
+        @endif
+        @if($document->total_discount > 0)
+            <tr>
+                <td colspan="5" class="text-right font-bold">DESCUENTO TOTAL: {{ $document->currency_type->symbol }}</td>
+                <td class="text-right font-bold">{{ number_format($document->total_discount, 2) }}</td>
             </tr>
         @endif
         <tr>

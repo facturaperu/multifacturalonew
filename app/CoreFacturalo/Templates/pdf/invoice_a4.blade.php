@@ -115,7 +115,6 @@
                 @else
                 0
                 @endif
-
             </td>
             <td class="text-right align-top">{{ number_format($row->total, 2) }}</td>
         </tr>
