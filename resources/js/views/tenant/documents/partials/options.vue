@@ -43,7 +43,7 @@
                 <el-button @click="clickClose">Cerrar</el-button>
             </template>
             <template v-else>
-                <el-button @click="clickFinalize">Ir al listado</el-button>
+                <el-button class="list" @click="clickFinalize">Ir al listado</el-button>
                 <el-button type="primary" @click="clickNewDocument">Nuevo comprobante</el-button>
             </template>
         </span>
