@@ -5,6 +5,7 @@ namespace App\CoreFacturalo\Requests\Api\Transform;
 use App\CoreFacturalo\Requests\Api\Transform\Common\EstablishmentTransform;
 use App\CoreFacturalo\Requests\Api\Transform\Common\PersonTransform;
 use App\CoreFacturalo\Requests\Api\Transform\Common\LegendTransform;
+use App\CoreFacturalo\Requests\Api\Transform\Common\ActionTransform;
 
 class DispatchTransform
 {
@@ -35,7 +36,9 @@ class DispatchTransform
             'dispatcher' => self::dispatcher($inputs),
             'driver' => self::driver($inputs),
             'items' => self::items($inputs),
-            'legends' => LegendTransform::transform($inputs)
+            'legends' => LegendTransform::transform($inputs),
+            'actions' => ActionTransform::transform($inputs),
+
         ];
     }
 
