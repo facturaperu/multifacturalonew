@@ -140,9 +140,9 @@ class Facturalo
 
             $company = $this->company;
             $document = $this->document;
-            $customer_email = $this->document->customer->email;
-
-            Mail::to($customer_email)->send(new DocumentEmail($company, $document));
+            $email = ($this->document->customer) ? $this->document->customer->email : $this->document->supplier->email;
+    
+            Mail::to($email)->send(new DocumentEmail($company, $document));
 
         }
     }

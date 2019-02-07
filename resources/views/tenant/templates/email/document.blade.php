@@ -14,7 +14,13 @@
     </style>
 </head>
 <body>
-<p>Estimad@: {{ $document->customer->name }}, informamos que su comprobante electrónico ha sido emitido exitosamente.</p>
+<p>Estimad@: 
+    @if($document->customer)
+        {{ $document->customer->name }}
+    @else
+        {{ $document->supplier->name }}
+    @endif
+    , informamos que su comprobante electrónico ha sido emitido exitosamente.</p>
 <p>Los datos de su comprobante electrónico son:</p>
 <ul>
     <li>Razon social: {{ $company->name }}</li>
