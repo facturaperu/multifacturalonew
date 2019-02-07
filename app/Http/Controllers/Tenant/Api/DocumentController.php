@@ -28,7 +28,9 @@ class DocumentController extends Controller
             return $facturalo;
         });
 
+        $fact->sendEmail();
         $fact->senderXmlSignedBill();
+
         $document = $fact->getDocument();
         $response = $fact->getResponse();
 
