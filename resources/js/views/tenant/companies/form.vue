@@ -47,6 +47,12 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <h4 class="border-bottom">Entorno del sistema</h4>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.soap_type_id}">
@@ -57,20 +63,29 @@
                                 <small class="form-control-feedback" v-if="errors.soap_type_id" v-text="errors.soap_type_id[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group" :class="{'has-danger': errors.soap_username}">
-                                <label class="control-label">SOAP Usuario</label>
-                                <el-input v-model="form.soap_username"></el-input>
-                                <small class="form-control-feedback" v-if="errors.soap_username" v-text="errors.soap_username[0]"></small>
+                    </div>
+
+                    <div v-if="form.soap_type_id == '02'">
+                        <div class="row" >
+                            <div class="col-md-12 mt-2">
+                                <h4 class="border-bottom">Usuario Secundario Sunat</h4>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group" :class="{'has-danger': errors.soap_password}">
-                                <label class="control-label">SOAP Password</label>
-                                <el-input v-model="form.soap_password"></el-input>
-                                <small class="form-control-feedback" v-if="errors.soap_password" v-text="errors.soap_password[0]"></small>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" :class="{'has-danger': errors.soap_username}">
+                                    <label class="control-label">SOAP Usuario</label>
+                                    <el-input v-model="form.soap_username"></el-input>
+                                    <div class="sub-title text-muted"><small>RUC + Usuario. Ejemplo: 12345678900ELUSUARIO</small></div>
+                                    <small class="form-control-feedback" v-if="errors.soap_username" v-text="errors.soap_username[0]"></small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" :class="{'has-danger': errors.soap_password}">
+                                    <label class="control-label">SOAP Password</label>
+                                    <el-input v-model="form.soap_password"></el-input>
+                                    <small class="form-control-feedback" v-if="errors.soap_password" v-text="errors.soap_password[0]"></small>
+                                </div>
                             </div>
                         </div>
                     </div>
