@@ -15,6 +15,8 @@ use App\CoreFacturalo\WS\Services\SunatEndpoints;
 use App\CoreFacturalo\WS\Signed\XmlSigned;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
 use App\Models\Tenant\Company;
+use App\Mail\Tenant\DocumentEmail;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Tenant\Dispatch;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Retention;
@@ -80,6 +82,7 @@ class Facturalo
     {
         $this->actions = array_key_exists('actions', $inputs)?$inputs['actions']:[];
         $this->type = $inputs['type'];
+
         switch ($this->type) {
             case 'debit':
             case 'credit':
@@ -96,7 +99,7 @@ class Facturalo
                     $document->items()->create($row);
                 }
                 $document->invoice()->create($inputs['invoice']);
-                $this->document = Document::find($document->id);
+                $this->document = Document::find($document->id); 
                 break;
             case 'summary':
                 $document = Summary::create($inputs);
@@ -127,6 +130,21 @@ class Facturalo
                 $this->document = Dispatch::find($document->id);
                 break;
         }
+    }
+
+    public function sendEmail()
+    { 
+        $send_email = ($this->actions['send_email'] === true) ? true : false;
+        
+        if($send_email){
+
+            $company = $this->company;
+            $document = $this->document;
+            $customer_email = $this->document->customer->email;
+    
+            Mail::to($customer_email)->send(new DocumentEmail($company, $document));
+
+        }      
     }
 
     public function createXmlUnsigned()
