@@ -99,7 +99,7 @@ class Facturalo
                     $document->items()->create($row);
                 }
                 $document->invoice()->create($inputs['invoice']);
-                $this->document = Document::find($document->id); 
+                $this->document = Document::find($document->id);
                 break;
             case 'summary':
                 $document = Summary::create($inputs);
@@ -133,18 +133,18 @@ class Facturalo
     }
 
     public function sendEmail()
-    { 
+    {
         $send_email = ($this->actions['send_email'] === true) ? true : false;
-        
+
         if($send_email){
 
             $company = $this->company;
             $document = $this->document;
             $customer_email = $this->document->customer->email;
-    
+
             Mail::to($customer_email)->send(new DocumentEmail($company, $document));
 
-        }      
+        }
     }
 
     public function createXmlUnsigned()
@@ -248,7 +248,7 @@ class Facturalo
 
             $pdf = new Mpdf([
                 'mode' => 'utf-8',
-                'format' => [78, 280 + ($quantity_rows * 10) + $p_order + $company_name + $legends + $total_exportation + $total_free + $total_unaffected + $total_exonerated + $total_taxed + $customer_name + $customer_address],
+                'format' => [78, 120 + ($quantity_rows * 10) + $p_order + $company_name + $legends + $total_exportation + $total_free + $total_unaffected + $total_exonerated + $total_taxed + $customer_name + $customer_address],
                 'margin_top' => 2,
                 'margin_right' => 5,
                 'margin_bottom' => 0,
@@ -258,8 +258,10 @@ class Facturalo
 
         $pdf->WriteHTML($html);
 
-        $html_footer = $template->pdfFooter();
-        $pdf->SetHTMLFooter($html_footer);
+        if ($format_pdf != 'ticket') {
+            $html_footer = $template->pdfFooter();
+            $pdf->SetHTMLFooter($html_footer);
+        }
         $this->uploadFile($pdf->output('', 'S'), 'pdf');
     }
 
