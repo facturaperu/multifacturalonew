@@ -240,6 +240,9 @@
     <tr>
         <td class="text-center desc">Código Hash: {{ $document->hash }}</td>
     </tr>
+    <tr>
+        <td class="text-center desc pt-5">Para consultar el comprobante ingresar a {!! url('/buscar') !!}</td>
+    </tr>
 </table>
 </body>
 </html>

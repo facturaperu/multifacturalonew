@@ -17,6 +17,10 @@
             <td width="20%">
                 <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" alt="{{ $company->name }}" class="company_logo" style="max-width: 300px">
             </td>
+        @else
+            <td width="20%">
+                <img src="{{ asset('logo/logo.jpg') }}" alt="{{ $company->name }}" class="company_logo border-box" style="max-width: 300px">
+            </td>
         @endif
         <td width="80%" class="pl-3">
             <div class="text-left">
