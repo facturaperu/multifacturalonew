@@ -15,7 +15,9 @@
     <tr>
         @if($company->logo)
             <td width="20%">
-                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" alt="{{ $company->name }}" class="company_logo" style="max-width: 300px">
+                <div class="company_logo_box">
+                    <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" alt="{{ $company->name }}" class="company_logo" style="max-width: 300px">
+                </div>
             </td>
         @else
             <td width="20%">

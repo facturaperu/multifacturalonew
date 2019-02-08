@@ -11,14 +11,13 @@
     <link href="{{ $path_style }}" rel="stylesheet" />
 </head>
 <body>
-<table class="full-width">
-    <tr>
+
         @if($company->logo)
-            <td class="text-center px-5 pt-5 pb-3">
-                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo">
-            </td>
+            <div class="text-center company_logo_box pt-5">
+                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo_ticket contain">
+            </div>
         @endif
-    </tr>
+<table class="full-width">
     <tr>
         <td class="text-center"><h4>{{ $company->name }}</h4></td>
     </tr>
