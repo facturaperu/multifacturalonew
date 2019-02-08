@@ -57,6 +57,7 @@
                 }
                 
                 this.$message({message:'Error al subir el archivo', type: 'error'});
+                this.imageUrl = '';
             },
             closed() {
                 this.dialogVisible = false;
