@@ -16,6 +16,10 @@
     <div class="text-center company_logo_box pt-5">
         <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo_ticket contain">
     </div>
+@else
+    <div class="text-center company_logo_box pt-5">
+        <img src="{{ asset('logo/logo.jpg') }}" class="company_logo_ticket contain">
+    </div>
 @endif
 <table class="full-width">
     <tr>

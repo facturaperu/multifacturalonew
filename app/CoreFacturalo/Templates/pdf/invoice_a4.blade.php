@@ -21,7 +21,7 @@
             </td>
         @else
             <td width="20%">
-                <img src="{{ asset('logo/logo.jpg') }}" alt="{{ $company->name }}" class="company_logo border-box" style="max-width: 200px">
+                <img src="{{ asset('logo/logo.jpg') }}" class="company_logo" style="max-width: 150px">
             </td>
         @endif
         <td width="50%" class="pl-3">

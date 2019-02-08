@@ -150,6 +150,10 @@
             <td width="25%">
                 <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo">
             </td>
+        @else
+            <td width="20%">
+                <img src="{{ asset('logo/logo.jpg') }}" alt="" class="company_logo" style="max-width: 200px">
+            </td>
         @endif
         <td width="100%">
             <table class="voucher-company-left">
