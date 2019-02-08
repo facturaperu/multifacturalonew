@@ -32,7 +32,7 @@
                 <small class="form-control-feedback" v-if="errors.customer_email" v-text="errors.customer_email[0]"></small>
             </div>
         </div>
-        <div class="row mt-4">
+        <div class="row mt-4" v-if="company.soap_type_id == '02'">
             <div class="col-md-12 text-center">
                 <button type="button" class="btn waves-effect waves-light btn-outline-primary"
                         @click.prevent="clickConsultCdr(form.id)">Consultar CDR</button>
@@ -59,11 +59,18 @@
                 loading: false,
                 resource: 'documents',
                 errors: {},
-                form: {}
+                form: {},
+                company: {}
             }
         },
-        created() {
+        async created() {
             this.initForm()
+            await this.$http.get(`/companies/record`)
+                .then(response => {
+                    if (response.data !== '') {
+                        this.company = response.data.data
+                    }
+                })
         },
         methods: {
             initForm() {
@@ -75,6 +82,9 @@
                     number: null,
                     id: null
                 };
+                this.company = {
+                    soap_type_id: null,
+                }
             },
             create() {
                 this.$http.get(`/${this.resource}/record/${this.recordId}`).then(response => {
