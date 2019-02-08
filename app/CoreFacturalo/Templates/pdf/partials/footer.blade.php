@@ -7,7 +7,7 @@
 <body>
 <table class="full-width">
     <tr>
-        <td class="text-center desc">Para consultar el comprobante ingresar a {!! url('/buscar') !!}</td>
+        <td class="text-center desc font-bold">Para consultar el comprobante ingresar a {!! url('/buscar') !!}</td>
     </tr>
 </table>
 </body>

@@ -1,6 +1,6 @@
 body {
     font-size: 12px;
-    font-family: "Open Sans", Arial, sans-serif;
+    font-family: Arial, sans-serif;
 }
 table {
     border-spacing: 0;
@@ -107,47 +107,47 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    font-size: 2.7em;
+    font-size: 32px;
     line-height: 44px;
     font-weight: 500;
 }
 
 h2 {
-    font-size: 2.25em;
+    font-size: 24px;
     font-weight: 500;
     line-height: 42px;
 }
 
 h3 {
-    font-size: 1.6em;
+    font-size: 18px;
     font-weight: 400;
     letter-spacing: normal;
     line-height: 24px;
 }
 
 h4 {
-    font-size: 1.3em;
+    font-size: 16px;
     font-weight: 400;
     letter-spacing: normal;
     line-height: 27px;
 }
 
 h5 {
-    font-size: 1.1em;
+    font-size: 13px;
     font-weight: 300;
     letter-spacing: normal;
     line-height: 18px;
 }
 
 h6 {
-    font-size: 0.9em;
+    font-size: 10px;
     font-weight: 300;
     letter-spacing: normal;
     line-height: 18px;
 }
 
 table, tr, td, th {
-    font-size: 14px !important;
+    font-size: 12px !important;
 }
 
 p {
