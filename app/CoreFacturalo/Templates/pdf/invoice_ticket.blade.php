@@ -12,11 +12,11 @@
 </head>
 <body>
 
-        @if($company->logo)
-            <div class="text-center company_logo_box pt-5">
-                <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo_ticket contain">
-            </div>
-        @endif
+@if($company->logo)
+    <div class="text-center company_logo_box pt-5">
+        <img src="{{ asset('storage/uploads/logos/'.$company->logo) }}" class="company_logo_ticket contain">
+    </div>
+@endif
 <table class="full-width">
     <tr>
         <td class="text-center"><h4>{{ $company->name }}</h4></td>
