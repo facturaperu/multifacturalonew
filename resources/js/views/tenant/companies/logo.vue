@@ -1,16 +1,13 @@
 <template>
     <div>
-        <div class="ib" v-if="path_logo != ''">
-            <img :src="path_logo" class="img-fluid" style="max-height: 70px;">
-        </div>
-        <div v-else class="text-center" style="color: #CCC; cursor: pointer;" @click="dialogVisible = true">
-            <i class="fa fa-circle fa-4x"></i>
+        <div class="text-center" style="color: #CCC; cursor: pointer;" @click="dialogVisible = true">
+            <img :src="src" class="img-fluid" style="max-height: 70px;">
         </div>
         <div class="">
             <el-dialog title="Logo" class="text-left" :visible.sync="dialogVisible" @closed="closed">
                 <p class="text-center">* Se recomienda resoluciones 700x300.</p>
                 <div class="text-center">
-                    <el-upload class="uploader" slot="append" :headers="headers" :data="{'type': 'logo'}" action="/companies/uploads" :show-file-list="false" :on-success="successUpload">
+                    <el-upload class="uploader" slot="append" :headers="headers" :data="{'type': 'logo'}" action="/companies/uploads" :show-file-list="false" :before-upload="beforeAvatarUpload" :on-success="successUpload">
                         <img v-if="imageUrl" width="100%" :src="imageUrl" alt="">
                         <i v-else class="el-icon-plus uploader-icon"></i>
                     </el-upload>
@@ -34,13 +31,22 @@
             }
         },
         computed: {
-            href() {
-                if (this.path_logo == '') return '#';
+            src() {
+                if (this.path_logo != '') return this.path_logo;
                 
-                return this.url;
+                return '/logo/700x300.jpg';
             }
         },
         methods: {
+            beforeAvatarUpload(file) {
+                const isIMG = ((file.type === 'image/jpeg') || (file.type === 'image/png') || (file.type === 'image/jpg'));
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                
+                if (!isIMG) this.$message.error('La imagen no es valida!');
+                if (!isLt2M) this.$message.error('La imagen excede los 2MB!');
+                
+                return isIMG && isLt2M;
+            },
             successUpload(response, file, fileList) {
                 this.imageUrl = URL.createObjectURL(file.raw);
                 
