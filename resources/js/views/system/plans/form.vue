@@ -35,9 +35,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-3">
                         <div class="form-group" :class="{'has-danger': (errors.plan_documents)}">
-                            <label class="control-label">Activar documentos</label> 
+                            <label class="control-label font-weight-bold mb-0">Habilitar documentos electrónicos</label> 
 
                             <el-checkbox-group v-model="form.plan_documents"  >
                                 <el-checkbox v-for="(city,ind) in plan_documents" class="plan_documents" :label="city.id"  :key="ind">{{city.description}}</el-checkbox>

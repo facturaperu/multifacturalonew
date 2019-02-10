@@ -17,13 +17,16 @@
                                         <chart-line :data="dataChartLine" v-if="loaded"></chart-line>
                                     </div>
                                 </div>
-                                <p class="text-right pr-4 pt-1 font-weight-semibold">Comprobantes generados por mes</p>
                             </div>
-                            <!-- <div class="col-lg-3 col-md-3 col-sm-4 col-4">
-                                <div class="title-chart">
-                                    Comprobantes
-                                </div>
-                            </div> -->
+                        </div>
+
+                        <div class="row px-4 mt-2 pb-3">
+                            <div class="col-2 font-weight-bold text-primary">
+                                2019
+                            </div>
+                            <div class="col-10 font-weight-semibold text-right">
+                                Comprobantes generados por mes
+                            </div>
                         </div>
                     </div>
                 </div>

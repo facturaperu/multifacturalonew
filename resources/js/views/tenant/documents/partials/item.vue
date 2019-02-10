@@ -46,14 +46,14 @@
                     </div>
 
                     <div class="col-md-12 mt-3">
-                        <section class="card mb-4 card-transparent card-collapsed" id="card-section">
-                                <header class="card-header hoverable bg-light border-top rounded-0" data-card-toggle style="cursor: pointer;" id="card-click">
-                                    <div class="card-actions">
+                        <section class="card mb-2 card-transparent card-collapsed" id="card-section">
+                                <header class="card-header hoverable bg-light border-top rounded-0 py-1" data-card-toggle style="cursor: pointer;" id="card-click">
+                                    <div class="card-actions" style="margin-top: -12px;">
                                         <a href="#" class="card-action card-action-toggle text-info" data-card-toggle=""></a>
                                         
                                     </div>
 
-                                    <p class="pl-1 card-title"><small>Información adicional atributos UBL 2.1</small></p>
+                                    <p class="pl-1">Información adicional atributos UBL 2.1</p>
                                 </header>
                                 <div class="card-body px-0" style="display: none;">
                                     <div class="col-md-12 px-0" v-if="discount_types.length > 0">

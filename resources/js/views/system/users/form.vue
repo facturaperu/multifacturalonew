@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header bg-info">
-            <h3 class="my-0">Datos del Usuario <small>Acceso al sistema</small></h3>
+            <h3 class="my-0">Datos del Administrador <small>Acceso al sistema</small></h3>
         </div>
         <div class="card-body">
             <form autocomplete="off" @submit.prevent="submit">
