@@ -1,15 +1,15 @@
 <template>
     <div class="card">
         <div class="card-header bg-info">
-            <h3 class="my-0">Buscar comprobante</h3>
+            <h3 class="my-0">Buscar comprobante electrónico</h3>
         </div>
         <div class="card-body">
             <form autocomplete="off" @submit.prevent="submit">
                 <div class="form-body">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-8">
                             <div class="form-group" :class="{'has-danger': errors.document_type_id}">
-                                <label class="control-label">Tipo Documento</label>
+                                <label class="control-label mt-2">Tipo Documento</label>
                                 <el-select v-model="form.document_type_id">
                                     <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
@@ -17,45 +17,48 @@
                             </div>
                         </div>
                         <div class="col-md-4">
+                            <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
+                                <label class="control-label mt-2">Fecha de emisión</label>
+                                <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
+                                <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.series}">
-                                <label class="control-label">Serie</label>
+                                <label class="control-label mt-2">Serie</label>
                                 <el-input v-model="form.series" :maxlength="4"></el-input>
                                 <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.number}">
-                                <label class="control-label">Número</label>
+                                <label class="control-label mt-2">Número</label>
                                 <el-input v-model="form.number"></el-input>
                                 <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
-                                <label class="control-label">Fecha de emisión</label>
-                                <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
-                                <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.customer_number}">
-                                <label class="control-label">Número Cliente</label>
+                                <label class="control-label mt-2">Número Cliente (RUC/DNI/CE)</label>
                                 <el-input v-model="form.customer_number" :maxlength="11"></el-input>
                                 <small class="form-control-feedback" v-if="errors.customer_number" v-text="errors.customer_number[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.total}">
-                                <label class="control-label">Total</label>
+                                <label class="control-label mt-2">Monto total</label>
                                 <el-input v-model="form.total"></el-input>
                                 <small class="form-control-feedback" v-if="errors.total" v-text="errors.total[0]"></small>
                             </div>
                         </div>
                     </div>
+                    
                 </div>
-                <div class="form-actions text-right pt-2">
+                <div class="form-actions text-right pt-2 mt-2">
                     <el-button type="primary" native-type="submit" :loading="loading_submit">Buscar</el-button>
                 </div>
             </form>

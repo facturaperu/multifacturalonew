@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="card mb-0">
-            <div class="card-body">
+            <div class="card-body ">
                 <data-table :resource="resource">
                     <tr slot="heading">
                         <th>#</th>
@@ -33,7 +33,7 @@
                     <tr slot-scope="{ index, row }" :class="{
                                                     'text-danger': (row.state_type_id === '11'),
                                                     'text-warning': (row.state_type_id === '13'),
-                                                    'border-left border-light': (row.state_type_id === '01'),
+                                                    'border-light': (row.state_type_id === '01'),
                                                     'border-left border-info': (row.state_type_id === '03'),
                                                     'border-left border-success': (row.state_type_id === '05'),
                                                     'border-left border-secondary': (row.state_type_id === '07'),
@@ -48,7 +48,15 @@
                             <small v-text="row.document_type_description"></small><br/>
                             <small v-if="row.affected_document" v-text="row.affected_document"></small>
                         </td>
-                        <td>{{ row.state_type_description }}</td>
+                        <td><span class="badge bg-secondary text-white" :class="{
+                            'bg-danger': (row.state_type_id === '11'),
+                            'bg-warning': (row.state_type_id === '13'),
+                            'bg-secondary': (row.state_type_id === '01'),
+                            'bg-info': (row.state_type_id === '03'),
+                            'bg-success': (row.state_type_id === '05'),
+                            'bg-secondary': (row.state_type_id === '07'),
+                            'bg-dark': (row.state_type_id === '09')
+                        }">{{ row.state_type_description }}</span></td>
                         <td class="text-center">{{ row.currency_type_id }}</td>
                         <td class="text-right">{{ row.total_exportation }}</td>
                         <td class="text-right">{{ row.total_free }}</td>

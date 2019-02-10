@@ -31,9 +31,16 @@
                         </a>
                         <ul class="nav nav-children" style="">
                             @if(in_array('documents', $vc_modules))
-                            <li class="{{ ($path[0] === 'documents')?'nav-active':'' }}">
+                            <li class="{{ ($path[0] === 'documents' && $path[1] === 'create')?'nav-active':'' }}">
+                                <a class="nav-link" href="{{route('tenant.documents.create')}}">
+                                    Nuevo comprobante electrónico
+                                </a>
+                            </li>
+                            @endif
+                            @if(in_array('documents', $vc_modules))
+                            <li class="{{ ($path[0] === 'documents' && $path[1] != 'create')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.documents.index')}}">
-                                    Comprobantes electrónicos
+                                    Listado de comprobantes
                                 </a>
                             </li>
                             @endif
@@ -56,6 +63,9 @@
                                     Ventas sin facturar (Pronto)
                                 </a>
                             </li>
+                            <p class="py-0 text-center my-0">
+                                <span><small class="text-muted">Facturas | Notas <small>(crédito y débito)</small> | Boletas | Anulaciones</small></span>
+                            </p>
                         </ul>
                     </li>
 

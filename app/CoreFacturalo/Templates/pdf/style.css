@@ -22,6 +22,14 @@ table {
 .company_logo {
   max-height: 100px;
 }
+.company_logo_box {
+  height: 100px;
+}
+.company_logo_ticket {
+  max-width: 200px;
+  max-height: 80px
+}
+.contain {object-fit: cover;}
 
 .text-right {
     text-align: right !important;

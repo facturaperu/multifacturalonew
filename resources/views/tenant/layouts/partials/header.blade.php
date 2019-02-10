@@ -4,7 +4,7 @@
             @if($vc_company->logo)
                 <img src="{{ asset('storage/uploads/logos/'.$vc_company->logo) }}" alt="Logo" />
             @else
-                <i class="fa fa-circle fa-3x"></i>
+                <img src="{{asset('logo/700x300.jpg')}}" alt="Logo" />
             @endif
         </a>
         <div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">

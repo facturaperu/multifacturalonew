@@ -48,13 +48,15 @@ class CompanyController extends Controller
         if ($request->hasFile('file')) {
 
             $company = Company::active();
-
+            
             $type = $request->input('type');
             $file = $request->file('file');
             $ext = $file->getClientOriginalExtension();
             $name = $type.'_'.$company->number.'.'.$ext;
-
-            $file->storeAs(($type === 'logo')?'public/uploads/logos':'certificates', $name);
+            
+            if (($type === 'logo')) request()->validate(['file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048']);
+            
+            $file->storeAs(($type === 'logo') ? 'public/uploads/logos' : 'certificates', $name);
 
             $company->$type = $name;
 
