@@ -7,13 +7,14 @@
             <el-dialog title="Logo" class="text-left" :visible.sync="dialogVisible" @closed="closed">
                 <p class="text-center">* Se recomienda resoluciones 700x300.</p>
                 <div class="text-center">
-                    <el-upload class="uploader" slot="append" :headers="headers" :data="{'type': 'logo'}" action="/companies/uploads" :show-file-list="false" :before-upload="beforeAvatarUpload" :on-success="successUpload">
+                    <el-upload class="uploader" ref="upload" slot="append" :auto-upload="false" :headers="headers" :data="{'type': 'logo'}" action="/companies/uploads" :show-file-list="false" :before-upload="beforeUpload" :on-success="successUpload" :on-change="preview">
                         <img v-if="imageUrl" width="100%" :src="imageUrl" alt="">
                         <i v-else class="el-icon-plus uploader-icon"></i>
                     </el-upload>
                 </div>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">Cerrar</el-button>
+                    <el-button @click="upload" class="submit" type="primary" :disabled="imageUrl == ''">Aplicar</el-button>
                 </span>
             </el-dialog>
         </div>
@@ -27,6 +28,7 @@
             return {
                 headers: headers_token,
                 dialogVisible: false,
+                load: false,
                 imageUrl: ''
             }
         },
@@ -38,7 +40,7 @@
             }
         },
         methods: {
-            beforeAvatarUpload(file) {
+            beforeUpload(file) {
                 const isIMG = ((file.type === 'image/jpeg') || (file.type === 'image/png') || (file.type === 'image/jpg'));
                 const isLt2M = file.size / 1024 / 1024 < 2;
                 
@@ -47,11 +49,18 @@
                 
                 return isIMG && isLt2M;
             },
+            preview(file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+            },
+            upload() {
+                this.$refs.upload.submit();
+            },
             successUpload(response, file, fileList) {
                 this.imageUrl = URL.createObjectURL(file.raw);
                 
                 if (response.success) {
                     this.$message.success(response.message);
+                    this.load = true;
                     
                     return;
                 }
@@ -62,7 +71,7 @@
             closed() {
                 this.dialogVisible = false;
                 
-                location.href = this.url;
+                if (this.load) location.href = this.url;
             }
         }
     }
