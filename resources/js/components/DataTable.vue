@@ -4,9 +4,6 @@
 
             <div class="col-md-12 col-lg-12 col-xl-12 ">
                 <div class="row">
-                    <div class="col-lg-2 col-md-3 col-sm-12 pb-2">
-                        Filtrar documentos por:
-                    </div>
                     <div class="col-lg-3 col-md-4 col-sm-12 pb-2">
                         <el-select v-model="search.column"  placeholder="Select" @change="changeClearInput">
                             <el-option v-for="(label, key) in columns" :key="key" :value="key" :label="label"></el-option>
@@ -90,24 +87,22 @@
             this.$eventHub.$on('reloadData', () => {
                 this.getRecords()
             })
-
-
         },
         async mounted () {
-
-            await this.$http.get(`${this.resource}/columns`).then((response) => {
+            let column_resource = _.split(this.resource, '/')
+            await this.$http.get(`/${_.head(column_resource)}/columns`).then((response) => {
                 this.columns = response.data
                 this.search.column = _.head(Object.keys(this.columns))
             });
-
             await this.getRecords()
+
         },
         methods: {
             customIndex(index) {
                 return (this.pagination.per_page * (this.pagination.current_page - 1)) + index + 1
             },
             getRecords() {
-                return this.$http.get(`${this.resource}/records?${this.getQueryParameters()}`).then((response) => {
+                return this.$http.get(`/${this.resource}/records?${this.getQueryParameters()}`).then((response) => {
                     this.records = response.data.data
                     this.pagination = response.data.meta
                     this.pagination.per_page = parseInt(response.data.meta.per_page)
