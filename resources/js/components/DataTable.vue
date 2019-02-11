@@ -4,10 +4,15 @@
 
             <div class="col-md-12 col-lg-12 col-xl-12 ">
                 <div class="row">
-                    <div class="col-lg-3 col-md-4 col-sm-12 pb-2">
-                        <el-select v-model="search.column"  placeholder="Select" @change="changeClearInput">
-                            <el-option v-for="(label, key) in columns" :key="key" :value="key" :label="label"></el-option>
-                        </el-select>
+                    <div class="col-lg-4 col-md-4 col-sm-12 pb-2">
+                        <div class="d-flex">
+                            <div style="width:100px">
+                                Filtrar por:
+                            </div>
+                            <el-select v-model="search.column"  placeholder="Select" @change="changeClearInput">
+                                <el-option v-for="(label, key) in columns" :key="key" :value="key" :label="label"></el-option>
+                            </el-select>
+                        </div>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-12 pb-2">
                         <template v-if="search.column=='date_of_issue'">
