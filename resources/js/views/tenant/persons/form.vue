@@ -14,10 +14,17 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
-                            <label class="control-label">Número</label>
+                            <label class="control-label">* Número</label>
                             <el-input v-model="form.number" :maxlength="maxLength" dusk="number">
                                 <template v-if="form.identity_document_type_id === '6' || form.identity_document_type_id === '1'">
-                                    <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchCustomer"></el-button>
+                                    <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchCustomer">
+                                        <template v-if="form.identity_document_type_id === '6'">
+                                            SUNAT
+                                        </template>
+                                        <template v-if="form.identity_document_type_id === '1'">
+                                            RENIEC
+                                        </template>
+                                    </el-button>
                                 </template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
@@ -27,7 +34,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.name}">
-                            <label class="control-label">Nombre</label>
+                            <label class="control-label">* Nombre</label>
                             <el-input v-model="form.name" dusk="name"></el-input>
                             <small class="form-control-feedback" v-if="errors.name" v-text="errors.name[0]"></small>
                         </div>
@@ -118,7 +125,7 @@
 
     export default {
         mixins: [serviceNumber],
-        props: ['showDialog', 'type', 'recordId', 'external'],
+        props: ['showDialog', 'type', 'recordId', 'external', 'document_type_id'],
         data() {
             return {
                 loading_submit: false,
@@ -176,6 +183,14 @@
                 }
             },
             create() {
+                if(this.external) {
+                    if(this.document_type_id === '01') {
+                        this.form.identity_document_type_id = '6'
+                    }
+                    if(this.document_type_id === '03') {
+                        this.form.identity_document_type_id = '1'
+                    }
+                }
                 if(this.type === 'customers') {
                     this.titleDialog = (this.recordId)? 'Editar Cliente':'Nuevo Cliente'
                 }

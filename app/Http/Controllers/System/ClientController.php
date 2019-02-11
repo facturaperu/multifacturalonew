@@ -38,7 +38,7 @@ class ClientController extends Controller
 
     public function records()
     {
-        $records = Client::all(); 
+        $records = Client::latest()->get();
         foreach ($records as &$row) {
             $tenancy = app(Environment::class);
             $tenancy->tenant($row->hostname->website);

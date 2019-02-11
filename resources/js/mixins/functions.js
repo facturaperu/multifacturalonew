@@ -144,6 +144,22 @@ export const serviceNumber = {
                 this.$message.error(response.data.message)
             }
             this.loading_search = false
+        },
+        async searchServiceNumber() {
+            if(this.form.number === '') {
+                this.$message.error('Ingresar el número a buscar')
+                return
+            }
+            this.loading_search = true
+            let response = await this.$http.get(`/services/ruc/${this.form.number}`)
+            if(response.data.success) {
+                let data = response.data.data
+                this.form.name = data.name
+                this.form.trade_name = data.trade_name
+            } else {
+                this.$message.error(response.data.message)
+            }
+            this.loading_search = false
         }
     }
 };

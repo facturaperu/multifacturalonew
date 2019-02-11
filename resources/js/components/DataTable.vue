@@ -1,60 +1,77 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-md-7">
+        <div class="row ">
+
+            <div class="col-md-12 col-lg-12 col-xl-12 ">
+                <div class="row">
+                    <div class="col-lg-2 col-md-3 col-sm-12 pb-2">
+                        Filtrar documentos por:
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-12 pb-2">
+                        <el-select v-model="search.column"  placeholder="Select" @change="changeClearInput">
+                            <el-option v-for="(label, key) in columns" :key="key" :value="key" :label="label"></el-option>
+                        </el-select>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-12 pb-2">
+                        <template v-if="search.column=='date_of_issue'">
+                            <el-date-picker
+                                v-model="search.value"
+                                type="date"
+                                style="width: 100%;"
+                                placeholder="Buscar"
+                                value-format="yyyy-MM-dd"
+                                @change="getRecords">
+                            </el-date-picker>
+                        </template>
+                        <template v-else>
+                            <el-input placeholder="Buscar"
+                                v-model="search.value"
+                                style="width: 100%;"
+                                prefix-icon="el-icon-search"
+                                @input="getRecords">
+                            </el-input>
+                        </template>
+                    </div>
+                </div>
+
             </div>
-            <div class="col-md-5">
-                <el-input placeholder="Buscar"
-                          v-model="search.value"
-                          class="input-with-select"
-                          prefix-icon="el-icon-search"
-                          @input="getRecords">
-                    <el-select v-model="search.column" slot="prepend" placeholder="Select" @change="getRecords">
-                        <el-option v-for="(label, key) in columns" :key="key" :value="key" :label="label"></el-option>
-                    </el-select>
-                </el-input>
+
+
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <slot name="heading"></slot>
+                        </thead>
+                        <tbody>
+                        <slot v-for="(row, index) in records" :row="row" :index="customIndex(index)"></slot>
+                        </tbody>
+                    </table>
+                    <div>
+                        <el-pagination
+                                @current-change="getRecords"
+                                layout="total, prev, pager, next"
+                                :total="pagination.total"
+                                :current-page.sync="pagination.current_page"
+                                :page-size="pagination.per_page">
+                        </el-pagination>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                <slot name="heading"></slot>
-                </thead>
-                <tbody>
-                <slot v-for="(row, index) in records" :row="row" :index="customIndex(index)"></slot>
-                </tbody>
-            </table>
-            <div>
-                <el-pagination
-                        @current-change="getRecords"
-                        layout="total, prev, pager, next"
-                        :total="pagination.total"
-                        :current-page.sync="pagination.current_page"
-                        :page-size="pagination.per_page">
-                </el-pagination>
-            </div>
-        </div>
+
     </div>
 </template>
 
-<style>
-    .input-with-select .el-select .el-input {
-        width: 140px;
-    }
-    .input-with-select .el-select .el-input .el-input__inner {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-    .input-with-select .el-input-group__prepend {
-        background-color: #fff;
-    }
-</style>
+
 <script>
+
+    import moment from 'moment'
     import queryString from 'query-string'
 
     export default {
         props: {
-            resource: String
+            resource: String,
         },
         data () {
             return {
@@ -73,13 +90,16 @@
             this.$eventHub.$on('reloadData', () => {
                 this.getRecords()
             })
+
+
         },
         async mounted () {
-            let column_resource = _.split(this.resource, '/')
-            await this.$http.get(`/${_.head(column_resource)}/columns`).then((response) => {
+
+            await this.$http.get(`${this.resource}/columns`).then((response) => {
                 this.columns = response.data
                 this.search.column = _.head(Object.keys(this.columns))
             });
+
             await this.getRecords()
         },
         methods: {
@@ -87,7 +107,7 @@
                 return (this.pagination.per_page * (this.pagination.current_page - 1)) + index + 1
             },
             getRecords() {
-                return this.$http.get(`/${this.resource}/records?${this.getQueryParameters()}`).then((response) => {
+                return this.$http.get(`${this.resource}/records?${this.getQueryParameters()}`).then((response) => {
                     this.records = response.data.data
                     this.pagination = response.data.meta
                     this.pagination.per_page = parseInt(response.data.meta.per_page)
@@ -100,6 +120,10 @@
                     ...this.search
                 })
             },
+            changeClearInput(){
+                this.search.value = ''
+                this.getRecords()
+            }
         }
     }
 </script>

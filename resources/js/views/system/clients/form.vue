@@ -6,9 +6,18 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">RUC</label>
-                            <el-input v-model="form.number" :maxlength="11" dusk="number"></el-input>
-                            <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
+                            <el-input v-model="form.number" :maxlength="11" dusk="number">
+                                <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchSunat">
+                                    SUNAT
+                                </el-button>
+                            </el-input>
                         </div>
+
+                        <!--<div class="form-group" :class="{'has-danger': errors.number}">-->
+                            <!--<label class="control-label">RUC</label>-->
+                            <!--<el-input v-model="form.number" :maxlength="11" dusk="number"></el-input>-->
+                            <!--<small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>-->
+                        <!--</div>-->
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.name}">
@@ -59,7 +68,14 @@
             </div>
             <div class="form-actions text-right pt-2">
                 <el-button @click.prevent="close()">Cancelar</el-button>
-                <el-button type="primary" native-type="submit" :loading="loading_submit" dusk="submit">Guardar</el-button>
+                <el-button type="primary" native-type="submit" :loading="loading_submit" dusk="submit">
+                    <template v-if="loading_submit">
+                        Creando base de datos...
+                    </template>
+                    <template v-else>
+                        Guardar
+                    </template>
+                </el-button>
             </div>
         </form>
     </el-dialog>
@@ -68,13 +84,15 @@
 
 <script>
 
-    import {EventBus} from '../../../helpers/bus'
+    import {serviceNumber} from '../../../mixins/functions'
 
     export default {
+        mixins: [serviceNumber],
         props: ['showDialog', 'recordId'],
         data() {
             return {
                 loading_submit: false,
+                loading_search: false,
                 titleDialog: null,
                 resource: 'clients',
                 error: {},
@@ -99,7 +117,8 @@
                     id: null,
                     name: null,
                     email: null,
-                    number: null,
+                    identity_document_type_id: '6',
+                    number: '',
                     password:null,
                     plan_id:null
                 }
@@ -136,6 +155,9 @@
             close() {
                 this.$emit('update:showDialog', false)
                 this.initForm()
+            },
+            searchSunat() {
+                this.searchServiceNumber()
             }
         }
     }

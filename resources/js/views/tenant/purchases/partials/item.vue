@@ -17,11 +17,11 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.affectation_igv_type_id}">
-                            <!--<label class="control-label">Afectación Igv</label>-->
-                            <el-checkbox v-model="change_affectation_igv_type_id">Cambiar Tipo de Afectación Igv</el-checkbox>
+                            <label class="control-label">Afectación Igv</label>
                             <el-select v-model="form.affectation_igv_type_id" :disabled="!change_affectation_igv_type_id" filterable>
                                 <el-option v-for="option in affectation_igv_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
+                            <el-checkbox v-model="change_affectation_igv_type_id">Editar</el-checkbox>
                             <small class="form-control-feedback" v-if="errors.affectation_igv_type_id" v-text="errors.affectation_igv_type_id[0]"></small>
                         </div>
                     </div>

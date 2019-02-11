@@ -50,7 +50,8 @@ class DocumentController extends Controller
     public function columns()
     {
         return [
-            'number' => 'Número'
+            'number' => 'Número',
+            'date_of_issue' => 'Fecha de emisión'
         ];
     }
 

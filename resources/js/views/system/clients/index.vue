@@ -129,6 +129,7 @@
                             <th>Correo</th>
                             <th class="text-center">Comprobantes</th>
                             <th class="text-center">Usuarios</th>
+                            <th class="text-center">F.Creación</th>
                             <th class="text-right">Acciones</th>
                         </tr>
                         </thead>
@@ -148,6 +149,7 @@
                                 <template v-if="row.max_users > 9999"><i class="fas fa-infinity"></i></template>
                                 <template v-else>{{ row.max_users }}</template>
                             </td>
+                            <td class="text-center">{{ row.created_at }}</td>
                             <td class="text-right">
                                 <template v-if="!row.locked">
                                     <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickPassword(row.id)">Clave</button>
