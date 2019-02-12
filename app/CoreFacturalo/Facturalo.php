@@ -441,7 +441,7 @@ class Facturalo
                 'certificate.pem');
         } else {
             $this->pathCertificate = storage_path('app'.DIRECTORY_SEPARATOR.
-                'certificates'.$this->company->certificate);
+                'certificates'.DIRECTORY_SEPARATOR.$this->company->certificate);
         }
     }
 
