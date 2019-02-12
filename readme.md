@@ -12,6 +12,9 @@ Para conocer el proceso de instalación del facturador, visite la documentación
 <br>
 [Manual - windows - linux](https://drive.google.com/open?id=1piT-xWJmYRYm3L5u-G-v611NlPWq62uFcGaFiJGS9H0 "Clic")
 
+## Manejo del facturador
+
+Visite el [Manual de usuario](https://drive.google.com/open?id=13t2-eqf57QRbAFR8qPkAjOXjODx6BCfWVjmzmrcHE50 "Clic")
 
 ## Manejo de la API
 
