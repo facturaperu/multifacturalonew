@@ -152,8 +152,8 @@
                             <td class="text-center">{{ row.created_at }}</td>
                             <td class="text-right">
                                 <template v-if="!row.locked">
-                                    <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickPassword(row.id)">Clave</button>
-                                    <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickDelete(row.id)">Eliminar</button>
+                                    <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2" @click.prevent="clickPassword(row.id)">Resetear clave</button>
+                                    <button type="button" class="btn waves-effect waves-light btn-xs btn-danger m-1__2" @click.prevent="clickDelete(row.id)">Eliminar</button>
                                 </template>
                             </td>
                         </tr>
