@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Traits\SummaryTrait;
 use App\Models\Tenant\{
+    Configuration,
     Document,
     Summary,
     Company,
@@ -29,7 +30,7 @@ class SummaryQueryCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Automatic query of summaries';
     
     /**
      * Create a new command instance.
@@ -50,22 +51,27 @@ class SummaryQueryCommand extends Command
         
         Auth::login(User::firstOrFail());
         
-        $date = Carbon::now()->subDay()->format('Y-m-d');
-        
-        $documents = Summary::query()
-            ->where([
-                'soap_type_id' => Company::firstOrFail()->active()->soap_type_id,
-                'summary_status_type_id' => '1',
-                'date_of_reference' => $date,
-                'state_type_id' => '03',
-            ])
-            ->get();
-        
-        if ($documents->count() > 0) {
-            foreach ($documents as $document) $this->query($document->id);
+        if (Configuration::firstOrFail()->cron) {
+            $date = Carbon::now()->subDay()->format('Y-m-d');
+            
+            $documents = Summary::query()
+                ->where([
+                    'soap_type_id' => Company::firstOrFail()->active()->soap_type_id,
+                    'summary_status_type_id' => '1',
+                    'date_of_reference' => $date,
+                    'state_type_id' => '03',
+                ])
+                ->get();
+            
+            if ($documents->count() > 0) {
+                foreach ($documents as $document) $this->query($document->id);
+            }
+            else {
+                $this->info('No data to process');
+            }
         }
         else {
-            $this->info('No data to process');
+            $this->info('The cron is disabled');
         }
         
         $this->info('The command is finished');

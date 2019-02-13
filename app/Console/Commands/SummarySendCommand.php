@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use App\Traits\SummaryTrait;
 use Illuminate\Http\Request;
 use App\Models\Tenant\{
+    Configuration,
     Document,
     Company,
     User
@@ -31,7 +32,7 @@ class SummarySendCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Automatic query of summaries';
+    protected $description = 'Automatic send of summaries';
     
     /**
      * Create a new command instance.
@@ -52,35 +53,40 @@ class SummarySendCommand extends Command
         
         Auth::login(User::firstOrFail());
         
-        $date = Carbon::now()->subDay()->format('Y-m-d');
-        
-        $documents = Document::query()
-            ->where([
-                'soap_type_id' => Company::firstOrFail()->active()->soap_type_id,
-                'date_of_issue' => $date,
-                'state_type_id' => '01',
-                'group_id' => '02'
-            ])
-            ->get();
-        
-        if ($documents->count() > 0) {
-            $data = [
-                'documents' => $documents->toArray(),
-                'summary_status_type_id' => '1',
-                'date_of_reference' => $date,
-                'date_of_issue' => null
-            ];
+        if (Configuration::firstOrFail()->cron) {
+            $date = Carbon::now()->subDay()->format('Y-m-d');
             
-            $data = SummaryValidation::validation($data);
-            $data = SummaryInput::set($data);
+            $documents = Document::query()
+                ->where([
+                    'soap_type_id' => Company::firstOrFail()->active()->soap_type_id,
+                    'date_of_issue' => $date,
+                    'state_type_id' => '01',
+                    'group_id' => '02'
+                ])
+                ->get();
             
-            $request = new Request;
-            $request->merge($data);
-            
-            $this->save($request);
+            if ($documents->count() > 0) {
+                $data = [
+                    'documents' => $documents->toArray(),
+                    'summary_status_type_id' => '1',
+                    'date_of_reference' => $date,
+                    'date_of_issue' => null
+                ];
+                
+                $data = SummaryValidation::validation($data);
+                $data = SummaryInput::set($data);
+                
+                $request = new Request;
+                $request->merge($data);
+                
+                $this->save($request);
+            }
+            else {
+                $this->info('No data to process');
+            }
         }
         else {
-            $this->info('No data to process');
+            $this->info('The cron is disabled');
         }
         
         $this->info('The command is finished');

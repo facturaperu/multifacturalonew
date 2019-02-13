@@ -8,26 +8,23 @@ use App\Http\Controllers\Controller;
 
 class ConfigurationController extends Controller
 {
-    public function create()
-    {
+    public function create() {
         return view('tenant.configurations.form');
     }
-
-    public function record()
-    {
+    
+    public function record() {
         $configuration = Configuration::first();
         $record = new ConfigurationResource($configuration);
-
+        
         return $record;
     }
-
-    public function store(ConfigurationRequest $request)
-    {
+    
+    public function store(ConfigurationRequest $request) {
         $id = $request->input('id');
         $configuration = Configuration::find($id);
         $configuration->fill($request->all());
         $configuration->save();
-
+        
         return [
             'success' => true,
             'message' => 'Configuración actualizada'

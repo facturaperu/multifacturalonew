@@ -7,18 +7,16 @@ use Illuminate\Validation\Rule;
 
 class ConfigurationRequest extends FormRequest
 {
-    public function authorize()
-    {
+    public function authorize() {
         return true;
     }
-
-    public function rules()
-    {
+    
+    public function rules() {
         $id = $this->input('id');
+        
         return [
-            'send_auto' => [
-                'required'
-            ],
+            'send_auto' => ['required', 'boolean'],
+            'cron' => ['required', 'boolean']
         ];
     }
 }
