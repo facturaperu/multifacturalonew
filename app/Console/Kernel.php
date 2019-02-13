@@ -2,8 +2,8 @@
 
 namespace App\Console;
 
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Console\Scheduling\Schedule;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,28 +15,29 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
     ];
-
+    
     /**
      * Define the application's command schedule.
      *
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')
-        //          ->hourly();
+    protected function schedule(Schedule $schedule) {
+        $schedule->command('tenancy:run summary:send')
+            ->dailyAt('02:00');
+        
+        $schedule->command('tenancy:run summary:query')
+            ->dailyAt('03:00');
     }
-
+    
     /**
      * Register the commands for the application.
      *
      * @return void
      */
-    protected function commands()
-    {
+    protected function commands() {
         $this->load(__DIR__.'/Commands');
-
+        
         require base_path('routes/console.php');
     }
 }

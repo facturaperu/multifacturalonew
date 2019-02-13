@@ -12,11 +12,11 @@ class ConfigurationResource extends JsonResource
      * @param  \Illuminate\Http\Request
      * @return array
      */
-    public function toArray($request)
-    {
+    public function toArray($request) {
         return [
             'id' => $this->id,
             'send_auto' => (bool) $this->send_auto,
+            'cron' => (bool) $this->cron
         ];
     }
 }
