@@ -7,30 +7,28 @@
             <form autocomplete="off">
                 <div class="form-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <label class="control-label">Enviar automaticamente los comprobantes a SUNAT</label>
                             <div class="form-group" :class="{'has-danger': errors.send_auto}">
-                                <el-switch
-                                        v-model="form.send_auto"
-                                        active-text="Si"
-                                        inactive-text="No"
-                                        @change="submit">
-                                </el-switch>
+                                <el-switch v-model="form.send_auto" active-text="Si" inactive-text="No" @change="submit"></el-switch>
                                 <small class="form-control-feedback" v-if="errors.send_auto" v-text="errors.send_auto[0]"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label">Habilitar cron</label>
+                            <div class="form-group" :class="{'has-danger': errors.cron}">
+                                <el-switch v-model="form.cron" active-text="Si" inactive-text="No" @change="submit"></el-switch>
+                                <small class="form-control-feedback" v-if="errors.cron" v-text="errors.cron[0]"></small>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--<div class="form-actions text-right pt-2">-->
-                    <!--<el-button type="primary" native-type="submit" :loading="loading_submit">Guardar</el-button>-->
-                <!--</div>-->
             </form>
         </div>
     </div>
 </template>
 
 <script>
-
     export default {
         data() {
             return {
@@ -41,43 +39,43 @@
             }
         },
         async created() {
-            await this.initForm()
-            await this.$http.get(`/${this.resource}/record`)
-                .then(response => {
-                    if (response.data !== '') {
-                        this.form = response.data.data
-                    }
-                })
+            await this.initForm();
+            
+            await this.$http.get(`/${this.resource}/record`) .then(response => {
+                if (response.data !== '') this.form = response.data.data;
+            });
         },
         methods: {
             initForm() {
-                this.errors = {}
+                this.errors = {};
+                
                 this.form = {
-                    id: null,
                     send_auto: true,
-                }
+                    cron: true,
+                    id: null
+                };
             },
             submit() {
-                this.loading_submit = true
-                this.$http.post(`/${this.resource}`, this.form)
-                    .then(response => {
-                        if (response.data.success) {
-                            this.$message.success(response.data.message)
-                        } else {
-                            this.$message.error(response.data.message)
-                        }
-                    })
-                    .catch(error => {
-                        if (error.response.status === 422) {
-                            this.errors = error.response.data.errors
-                        } else {
-                            console.log(error)
-                        }
-                    })
-                    .then(() => {
-                        this.loading_submit = false
-                    })
-            },
+                this.loading_submit = true;
+                
+                this.$http.post(`/${this.resource}`, this.form).then(response => {
+                    if (response.data.success) {
+                        this.$message.success(response.data.message);
+                    }
+                    else {
+                        this.$message.error(response.data.message);
+                    }
+                }).catch(error => {
+                    if (error.response.status === 422) {
+                        this.errors = error.response.data.errors;
+                    }
+                    else {
+                        console.log(error);
+                    }
+                }).then(() => {
+                    this.loading_submit = false;
+                });
+            }
         }
     }
 </script>
