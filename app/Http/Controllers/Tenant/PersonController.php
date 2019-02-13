@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Requests\Tenant\PersonRequest;
 use App\Http\Resources\Tenant\PersonCollection;
 use App\Http\Resources\Tenant\PersonResource;
-use App\Models\Tenant\Catalogs\Code;
+use App\Imports\CustomersImport;
 use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
@@ -12,7 +12,9 @@ use App\Models\Tenant\Catalogs\IdentityDocumentType;
 use App\Models\Tenant\Catalogs\Province;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Person;
+use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PersonController extends Controller
 {
@@ -83,6 +85,34 @@ class PersonController extends Controller
         return [
             'success' => true,
             'message' => 'Cliente eliminado con éxito'
+        ];
+    }
+
+    public function import(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            try {
+//                $data = Excel::import(new CustomersImport(), $request->file('file'));
+
+                $import = new CustomersImport();
+                $import->import($request->file('file'), null, \Maatwebsite\Excel\Excel::XLSX);
+                $data = $import->getData();
+//                $data = (new CustomersImport)->import($request->file('file'), null, \Maatwebsite\Excel\Excel::XLSX);
+                return [
+                    'success' => true,
+                    'message' =>  __('app.actions.upload.success'),
+                    'data' => $data
+                ];
+            } catch (Exception $e) {
+                return [
+                    'success' => false,
+                    'message' =>  $e->getMessage()
+                ];
+            }
+        }
+        return [
+            'success' => false,
+            'message' =>  __('app.actions.upload.error'),
         ];
     }
 }

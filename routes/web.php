@@ -118,6 +118,7 @@ if ($hostname) {
             Route::get('persons/record/{person}', 'Tenant\PersonController@record');
             Route::post('persons', 'Tenant\PersonController@store');
             Route::delete('persons/{person}', 'Tenant\PersonController@destroy');
+            Route::post('persons/import', 'Tenant\PersonController@import');
 
             //Documents
             Route::get('documents', 'Tenant\DocumentController@index')->name('tenant.documents.index');
