@@ -16,3 +16,6 @@ yarn-error.log
 access_log
 error_log
 .env.dusk
+.env.dusk.local
+debug.log
+phpunit.dusk.xml

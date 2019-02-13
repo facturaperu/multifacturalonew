@@ -43,8 +43,9 @@ class ExampleTest extends DuskTestCase
                 ->waitFor('@plan_id')
                 ->elements('.el-select-dropdown__item')[0]->click();
             
-            $browser->press('Guardar')
-                ->waitForText('Cliente Registrado satisfactoriamente', 30);
+            $browser->waitForText('Guardar', 5)
+                ->press('Guardar')
+                ->waitForText('Cliente Registrado satisfactoriamente', 300);
             
             // Change of url (Sub-domain)
             Browser::$baseUrl = 'http://dev.'.env('APP_URL_BASE');
@@ -54,7 +55,7 @@ class ExampleTest extends DuskTestCase
                 ->type('email', 'test@test.com')
                 ->type('password', '123456')
                 ->press('Iniciar sesión')
-                ->waitForText('Menu', 30);
+                ->waitForText('Menu', 35);
             
             // Create product (Sub-domain)
             $browser->clickLink('Productos')
@@ -93,9 +94,10 @@ class ExampleTest extends DuskTestCase
                 ->press('Guardar')
                 ->waitForText('Cliente registrado con éxito', 5);
             
-            // Create electronic receipts (Sub-domain)
-            $browser->clickLink('Comprobantes electrónicos')
-                ->clickLink('Nuevo')
+
+            // Create electronic receipts (Sub-domain)             
+
+            $browser->clickLink('Nuevo comprobante electrónico') 
                 ->waitForText('Tipo de comprobante', 5)
                 ->click('@customer_id')
                 ->waitFor('@customer_id')
@@ -110,10 +112,11 @@ class ExampleTest extends DuskTestCase
             $browser->elements('.el-button.add')[0]->click();
             
             $browser->press('Cerrar')
-                ->waitForText('Generar', 5)
-                ->elements('.el-button.submit')[0]->click();
+                ->waitForText('Generar', 15) 
+                ->press('Generar');
+
             
-            $browser->waitForText('Comprobante: F001-1', 20)
+            $browser->waitForText('Comprobante: F001-1', 50)
                 ->waitForText('Ir al listado', 20)
                 ->elements('.el-button.list')[0]->click();
             
@@ -133,7 +136,7 @@ class ExampleTest extends DuskTestCase
                 ->waitForText('¿Desea eliminar el registro?', 5)
                 ->elements('.el-message-box .el-button--primary')[0]->click();
             
-            $browser->waitForText('Se eliminó correctamente el registro', 30);
+            $browser->waitForText('Se eliminó correctamente el registro', 300);
             
             // Logout (Admin)
             $browser->clickLink('Admin Instrador')
