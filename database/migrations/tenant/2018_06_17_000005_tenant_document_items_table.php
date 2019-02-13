@@ -19,7 +19,7 @@ class TenantDocumentItemsTable extends Migration
             $table->unsignedInteger('document_id');
             $table->unsignedInteger('item_id');
             $table->json('item');
-            $table->integer('quantity');
+            $table->decimal('quantity', 12, 2);
             $table->decimal('unit_value', 12, 2);
 
             $table->string('affectation_igv_type_id');
