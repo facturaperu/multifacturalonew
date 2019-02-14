@@ -22,7 +22,7 @@ Para conocer acerca de nuestra API, visite la [documentación](https://docs.goog
  
 ## Pruebas
 
-[Manual de pruebas](https://docs.google.com/document/d/1GihGu-qNukj27hufdkPWUYO6wl-XIUVyK2cXygDqdlI/edit#heading=h.kfj5m3r1n58v "Clic")
+[Manual de pruebas](https://docs.google.com/document/d/1GihGu-qNukj27hufdkPWUYO6wl-XIUVyK2cXygDqdlI/edit# "Clic")
 
 ## DEMO
 
