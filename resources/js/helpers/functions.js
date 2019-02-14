@@ -79,13 +79,14 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     };
 
     let percentage_igv = 18
+    let unit_value = row.unit_price
 
-    if (row.affectation_igv_type_id !== '10') {
-        percentage_igv = 0
+    if (row.affectation_igv_type_id === '10') {
+        unit_value = row.unit_price / (1 + percentage_igv / 100)
     }
 
     //row.unit_price = parseFloat(this.form.unit_price)
-    let unit_value = row.unit_price / (1 + percentage_igv / 100)
+
 
     //row.unit_value = _.round(_unit_value, 2)
 //                _unit_value = row.unit_price / (1 + _percentage_igv / 100)
@@ -178,10 +179,12 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
     if (row.affectation_igv_type.free) {
         row.price_type_id = '02'
+        row.unit_value = 0
+        // row.total_value = 0
         row.total = 0
     }
 
-    console.log(row)
+    // console.log(row)
     return row
 }
 

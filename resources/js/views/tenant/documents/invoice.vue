@@ -122,9 +122,9 @@
                                                 <th class="font-weight-bold">Descripción</th>
                                                 <th class="text-center font-weight-bold">Unidad</th>
                                                 <th class="text-right font-weight-bold">Cantidad</th>
-                                                <!--<th class="text-right font-weight-bold">Precio Unitario</th>-->
+                                                <th class="text-right font-weight-bold">Precio Unitario</th>
                                                 <th class="text-right font-weight-bold">Subtotal</th>
-                                                <th class="text-right font-weight-bold">Cargo</th>
+                                                <!--<th class="text-right font-weight-bold">Cargo</th>-->
                                                 <th class="text-right font-weight-bold">Total</th>
                                                 <th></th>
                                             </tr>
@@ -387,10 +387,11 @@
                     if (['10', '20', '30', '40'].indexOf(row.affectation_igv_type_id) < 0) {
                         total_free += parseFloat(row.total_value)
                     }
-
+                    if (['10', '20', '30', '40'].indexOf(row.affectation_igv_type_id) > -1) {
+                        total_igv += parseFloat(row.total_igv)
+                        total += parseFloat(row.total)
+                    }
                     total_value += parseFloat(row.total_value)
-                    total_igv += parseFloat(row.total_igv)
-                    total += parseFloat(row.total)
                 });
 
                 this.form.total_exportation = _.round(total_exportation, 2)
