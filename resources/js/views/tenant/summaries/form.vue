@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-md-4 d-flex align-items-end justify-content-end pt-2">
                         <div class="form-group">
-                            <button type="button" class="btn waves-effect waves-light btn-info" @click.prevent="clickSearchDocuments">Buscar comprobantes</button>
+                            <button type="button" class="btn waves-effect waves-light btn-info" @click.prevent="clickSearchDocuments" dusk="search-documents">Buscar comprobantes</button>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
             </div>
             <div class="form-actions text-right pt-2">
                 <el-button @click.prevent="close()">Cancelar</el-button>
-                <el-button type="primary" native-type="submit" :loading="loading_submit" v-if="form.documents.length > 0">Guardar</el-button>
+                <el-button type="primary" native-type="submit" :loading="loading_submit" v-if="form.documents.length > 0" dusk="save-summary">Guardar</el-button>
             </div>
         </form>
     </el-dialog>

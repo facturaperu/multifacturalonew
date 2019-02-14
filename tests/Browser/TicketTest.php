@@ -2,25 +2,27 @@
 
 namespace Tests\Browser;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
+use Laravel\Dusk\Browser;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+
 use Config, DB;
 
-class ExampleTest extends DuskTestCase
+class TicketTest extends DuskTestCase
 {
+
     use DatabaseMigrations;
     
     /**
-     * A basic browser test example.
-     *
-     * @return void
-     */
-    public function testBasicExample() {
-        
+    * @group ticket
+    */
+    public function testTicket()
+    {
         $this->browse(function (Browser $browser) {
-            // Seeders
-            $this->artisan('db:seed', [
+            
+
+             // Seeders
+             $this->artisan('db:seed', [
                 '--class' => 'DatabaseSeeder'
             ]);
             
@@ -35,7 +37,7 @@ class ExampleTest extends DuskTestCase
             // Customer registration (Admin)
             $browser->press('Nuevo')
                 ->assertSee('Nuevo Cliente')
-                ->type('@number', '12345678900')
+                ->type('@number', '20501973522')
                 ->type('@name', 'TESTS S.A.S')
                 ->type('@subdomain', 'dev')
                 ->type('@email', 'test@test.com')
@@ -56,17 +58,17 @@ class ExampleTest extends DuskTestCase
                 ->type('email', 'test@test.com')
                 ->type('password', '123456')
                 ->press('Iniciar sesión')
-                ->waitForText('Menu', 35);
+                ->waitForText('Menu', 55);
             
             // Create product (Sub-domain)
             $browser->clickLink('Productos')
                 ->press('Nuevo')
                 ->waitForText('Nuevo Producto', 5)
-                ->type('@internal_id', '001')
-                ->type('@description', 'Test product')
+                ->type('@internal_id', 'P001')
+                ->type('@description', 'PEPSI')
                 ->type('@item_code', '-')
-                ->type('@sale_unit_price', '15')
-                ->type('@purchase_unit_price', '8')
+                ->type('@sale_unit_price', '20')
+                ->type('@purchase_unit_price', '20')
                 ->press('Guardar')
                 ->waitForText('Producto registrado con éxito', 5);
             
@@ -74,33 +76,27 @@ class ExampleTest extends DuskTestCase
             $browser->clickLink('Clientes')
                 ->press('Nuevo')
                 ->waitForText('Nuevo Cliente', 5)
-                ->type('@number', '98765432100')
-                ->type('@name', 'Test client')
-                ->type('@trade_name', 'Test client')
-                ->click('@department_id')
-                ->waitFor('@department_id')
-                ->elements('.el-select-departments .el-select-dropdown__item')[0]->click();
-                
-            $browser->click('@province_id')
-                ->waitFor('@province_id')
-                ->elements('.el-select-provinces .el-select-dropdown__item')[0]->click();
+                ->click('@identity_document_type_id')
+                ->waitFor('@identity_document_type_id')                
+                ->elements('.el-select-identity_document_type .el-select-dropdown__item')[1]->click();                
             
-            $browser->click('@district_id')
-                ->waitFor('@district_id')
-                ->elements('.el-select-districts .el-select-dropdown__item')[0]->click();
-            
-            $browser->type('@address', 'Does not have')
-                ->type('@telephone', '1234567')
-                ->type('@email', 'nothing@nothing.com')
-                ->press('Guardar')
+            $browser->waitForText('RENIEC', 5)
+                ->type('@number', '77695545')
+                ->type('@name', 'Juan Perez');
+           
+            $browser->press('Guardar')
                 ->waitForText('Cliente registrado con éxito', 5);
-            
 
-            // Create electronic receipts (Sub-domain)             
+
+            //boleta          
 
             $browser->clickLink('Nuevo comprobante electrónico') 
                 ->waitForText('Tipo de comprobante', 5)
-                ->click('@customer_id')
+                ->click('@document_type_id')
+                ->waitFor('@document_type_id')                
+                ->elements('.el-select-document_type .el-select-dropdown__item')[1]->click();  
+
+            $browser->click('@customer_id')
                 ->waitFor('@customer_id')
                 ->elements('.el-select-customers .el-select-dropdown__item')[0]->click();
             
@@ -117,16 +113,49 @@ class ExampleTest extends DuskTestCase
                 ->press('Generar');
 
             
-            $browser->waitForText('Comprobante: F001-1', 50)
+            $browser->waitForText('Comprobante: B001-1', 50)
                 ->waitForText('Ir al listado', 20)
                 ->elements('.el-button.list')[0]->click();
+
+
+
+            $browser->visit('/summaries')
+                    ->waitForText('Nuevo', 20)
+                    ->press('Nuevo');
+
+            $browser->waitForText('Registrar Resumen', 20)
+                    ->click('@search-documents');
+ 
+
+            $browser->waitForText('Guardar', 20)
+                    ->click('@save-summary');
             
-            // Logout (Sub-domain)
+            /*while($browser->waitForText('Code: HTTP; Description: Bad Gateway')){
+                
+                $browser->waitForText('Guardar', 10)
+                    ->click('@save-summary');
+                
+                $browser->pause(30);
+            }*/
+                    
+
+            $browser->waitForText('El resumen RC-20190213-1 fue creado correctamente', 25)
+                    ->assertSee('El resumen RC-20190213-1 fue creado correctamente');
+           
+            /*$browser->waitForText('Acciones', 20)
+                    ->click('@consult-ticket');
+
+            $browser->waitForText('El Resumen diario RC-20190213-1, ha sido aceptado', 20)
+                    ->assertSee('El Resumen diario RC-20190213-1, ha sido aceptado');*/
+                    
+                    
+                   
+                // Logout (Sub-domain)
             $browser->clickLink('Administrador')
-                ->waitForText('Salir', 3)
-                ->clickLink('Salir')
-                ->assertSee('Acceso al Sistema');
-            
+            ->waitForText('Salir', 3)
+            ->clickLink('Salir')
+            ->assertSee('Acceso al Sistema');
+        
             // Change of url (Admin)
             Browser::$baseUrl = 'http://'.env('APP_URL_BASE');
             
@@ -144,6 +173,7 @@ class ExampleTest extends DuskTestCase
                 ->waitForText('Salir', 3)
                 ->clickLink('Salir')
                 ->assertSee('Acceso al Sistema');
+
         });
     }
 }
