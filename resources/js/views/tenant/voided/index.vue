@@ -43,6 +43,7 @@
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
                                     @click.prevent="clickTicket(row.type, row.id)"
+                                    dusk="consult-voided"
                                     v-if="row.btn_ticket">Consultar</button>
                         </td>
                     </tr>
