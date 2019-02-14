@@ -6,6 +6,7 @@
                 <li class="active"><span>Productos</span></li>
             </ol>
             <div class="right-wrapper pull-right">
+                <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickImport()"><i class="fa fa-upload"></i> Importar</button>
                 <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
             </div>
         </div>
@@ -40,23 +41,28 @@
                     </tr>
                 </data-table>
             </div>
+
             <items-form :showDialog.sync="showDialog"
                         :recordId="recordId"></items-form>
+
+            <items-import :showDialog.sync="showImportDialog"></items-import>
         </div>
     </div>
 </template>
 <script>
 
     import ItemsForm from './form.vue'
+    import ItemsImport from './import.vue'
     import DataTable from '../../../components/DataTable.vue'
     import {deletable} from '../../../mixins/deletable'
 
     export default {
         mixins: [deletable],
-        components: {ItemsForm, DataTable},
+        components: {ItemsForm, ItemsImport, DataTable},
         data() {
             return {
                 showDialog: false,
+                showImportDialog: false,
                 resource: 'items',
                 recordId: null,
             }
@@ -67,6 +73,9 @@
             clickCreate(recordId = null) {
                 this.recordId = recordId
                 this.showDialog = true
+            },
+            clickImport() {
+                this.showImportDialog = true
             },
             clickDelete(id) {
                 this.destroy(`/${this.resource}/${id}`).then(() =>

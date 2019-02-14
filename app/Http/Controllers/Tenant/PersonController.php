@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Requests\Tenant\PersonRequest;
 use App\Http\Resources\Tenant\PersonCollection;
 use App\Http\Resources\Tenant\PersonResource;
-use App\Imports\CustomersImport;
+use App\Imports\PersonsImport;
 use App\Models\Tenant\Catalogs\Country;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
@@ -14,7 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant\Person;
 use Exception;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel;
 
 class PersonController extends Controller
 {
@@ -92,12 +92,9 @@ class PersonController extends Controller
     {
         if ($request->hasFile('file')) {
             try {
-//                $data = Excel::import(new CustomersImport(), $request->file('file'));
-
-                $import = new CustomersImport();
-                $import->import($request->file('file'), null, \Maatwebsite\Excel\Excel::XLSX);
+                $import = new PersonsImport();
+                $import->import($request->file('file'), null, Excel::XLSX);
                 $data = $import->getData();
-//                $data = (new CustomersImport)->import($request->file('file'), null, \Maatwebsite\Excel\Excel::XLSX);
                 return [
                     'success' => true,
                     'message' =>  __('app.actions.upload.success'),
