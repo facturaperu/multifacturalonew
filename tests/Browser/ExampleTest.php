@@ -17,7 +17,6 @@ class ExampleTest extends DuskTestCase
      * @return void
      */
     public function testBasicExample() {
-        
         $this->browse(function (Browser $browser) {
             // Seeders
             $this->artisan('db:seed', [
@@ -31,7 +30,9 @@ class ExampleTest extends DuskTestCase
                 ->type('password', '123456')
                 ->press('Iniciar sesión')
                 ->assertPathIs('/dashboard');
-            
+                
+                
+
             // Customer registration (Admin)
             $browser->press('Nuevo')
                 ->assertSee('Nuevo Cliente')
@@ -41,7 +42,7 @@ class ExampleTest extends DuskTestCase
                 ->type('@email', 'test@test.com')
                 ->type('@password', '123456')
                 ->click('@plan_id')
-                ->waitFor('@plan_id')
+                ->waitFor('@plan_id',10)
                 ->elements('.el-select-dropdown__item')[0]->click();
             
             $browser->waitForText('Guardar', 5)
@@ -57,7 +58,9 @@ class ExampleTest extends DuskTestCase
                 ->type('password', '123456')
                 ->press('Iniciar sesión')
                 ->waitForText('Menu', 35);
-            
+
+ 
+
             // Create product (Sub-domain)
             $browser->clickLink('Productos')
                 ->press('Nuevo')
@@ -69,6 +72,7 @@ class ExampleTest extends DuskTestCase
                 ->type('@purchase_unit_price', '8')
                 ->press('Guardar')
                 ->waitForText('Producto registrado con éxito', 5);
+            
             
             // Create client (Sub-domain)
             $browser->clickLink('Clientes')
@@ -121,6 +125,33 @@ class ExampleTest extends DuskTestCase
                 ->waitForText('Ir al listado', 20)
                 ->elements('.el-button.list')[0]->click();
             
+
+            //create anulation
+            $browser->waitForText('Anular', 20)
+                    ->press('Anular');
+
+
+            $browser->waitForText('Comprobante: F001-1', 10)
+                    ->type('@description', 'error en el total')
+                    ->click('@annulment-voided')
+                    ->waitForText('La anulación RA-20190214-1 fue creado correctamente', 25)
+                    ->assertSee('La anulación RA-20190214-1 fue creado correctamente');
+
+
+            $browser->visit('/voided');
+
+            $browser->waitForText('Consultar', 20)
+                    ->click('@consult-voided')
+                    ->waitForText('La Comunicacion de baja RA-20190214-1, ha sido aceptada', 25)
+                    ->assertSee('La Comunicacion de baja RA-20190214-1, ha sido aceptada');
+
+            // $browser->clickLink('Anulaciones');
+
+
+            // $browser->clickLink('Listado de comprobantes');
+
+
+
             // Logout (Sub-domain)
             $browser->clickLink('Administrador')
                 ->waitForText('Salir', 3)

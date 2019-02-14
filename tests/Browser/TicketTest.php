@@ -139,14 +139,14 @@ class TicketTest extends DuskTestCase
             }*/
                     
 
-            $browser->waitForText('El resumen RC-20190213-1 fue creado correctamente', 25)
-                    ->assertSee('El resumen RC-20190213-1 fue creado correctamente');
+            $browser->waitForText('El resumen RC-20190214-1 fue creado correctamente', 25)
+                    ->assertSee('El resumen RC-20190214-1 fue creado correctamente');
            
             /*$browser->waitForText('Acciones', 20)
                     ->click('@consult-ticket');
 
-            $browser->waitForText('El Resumen diario RC-20190213-1, ha sido aceptado', 20)
-                    ->assertSee('El Resumen diario RC-20190213-1, ha sido aceptado');*/
+            $browser->waitForText('El Resumen diario RC-20190214-1, ha sido aceptado', 20)
+                    ->assertSee('El Resumen diario RC-20190214-1, ha sido aceptado');*/
                     
                     
                    
