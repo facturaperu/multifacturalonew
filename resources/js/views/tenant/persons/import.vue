@@ -1,26 +1,30 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create">
+    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create" class="dialog-import">
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="form-group" :class="{'has-danger': errors.file}">
-                            <label class="control-label">Seleccionar archivo</label>
+                        <a href="/formats/persons.xlsx" target="_new">Descargar formato</a>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <div class="form-group text-center" :class="{'has-danger': errors.file}">
                             <el-upload
                                     ref="upload"
                                     :headers="headers"
                                     :data="{'type': type}"
                                     action="/persons/import"
-                                    :show-file-list="false"
-                                    :auto-upload="true"
+                                    :show-file-list="true"
+                                    :auto-upload="false"
                                     :multiple="false"
                                     :on-error="errorUpload"
+                                    :limit="1"
                                     :on-success="successUpload">
-                                <el-button slot="trigger" type="primary">Selecciona un archivo</el-button>
+                                <el-button slot="trigger" type="primary">Seleccione un archivo (xlsx)</el-button>
                             </el-upload>
                             <small class="form-control-feedback" v-if="errors.file" v-text="errors.file[0]"></small>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="form-actions text-right mt-4">
@@ -63,28 +67,10 @@
                     this.titleDialog = 'Importar Proveedores'
                 }
             },
-            submit() {
+            async submit() {
                 this.loading_submit = true
-                this.$http.post(`/${this.resource}`, this.form)
-                    .then(response => {
-                        if (response.data.success) {
-                            this.$message.success(response.data.message)
-                            this.$eventHub.$emit('reloadData')
-                            this.close()
-                        } else {
-                            this.$message.error(response.data.message)
-                        }
-                    })
-                    .catch(error => {
-                        if (error.response.status === 422) {
-                            this.errors = error.response.data
-                        } else {
-                            console.log(error)
-                        }
-                    })
-                    .then(() => {
-                        this.loading_submit = false
-                    })
+                await this.$refs.upload.submit()
+                this.loading_submit = false
             },
             close() {
                 this.$emit('update:showDialog', false)
@@ -94,6 +80,7 @@
                 if (response.success) {
                     this.$message.success(response.message)
                     this.$eventHub.$emit('reloadData')
+                    this.$refs.upload.clearFiles()
                     this.close()
                 } else {
                     this.$message({message:response.message, type: 'error'})
