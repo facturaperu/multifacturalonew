@@ -144,7 +144,7 @@ class ClientController extends Controller
             'send_auto' => true,
         ]);
 
-        DB::connection('tenant')->table('establishments')->insert([
+        $establishment_id = DB::connection('tenant')->table('establishments')->insertGetId([
             'description' => 'Oficina Principal',
             'country_id' => 'PE',
             'department_id' => '15',
@@ -171,7 +171,8 @@ class ClientController extends Controller
             'name' => 'Administrador',
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
-            'api_token' => $token
+            'api_token' => $token,
+            'establishment_id' => $establishment_id
         ]);
 
         return [

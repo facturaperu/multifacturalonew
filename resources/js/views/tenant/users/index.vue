@@ -12,6 +12,7 @@
                         <th>Email</th>
                         <th>Nombre</th>
                         <th>Api Token</th>
+                        <th>Establecimiento</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -20,6 +21,7 @@
                         <td>{{ row.email }}</td>
                         <td>{{ row.name }}</td>
                         <td>{{ row.api_token }}</td>
+                        <td>{{ row.establishment_description }}</td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"  @click.prevent="clickDelete(row.id)" v-show="row.id!=1">Eliminar</button>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\UserRequest;
 use App\Http\Resources\Tenant\UserResource;
+use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Module;
 use App\Models\Tenant\User;
 use App\Http\Resources\Tenant\UserCollection;
@@ -25,8 +26,9 @@ class UserController extends Controller
     public function tables()
     {
         $modules = Module::orderBy('description')->get();
+        $establishments = Establishment::orderBy('description')->get();
 
-        return compact('modules');
+        return compact('modules', 'establishments');
     }
 
     public function store(UserRequest $request)

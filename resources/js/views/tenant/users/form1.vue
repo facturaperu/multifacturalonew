@@ -3,18 +3,27 @@
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.name}">
                             <label class="control-label">Nombre</label>
                             <el-input v-model="form.name"></el-input>
                             <small class="form-control-feedback" v-if="errors.name" v-text="errors.name[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.email}">
                             <label class="control-label">Correo Electrónico</label>
                             <el-input v-model="form.email" :disabled="form.id!=null"></el-input>
                             <small class="form-control-feedback" v-if="errors.email" v-text="errors.email[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.establishment_id}">
+                            <label class="control-label">Establecimiento</label>
+                            <el-select v-model="form.establishment_id" filterable>
+                                <el-option v-for="option in establishments" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.establishment_id" v-text="errors.establishment_id[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-12" v-show="form.id">
@@ -72,13 +81,15 @@
                 resource: 'users',
                 errors: {},
                 form: {},
-                modules: []
+                modules: [],
+                establishments: []
             }
         },
         async created() {
             await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.modules = response.data.modules
+                    this.establishments = response.data.establishments
                 })
             await this.initForm()
         },
@@ -90,6 +101,7 @@
                     name: null,
                     email: null,
                     api_token: null,
+                    establishment_id: null,
                     password: null,
                     password_confirmation: null,
                     modules: []
