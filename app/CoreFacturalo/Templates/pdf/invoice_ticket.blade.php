@@ -170,8 +170,16 @@
 <table class="full-width">
     <tr>
         @foreach($document->legends as $row)
-            <td colspan="5" class="desc pt-3">Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></td>
+            <td class="desc pt-3">Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></td>
         @endforeach
+    </tr>
+    <tr>
+        <td class="desc pt-3">
+            <strong>Información adicional</strong>
+            @foreach($document->additional_information as $information)
+                <p class="desc">{{ $information }}</p>
+            @endforeach
+        </td>
     </tr>
     <tr>
         <td class="text-center pt-3"><img class="qr_code" src="data:image/png;base64, {{ $document->qr }}" /></td>

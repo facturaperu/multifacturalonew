@@ -180,9 +180,13 @@
             @foreach($document->legends as $row)
                 <p>Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></p>
             @endforeach
+            <br/>
+            <strong>Información adicional</strong>
+            @foreach($document->additional_information as $information)
+                <p>{{ $information }}</p>
+            @endforeach
             <div class="text-left"><img class="qr_code" src="data:image/png;base64, {{ $document->qr }}" /></div>
             <p>Código Hash: {{ $document->hash }}</p>
-
         </td>
     </tr>
 </table>

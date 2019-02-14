@@ -49,6 +49,7 @@ class DocumentTransform
             'guides' => self::guides($inputs),
             'related' => self::related($inputs),
             'legends' => LegendTransform::transform($inputs),
+            'additional_information' => Functions::valueKeyInArray($inputs, 'informacion_adicional'),
             'actions' => ActionTransform::transform($inputs),
         ];
 
