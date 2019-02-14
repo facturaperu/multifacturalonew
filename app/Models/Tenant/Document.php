@@ -53,6 +53,7 @@ class Document extends ModelTenant
         'perception',
         'detraction',
         'legends',
+        'additional_information',
 
         'filename',
         'hash',
@@ -165,6 +166,12 @@ class Document extends ModelTenant
     public function setLegendsAttribute($value)
     {
         $this->attributes['legends'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getAdditionalInformationAttribute($value)
+    {
+        $arr = explode('|', $value);
+        return $arr;
     }
 
     public function user()
