@@ -182,7 +182,7 @@ class DocumentInput
                     $base = $row['base'];
 
                     $charges[] = [
-                        'discount_type_id' => $charge_type_id,
+                        'charge_type_id' => $charge_type_id,
                         'description' => $description,
                         'factor' => $factor,
                         'amount' => $amount,

@@ -37,6 +37,7 @@ class UserController extends Controller
         $user = User::firstOrNew(['id' => $id]);
         $user->name = $request->input('name');
         $user->email = $request->input('email');
+        $user->establishment_id = $request->input('establishment_id');
         if (!$id) {
             $user->api_token = str_random(50);
             $user->password = bcrypt($request->input('password'));

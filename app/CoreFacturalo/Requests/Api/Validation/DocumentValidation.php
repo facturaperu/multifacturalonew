@@ -5,8 +5,8 @@ namespace App\CoreFacturalo\Requests\Api\Validation;
 class DocumentValidation
 {
     public static function validation($inputs) {
-        $inputs['establishment_id'] = Functions::establishment($inputs['establishment']);
-        unset($inputs['establishment']);
+        $inputs['establishment_id'] = auth()->user()->establishment_id;// Functions::establishment($inputs['establishment']);
+        //unset($inputs['establishment']);
         
         Functions::validateSeries($inputs);
         

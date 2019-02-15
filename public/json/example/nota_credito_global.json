@@ -13,9 +13,6 @@
     "numero_documento": "1",
     "codigo_tipo_documento": "07"
   },
-  "datos_del_emisor": {
-    "codigo_del_domicilio_fiscal": "0000"
-  },
   "datos_del_cliente_o_receptor":{
     "codigo_tipo_documento_identidad": "6",
     "numero_documento": "10414711225",
