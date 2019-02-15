@@ -10,7 +10,7 @@ Para conocer el proceso de instalación del facturador, visite la documentación
 
 [Manual - forge](https://docs.google.com/document/d/1NVV2yv8ys8tjdz5ByvEPhIUdm0GJ95XiB-iMlElaJTA/edit# "Clic")
 <br>
-[Manual - windows - linux](https://drive.google.com/open?id=1piT-xWJmYRYm3L5u-G-v611NlPWq62uFcGaFiJGS9H0 "Clic")
+[Manual - windows - linux](https://drive.google.com/open?id=1Jf0vgGvx27MbOB4JYsk9Gzgd5QIl32j35pwU1LI_Woo "Clic")
 
 ## Manejo del facturador
 
@@ -25,6 +25,13 @@ Además puede realizar sus pruebas usando [Postman Collection](https://drive.goo
 ## Pruebas
 
 [Manual de pruebas](https://docs.google.com/document/d/1GihGu-qNukj27hufdkPWUYO6wl-XIUVyK2cXygDqdlI/edit# "Clic")
+
+## ADMIN
+
+Visite el siguiente enlace: [FACTURADOR PRO](http://2facturaloperuonline.com "Clic")
+<br>
+Usuario: admin@gmail.com<br>
+Contraseña: 123456
 
 ## DEMO
 
