@@ -259,7 +259,7 @@ class Facturalo
                 'mode' => 'utf-8',
                 'format' => [
                     78,
-                    110 +
+                    120 +
                     ($quantity_rows * 8) +
                     ($discount_global * 3) +
                     $company_name +
