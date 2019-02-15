@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.identity_document_type_id}">
-                            <label class="control-label">Tipo Doc. Identidad</label>
+                            <label class="control-label">Tipo Doc. Identidad <span class="text-danger">*</span></label>
                             <el-select v-model="form.identity_document_type_id" filterable  popper-class="el-select-identity_document_type" dusk="identity_document_type_id" >
                                 <el-option v-for="option in identity_document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
-                            <label class="control-label">* Número</label>
+                            <label class="control-label">Número <span class="text-danger">*</span></label>
                             <el-input v-model="form.number" :maxlength="maxLength" dusk="number">
                                 <template v-if="form.identity_document_type_id === '6' || form.identity_document_type_id === '1'">
                                     <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchCustomer">
@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.name}">
-                            <label class="control-label">* Nombre</label>
+                            <label class="control-label">Nombre <span class="text-danger">*</span></label>
                             <el-input v-model="form.name" dusk="name"></el-input>
                             <small class="form-control-feedback" v-if="errors.name" v-text="errors.name[0]"></small>
                         </div>

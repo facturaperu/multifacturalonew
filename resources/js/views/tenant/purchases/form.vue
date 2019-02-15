@@ -3,11 +3,11 @@
         <div class="card-header bg-info">
             <h3 class="my-0">Nueva Compra</h3>
         </div>
-        <div class="card-body">
+        <div class="tab-content">
             <form autocomplete="off" @submit.prevent="submit">
                 <div class="form-body">
-                   
-                    <div class="row">   
+
+                    <div class="row">
                          <div class="col-lg-3">
                             <div class="form-group" :class="{'has-danger': errors.document_type_id}">
                                 <label class="control-label">Tipo de comprobante</label>
@@ -19,7 +19,7 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.series}">
-                                <label class="control-label">Serie</label> 
+                                <label class="control-label">Serie <span class="text-danger">*</span></label>
                                 <el-input v-model="form.series" :maxlength="4"></el-input>
 
                                 <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.number}">
-                                <label class="control-label">Número</label> 
+                                <label class="control-label">Número <span class="text-danger">*</span></label>
                                 <el-input v-model="form.number"></el-input>
 
                                 <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
@@ -42,8 +42,8 @@
                                 <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
                             </div>
                         </div>
-                        
-                       
+
+
                         <div class="col-lg-3">
                             <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
                                 <label class="control-label">Fecha de emisión</label>
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        
+
                         <div class="col-lg-5">
                             <div class="form-group" :class="{'has-danger': errors.supplier_id}">
                                 <label class="control-label">
@@ -65,15 +65,15 @@
                                 </el-select>
                                 <small class="form-control-feedback" v-if="errors.supplier_id" v-text="errors.supplier_id[0]"></small>
                             </div>
-                        </div>  
-                        
+                        </div>
+
                         <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.date_of_due}">
                                 <label class="control-label">Fecha de vencimiento</label>
                                 <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
                                 <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
                             </div>
-                        </div> 
+                        </div>
                         <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
                                 <label class="control-label">Tipo de cambio</label>
@@ -81,7 +81,7 @@
                                 <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
                             </div>
                         </div>
-                        
+
                         <div class="col-lg-2 col-md-6 d-flex align-items-end pt-2">
                             <div class="form-group">
                                 <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Producto</button>
@@ -141,7 +141,7 @@
             </form>
         </div>
 
-        <purchase-form-item :showDialog.sync="showDialogAddItem" 
+        <purchase-form-item :showDialog.sync="showDialogAddItem"
                            :currency-type-id-active="form.currency_type_id"
                            :exchange-rate-sale="form.exchange_rate_sale"
                            @add="addRow"></purchase-form-item>
@@ -175,7 +175,7 @@
                 showDialogOptions: false,
                 loading_submit: false,
                 errors: {},
-                form: {}, 
+                form: {},
                 aux_supplier_id:null,
                 document_types: [],
                 currency_types: [],
@@ -202,30 +202,30 @@
                     this.establishment = response.data.establishment
                     this.all_suppliers = response.data.suppliers
                     this.discount_types = response.data.discount_types
-                    this.charges_types = response.data.charges_types 
+                    this.charges_types = response.data.charges_types
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
-                    this.form.establishment_id = (this.establishment.id) ? this.establishment.id:null 
+                    this.form.establishment_id = (this.establishment.id) ? this.establishment.id:null
                     this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
- 
+
                     this.changeDateOfIssue()
                     this.changeDocumentType()
                     this.changeCurrencyType()
                 })
 
             this.$eventHub.$on('reloadDataPersons', (supplier_id) => {
-                this.reloadDataSuppliers(supplier_id)   
+                this.reloadDataSuppliers(supplier_id)
            })
         },
         methods: {
-            
+
             filterSuppliers() {
- 
+
                 if(this.form.document_type_id === '01') {
                     this.suppliers = _.filter(this.all_suppliers, {'identity_document_type_id': '6'})
-                    this.selectSupplier()                    
+                    this.selectSupplier()
 
-                } else {                    
-                    this.suppliers = _.filter(this.all_suppliers, (c) => { return c.identity_document_type_id !== '6' }) 
+                } else {
+                    this.suppliers = _.filter(this.all_suppliers, (c) => { return c.identity_document_type_id !== '6' })
                     this.selectSupplier()
                 }
             },
@@ -233,7 +233,7 @@
 
                 let supplier = _.find(this.suppliers, {'id': this.aux_supplier_id})
                 this.form.supplier_id = (supplier) ? supplier.id : null
-                this.aux_supplier_id = null 
+                this.aux_supplier_id = null
 
             },
             initForm() {
@@ -271,7 +271,7 @@
                     charges: [],
                     discounts: [],
                     attributes: [],
-                    guides: [], 
+                    guides: [],
                 }
             },
             resetForm() {
@@ -279,11 +279,11 @@
                 this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                 this.form.establishment_id = this.establishment.id
                 this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
-           
+
                 this.changeDateOfIssue()
                 this.changeDocumentType()
                 this.changeCurrencyType()
-            }, 
+            },
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
                 // this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
@@ -299,7 +299,7 @@
             },
             clickRemoveItem(index) {
                 this.form.items.splice(index, 1)
-                this.calculateTotal()  
+                this.calculateTotal()
             },
             changeCurrencyType() {
                 this.currency_type = _.find(this.currency_types, {'id': this.form.currency_type_id})
@@ -357,10 +357,10 @@
                 this.form.total = _.round(total, 2)
              },
             submit() {
-                
-                this.loading_submit = true 
+
+                this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form)
-                    .then(response => { 
+                    .then(response => {
 
                         if (response.data.success) {
                             this.resetForm()
@@ -390,8 +390,8 @@
 
                     this.aux_supplier_id = supplier_id
                     this.all_suppliers = response.data
-                    this.filterSuppliers() 
- 
+                    this.filterSuppliers()
+
                 })
             },
         }

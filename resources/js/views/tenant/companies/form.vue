@@ -16,7 +16,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.name}">
-                                <label class="control-label">Nombre</label>
+                                <label class="control-label">Nombre <span class="text-danger">*</span></label>
                                 <el-input v-model="form.name"></el-input>
                                 <small class="form-control-feedback" v-if="errors.name" v-text="errors.name[0]"></small>
                             </div>
@@ -25,7 +25,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.trade_name}">
-                                <label class="control-label">Nombre comercial</label>
+                                <label class="control-label">Nombre comercial <span class="text-danger">*</span></label>
                                 <el-input v-model="form.trade_name"></el-input>
                                 <small class="form-control-feedback" v-if="errors.trade_name" v-text="errors.trade_name[0]"></small>
                             </div>
@@ -74,15 +74,15 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group" :class="{'has-danger': errors.soap_username}">
-                                    <label class="control-label">SOAP Usuario</label>
+                                    <label class="control-label">SOAP Usuario <span class="text-danger">*</span></label>
                                     <el-input v-model="form.soap_username"></el-input>
-                                    <div class="sub-title text-muted"><small>RUC + Usuario. Ejemplo: 12345678900ELUSUARIO</small></div>
+                                    <div class="sub-title text-muted"><small>RUC + Usuario. Ejemplo: 01234567890ELUSUARIO</small></div>
                                     <small class="form-control-feedback" v-if="errors.soap_username" v-text="errors.soap_username[0]"></small>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group" :class="{'has-danger': errors.soap_password}">
-                                    <label class="control-label">SOAP Password</label>
+                                    <label class="control-label">SOAP Password <span class="text-danger">*</span></label>
                                     <el-input v-model="form.soap_password"></el-input>
                                     <small class="form-control-feedback" v-if="errors.soap_password" v-text="errors.soap_password[0]"></small>
                                 </div>

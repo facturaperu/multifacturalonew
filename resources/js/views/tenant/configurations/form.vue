@@ -7,15 +7,15 @@
             <form autocomplete="off">
                 <div class="form-body">
                     <div class="row">
-                        <div class="col-md-8">
-                            <label class="control-label">Enviar automaticamente los comprobantes a SUNAT</label>
+                        <div class="col-md-6">
+                            <label class="control-label">Reenvio de Facturas automático</label>
                             <div class="form-group" :class="{'has-danger': errors.send_auto}">
                                 <el-switch v-model="form.send_auto" active-text="Si" inactive-text="No" @change="submit"></el-switch>
                                 <small class="form-control-feedback" v-if="errors.send_auto" v-text="errors.send_auto[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <label class="control-label">Habilitar cron</label>
+                        <div class="col-md-6">
+                            <label class="control-label">Envio de Resumenes automático <small>(2:00 am - 3:00 am)</small></label>
                             <div class="form-group" :class="{'has-danger': errors.cron}">
                                 <el-switch v-model="form.cron" active-text="Si" inactive-text="No" @change="submit"></el-switch>
                                 <small class="form-control-feedback" v-if="errors.cron" v-text="errors.cron[0]"></small>
@@ -40,7 +40,7 @@
         },
         async created() {
             await this.initForm();
-            
+
             await this.$http.get(`/${this.resource}/record`) .then(response => {
                 if (response.data !== '') this.form = response.data.data;
             });
@@ -48,7 +48,7 @@
         methods: {
             initForm() {
                 this.errors = {};
-                
+
                 this.form = {
                     send_auto: true,
                     cron: true,
@@ -57,7 +57,7 @@
             },
             submit() {
                 this.loading_submit = true;
-                
+
                 this.$http.post(`/${this.resource}`, this.form).then(response => {
                     if (response.data.success) {
                         this.$message.success(response.data.message);

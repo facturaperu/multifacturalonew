@@ -21,7 +21,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.description}">
-                            <label class="control-label">Descripción</label>
+                            <label class="control-label">Descripción <span class="text-danger">*</span></label>
                             <el-input v-model="form.description" dusk="description"></el-input>
                             <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
                         </div>
