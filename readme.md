@@ -18,8 +18,10 @@ Visite el [Manual de usuario](https://drive.google.com/open?id=13t2-eqf57QRbAFR8
 
 ## Manejo de la API
 
-Para conocer acerca de nuestra API, visite la [documentación](https://docs.google.com/document/d/1FtuEGAq7scoQFGQKBuT8Zd6dLVU7h9abeGXbE41J-qA/edit# "Clic")
- 
+Para conocer acerca de nuestra API, visite la [documentación](https://docs.google.com/document/d/1FtuEGAq7scoQFGQKBuT8Zd6dLVU7h9abeGXbE41J-qA/edit# "Clic")<br>
+
+Además puede realizar sus pruebas usando [Postman Collection](https://drive.google.com/open?id=1znIZUoyJU8YmkW7Fjq1VI_IVaB-HcE1S "Clic") 
+
 ## Pruebas
 
 [Manual de pruebas](https://docs.google.com/document/d/1GihGu-qNukj27hufdkPWUYO6wl-XIUVyK2cXygDqdlI/edit# "Clic")
