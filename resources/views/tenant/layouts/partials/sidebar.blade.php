@@ -24,6 +24,8 @@
                         {{ ($path[0] === 'documents')?'nav-active nav-expanded':'' }}
                         {{ ($path[0] === 'items')?'nav-active nav-expanded':'' }}
                         {{ ($path[0] === 'persons' && $path[1] === 'customers')?'nav-active nav-expanded':'' }}
+                        {{ ($path[0] === 'summaries')?'nav-active nav-expanded':'' }}
+                        {{ ($path[0] === 'voided')?'nav-active nav-expanded':'' }}
                         ">
                         <a class="nav-link" href="#">
                             <i class="fas fa-receipt" aria-hidden="true"></i>
@@ -58,14 +60,40 @@
                                 </a>
                             </li>
                             @endif
+                            <li class="nav-parent
+                                {{ ($path[0] === 'summaries')?'nav-active nav-expanded':'' }}
+                                {{ ($path[0] === 'voided')?'nav-active nav-expanded':'' }}
+                                ">
+                                <a class="nav-link" href="#">
+                                    Resúmenes y Anulaciones
+                                </a>
+                                <ul class="nav nav-children">
+
+                                    @if(in_array('summaries', $vc_modules))
+                                    <li class="{{ ($path[0] === 'summaries')?'nav-active':'' }}">
+                                        <a class="nav-link" href="{{route('tenant.summaries.index')}}">
+                                            Resúmenes
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(in_array('voided', $vc_modules))
+                                    <li class="{{ ($path[0] === 'voided')?'nav-active':'' }}">
+                                        <a class="nav-link" href="{{route('tenant.voided.index')}}">
+                                            Anulaciones
+                                        </a>
+                                    </li>
+                                    @endif
+                                </ul>
+                            </li>
                             <li class="#">
                                 <a class="nav-link" href="#">
                                     Ventas sin facturar (Pronto)
                                 </a>
                             </li>
-                            <p class="py-0 text-center my-0">
+                            {{-- <p class="py-0 text-center my-0">
                                 <span><small class="text-muted">Facturas | Notas <small>(crédito y débito)</small> | Boletas | Anulaciones</small></span>
-                            </p>
+                            </p> --}}
                         </ul>
                     </li>
 
@@ -127,14 +155,12 @@
 
                     <li class="
                         nav-parent
-                        {{ ($path[0] === 'summaries')?'nav-active nav-expanded':'' }}
-                        {{ ($path[0] === 'voided')?'nav-active nav-expanded':'' }}
                         {{ ($path[0] === 'retentions')?'nav-active nav-expanded':'' }}
                         {{ ($path[0] === 'dispatches')?'nav-active nav-expanded':'' }}
                         ">
                         <a class="nav-link" href="#">
                             <i class="fas fa-file-alt" aria-hidden="true"></i>
-                            <span>Otros comprobantes</span>
+                            <span>Comprobantes avanzados</span>
                         </a>
                         <ul class="nav nav-children" style="">
 
@@ -148,20 +174,20 @@
                                     {{--Notas de crébito--}}
                                 {{--</a>--}}
                             {{--</li>--}}
-                            @if(in_array('summaries', $vc_modules))
+                            {{-- @if(in_array('summaries', $vc_modules))
                             <li class="{{ ($path[0] === 'summaries')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.summaries.index')}}">
                                     Resúmenes
                                 </a>
                             </li>
-                            @endif
-                            @if(in_array('voided', $vc_modules))
+                            @endif --}}
+                            {{-- @if(in_array('voided', $vc_modules))
                             <li class="{{ ($path[0] === 'voided')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.voided.index')}}">
                                     Anulaciones
                                 </a>
                             </li>
-                            @endif
+                            @endif --}}
                             @if(in_array('retentions', $vc_modules))
                             <li class="{{ ($path[0] === 'retentions')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.retentions.index')}}">
