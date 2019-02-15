@@ -79,3 +79,10 @@
 .pricing-table h3 {
     padding: 10px !important;
 }
+
+.data-table-visible-columns {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 5;
+}
