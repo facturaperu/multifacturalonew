@@ -102417,3 +102417,15 @@ a.link:focus {
   width: 500px !important;
 }
 
+.pricing-table h3 span {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  font-size: 20px !important;
+  height: 130px !important;
+  width: 130px !important;
+}
+
+.pricing-table h3 {
+  padding: 10px !important;
+}
+
