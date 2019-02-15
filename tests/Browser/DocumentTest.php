@@ -14,7 +14,7 @@ class DocumentTest extends DuskTestCase
     use DatabaseMigrations;
     
     /**
-    * @group ticket
+    * @group documents
     */
     public function testDocument()
     {
@@ -50,6 +50,8 @@ class DocumentTest extends DuskTestCase
             // Change of url (Admin)
             Browser::$baseUrl = 'http://'.env('APP_URL_BASE');
             
+            $this->system_delete_client($browser);
+
             $this->system_logout($browser);
             
             
@@ -68,16 +70,16 @@ class DocumentTest extends DuskTestCase
         $browser->waitForText('Comprobante: F001-1', 20)
                 ->type('@description', 'error en el total')
                 ->click('@annulment-voided')
-                ->waitForText('La anulación RA-20190214-1 fue creado correctamente', 25)
-                ->assertSee('La anulación RA-20190214-1 fue creado correctamente');
+                ->waitForText('La anulación RA-'.date('Ymd').'-1 fue creado correctamente', 25)
+                ->assertSee('La anulación RA-'.date('Ymd').'-1 fue creado correctamente');
 
 
         $browser->visit('/voided');
 
         $browser->waitForText('Consultar', 20)
                 ->click('@consult-voided')
-                ->waitForText('La Comunicacion de baja RA-20190214-1, ha sido aceptada', 25)
-                ->assertSee('La Comunicacion de baja RA-20190214-1, ha sido aceptada');
+                ->waitForText('La Comunicacion de baja RA-'.date('Ymd').'-1, ha sido aceptada', 25)
+                ->assertSee('La Comunicacion de baja RA-'.date('Ymd').'-1, ha sido aceptada');
 
         $browser->pause(10);
 
@@ -107,6 +109,11 @@ class DocumentTest extends DuskTestCase
 
         $browser->waitForText('El Resumen diario RC-'.date('Ymd').'-1, ha sido aceptado', 20)
                 ->assertSee('El Resumen diario RC-'.date('Ymd').'-1, ha sido aceptado');
+
+        $browser->visit('/documents')
+                ->waitForText('Comprobantes', 20)
+                ->assertSee('Comprobantes');
+
     }
     
 
@@ -139,7 +146,9 @@ class DocumentTest extends DuskTestCase
         
         $browser->waitForText('Comprobante: B001-1', 50)
                 ->waitForText('Ir al listado', 20)
-                ->elements('.el-button.list')[0]->click();
+                ->assertSee('Comprobante: B001-1');
+                
+        $browser->elements('.el-button.list')[0]->click();
 
 
 
@@ -169,7 +178,8 @@ class DocumentTest extends DuskTestCase
 
             
             $browser->waitForText('Comprobante: F001-1', 50)
-                    ->waitForText('Ir al listado', 20);
+                    ->waitForText('Ir al listado', 20)
+                    ->assertSee('Comprobante: F001-1');
 
     }
 
@@ -266,19 +276,21 @@ class DocumentTest extends DuskTestCase
         
     }
 
-
-    public function system_logout($browser){
-        
-        // Customer removal (Admin)
+    public function system_delete_client($browser){
+ 
         $browser->visit('/')
-        ->waitForText('Eliminar', 5)
-        ->press('Eliminar')
-        ->waitForText('¿Desea eliminar el registro?', 5)
-        ->elements('.el-message-box .el-button--primary')[0]->click();
+                ->waitForText('Eliminar', 5)
+                ->press('Eliminar')
+                ->waitForText('¿Desea eliminar el registro?', 5)
+                ->elements('.el-message-box .el-button--primary')[0]->click();
     
         $browser->waitForText('Se eliminó correctamente el registro', 300);
 
-        // Logout (Admin)
+    }
+
+    public function system_logout($browser){
+        
+         
         $browser->clickLink('Admin Instrador')
                 ->waitForText('Salir', 3)
                 ->clickLink('Salir')
@@ -296,8 +308,7 @@ class DocumentTest extends DuskTestCase
 
     }
     public function tenant_logout($browser){
-
-         // Logout (Sub-domain)
+ 
          $browser->clickLink('Administrador')
          ->waitForText('Salir', 3)
          ->clickLink('Salir')

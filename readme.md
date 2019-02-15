@@ -26,6 +26,13 @@ Además puede realizar sus pruebas usando [Postman Collection](https://drive.goo
 
 [Manual de pruebas](https://docs.google.com/document/d/1GihGu-qNukj27hufdkPWUYO6wl-XIUVyK2cXygDqdlI/edit# "Clic")
 
+## ADMIN
+
+Visite el siguiente enlace: [FACTURADOR PRO](http://2facturaloperuonline.com "Clic")
+<br>
+Usuario: admin@gmail.com<br>
+Contraseña: 123456
+
 ## DEMO
 
 Visite el siguiente enlace: [FACTURADOR PRO](http://demo.2facturaloperuonline.com "Clic")
