@@ -81,12 +81,12 @@ class DocumentController extends Controller
         $operation_types = OperationType::whereActive()->get();
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
-
         $company = Company::active();
+        $document_type_03_filter = env('DOCUMENT_TYPE_03_FILTER', true);
 
         return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
                        'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
-                       'discount_types', 'charge_types', 'company');
+                       'discount_types', 'charge_types', 'company', 'document_type_03_filter');
     }
 
     public function item_tables()

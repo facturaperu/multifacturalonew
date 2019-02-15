@@ -218,6 +218,7 @@
                 all_customers: [],
                 customers: [],
                 company: null,
+                document_type_03_filter: null,
                 operation_types: [],
                 establishments: [],
                 establishment: null,
@@ -240,6 +241,7 @@
                     this.discount_types = response.data.discount_types
                     this.charges_types = response.data.charges_types
                     this.company = response.data.company
+                    this.document_type_03_filter = response.data.document_type_03_filter
 
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
@@ -337,7 +339,11 @@
                 if(this.form.document_type_id === '01') {
                     this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
                 } else {
-                    this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
+                    if(this.document_type_03_filter) {
+                        this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
+                    } else {
+                        this.customers = this.all_customers
+                    }
                 }
             },
             addRow(row) {
