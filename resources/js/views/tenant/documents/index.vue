@@ -3,7 +3,8 @@
         <div class="page-header pr-0">
             <h2><a href="/dashboard"><i class="fas fa-tachometer-alt"></i></a></h2>
             <ol class="breadcrumbs">
-                <li class="active"><span>Comprobantes</span></li>
+                <li class="active"><span>Comprobantes</span> </li>
+                <li><span class="text-muted">Facturas - Notas <small>(crédito y débito)</small> - Boletas - Anulaciones</small></span></li>
             </ol>
             <div class="right-wrapper pull-right">
                 <a :href="`/${resource}/create`" class="btn btn-custom btn-sm  mt-2 mr-2"><i class="fa fa-plus-circle"></i> Nuevo</a>
@@ -99,7 +100,7 @@
                                     <!--@click.prevent="clickTicket(row.voided.id, row.group_id)"-->
                                     <!--v-if="row.btn_ticket">Consultar</button>-->
                         <!--</td>-->
-                        
+
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger m-1__2"
                                     @click.prevent="clickVoided(row.id)"

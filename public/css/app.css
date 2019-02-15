@@ -101365,11 +101365,7 @@ a.link:focus {
 }
 
 .pricing-table h3 span {
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
   font-size: 20px !important;
-  height: 130px !important;
-  width: 130px !important;
 }
 
 .pricing-table h3 {
@@ -101381,5 +101377,15 @@ a.link:focus {
   right: 20px;
   top: 20px;
   z-index: 5;
+}
+
+@media screen and (max-width: 1400px) {
+  .short-text {
+    display: inline-block;
+  }
+
+  .full-text {
+    display: none;
+  }
 }
 

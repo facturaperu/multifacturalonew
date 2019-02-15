@@ -26,7 +26,8 @@
                         <div class="row">
                             <div class="col-lg-2 pb-2">
                                 <div class="form-group" :class="{'has-danger': errors.document_type_id}">
-                                    <label class="control-label font-weight-bold text-info">Tipo de comprobante</label>
+                                    <label class="control-label font-weight-bold text-info full-text">Tipo de comprobante</label>
+                                    <label class="control-label font-weight-bold text-info short-text">Tipo comprobante</label>
                                     <el-select v-model="form.document_type_id" @change="changeDocumentType" popper-class="el-select-document_type" dusk="document_type_id" class="border-left rounded-left border-info">
                                         <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
