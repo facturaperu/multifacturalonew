@@ -17,6 +17,7 @@
         "laravelcollective/html": "^5.4.0",
         "maatwebsite/excel": "^3.1",
         "mpdf/mpdf": "^7.1",
+        "robrichards/xmlseclibs": "3.0.*",
         "thiagoalessio/tesseract_ocr": "^2.7",
         "wapnen/google-cloud-vision-php": "dev-master"
     },
@@ -27,8 +28,7 @@
         "laravel/dusk": "^4.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^7.0",
-        "robrichards/xmlseclibs": "3.0.*"
+        "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "classmap": [
