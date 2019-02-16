@@ -107,7 +107,8 @@
                             </div>
                             <div class="col-lg-2">
                                 <div class="form-group" :class="{'has-danger': errors.date_of_due}">
-                                    <label class="control-label">Fecha de vencimiento</label>
+                                    <label class="control-label full-text">Fecha de vencimiento</label>
+                                    <label class="control-label short-text">F. vencimiento</label>
                                     <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
                                     <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
                                 </div>
