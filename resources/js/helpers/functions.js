@@ -85,38 +85,6 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         unit_value = row.unit_price / (1 + percentage_igv / 100)
     }
 
-    //row.unit_price = parseFloat(this.form.unit_price)
-
-
-    //row.unit_value = _.round(_unit_value, 2)
-//                _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-
-//                if (this.item.has_isc) {
-//                    row.percentage_isc = parseFloat(this.item.percentage_isc)
-//                    row.suggested_price = parseFloat(this.item.suggested_price)
-//                    row.system_isc_type_id = this.item.system_isc_type_id
-//
-//                    let _unit_value_isc = 0
-//                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-//
-//                    if (this.item.system_isc_type_id === '01') {
-//                        _unit_value /= (1 + row.percentage_isc / 100)
-//                        _unit_value_isc = _unit_value * row.percentage_isc / 100
-//                        //row.unit_value = _unit_value /_unit_value_isc
-//                    }
-//                    if (this.item.system_isc_type_id === '02') {
-//                        //_unit_value = _unit_value
-//                    }
-//                    if (this.item.system_isc_type_id === '03') {
-//                        _unit_value_isc = row.suggested_price * row.percentage_isc / 100
-//                        row.unit_value = _unit_value - _unit_value_isc
-//                    }
-//
-//                    row.total_isc = _unit_value_isc * row.quantity
-//
-//                } else {
-//                    _unit_value = row.unit_price / (1 + _percentage_igv / 100)
-//                }
     row.unit_value = _.round(unit_value, 2)
 
     let total_value_partial = unit_value * row.quantity
@@ -164,7 +132,19 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     let total_charge = charge_base + charge_no_base
     let total_value = total_value_partial - total_discount + total_charge
     let total_base_igv = total_value_partial - discount_base + total_isc
-    let total_igv  = total_base_igv * percentage_igv / 100
+
+    let total_igv = 0
+
+    if (row.affectation_igv_type_id === '10') {
+        total_igv = total_base_igv * percentage_igv / 100
+    }
+    if (row.affectation_igv_type_id === '20') { //Exonerated
+        total_igv = 0
+    }
+    if (row.affectation_igv_type_id === '30') { //Unaffected
+        total_igv = 0
+    }
+
     let total_taxes = total_igv + total_isc + total_other_taxes
     let total = total_value + total_taxes
 
