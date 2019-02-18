@@ -4,7 +4,7 @@
             <img :src="src" class="img-fluid" style="max-height: 70px;">
         </div>
         <div class="">
-            <el-dialog title="Logo" class="text-left" :visible.sync="dialogVisible" @closed="closed">
+            <el-dialog title="Logo" class="text-left" :visible.sync="dialogVisible">
                 <p class="text-center">* Se recomienda resoluciones 700x300.</p>
                 <div class="text-center">
                     <el-upload class="uploader" ref="upload" slot="append" :auto-upload="false" :headers="headers" :data="{'type': 'logo'}" action="/companies/uploads" :show-file-list="false" :before-upload="beforeUpload" :on-success="successUpload" :on-change="preview">
@@ -60,7 +60,8 @@
                 
                 if (response.success) {
                     this.$message.success(response.message);
-                    this.load = true;
+                    location.href = this.url;
+//                    this.load = true;
                     
                     return;
                 }
@@ -68,11 +69,11 @@
                 this.$message({message:'Error al subir el archivo', type: 'error'});
                 this.imageUrl = '';
             },
-            closed() {
-                this.dialogVisible = false;
-                
-                if (this.load) location.href = this.url;
-            }
+//            closed() {
+//                this.dialogVisible = false;
+//
+//                if (this.load) location.href = this.url;
+//            }
         }
     }
 </script>
