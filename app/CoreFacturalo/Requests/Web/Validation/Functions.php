@@ -96,12 +96,14 @@ class Functions
     }
     
     public static function DNI($inputs){
+
         if (($inputs['document_type_id'] == '03') && ($inputs['total']) > 700) {
             $person = Person::query()
                 ->with('identity_document_type')
                 ->find($inputs['customer_id']);
             
-            if (!in_array($person->identity_document_type_id, ['01'])) throw new Exception("El tipo doc. identidad {$person->identity_document_type->description} del cliente no es valido.");
+            if (!in_array($person->identity_document_type_id, ['1','6'], true)) throw new Exception("El tipo doc. identidad {$person->identity_document_type->description} del cliente no es valido.");
         }
+
     }
 }
