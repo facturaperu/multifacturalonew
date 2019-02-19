@@ -303,23 +303,23 @@
         </cac:TaxTotal>
         <cac:Item>
             <cbc:Description><![CDATA[{{ $row->item->description }}]]></cbc:Description>
-            @if($row->internal_id)
+            @if($row->item->internal_id)
             <cac:SellersItemIdentification>
-                <cbc:ID>{{ $row->internal_id }}</cbc:ID>
+                <cbc:ID>{{ $row->item->internal_id }}</cbc:ID>
             </cac:SellersItemIdentification>
             @endif
-            @if($row->item_code)
+            @if($row->item->item_code)
             <cac:CommodityClassification>
-                <cbc:ItemClassificationCode>{{ $row->item_code }}</cbc:ItemClassificationCode>
+                <cbc:ItemClassificationCode>{{ $row->item->item_code }}</cbc:ItemClassificationCode>
             </cac:CommodityClassification>
             @endif
-            @if($row->item_code_gs1)
+            @if($row->item->item_code_gs1)
             <cac:StandardItemIdentification>
-                <cbc:ID>{{ $row->item_code_gs1 }}</cbc:ID>
+                <cbc:ID>{{ $row->item->item_code_gs1 }}</cbc:ID>
             </cac:StandardItemIdentification>
             @endif
-            @if($row->attributes)
-            @foreach($row->attributes as $attr)
+            @if($row->item->attributes)
+            @foreach($row->item->attributes as $attr)
             <cac:AdditionalItemProperty>
                 <cbc:Name>{{ $attr->name }}</cbc:Name>
                 <cbc:NameCode>{{ $attr->code }}</cbc:NameCode>
