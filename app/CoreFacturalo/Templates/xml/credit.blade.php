@@ -318,8 +318,8 @@
                 <cbc:ID>{{ $row->item->item_code_gs1 }}</cbc:ID>
             </cac:StandardItemIdentification>
             @endif
-            @if($row->item->attributes)
-            @foreach($row->item->attributes as $attr)
+            @if($row->attributes)
+            @foreach($row->attributes as $attr)
             <cac:AdditionalItemProperty>
                 <cbc:Name>{{ $attr->name }}</cbc:Name>
                 <cbc:NameCode>{{ $attr->code }}</cbc:NameCode>
