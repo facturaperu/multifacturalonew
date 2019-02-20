@@ -59,7 +59,6 @@ class Functions
             'sale_affectation_igv_type_id' => $inputs['affectation_igv_type_id'],
             'purchase_affectation_igv_type_id' => $inputs['affectation_igv_type_id'],
         ]);
-        
         return $item->id;
     }
     
@@ -78,7 +77,6 @@ class Functions
         }
         
         $documents = [];
-        
         foreach ($inputs['documents'] as $row) {
             $document = Document::where('external_id', $row['external_id'])
                 ->where('date_of_issue', $inputs['date_of_reference'])
