@@ -14,9 +14,11 @@ class TenantChangeColumnsToExchangeRates extends Migration
     public function up()
     {
         Schema::table('exchange_rates', function (Blueprint $table) {
-            $table->renameColumn('buy', 'original');
-            $table->renameColumn('sell', 'sale');
-            $table->dropColumn('date_original');
+            $table->renameColumn('buy', 'purchase')->after('date');
+            $table->decimal('purchase_original', 13, 3)->after('date');
+            $table->renameColumn('sell', 'sale')->after('date');
+            $table->decimal('sale_original', 13, 3)->after('date');
+//            $table->dropColumn('date_original');
         });
     }
 
@@ -28,9 +30,10 @@ class TenantChangeColumnsToExchangeRates extends Migration
     public function down()
     {
         Schema::table('exchange_rates', function (Blueprint $table) {
-            $table->renameColumn('original', 'buy');
+            $table->renameColumn('purchase', 'buy');
             $table->renameColumn('sale', 'sell');
-            $table->date('date_original');
+            $table->dropColumn('purchase_original');
+            $table->dropColumn('sale_original');
         });
     }
 }

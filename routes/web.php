@@ -199,6 +199,7 @@ if ($hostname) {
             Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
             Route::post('services/exchange_rate', 'Tenant\Api\ServiceController@exchange_rate');
             Route::post('services/search_exchange_rate', 'Tenant\Api\ServiceController@searchExchangeRateByDate');
+            Route::get('services/exchange_rate/{date}', 'Tenant\Api\ServiceController@exchangeRateTest');
 
             //BUSQUEDA DE DOCUMENTOS
             // Route::get('busqueda', 'Tenant\SearchController@index')->name('search');

@@ -286,9 +286,9 @@
             },
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
-                // this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
-                //     this.form.exchange_rate_sale = response
-                // })
+                this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
+                    this.form.exchange_rate_sale = response
+                })
             },
             changeDocumentType() {
                 this.filterSuppliers()

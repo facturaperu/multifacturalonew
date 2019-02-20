@@ -1,9 +1,6 @@
 <?php
 
-Route::get('services/exchange_rate', 'Tenant\Api\ServiceController@exchangeRateTest');
-Route::post('services/search_exchange_rate', 'Tenant\Api\ServiceController@exchangeRate');
 $hostname = app(Hyn\Tenancy\Contracts\CurrentHostname::class);
-
 if ($hostname) {
     Route::domain($hostname->fqdn)->group(function() {
         Route::middleware('auth:api')->group(function() {
