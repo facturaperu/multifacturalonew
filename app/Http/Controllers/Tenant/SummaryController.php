@@ -49,7 +49,7 @@ class SummaryController extends Controller
             ->where('soap_type_id', $company->soap_type_id)
             ->where('group_id', '02')
             ->where('state_type_id', '01')
-            ->where()
+            ->take(500)
             ->get();
             
         if (count($documents) === 0) throw new Exception("No se encontraron documentos con la fecha {$date_of_reference}");
