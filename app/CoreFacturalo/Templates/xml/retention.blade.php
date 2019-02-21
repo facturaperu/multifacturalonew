@@ -69,8 +69,8 @@
     @if($document->observations)
         <cbc:Note><![CDATA[{{ $document->observations }}]]></cbc:Note>
     @endif
-    <cbc:TotalInvoiceAmount currencyID="PEN">{{ $document->total }}</cbc:TotalInvoiceAmount>
-    <sac:SUNATTotalPaid currencyID="PEN">{{ $document->total_retention }}</sac:SUNATTotalPaid>
+    <cbc:TotalInvoiceAmount currencyID="PEN">{{ $document->total_retention }}</cbc:TotalInvoiceAmount>
+    <sac:SUNATTotalPaid currencyID="PEN">{{ $document->total }}</sac:SUNATTotalPaid>
     @foreach($document->documents as $doc)
     <sac:SUNATRetentionDocumentReference>
         <cbc:ID schemeID="{{ $doc->document_type_id }}">{{ $doc->series }}-{{ $doc->number }}</cbc:ID>
