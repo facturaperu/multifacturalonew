@@ -92,8 +92,8 @@ class ClientController extends Controller
     public function store(ClientRequest $request)
     {
         $subDom = strtolower($request->input('subdomain'));
-        $uuid = env('PREFIX_DATABASE').'_'.$subDom;
-        $fqdn = $subDom.'.'.env('APP_URL_BASE');
+        $uuid = config('tenant.prefix_database').'_'.$subDom;
+        $fqdn = $subDom.'.'.config('tenant.app_url_base');
 
         $website = new Website();
         $hostname = new Hostname();
