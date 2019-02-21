@@ -48,7 +48,7 @@ class DispatchController extends Controller
             ->orderBy('series')
             ->orderBy('number', 'desc');
         
-        return new DispatchCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
+        return new DispatchCollection($records->paginate(config('tenant.items_per_page')));
     }
     
     public function create() {

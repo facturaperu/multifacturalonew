@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\URL;
 class AppServiceProvider extends ServiceProvider
 {
     public function boot() {
-        if (env('FORCE_HTTPS', false)) URL::forceScheme('https');
+        if (config('tenant.force_https')) URL::forceScheme('https');
     }
     
     public function register() {

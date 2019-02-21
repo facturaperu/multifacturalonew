@@ -33,7 +33,7 @@ class DocumentEmail extends Mailable
         $xml = $this->getStorage($this->document->filename, 'signed');
 
         return $this->subject('Envio de Comprobante de Pago Electrónico')
-                    ->from(env('MAIL_USERNAME'), 'Comprobante electrónico')
+                    ->from(config('mail.username'), 'Comprobante electrónico')
                     ->view('tenant.templates.email.document')
                     ->attachData($pdf, $this->document->filename.'.pdf')
                     ->attachData($xml, $this->document->filename.'.xml');
