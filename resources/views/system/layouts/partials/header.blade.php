@@ -1,8 +1,11 @@
 <header class="header">
     <div class="logo-container">
         <a href="{{route('system.dashboard')}}" class="logo pt-2 pt-md-0">
-            {{-- <img src="{{ asset($vc_company->logo) }}" alt="Porto Admin" /> --}}
-            <i class="fa fa-circle fa-3x"></i>
+            @if (file_exists(public_path('theme/logo.svg')))
+                <img class="uk-logo-inverse" width="100" height="auto" src="{{asset('theme/logo.svg')}}" alt="Logo"/>
+            @else
+                <i class="fa fa-circle fa-3x"></i>
+            @endif
         </a>
         <div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
             <i class="fas fa-bars" aria-label="Toggle sidebar"></i>

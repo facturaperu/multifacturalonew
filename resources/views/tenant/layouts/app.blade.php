@@ -48,6 +48,9 @@
 
     <link rel="stylesheet" href="{{ asset('porto-light/css/theme.css') }}" />
     <link rel="stylesheet" href="{{ asset('porto-light/css/custom.css') }}" />
+    @if (file_exists(public_path('theme/theme.css')))
+        <link rel="stylesheet" href="{{ asset('theme/theme.css') }}" />
+    @endif
     @stack('styles')
 
 
