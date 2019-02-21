@@ -20,7 +20,7 @@ Visite el [Manual de usuario](https://drive.google.com/open?id=13t2-eqf57QRbAFR8
 
 Para conocer acerca de nuestra API, visite la [documentación](https://docs.google.com/document/d/1FtuEGAq7scoQFGQKBuT8Zd6dLVU7h9abeGXbE41J-qA/edit# "Clic")<br>
 
-Además puede realizar sus pruebas usando [Postman Collection](https://drive.google.com/open?id=1znIZUoyJU8YmkW7Fjq1VI_IVaB-HcE1S "Clic") 
+Además puede realizar sus pruebas usando [Postman Collection](https://drive.google.com/open?id=1wilZDBDaH2_8eRFFcH56w_U1Naba2TZ6 "Clic") 
 
 ## Pruebas
 
