@@ -143,6 +143,7 @@ if ($hostname) {
             Route::post('summaries/documents', 'Tenant\SummaryController@documents');
             Route::post('summaries', 'Tenant\SummaryController@store');
             Route::get('summaries/status/{summary}', 'Tenant\SummaryController@status');
+            Route::get('summaries/columns', 'Tenant\SummaryController@columns');
 
             //Voided
             Route::get('voided', 'Tenant\VoidedController@index')->name('tenant.voided.index');

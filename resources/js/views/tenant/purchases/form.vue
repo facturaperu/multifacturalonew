@@ -53,7 +53,6 @@
                         </div>
                     </div>
                     <div class="row">
-
                         <div class="col-lg-5">
                             <div class="form-group" :class="{'has-danger': errors.supplier_id}">
                                 <label class="control-label">
@@ -76,7 +75,11 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
-                                <label class="control-label">Tipo de cambio</label>
+                                <label class="control-label">Tipo de cambio
+                                    <el-tooltip class="item" effect="dark" content="Valor obtenido de SUNAT" placement="top-end">
+                                        <i class="fa fa-info-circle"></i>
+                                    </el-tooltip>
+                                </label>
                                 <el-input v-model="form.exchange_rate_sale"></el-input>
                                 <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
                             </div>
