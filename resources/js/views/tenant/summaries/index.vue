@@ -13,51 +13,44 @@
             <div class="card-header bg-info">
                 <h3 class="my-0">Listado de resúmenes</h3>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th class="text-center">Fecha Emisión</th>
-                            <th class="text-center">Fecha Referencia</th>
-                            <th>Identificador</th>
-                            <th>Estado</th>
-                            <th>Ticket</th>
-                            <th class="text-center">Descargas</th>
-                            <th class="text-right">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="(row, index) in records">
-                            <td>{{ index + 1 }}</td>
-                            <td class="text-center">{{ row.date_of_issue }}</td>
-                            <td class="text-center">{{ row.date_of_reference }}</td>
-                            <td>{{ row.identifier }}</td>
-                            <td>{{ row.state_type_description }}</td>
-                            <td>{{ row.ticket }}</td>
-                            <td class="text-center">
-                                <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
-                                        @click.prevent="clickDownload(row.download_xml)"
-                                        v-if="row.has_xml">XML</button>
-                                <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
-                                        @click.prevent="clickDownload(row.download_pdf)"
-                                        v-if="row.has_pdf">XML</button>
-                                <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
-                                        @click.prevent="clickDownload(row.download_cdr)"
-                                        v-if="row.has_cdr">CDR</button>
-                            </td>
-                            <td class="text-right">
-                                <button type="button" class="btn waves-effect waves-light btn-xs btn-warning"
-                                        @click.prevent="clickTicket(row.id)"
-                                        dusk="consult-ticket"
-                                        v-if="row.btn_ticket">Consultar</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+
+             <div class="card-body">
+                <data-table :resource="resource">
+                    <tr slot="heading">
+                        <th>#</th>
+                        <th class="text-center">Fecha Emisión</th>
+                        <th class="text-center">Fecha Referencia</th>
+                        <th>Identificador</th>
+                        <th>Estado</th>
+                        <th>Ticket</th>
+                        <th class="text-center">Descargas</th>
+                        <th class="text-right">Acciones</th>
+                    <tr>
+                    <tr slot-scope="{ index, row }" >
+                        <td>{{ index  }}</td>
+                        <td class="text-center">{{ row.date_of_issue }}</td>
+                        <td class="text-center">{{ row.date_of_reference }}</td>
+                        <td>{{ row.identifier }}</td>
+                        <td>{{ row.state_type_description }}</td>
+                        <td>{{ row.ticket }}</td>
+                        <td class="text-center">
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickDownload(row.download_xml)"
+                                    v-if="row.has_xml">XML</button> 
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickDownload(row.download_cdr)"
+                                    v-if="row.has_cdr">CDR</button>
+                        </td>
+                        <td class="text-right">
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-warning"
+                                    @click.prevent="clickTicket(row.id)"
+                                    dusk="consult-ticket"
+                                    v-if="row.btn_ticket">Consultar</button>
+                        </td>
+                    </tr>
+                </data-table>
             </div>
+            
             <summary-form :showDialog.sync="showDialog"
                         :external="false"></summary-form>
         </div>
@@ -68,9 +61,10 @@
 <script>
 
     import SummaryForm from './form.vue'
+    import DataTable from '../../../components/DataTable.vue'
 
     export default {
-        components: {SummaryForm},
+        components: {DataTable, SummaryForm},
         data () {
             return {
                 resource: 'summaries',
@@ -79,18 +73,9 @@
             }
         },
         created() {
-            this.$eventHub.$on('reloadData', () => {
-                this.getData()
-            })
-            this.getData()
+
         },
-        methods: {
-            getData() {
-                this.$http.get(`/${this.resource}/records`)
-                    .then(response => {
-                        this.records = response.data.data
-                    })
-            },
+        methods: { 
             clickCreate() {
                 this.showDialog = true
             },
@@ -98,8 +83,8 @@
                 this.$http.get(`/${this.resource}/status/${id}`)
                     .then(response => {
                         if (response.data.success) {
+                            this.$eventHub.$emit('reloadData') 
                             this.$message.success(response.data.message)
-                            this.getData()
                         } else {
                             this.$message.error(response.data.message)
                         }

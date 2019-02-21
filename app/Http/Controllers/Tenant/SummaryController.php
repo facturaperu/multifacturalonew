@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\CoreFacturalo\Facturalo;
 use App\Http\Requests\Tenant\{
@@ -33,11 +34,19 @@ class SummaryController extends Controller
         return view('tenant.summaries.index');
     }
     
-    public function records() {
-        $records = Summary::where('summary_status_type_id', '1')
-            ->latest();
+    public function records(Request $request) {
         
+        $records = Summary::where([ ['summary_status_type_id','1'], [ $request->column, 'like', "%{$request->value}%" ]])
+            ->latest();
+         
         return new SummaryCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
+    }
+
+    public function columns()
+    {
+        return [
+            'date_of_issue' => 'Fecha de emisión'
+        ];
     }
     
     public function documents(SummaryDocumentsRequest $request) {
