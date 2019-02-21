@@ -30,7 +30,7 @@ class ClientController extends Controller
 
     public function tables()
     {
-        $url_base = '.'.env('APP_URL_BASE');
+        $url_base = '.'.config('tenant.app_url_base');
         $plans = Plan::all();
 
         return compact('url_base','plans');

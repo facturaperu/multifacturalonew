@@ -7,4 +7,6 @@ return [
     'prefix_database' => env('PREFIX_DATABASE', 'tenancy'),
     'signature_note' => env('SIGNATURE_NOTE', 'FACTURALO'),
     'signature_uri' => env('SIGNATURE_URI', '#FACTURALO'),
+    'force_https' => env('FORCE_HTTPS', false),
+    'document_type_03_filter' => env('DOCUMENT_TYPE_03_FILTER', true),
 ];

@@ -27,7 +27,7 @@
         </cac:SignatoryParty>
         <cac:DigitalSignatureAttachment>
             <cac:ExternalReference>
-                <cbc:URI>{{ env('SIGNATURE_URI') }}</cbc:URI>
+                <cbc:URI>{{ config('tenant.signature_uri') }}</cbc:URI>
             </cac:ExternalReference>
         </cac:DigitalSignatureAttachment>
     </cac:Signature>

@@ -39,7 +39,7 @@ class SummaryController extends Controller
         $records = Summary::where([ ['summary_status_type_id','1'], [ $request->column, 'like', "%{$request->value}%" ]])
             ->latest();
          
-        return new SummaryCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
+        return new SummaryCollection($records->paginate(config('tenant.items_per_page')));
     }
 
     public function columns()

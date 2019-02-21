@@ -60,7 +60,7 @@ class DocumentController extends Controller
         $records = Document::where($request->column, 'like', "%{$request->value}%")
                             ->latest();
 
-        return new DocumentCollection($records->paginate(env('ITEMS_PER_PAGE', 10)));
+        return new DocumentCollection($records->paginate(config('tenant.items_per_page')));
     }
 
     public function create()
@@ -82,7 +82,7 @@ class DocumentController extends Controller
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
         $company = Company::active();
-        $document_type_03_filter = env('DOCUMENT_TYPE_03_FILTER', true);
+        $document_type_03_filter = config('tenant.document_type_03_filter');
 
         return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
                        'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',

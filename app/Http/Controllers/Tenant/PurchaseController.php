@@ -50,7 +50,7 @@ class PurchaseController extends Controller
         $records = Purchase::where($request->column, 'like', "%{$request->value}%")
                             ->latest();
 
-        return new PurchaseCollection($records->paginate(env('ITEMS_PER_PAGE', 20)));
+        return new PurchaseCollection($records->paginate(config('tenant.items_per_page')));
     }
 
     public function tables()

@@ -43,7 +43,7 @@ class UserController extends Controller
             $user->password = bcrypt($request->input('password'));
         }
         elseif ($request->input('password') !== '') {
-            if (env('PASSWORD_CHANGE')) {
+            if (config('tenant.password_change')) {
                 $user->password = bcrypt($request->input('password'));
             }
         }
