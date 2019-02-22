@@ -26,8 +26,9 @@
                         <div class="row">
                             <div class="col-lg-2 pb-2">
                                 <div class="form-group" :class="{'has-danger': errors.document_type_id}">
-                                    <label class="control-label font-weight-bold text-info full-text">Tipo de comprobante</label>
-                                    <label class="control-label font-weight-bold text-info short-text">Tipo comprobante</label>
+                                    <!--<label class="control-label font-weight-bold text-info full-text">Tipo de comprobante</label>-->
+                                    <!--<label class="control-label font-weight-bold text-info short-text">Tipo comprobante</label>-->
+                                    <label class="control-label font-weight-bold text-info">Tipo comprobante</label>
                                     <el-select v-model="form.document_type_id" @change="changeDocumentType" popper-class="el-select-document_type" dusk="document_type_id" class="border-left rounded-left border-info">
                                         <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
@@ -73,7 +74,7 @@
                             <div class="col-lg-2">
                                 <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
                                     <label class="control-label">Tipo de cambio
-                                        <el-tooltip class="item" effect="dark" content="Valor obtenido de SUNAT" placement="top-end">
+                                        <el-tooltip class="item" effect="dark" content="Tipo de cambio del día, extraído de SUNAT" placement="top-end">
                                             <i class="fa fa-info-circle"></i>
                                         </el-tooltip>
                                     </label>
@@ -104,15 +105,17 @@
                             </div>
                             <div class="col-lg-2">
                                 <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
-                                    <label class="control-label">Fecha de emisión</label>
+                                    <!--<label class="control-label">Fecha de emisión</label>-->
+                                    <label class="control-label">Fec. Emisión</label>
                                     <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false" @change="changeDateOfIssue"></el-date-picker>
                                     <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
                                 </div>
                             </div>
                             <div class="col-lg-2">
                                 <div class="form-group" :class="{'has-danger': errors.date_of_due}">
-                                    <label class="control-label full-text">Fecha de vencimiento</label>
-                                    <label class="control-label short-text">F. vencimiento</label>
+                                    <!--<label class="control-label full-text">Fecha de vencimiento</label>-->
+                                    <!--<label class="control-label short-text">F. vencimiento</label>-->
+                                    <label class="control-label">Fec. Vencimiento</label>
                                     <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
                                     <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
                                 </div>
@@ -419,11 +422,8 @@
             submit() {
                 this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form).then(response => {
-                    console.log(response);
-
                     if (response.data.success) {
                         this.resetForm();
-
                         this.documentNewId = response.data.data.id;
                         this.showDialogOptions = true;
                     }

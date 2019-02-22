@@ -22,10 +22,11 @@ class VoidedController extends Controller
             $facturalo->save($request->all());
             $facturalo->createXmlUnsigned();
             $facturalo->signXmlUnsigned();
+            $facturalo->senderXmlSignedSummary();
+
             return $facturalo;
         });
 
-        $fact->senderXmlSignedSummary();
         $document = $fact->getDocument();
         //$response = $fact->getResponse();
 

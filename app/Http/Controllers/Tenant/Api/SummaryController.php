@@ -23,6 +23,7 @@ class SummaryController extends Controller
             $facturalo->createXmlUnsigned();
             $facturalo->signXmlUnsigned();
             $facturalo->senderXmlSignedSummary();
+
             return $facturalo;
         });
 

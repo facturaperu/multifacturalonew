@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group" :class="{'has-danger': errors.document_type_id}">
-                                <label class="control-label">Tipo de comprobante</label>
+                                <label class="control-label">Tipo comprobante</label>
                                 <el-select v-model="form.document_type_id" @change="changeDocumentType">
                                     <el-option v-for="option in document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
@@ -83,7 +83,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group" :class="{'has-danger': errors.date_of_issue}">
-                                <label class="control-label">Fecha de emisión</label>
+                                <label class="control-label">Fec. Emisión</label>
                                 <el-date-picker v-model="form.date_of_issue" type="date" value-format="yyyy-MM-dd" :clearable="false" @change="changeDateOfIssue"></el-date-picker>
                                 <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
                             </div>
@@ -98,7 +98,7 @@
                         <div class="col-lg-2">
                             <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
                                 <label class="control-label">Tipo de cambio
-                                    <el-tooltip class="item" effect="dark" content="Valor obtenido de SUNAT" placement="top-end">
+                                    <el-tooltip class="item" effect="dark" content="Tipo de cambio del día, extraído de SUNAT" placement="top-end">
                                         <i class="fa fa-info-circle"></i>
                                     </el-tooltip>
                                 </label>

@@ -1,13 +1,13 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create" append-to-body>
+    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create" append-to-body top="7vh">
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group" :class="{'has-danger': errors.internal_id}">
-                            <label class="control-label">Código Interno</label>
-                            <el-input v-model="form.internal_id" dusk="internal_id"></el-input>
-                            <small class="form-control-feedback" v-if="errors.internal_id" v-text="errors.internal_id[0]"></small>
+                    <div class="col-md-9">
+                        <div class="form-group" :class="{'has-danger': errors.description}">
+                            <label class="control-label">Descripción <span class="text-danger">*</span></label>
+                            <el-input v-model="form.description" dusk="description"></el-input>
+                            <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -17,27 +17,6 @@
                                 <el-option v-for="option in unit_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.unit_type_id" v-text="errors.unit_type_id[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.description}">
-                            <label class="control-label">Descripción <span class="text-danger">*</span></label>
-                            <el-input v-model="form.description" dusk="description"></el-input>
-                            <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group" :class="{'has-danger': errors.item_code}">
-                            <label class="control-label">Código Sunat</label>
-                            <el-input v-model="form.item_code" dusk="item_code"></el-input>
-                            <small class="form-control-feedback" v-if="errors.item_code" v-text="errors.item_code[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group" :class="{'has-danger': errors.item_code_gs1}">
-                            <label class="control-label">Código GSL</label>
-                            <el-input v-model="form.item_code_gs1" dusk="item_code_gs1"></el-input>
-                            <small class="form-control-feedback" v-if="errors.item_code_gs1" v-text="errors.item_code_gs1[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -51,10 +30,44 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.sale_unit_price}">
-                            <label class="control-label">Precio Unitario (Venta)</label>
+                            <label class="control-label">Precio Unitario (Venta) <span class="text-danger">*</span></label>
                             <el-input v-model="form.sale_unit_price" dusk="sale_unit_price"></el-input>
                             <small class="form-control-feedback" v-if="errors.sale_unit_price" v-text="errors.sale_unit_price[0]"></small>
                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" :class="{'has-danger': errors.sale_affectation_igv_type_id}">
+                            <label class="control-label">Tipo de afectación (Venta)</label>
+                            <el-select v-model="form.sale_affectation_igv_type_id">
+                                <el-option v-for="option in affectation_igv_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.sale_affectation_igv_type_id" v-text="errors.sale_affectation_igv_type_id[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.internal_id}">
+                            <label class="control-label">Código Interno
+                                <el-tooltip class="item" effect="dark" content="Código interno de la empresa para el control de sus productos" placement="top-start">
+                                    <i class="fa fa-info-circle"></i>
+                                </el-tooltip>
+                            </label>
+                            <el-input v-model="form.internal_id" dusk="internal_id"></el-input>
+                            <small class="form-control-feedback" v-if="errors.internal_id" v-text="errors.internal_id[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.item_code}">
+                            <label class="control-label">Código Sunat
+                                <el-tooltip class="item" effect="dark" content="Código proporcionado por SUNAT, campo obligatorio para exportaciones" placement="top">
+                                    <i class="fa fa-info-circle"></i>
+                                </el-tooltip>
+                            </label>
+                            <el-input v-model="form.item_code" dusk="item_code"></el-input>
+                            <small class="form-control-feedback" v-if="errors.item_code" v-text="errors.item_code[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <h5 class="separator-title">Campos adicionales</h5>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.purchase_unit_price}">
@@ -62,6 +75,17 @@
                             <el-input v-model="form.purchase_unit_price" dusk="purchase_unit_price"></el-input>
                             <small class="form-control-feedback" v-if="errors.purchase_unit_price" v-text="errors.purchase_unit_price[0]"></small>
                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" :class="{'has-danger': errors.purchase_affectation_igv_type_id}">
+                            <label class="control-label">Tipo de afectación (Compra)</label>
+                            <el-select v-model="form.purchase_affectation_igv_type_id">
+                                <el-option v-for="option in affectation_igv_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.purchase_affectation_igv_type_id" v-text="errors.purchase_affectation_igv_type_id[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
                     </div>
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.stock}">
@@ -75,24 +99,6 @@
                             <label class="control-label">Stock Mínimo</label>
                             <el-input v-model="form.stock_min"></el-input>
                             <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.sale_affectation_igv_type_id}">
-                            <label class="control-label">Tipo de afectación (Venta)</label>
-                            <el-select v-model="form.sale_affectation_igv_type_id">
-                                <el-option v-for="option in affectation_igv_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                            </el-select>
-                            <small class="form-control-feedback" v-if="errors.sale_affectation_igv_type_id" v-text="errors.sale_affectation_igv_type_id[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.purchase_affectation_igv_type_id}">
-                            <label class="control-label">Tipo de afectación (Compra)</label>
-                            <el-select v-model="form.purchase_affectation_igv_type_id">
-                                <el-option v-for="option in affectation_igv_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                            </el-select>
-                            <small class="form-control-feedback" v-if="errors.purchase_affectation_igv_type_id" v-text="errors.purchase_affectation_igv_type_id[0]"></small>
                         </div>
                     </div>
                 </div>

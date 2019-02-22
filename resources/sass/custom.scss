@@ -91,3 +91,21 @@
     .short-text { display: inline-block; }
     .full-text { display: none; }
 }
+
+
+.separator-title {
+  position: relative;
+  color: #303133;
+  font-weight: 500;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  &:before {
+    content: '';
+    width: 100%;
+    border-bottom: solid 1px #dcdfe6;
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    z-index: 1;
+  }
+}

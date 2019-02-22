@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <errors>
+<error code="HTTP">La SUNAT no responde a su solicitud, vuelva a intentarlo.</error>
 <error code="0100">El sistema no puede responder su solicitud. Intente nuevamente o comuníquese con su Administrador</error>
 <error code="0101">El encabezado de seguridad es incorrecto</error>
 <error code="0102">Usuario o contraseña incorrectos</error>

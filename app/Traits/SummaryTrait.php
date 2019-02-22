@@ -15,6 +15,7 @@ trait SummaryTrait
             $facturalo->createXmlUnsigned();
             $facturalo->signXmlUnsigned();
             $facturalo->senderXmlSignedSummary();
+
             return $facturalo;
         });
 
