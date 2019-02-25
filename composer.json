@@ -17,9 +17,7 @@
         "laravelcollective/html": "^5.4.0",
         "maatwebsite/excel": "^3.1",
         "mpdf/mpdf": "^7.1",
-        "robrichards/xmlseclibs": "3.0.*",
-        "thiagoalessio/tesseract_ocr": "^2.7",
-        "wapnen/google-cloud-vision-php": "dev-master"
+        "robrichards/xmlseclibs": "3.0.*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

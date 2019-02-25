@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d17e4c6acaf16c33e7b47abe8a7fe428",
+    "content-hash": "6fce89ba3b09d2590cfd71c64476a1a6",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -2278,16 +2278,16 @@
         },
         {
             "name": "opis/closure",
-            "version": "3.1.5",
+            "version": "3.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opis/closure.git",
-                "reference": "41f5da65d75cf473e5ee582df8fc7f2c733ce9d6"
+                "reference": "ccb8e3928c5c8181c76cdd0ed9366c5bcaafd91b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opis/closure/zipball/41f5da65d75cf473e5ee582df8fc7f2c733ce9d6",
-                "reference": "41f5da65d75cf473e5ee582df8fc7f2c733ce9d6",
+                "url": "https://api.github.com/repos/opis/closure/zipball/ccb8e3928c5c8181c76cdd0ed9366c5bcaafd91b",
+                "reference": "ccb8e3928c5c8181c76cdd0ed9366c5bcaafd91b",
                 "shasum": ""
             },
             "require": {
@@ -2335,7 +2335,7 @@
                 "serialization",
                 "serialize"
             ],
-            "time": "2019-01-14T14:45:33+00:00"
+            "time": "2019-02-22T10:30:00+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -4458,51 +4458,6 @@
             "time": "2019-01-30T11:44:30+00:00"
         },
         {
-            "name": "thiagoalessio/tesseract_ocr",
-            "version": "2.7.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thiagoalessio/tesseract-ocr-for-php.git",
-                "reference": "b369b5496b6e809d012aacf06cbf2db5f6b29f76"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thiagoalessio/tesseract-ocr-for-php/zipball/b369b5496b6e809d012aacf06cbf2db5f6b29f76",
-                "reference": "b369b5496b6e809d012aacf06cbf2db5f6b29f76",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.4 || ^7.0"
-            },
-            "require-dev": {
-                "codacy/coverage": "dev-master",
-                "phpunit/php-code-coverage": "^2.2.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "thiagoalessio\\TesseractOCR\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "thiagoalessio",
-                    "email": "thiagoalessio@me.com"
-                }
-            ],
-            "description": "A wrapper to work with Tesseract OCR inside PHP.",
-            "keywords": [
-                "OCR",
-                "Tesseract",
-                "text recognition"
-            ],
-            "time": "2019-01-30T19:47:33+00:00"
-        },
-        {
             "name": "tijsverkoyen/css-to-inline-styles",
             "version": "2.2.1",
             "source": {
@@ -4599,48 +4554,6 @@
                 "environment"
             ],
             "time": "2019-01-29T11:11:52+00:00"
-        },
-        {
-            "name": "wapnen/google-cloud-vision-php",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wapnen/google-cloud-vision-php.git",
-                "reference": "1c2638e7d0e9e0eebdc7b1f685190ffadd8b151f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wapnen/google-cloud-vision-php/zipball/1c2638e7d0e9e0eebdc7b1f685190ffadd8b151f",
-                "reference": "1c2638e7d0e9e0eebdc7b1f685190ffadd8b151f",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.3"
-            },
-            "type": "package",
-            "autoload": {
-                "psr-4": {
-                    "GoogleCloudVision\\": "GoogleCloudVision/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Wapnen Gowok",
-                    "email": "wapneng@gmail.com"
-                }
-            ],
-            "description": "A simple php library for the google cloud vision API ",
-            "keywords": [
-                "Computer Vision",
-                "google cloud vision api",
-                "machine learning",
-                "php"
-            ],
-            "time": "2018-12-15T11:25:12+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",
@@ -6545,9 +6458,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "wapnen/google-cloud-vision-php": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
