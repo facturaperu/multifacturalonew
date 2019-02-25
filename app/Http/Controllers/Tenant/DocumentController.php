@@ -28,6 +28,7 @@ use App\Models\Tenant\Item;
 use App\Models\Tenant\Person;
 use App\Models\Tenant\Series;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -224,5 +225,35 @@ class DocumentController extends Controller
             'success' => true,
             'message' => $response['description'],
         ];
+    }
+
+    public function sendJson()
+    {
+        $bearer = '';
+        $api_url = '';
+        $client = new Client(['base_uri' => $api_url]);
+//        $parameters = [
+//            'http_errors' => false,
+//            'headers' => [
+//                'Authorization' => 'Bearer '.$bearer,
+//                'Accept' => 'application/json',
+//            ],
+//        ];
+        $res = $client->post('/api/documents', [
+            'http_errors' => false,
+            'headers' => [
+                'Authorization' => 'Bearer '.$bearer,
+                'Accept' => 'application/json',
+            ],
+            'form_params' => [
+                'data_json' => 'abc',
+                'other_field' => '123',
+                'nested_field' => [
+                    'nested' => 'hello'
+                ]
+            ]
+        ]);
+        $response = json_decode($res->getBody()->getContents(), true);
+        return $response;
     }
 }
