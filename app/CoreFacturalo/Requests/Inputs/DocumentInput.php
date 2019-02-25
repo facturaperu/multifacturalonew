@@ -92,6 +92,7 @@ class DocumentInput
             'additional_information' => Functions::valueKeyInArray($inputs, 'additional_information'),
             'legends' => LegendInput::set($inputs),
             'actions' => ActionInput::set($inputs),
+            'server' => config('tenant.server')
         ];
     }
 
