@@ -42,7 +42,7 @@ class UserController extends Controller
             $user->api_token = str_random(50);
             $user->password = bcrypt($request->input('password'));
         }
-        elseif ($request->input('password') !== '') {
+        elseif ($request->has('password')) {
             if (config('tenant.password_change')) {
                 $user->password = bcrypt($request->input('password'));
             }
