@@ -89,33 +89,19 @@ class DocumentController extends Controller
         $fact = DB::connection('tenant')->transaction(function () use ($request) {
             $facturalo = new Facturalo();
             $facturalo->save($request->all());
-//            $facturalo->createXmlUnsigned();
-//            $facturalo->signXmlUnsigned();
-//            $facturalo->updateHash();
-//            $facturalo->updateQr();
-//            $facturalo->createPdf();
-//            $facturalo->senderXmlSignedBill();
 
             return $facturalo;
         });
-
         $document = $fact->getDocument();
 
-//        $doc = Document::find($document->id);
-
         $data_json = $document->data_json;
-
+        $document->external_id = $data_json->external_id;
         $document->hash = $data_json->hash;
         $document->qr = $data_json->qr;
         $document->save();
-//        $response = $fact->getResponse();
-
 
         return [
             'success' => true,
-//            'data' => [
-//                'id' => $document->id,
-//            ],
         ];
     }
 }

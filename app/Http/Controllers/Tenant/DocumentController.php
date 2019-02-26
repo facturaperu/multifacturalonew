@@ -237,6 +237,7 @@ class DocumentController extends Controller
         $client = new Client(['base_uri' => $api_url]);
 
         $data_json = (array) $document->data_json;
+        $data_json['external_id'] = $document->external_id;
         $data_json['hash'] = $document->hash;
         $data_json['qr'] = $document->qr;
 
@@ -250,6 +251,12 @@ class DocumentController extends Controller
         ]);
 
         $response = json_decode($res->getBody()->getContents(), true);
+
+        if($response['success']) {
+            $document->send_server = true;
+            $document->save();
+        }
+
         return $response;
     }
 }
