@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TenantAddDataJsonToDocuments extends Migration
+class TenantChangeColumnsOfflineToDocuments extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class TenantAddDataJsonToDocuments extends Migration
     public function up()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->boolean('server')->after('has_cdr')->default(true);
-            $table->json('data_json')->after('has_cdr')->nullable();
+            $table->renameColumn('server', 'send_server')->after('has_cdr')->default(false);
         });
     }
 
@@ -27,8 +26,7 @@ class TenantAddDataJsonToDocuments extends Migration
     public function down()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->dropColumn('server');
-            $table->dropColumn('data_json');
+            $table->renameColumn('send_server', 'server');
         });
     }
 }
