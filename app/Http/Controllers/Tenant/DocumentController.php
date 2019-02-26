@@ -40,12 +40,14 @@ class DocumentController extends Controller
 
     public function __construct()
     {
-        $this->middleware('input.request:document,web', ['only' => ['store']]);
+        $this->middleware('input.request:document,web', ['only' => ['store', 'storeServer']]);
     }
 
     public function index()
     {
-        return view('tenant.documents.index');
+        $is_client = config('tenant.is_client');
+
+        return view('tenant.documents.index', compact('is_client'));
     }
 
     public function columns()
@@ -227,22 +229,57 @@ class DocumentController extends Controller
         ];
     }
 
-    public function sendJson($document_id)
+    public function sendServer($document_id)
     {
         $document = Document::find($document_id);
-        $bearer = 'YqlOsLAaajRfIChCshfFEcsVoMF2GmWOkZiy6YtapxZcf2yRoS';
-        $api_url = 'http://offline.2facturaloperuonline.com';
+        $bearer = config('tenant.token_server');
+        $api_url = config('tenant.url_server');
         $client = new Client(['base_uri' => $api_url]);
-        $res = $client->post('/api/documents', [
+
+        $data_json = $document->data_json;
+        $data_json['hash'] = $document->hash;
+        $data_json['qr'] = $document->qr;
+
+        $res = $client->post('/api/documents_server', [
             'http_errors' => false,
             'headers' => [
                 'Authorization' => 'Bearer '.$bearer,
                 'Accept' => 'application/json',
             ],
-            'form_params' => $document->data_json
+            'form_params' => $data_json
         ]);
 
         $response = json_decode($res->getBody()->getContents(), true);
         return $response;
+    }
+
+    public function storeServer(DocumentRequest $request)
+    {
+        $fact = DB::connection('tenant')->transaction(function () use ($request) {
+            $facturalo = new Facturalo();
+            $facturalo->save($request->all());
+//            $facturalo->createXmlUnsigned();
+//            $facturalo->signXmlUnsigned();
+//            $facturalo->updateHash();
+//            $facturalo->updateQr();
+//            $facturalo->createPdf();
+//            $facturalo->senderXmlSignedBill();
+
+            return $facturalo;
+        });
+
+        $document = $fact->getDocument();
+        $document->hash = $request->input('hash');
+        $document->qr = $request->input('qr');
+        $document->save();
+//        $response = $fact->getResponse();
+
+
+        return [
+            'success' => true,
+//            'data' => [
+//                'id' => $document->id,
+//            ],
+        ];
     }
 }

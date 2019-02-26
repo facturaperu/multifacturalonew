@@ -14,8 +14,8 @@ class TenantAddDataJsonToDocuments extends Migration
     public function up()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->boolean('server')->after('has_cdr')->default(true);
             $table->json('data_json')->after('has_cdr')->nullable();
+            $table->boolean('send_server')->after('has_cdr')->default(false);
         });
     }
 
@@ -27,8 +27,8 @@ class TenantAddDataJsonToDocuments extends Migration
     public function down()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->dropColumn('server');
             $table->dropColumn('data_json');
+            $table->dropColumn('send_server');
         });
     }
 }

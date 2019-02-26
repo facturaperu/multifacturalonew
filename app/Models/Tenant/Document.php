@@ -63,7 +63,6 @@ class Document extends ModelTenant
         'has_pdf',
         'has_cdr',
         'data_json',
-        'server'
     ];
 
     protected $casts = [
