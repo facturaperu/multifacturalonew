@@ -220,7 +220,7 @@
                         this.$message.error(error.response.data.message)
                     })
             },
-            clickCheckOnline() {
+            clickCheckOnline(document_id) {
                 this.$http.get(`/${this.resource}/check_server/${document_id}`)
                     .then(response => {
                         if (response.data.success) {
