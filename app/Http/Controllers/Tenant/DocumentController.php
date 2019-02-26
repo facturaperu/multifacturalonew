@@ -40,7 +40,7 @@ class DocumentController extends Controller
 
     public function __construct()
     {
-        $this->middleware('input.request:document,web', ['only' => ['store', 'storeServer']]);
+        $this->middleware('input.request:document,web', ['only' => ['store']]);
     }
 
     public function index()
@@ -251,35 +251,5 @@ class DocumentController extends Controller
 
         $response = json_decode($res->getBody()->getContents(), true);
         return $response;
-    }
-
-    public function storeServer(DocumentRequest $request)
-    {
-        $fact = DB::connection('tenant')->transaction(function () use ($request) {
-            $facturalo = new Facturalo();
-            $facturalo->save($request->all());
-//            $facturalo->createXmlUnsigned();
-//            $facturalo->signXmlUnsigned();
-//            $facturalo->updateHash();
-//            $facturalo->updateQr();
-//            $facturalo->createPdf();
-//            $facturalo->senderXmlSignedBill();
-
-            return $facturalo;
-        });
-
-        $document = $fact->getDocument();
-        $document->hash = $request->input('hash');
-        $document->qr = $request->input('qr');
-        $document->save();
-//        $response = $fact->getResponse();
-
-
-        return [
-            'success' => true,
-//            'data' => [
-//                'id' => $document->id,
-//            ],
-        ];
     }
 }
