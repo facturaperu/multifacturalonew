@@ -103,8 +103,10 @@ class DocumentController extends Controller
 
 //        $doc = Document::find($document->id);
 
-        $document->hash = '1';// $request->input('hash');
-        $document->qr = '2';//$request->input('qr');
+        $data_json = $request->input('data_json');
+
+        $document->hash = $data_json->hash;
+        $document->qr = $data_json->qr;
         $document->save();
 //        $response = $fact->getResponse();
 
