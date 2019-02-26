@@ -100,9 +100,12 @@ class DocumentController extends Controller
         });
 
         $document = $fact->getDocument();
-        $document->hash = $request->input('hash');
-        $document->qr = $request->input('qr');
-        $document->save();
+
+        $doc = Document::find($document->id);
+
+        $doc->hash = '1';// $request->input('hash');
+        $doc->qr = '2';//$request->input('qr');
+        $doc->save();
 //        $response = $fact->getResponse();
 
 
