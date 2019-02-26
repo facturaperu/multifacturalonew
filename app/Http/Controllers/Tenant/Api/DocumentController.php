@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Tenant\Api;
 
 use App\CoreFacturalo\Facturalo;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
+use App\CoreFacturalo\WS\Zip\ZipFly;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Document;
 use Exception;
@@ -98,8 +99,10 @@ class DocumentController extends Controller
         $document = $fact->getDocument();
         $data_json = $document->data_json;
 
-        $this->uploadStorage($document->filename, json_decode($data_json->file_xml_signed), 'signed');
-        $this->uploadStorage($document->filename, json_decode($data_json->file_pdf), 'pdf');
+        $zipFly = new ZipFly();
+
+        $this->uploadStorage($document->filename, $zipFly->decompress(base64_decode($data_json->file_xml_signed)), 'signed');
+        $this->uploadStorage($document->filename, $zipFly->decompress(base64_decode($data_json->file_pdf)), 'pdf');
 
         $document->external_id = $data_json->external_id;
         $document->hash = $data_json->hash;
