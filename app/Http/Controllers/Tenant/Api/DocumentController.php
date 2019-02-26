@@ -124,7 +124,7 @@ class DocumentController extends Controller
         return [
             'success' => true,
             'state_type_id' => $document->state_type_id,
-            'file_cdr' => $file_cdr
+            'file_cdr' => json_decode($file_cdr)
         ];
     }
 }
