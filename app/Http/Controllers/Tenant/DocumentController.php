@@ -284,9 +284,9 @@ class DocumentController extends Controller
             $document->state_type_id = $state_type_id;
             $document->save();
 
-//            if($state_type_id === '05') {
-//                $this->uploadStorage($document->filename, $response['file_cdr'], 'cdr');
-//            }
+            if($state_type_id === '05') {
+                $this->uploadStorage($document->filename, json_decode($response['file_cdr']), 'cdr');
+            }
         }
 
         return $response;
