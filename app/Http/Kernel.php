@@ -62,5 +62,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'input.request' => \App\CoreFacturalo\InputRequest::class,
 //        'module' => \App\Http\Middleware\CheckModule::class,
+       'redirect.module' => \App\Http\Middleware\RedirectModule::class,
     ];
 }
