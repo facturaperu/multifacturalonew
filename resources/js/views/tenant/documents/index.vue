@@ -112,7 +112,7 @@
                                     v-if="row.btn_resend && !isClient">Reenviar</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickSendOnline(row.id)"
-                                    v-if="isClient">Enviar Servidor</button>
+                                    v-if="isClient && !row.send_server">Enviar Servidor</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickOptions(row.id)">Opciones</button>
                         </td>

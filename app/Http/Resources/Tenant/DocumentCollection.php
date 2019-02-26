@@ -80,6 +80,7 @@ class DocumentCollection extends ResourceCollection
 //                'btn_ticket' => $btn_ticket,
                 'btn_resend' => $btn_resend,
                 'btn_consult_cdr' => $btn_consult_cdr,
+                'send_server' => (bool) $row->send_server,
 //                'voided' => $voided,
                 'affected_document' => $affected_document,
 //                'has_xml_voided' => $has_xml_voided,
