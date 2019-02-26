@@ -227,32 +227,21 @@ class DocumentController extends Controller
         ];
     }
 
-    public function sendJson()
+    public function sendJson($document_id)
     {
-        $bearer = '';
-        $api_url = '';
+        $document = Document::find($document_id);
+        $bearer = 'YqlOsLAaajRfIChCshfFEcsVoMF2GmWOkZiy6YtapxZcf2yRoS';
+        $api_url = 'http://offline.2facturaloperuonline.com';
         $client = new Client(['base_uri' => $api_url]);
-//        $parameters = [
-//            'http_errors' => false,
-//            'headers' => [
-//                'Authorization' => 'Bearer '.$bearer,
-//                'Accept' => 'application/json',
-//            ],
-//        ];
         $res = $client->post('/api/documents', [
             'http_errors' => false,
             'headers' => [
                 'Authorization' => 'Bearer '.$bearer,
                 'Accept' => 'application/json',
             ],
-            'form_params' => [
-                'data_json' => 'abc',
-                'other_field' => '123',
-                'nested_field' => [
-                    'nested' => 'hello'
-                ]
-            ]
+            'form_params' => $document->data_json
         ]);
+
         $response = json_decode($res->getBody()->getContents(), true);
         return $response;
     }

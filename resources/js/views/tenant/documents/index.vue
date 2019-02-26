@@ -110,6 +110,8 @@
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickResend(row.id)"
                                     v-if="row.btn_resend">Reenviar</button>
+                            <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"-->
+                                    <!--@click.prevent="clickSendOnline(row.id)">Online</button>-->
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickOptions(row.id)">Opciones</button>
                         </td>
@@ -199,7 +201,20 @@
                         this.$message.error(error.response.data.message)
                     })
             },
-
+            clickSendOnline(document_id) {
+                this.$http.get(`/${this.resource}/send_json/${document_id}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            this.$message.success('Se envio satisfactoriamente el comprobante.')
+                            this.$eventHub.$emit('reloadData')
+                        } else {
+                            this.$message.error(response.data.message)
+                        }
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data.message)
+                    })
+            },
             clickOptions(recordId = null) {
                 this.recordId = recordId
                 this.showDialogOptions = true
