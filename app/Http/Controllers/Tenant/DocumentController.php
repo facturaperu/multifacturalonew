@@ -241,6 +241,7 @@ class DocumentController extends Controller
         $data_json['hash'] = $document->hash;
         $data_json['qr'] = $document->qr;
         $data_json['file_xml_signed'] = $this->getStorage($document->filename, 'signed');
+        $data_json['file_pdf'] = $this->getStorage($document->filename, 'pdf');
 
         $res = $client->post('/api/documents_server', [
             'http_errors' => false,
@@ -279,8 +280,13 @@ class DocumentController extends Controller
         $response = json_decode($res->getBody()->getContents(), true);
 
         if($response['success']) {
-            $document->state_type_id = $response['state_type_id'];
+            $state_type_id = $response['state_type_id'];
+            $document->state_type_id = $state_type_id;
             $document->save();
+
+            if($state_type_id === '05') {
+                $this->uploadStorage($document->filename, $response['file_cdr'], 'cdr');
+            }
         }
 
         return $response;

@@ -99,6 +99,7 @@ class DocumentController extends Controller
         $data_json = $document->data_json;
 
         $this->uploadStorage($document->filename, $data_json->file_xml_signed, 'signed');
+        $this->uploadStorage($document->filename, $data_json->file_pdf, 'pdf');
 
         $document->external_id = $data_json->external_id;
         $document->hash = $data_json->hash;
@@ -114,9 +115,16 @@ class DocumentController extends Controller
     {
         $document = Document::where('external_id', $external_id)->first();
 
+        if ($document->state_type_id === '05') {
+           $file_cdr = $this->getStorage($document->filename, 'cdr');
+        } else {
+            $file_cdr = null;
+        }
+
         return [
             'success' => true,
-            'state_type_id' => $document->state_type_id
+            'state_type_id' => $document->state_type_id,
+            'file_cdr' => $file_cdr
         ];
     }
 }
