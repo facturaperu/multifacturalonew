@@ -78,7 +78,7 @@ class RedirectModule
     private function getGroup($path){
          
         ///* Module Documents */
-
+        
         if($path[0] == "documents"){
             $group = "documents";
 
