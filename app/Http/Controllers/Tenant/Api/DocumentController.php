@@ -116,7 +116,7 @@ class DocumentController extends Controller
         $document = Document::where('external_id', $external_id)->first();
 
         if ($document->state_type_id === '05') {
-            $file_cdr = json_encode($this->getStorage($document->filename, 'cdr'));
+            $file_cdr = base64_encode($this->getStorage($document->filename, 'cdr'));
         } else {
             $file_cdr = null;
         }
