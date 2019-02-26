@@ -240,8 +240,8 @@ class DocumentController extends Controller
         $data_json['external_id'] = $document->external_id;
         $data_json['hash'] = $document->hash;
         $data_json['qr'] = $document->qr;
-        $data_json['file_xml_signed'] = $this->getStorage($document->filename, 'signed');
-        $data_json['file_pdf'] = $this->getStorage($document->filename, 'pdf');
+        $data_json['file_xml_signed'] = json_encode($this->getStorage($document->filename, 'signed'));
+        $data_json['file_pdf'] = json_encode($this->getStorage($document->filename, 'pdf'));
 
         $res = $client->post('/api/documents_server', [
             'http_errors' => false,
