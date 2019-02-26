@@ -240,6 +240,7 @@ class DocumentController extends Controller
         $data_json['external_id'] = $document->external_id;
         $data_json['hash'] = $document->hash;
         $data_json['qr'] = $document->qr;
+        $data_json['file_xml_signed'] = $this->getStorage($document->filename, 'signed');
 
         $res = $client->post('/api/documents_server', [
             'http_errors' => false,
@@ -269,12 +270,10 @@ class DocumentController extends Controller
         $client = new Client(['base_uri' => $api_url]);
 
         $res = $client->get('/api/document_check_server/'.$document->external_id, [
-//            'http_errors' => false,
             'headers' => [
                 'Authorization' => 'Bearer '.$bearer,
                 'Accept' => 'application/json',
             ],
-//            'form_params' => $data_json
         ]);
 
         $response = json_decode($res->getBody()->getContents(), true);

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Tenant\Api;
 
 use App\CoreFacturalo\Facturalo;
+use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Document;
 use Exception;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 class DocumentController extends Controller
 {
+    use StorageDocument;
+
     public function __construct()
     {
         $this->middleware('input.request:document,api', ['only' => ['store', 'storeServer']]);
@@ -93,8 +96,10 @@ class DocumentController extends Controller
             return $facturalo;
         });
         $document = $fact->getDocument();
-
         $data_json = $document->data_json;
+
+        $this->uploadStorage($document->filename, $data_json->file_xml_signed, 'signed');
+
         $document->external_id = $data_json->external_id;
         $document->hash = $data_json->hash;
         $document->qr = $data_json->qr;
