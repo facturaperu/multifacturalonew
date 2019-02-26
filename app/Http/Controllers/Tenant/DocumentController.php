@@ -236,7 +236,7 @@ class DocumentController extends Controller
         $api_url = config('tenant.url_server');
         $client = new Client(['base_uri' => $api_url]);
 
-        $data_json = $document->data_json;
+        $data_json = (array) $document->data_json;
         $data_json['hash'] = $document->hash;
         $data_json['qr'] = $document->qr;
 
