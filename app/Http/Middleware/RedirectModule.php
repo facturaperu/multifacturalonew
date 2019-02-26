@@ -140,7 +140,12 @@ class RedirectModule
             
         }
         elseif($path[0] == "companies"){
+            
             $group = "configuration";
+
+            if(count($path)>1 && $path[1] == "uploads"){
+                $group = "documents";
+            }
             
         }
         elseif($path[0] == "catalogs"){
