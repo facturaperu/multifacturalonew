@@ -16,6 +16,7 @@ if ($hostname) {
             Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
 
             Route::post('documents_server', 'Tenant\Api\DocumentController@storeServer');
+            Route::get('document_check_server/{external_id}', 'Tenant\Api\DocumentController@documentCheckServer');
         });
         Route::post('services/validate_cpe', 'Tenant\Api\ServiceController@validateCpe');
         Route::post('services/consult_status', 'Tenant\Api\ServiceController@consultStatus');

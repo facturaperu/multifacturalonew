@@ -259,4 +259,31 @@ class DocumentController extends Controller
 
         return $response;
     }
+
+    public function checkServer($document_id)
+    {
+        $document = Document::find($document_id);
+        $bearer = config('tenant.token_server');
+        $api_url = config('tenant.url_server');
+
+        $client = new Client(['base_uri' => $api_url]);
+
+        $res = $client->get('/api/document_check_server/'.$document->external_id, [
+//            'http_errors' => false,
+            'headers' => [
+                'Authorization' => 'Bearer '.$bearer,
+                'Accept' => 'application/json',
+            ],
+//            'form_params' => $data_json
+        ]);
+
+        $response = json_decode($res->getBody()->getContents(), true);
+
+        if($response['success']) {
+            $document->state_type_id = $response['state_type_id'];
+            $document->save();
+        }
+
+        return $response;
+    }
 }

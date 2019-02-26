@@ -114,6 +114,9 @@
                                     @click.prevent="clickSendOnline(row.id)"
                                     v-if="isClient && !row.send_server">Enviar Servidor</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
+                                    @click.prevent="clickCheckOnline(row.id)"
+                                    v-if="isClient && row.send_server">Consultar Servidor</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickOptions(row.id)">Opciones</button>
                         </td>
                     </tr>
@@ -208,6 +211,20 @@
                     .then(response => {
                         if (response.data.success) {
                             this.$message.success('Se envio satisfactoriamente el comprobante.')
+                            this.$eventHub.$emit('reloadData')
+                        } else {
+                            this.$message.error(response.data.message)
+                        }
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data.message)
+                    })
+            },
+            clickCheckOnline() {
+                this.$http.get(`/${this.resource}/check_server/${document_id}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            this.$message.success('Consulta satisfactoria.')
                             this.$eventHub.$emit('reloadData')
                         } else {
                             this.$message.error(response.data.message)

@@ -104,4 +104,14 @@ class DocumentController extends Controller
             'success' => true,
         ];
     }
+
+    public function documentCheckServer($external_id)
+    {
+        $document = Document::where('external_id', $external_id)->first();
+
+        return [
+            'success' => true,
+            'state_type_id' => $document->state_type_id
+        ];
+    }
 }
