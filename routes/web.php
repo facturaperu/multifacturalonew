@@ -137,6 +137,9 @@ if ($hostname) {
             Route::get('documents/item/tables', 'Tenant\DocumentController@item_tables');
             Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
 
+            Route::get('documents/send_server/{document}', 'Tenant\DocumentController@sendServer');
+            Route::get('documents/check_server/{document}', 'Tenant\DocumentController@checkServer');
+
             //Summaries
             Route::get('summaries', 'Tenant\SummaryController@index')->name('tenant.summaries.index');
             Route::get('summaries/records', 'Tenant\SummaryController@records');

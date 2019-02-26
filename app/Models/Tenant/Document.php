@@ -63,7 +63,7 @@ class Document extends ModelTenant
         'has_pdf',
         'has_cdr',
         'data_json',
-        'server'
+        'send_server'
     ];
 
     protected $casts = [
@@ -168,6 +168,16 @@ class Document extends ModelTenant
     public function setLegendsAttribute($value)
     {
         $this->attributes['legends'] = (is_null($value))?null:json_encode($value);
+    }
+
+    public function getDataJsonAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setDataJsonAttribute($value)
+    {
+        $this->attributes['data_json'] = (is_null($value))?null:json_encode($value);
     }
 
     public function getAdditionalInformationAttribute($value)

@@ -9,5 +9,7 @@ return [
     'signature_uri' => env('SIGNATURE_URI', '#FACTURALO'),
     'force_https' => env('FORCE_HTTPS', false),
     'document_type_03_filter' => env('DOCUMENT_TYPE_03_FILTER', true),
-    'server' => env('SEVER', false),
+    'is_client' => env('IS_CLIENT', false),
+    'token_server' => env('TOKEN_SERVER'),
+    'url_server' => env('URL_SERVER'),
 ];
