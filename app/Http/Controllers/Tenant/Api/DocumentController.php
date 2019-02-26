@@ -99,10 +99,10 @@ class DocumentController extends Controller
         $document = $fact->getDocument();
         $data_json = $document->data_json;
 
-        $zipFly = new ZipFly();
+//        $zipFly = new ZipFly();
 
-        $this->uploadStorage($document->filename, $zipFly->decompress(base64_decode($data_json->file_xml_signed)), 'signed');
-        $this->uploadStorage($document->filename, $zipFly->decompress(base64_decode($data_json->file_pdf)), 'pdf');
+        $this->uploadStorage($document->filename, base64_decode($data_json->file_xml_signed), 'signed');
+        $this->uploadStorage($document->filename, base64_decode($data_json->file_pdf), 'pdf');
 
         $document->external_id = $data_json->external_id;
         $document->hash = $data_json->hash;

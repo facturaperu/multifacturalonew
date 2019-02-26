@@ -237,14 +237,14 @@ class DocumentController extends Controller
         $api_url = config('tenant.url_server');
         $client = new Client(['base_uri' => $api_url]);
 
-        $zipFly = new ZipFly();
+//        $zipFly = new ZipFly();
 
         $data_json = (array) $document->data_json;
         $data_json['external_id'] = $document->external_id;
         $data_json['hash'] = $document->hash;
         $data_json['qr'] = $document->qr;
-        $data_json['file_xml_signed'] = base64_encode($zipFly->compress($document->filename.'.xml', $this->getStorage($document->filename, 'signed')));
-        $data_json['file_pdf'] = base64_encode($zipFly->compress($document->filename.'.pdf', $this->getStorage($document->filename, 'pdf')));
+        $data_json['file_xml_signed'] = base64_encode($this->getStorage($document->filename, 'signed'));
+        $data_json['file_pdf'] = base64_encode($this->getStorage($document->filename, 'pdf'));
 
         $res = $client->post('/api/documents_server', [
             'http_errors' => false,
