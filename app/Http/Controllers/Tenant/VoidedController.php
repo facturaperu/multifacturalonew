@@ -40,7 +40,7 @@ class VoidedController extends Controller
 
         $summaries = DB::connection('tenant')
                         ->table('summaries')
-                        ->select(DB::raw("id, external_id, date_of_reference, date_of_issue, ticket, identifier, state_type_id, 'summary' AS 'type'"))
+                        ->select(DB::raw("id, external_id, date_of_reference, date_of_issue, ticket, identifier, state_type_id, 'summaries' AS 'type'"))
                         ->where($request->column, 'like', "%{$request->value}%")
                         ->where('summary_status_type_id', '3');
 
