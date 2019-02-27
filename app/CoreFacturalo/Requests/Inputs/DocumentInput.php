@@ -92,6 +92,8 @@ class DocumentInput
             'additional_information' => Functions::valueKeyInArray($inputs, 'additional_information'),
             'legends' => LegendInput::set($inputs),
             'actions' => ActionInput::set($inputs),
+            'data_json' => Functions::valueKeyInArray($inputs, 'data_json'),
+            'send_server' => false,
         ];
     }
 

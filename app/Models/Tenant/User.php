@@ -68,6 +68,36 @@ class User extends Authenticatable
         return false;
     }
 
+
+
+    public function getModule()
+    {
+        $module = $this->modules()->orderBy('id')->first();
+        if ($module) {
+            return $module->value;
+        }
+        return null;
+    }
+
+    public function getModules()
+    {
+        $modules = $this->modules()->get();
+        if ($modules) {
+            return $modules;
+        }
+        return null;
+    }
+
+
+    public function searchModule($module)
+    {
+        if ($this->modules()->where('value', $module)->first()) {
+            return true;
+        }
+        return false;
+    }
+
+
     public function establishment()
     {
         return $this->belongsTo(Establishment::class);

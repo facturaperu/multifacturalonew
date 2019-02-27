@@ -15,8 +15,8 @@ if ($hostname) {
         Route::get('downloads/{model}/{type}/{external_id}/{format?}', 'Tenant\DownloadController@downloadExternal')->name('tenant.download.external_id');
         Route::get('print/{model}/{external_id}/{format?}', 'Tenant\DownloadController@toPrint');
 
-//        Route::middleware(['auth', 'module'])->group(function() {
-        Route::middleware(['auth'])->group(function() {
+       Route::middleware(['auth', 'redirect.module'])->group(function() {
+        // Route::middleware(['auth'])->group(function() {
             Route::get('/', function () {
                 return redirect()->route('tenant.documents.create');
             });
@@ -136,6 +136,9 @@ if ($hostname) {
             Route::get('documents/note/{document}', 'Tenant\NoteController@create');
             Route::get('documents/item/tables', 'Tenant\DocumentController@item_tables');
             Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
+
+            Route::get('documents/send_server/{document}', 'Tenant\DocumentController@sendServer');
+            Route::get('documents/check_server/{document}', 'Tenant\DocumentController@checkServer');
 
             //Summaries
             Route::get('summaries', 'Tenant\SummaryController@index')->name('tenant.summaries.index');

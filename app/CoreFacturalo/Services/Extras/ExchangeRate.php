@@ -5,6 +5,7 @@ namespace App\CoreFacturalo\Services\Extras;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use DiDom\Document as DiDom;
+use GuzzleHttp\Exception\ClientException;
 
 class ExchangeRate
 {
@@ -20,7 +21,13 @@ class ExchangeRate
     private function search($month, $year)
     {
         $client = new  Client(['base_uri' => 'http://www.sunat.gob.pe/cl-at-ittipcam/']);
-        $response = $client->request('GET', "tcS01Alias?mes={$month}&anho={$year}");
+        try {
+            $response = $client->request('GET', "tcS01Alias?mes={$month}&anho={$year}");
+        } catch (ClientException $e) {
+            return $e->getResponse();
+        }
+
+        //dd($response->getStatusCode());
         if ($response->getStatusCode() == 200 && $response != "") {
             $html = $response->getBody()->getContents();
             $xp = new DiDom($html);

@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <tenant-documents-index></tenant-documents-index>
+    <tenant-documents-index :is-client="{{ json_encode($is_client) }}"></tenant-documents-index>
 
 @endsection
 

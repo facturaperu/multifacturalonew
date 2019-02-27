@@ -51,6 +51,7 @@ class DocumentTransform
             'legends' => LegendTransform::transform($inputs),
             'additional_information' => Functions::valueKeyInArray($inputs, 'informacion_adicional'),
             'actions' => ActionTransform::transform($inputs),
+            'data_json' => $inputs
         ];
 
         $inputs_transform = self::invoice($inputs_transform, $inputs);
