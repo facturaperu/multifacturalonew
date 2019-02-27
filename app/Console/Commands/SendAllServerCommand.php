@@ -48,11 +48,15 @@ class SendAllServerCommand extends Command
         
         $documents = Document::query()
             ->where('send_server', 0)
+            ->orWhere('shipping_status', '!=', '')
             ->get();
         
         foreach ($documents as $document) {
             try {
                 DocumentController::sendServer($document->id);
+                
+                $document->shipping_status = '';
+                $document->save();
             }
             catch (\Exception $e) {
                 $document->shipping_status = json_encode([
