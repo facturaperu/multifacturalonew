@@ -88,42 +88,42 @@ class DocumentController extends Controller
         }
     }
 
-    public function storeServer(Request $request)
-    {
-        $fact = DB::connection('tenant')->transaction(function () use ($request) {
+    public function storeServer(Request $request) {
+        $fact = DB::connection('tenant')->transaction(function() use($request) {
             $facturalo = new Facturalo();
             $facturalo->save($request->all());
-
+            
             return $facturalo;
         });
+        
         $document = $fact->getDocument();
         $data_json = $document->data_json;
-
-//        $zipFly = new ZipFly();
-
+        
+       // $zipFly = new ZipFly();
+       
         $this->uploadStorage($document->filename, base64_decode($data_json->file_xml_signed), 'signed');
         $this->uploadStorage($document->filename, base64_decode($data_json->file_pdf), 'pdf');
-
+        
         $document->external_id = $data_json->external_id;
         $document->hash = $data_json->hash;
         $document->qr = $data_json->qr;
         $document->save();
-
+        
         return [
             'success' => true,
         ];
     }
-
-    public function documentCheckServer($external_id)
-    {
+    
+    public function documentCheckServer($external_id) {
         $document = Document::where('external_id', $external_id)->first();
-
+        
         if ($document->state_type_id === '05') {
             $file_cdr = base64_encode($this->getStorage($document->filename, 'cdr'));
-        } else {
+        }
+        else {
             $file_cdr = null;
         }
-
+        
         return [
             'success' => true,
             'state_type_id' => $document->state_type_id,

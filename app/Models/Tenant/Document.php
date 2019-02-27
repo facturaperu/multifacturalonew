@@ -8,7 +8,7 @@ use App\Models\Tenant\Catalogs\DocumentType;
 class Document extends ModelTenant
 {
     protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'currency_type', 'group', 'items', 'invoice', 'note'];
-
+    
     protected $fillable = [
         'user_id',
         'external_id',
@@ -44,7 +44,6 @@ class Document extends ModelTenant
         'total_taxes',
         'total_value',
         'total',
-
         'charges',
         'discounts',
         'prepayments',
@@ -54,16 +53,17 @@ class Document extends ModelTenant
         'detraction',
         'legends',
         'additional_information',
-
         'filename',
         'hash',
         'qr',
-
         'has_xml',
         'has_pdf',
         'has_cdr',
         'data_json',
-        'send_server'
+        'send_server',
+        'shipping_status',
+        'sunat_shipping_status',
+        'query_status'
     ];
 
     protected $casts = [

@@ -19,3 +19,4 @@ error_log
 .env.dusk.local
 debug.log
 phpunit.dusk.xml
+docker-compose.yml

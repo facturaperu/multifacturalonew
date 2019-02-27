@@ -40,6 +40,10 @@ Visite el siguiente enlace: [FACTURADOR PRO](http://demo.2facturaloperuonline.co
 Usuario: demo@gmail.com<br>
 Contraseña: 123456
 
+## Actualización Docker-Git
+
+Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/11PI1a9yjCPfH9CCuWmJSrdj1V8IEUffqurqvdkw29co/edit?usp=sharing "Clic")
+
 ## Cambio de entornos (Prueba - Producción)
 
 Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/1iHUrlqzjwoQm967PRYirX5SN4L2ONAH8yvwTcePZ1PU/edit?usp=sharing "Clic")
