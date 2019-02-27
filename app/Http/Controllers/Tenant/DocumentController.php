@@ -229,23 +229,22 @@ class DocumentController extends Controller
             'message' => $response['description'],
         ];
     }
-
-    public function sendServer($document_id)
-    {
+    
+    public function sendServer($document_id) {
         $document = Document::find($document_id);
         $bearer = config('tenant.token_server');
         $api_url = config('tenant.url_server');
         $client = new Client(['base_uri' => $api_url]);
-
-//        $zipFly = new ZipFly();
-
+        
+       // $zipFly = new ZipFly();
+       
         $data_json = (array) $document->data_json;
         $data_json['external_id'] = $document->external_id;
         $data_json['hash'] = $document->hash;
         $data_json['qr'] = $document->qr;
         $data_json['file_xml_signed'] = base64_encode($this->getStorage($document->filename, 'signed'));
         $data_json['file_pdf'] = base64_encode($this->getStorage($document->filename, 'pdf'));
-
+        
         $res = $client->post('/api/documents_server', [
             'http_errors' => false,
             'headers' => [
@@ -254,44 +253,43 @@ class DocumentController extends Controller
             ],
             'form_params' => $data_json
         ]);
-
+        
         $response = json_decode($res->getBody()->getContents(), true);
-
-        if($response['success']) {
+        
+        if ($response['success']) {
             $document->send_server = true;
             $document->save();
         }
-
+        
         return $response;
     }
-
-    public function checkServer($document_id)
-    {
+    
+    public function checkServer($document_id) {
         $document = Document::find($document_id);
         $bearer = config('tenant.token_server');
         $api_url = config('tenant.url_server');
-
+        
         $client = new Client(['base_uri' => $api_url]);
-
+        
         $res = $client->get('/api/document_check_server/'.$document->external_id, [
             'headers' => [
                 'Authorization' => 'Bearer '.$bearer,
                 'Accept' => 'application/json',
             ],
         ]);
-
+        
         $response = json_decode($res->getBody()->getContents(), true);
-
-        if($response['success']) {
+        
+        if ($response['success']) {
             $state_type_id = $response['state_type_id'];
             $document->state_type_id = $state_type_id;
             $document->save();
-
-            if($state_type_id === '05') {
+            
+            if ($state_type_id === '05') {
                 $this->uploadStorage($document->filename, base64_decode($response['file_cdr']), 'cdr');
             }
         }
-
+        
         return $response;
     }
 }
