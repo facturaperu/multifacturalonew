@@ -191,11 +191,10 @@ class DocumentController extends Controller
             'success' => true
         ];
     }
-
-    public function send($document_id)
-    {
+    
+    public function send($document_id) {
         $document = Document::find($document_id);
-
+        
         $fact = DB::connection('tenant')->transaction(function () use ($document) {
             $facturalo = new Facturalo();
             $facturalo->setDocument($document);
@@ -203,15 +202,15 @@ class DocumentController extends Controller
             $facturalo->onlySenderXmlSignedBill();
             return $facturalo;
         });
-
+        
         $response = $fact->getResponse();
-
+        
         return [
             'success' => true,
             'message' => $response['description'],
         ];
     }
-
+    
     public function consultCdr($document_id)
     {
         $document = Document::find($document_id);
