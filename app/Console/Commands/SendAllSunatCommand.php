@@ -5,9 +5,12 @@ namespace App\Console\Commands;
 use Facades\App\Http\Controllers\Tenant\DocumentController;
 use Illuminate\Console\Command;
 use App\Models\Tenant\Document;
+use App\Traits\CommandTrait;
 
 class SendAllSunatCommand extends Command
 {
+    use CommandTrait;
+    
     /**
      * The name and signature of the console command.
      *
@@ -63,13 +66,5 @@ class SendAllSunatCommand extends Command
         }
         
         $this->info('The command is finished');
-    }
-    
-    /**
-     * Is offline
-     * @return boolean
-     */
-    private function isOffline() {
-        return config('tenant.is_client');
     }
 }
