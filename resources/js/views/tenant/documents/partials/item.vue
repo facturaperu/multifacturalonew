@@ -35,23 +35,32 @@
                     <div class="col-md-3 col-sm-6">
                         <div class="form-group" :class="{'has-danger': errors.unit_price}">
                             <label class="control-label">Precio Unitario</label>
-                            <el-input v-model="form.unit_price">
+                            <el-input v-model="form.unit_price" @input="calculateQuantity">
                                 <template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
 
+                    <!--<div class="col-md-3 col-sm-6" v-if="form.item.calculate_quantity">-->
+                        <!--<div class="form-group" :class="{'has-danger': errors.total_item}">-->
+                            <!--<label class="control-label">Total venta producto</label>-->
+                            <!--<el-input v-model="form.item.total_item" @input="calculateQuantity"  :min="0.01">-->
+                                <!--<template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>-->
+                            <!--</el-input>-->
+                            <!--<small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
                     <div class="col-md-3 col-sm-6" v-if="form.item.calculate_quantity">
-                        <div class="form-group" :class="{'has-danger': errors.total_item}">
+                        <div class="form-group">
                             <label class="control-label">Total venta producto</label>
-                            <el-input v-model="form.item.total_item" @input="calculateQuantity"  :min="0.01">
+                            <el-input v-model="total_item" @input="calculateQuantity" :min="0.01">
                                 <template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>
                             </el-input>
-                            <small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>
+                            <!--<small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>-->
                         </div>
                     </div>
-
 
                     <div class="col-md-12 mt-3">
                         <el-collapse v-model="activePanel">
@@ -314,7 +323,8 @@
                 attribute_types: [],
                 use_price: 1,
                 change_affectation_igv_type_id: false,
-                activePanel: 0
+                activePanel: 0,
+                total_item: 0
             }
         },
         created() {
@@ -354,6 +364,7 @@
                     attributes: [],
                 }
                 this.activePanel = 0
+                this.total_item = 0
 
             },
             // initializeFields() {
@@ -429,11 +440,11 @@
                 this.form.quantity = 1
                 this.cleanTotalItem(this.form.item) 
             },
-            calculateQuantity(){
-
-                this.form.item = _.find(this.items, {'id': this.form.item_id})
-                this.form.quantity = _.round((this.form.item.total_item / this.form.item.sale_unit_price), 2)  
-
+            calculateQuantity() {
+                console.log('asdasdasdsad')
+                if(this.form.item.calculate_quantity) {
+                    this.form.quantity = _.round((this.total_item / this.form.unit_price), 2)
+                }
             },
             cleanTotalItem(item){
                 item.total_item = null  
