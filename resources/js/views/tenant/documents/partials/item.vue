@@ -40,25 +40,15 @@
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
                         </div>
-                    </div>
-
-                    <!--<div class="col-md-3 col-sm-6" v-if="form.item.calculate_quantity">-->
-                        <!--<div class="form-group" :class="{'has-danger': errors.total_item}">-->
-                            <!--<label class="control-label">Total venta producto</label>-->
-                            <!--<el-input v-model="form.item.total_item" @input="calculateQuantity"  :min="0.01">-->
-                                <!--<template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>-->
-                            <!--</el-input>-->
-                            <!--<small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                    </div> 
 
                     <div class="col-md-3 col-sm-6" v-if="form.item.calculate_quantity">
-                        <div class="form-group">
+                        <div class="form-group"  :class="{'has-danger': errors.total_item}">
                             <label class="control-label">Total venta producto</label>
                             <el-input v-model="total_item" @input="calculateQuantity" :min="0.01">
                                 <template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>
                             </el-input>
-                            <!--<small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>-->
+                            <small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>
                         </div>
                     </div>
 
@@ -438,16 +428,15 @@
                 this.form.unit_price = this.form.item.sale_unit_price
                 this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id
                 this.form.quantity = 1
-                this.cleanTotalItem(this.form.item) 
+                this.cleanTotalItem() 
             },
             calculateQuantity() {
-                console.log('asdasdasdsad')
                 if(this.form.item.calculate_quantity) {
                     this.form.quantity = _.round((this.total_item / this.form.unit_price), 2)
                 }
             },
-            cleanTotalItem(item){
-                item.total_item = null  
+            cleanTotalItem(){
+                this.total_item = null  
             }, 
             clickAddItem() {
 
@@ -466,8 +455,8 @@
                 this.errors = {} 
 
                 if(this.form.item.calculate_quantity){
-                    if(this.form.item.total_item < 1)
-                        this.$set(this.errors, 'total_item', ['total venta debe ser mayor a cero']);
+                    if(this.total_item < 0.01)
+                        this.$set(this.errors, 'total_item', ['total venta item debe ser mayor a 0.01']);
                 } 
 
                 return this.errors 
