@@ -187,6 +187,9 @@
                                     Inventarios
                                 </a>
                             </li>
+                            <li class="{{(($path[0] === 'reports') && ($path[1] == 'consistency-documents')) ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('tenant.consistency-documents.index')}}">Consistencia documentos</a>
+                            </li>
                         </ul>
                     </li>
                     @endif
