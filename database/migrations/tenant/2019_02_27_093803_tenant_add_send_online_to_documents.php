@@ -13,9 +13,9 @@ class TenantAddSendOnlineToDocuments extends Migration
      */
     public function up() {
         Schema::table('documents', function (Blueprint $table) {
-            $table->json('shipping_status')->default('')->after('send_server');
-            $table->json('sunat_shipping_status')->default('')->after('shipping_status');
-            $table->json('query_status')->default('')->after('sunat_shipping_status');
+            $table->json('shipping_status')->nullable()->after('send_server');
+            $table->json('sunat_shipping_status')->nullable()->after('shipping_status');
+            $table->json('query_status')->nullable()->after('sunat_shipping_status');
         });
     }
     
