@@ -68,6 +68,7 @@ Vue.component('tenant-attribute_types-index', require('./views/tenant/attribute_
 Vue.component('tenant-calendar', require('./views/tenant/components/calendar.vue'));
 Vue.component('tenant-tasks-lists', require('./views/tenant/tasks/lists.vue'));
 Vue.component('tenant-tasks-form', require('./views/tenant/tasks/form.vue'));
+Vue.component('tenant-reports-consistency-documents-lists', require('./views/tenant/reports/consistency-documents/lists.vue'));
 
 // System
 Vue.component('system-clients-index', require('./views/system/clients/index.vue'));

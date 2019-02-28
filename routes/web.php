@@ -29,7 +29,7 @@ if ($hostname) {
             Route::post('tasks/tables', 'Tenant\TaskController@tables');
             Route::post('tasks', 'Tenant\TaskController@store');
             Route::delete('tasks/{task}', 'Tenant\TaskController@destroy');
-
+            
             //Company
             Route::get('companies/create', 'Tenant\CompanyController@create')->name('tenant.companies.create');
             Route::get('companies/tables', 'Tenant\CompanyController@tables');
@@ -202,9 +202,12 @@ if ($hostname) {
             Route::post('reports/kardex/search', 'Tenant\ReportKardexController@search')->name('tenant.reports.kardex.search');
             Route::post('reports/kardex/pdf', 'Tenant\ReportKardexController@pdf')->name('tenant.report.kardex.pdf');
             Route::post('reports/kardex/excel', 'Tenant\ReportKardexController@excel')->name('tenant.report.kardex.report_excel');
-
+            
+            Route::get('reports/consistency-documents', 'Tenant\ReportConsistencyDocumentController@index')->name('tenant.consistency-documents.index');
+            Route::post('reports/consistency-documents/lists', 'Tenant\ReportConsistencyDocumentController@lists');
+            
             Route::post('options/delete_documents', 'Tenant\OptionController@deleteDocuments');
-
+            
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
             Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
             Route::post('services/exchange_rate', 'Tenant\Api\ServiceController@exchange_rate');
