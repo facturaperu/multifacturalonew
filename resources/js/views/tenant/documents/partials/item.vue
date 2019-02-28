@@ -45,7 +45,7 @@
                     <div class="col-md-3 col-sm-6" v-if="form.item.calculate_quantity">
                         <div class="form-group" :class="{'has-danger': errors.total_item}">
                             <label class="control-label">Total venta producto</label>
-                            <el-input v-model="form.item.total_item" @input="calculateQuantity" :disabled="!form.item.calculate_quantity" :min="0.01">
+                            <el-input v-model="form.item.total_item" @input="calculateQuantity"  :min="0.01">
                                 <template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>
