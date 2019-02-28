@@ -157,12 +157,26 @@
                                     </table>
                                 </div>
                             </div>
-                                <div class="col-lg-12 col-md-6 d-flex align-items-end">
-                                    <div class="form-group">
-                                        <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Producto</button>
-                                    </div>
+                            <div class="col-lg-12 col-md-6 d-flex align-items-end">
+                                <div class="form-group">
+                                    <button type="button" class="btn waves-effect waves-light btn-primary" @click.prevent="showDialogAddItem = true">+ Agregar Producto</button>
                                 </div>
-                            <div class="col-md-12">
+                            </div>
+ 
+                            <div class="col-md-8 mt-3">
+                                <el-collapse v-model="activePanel">
+                                    <el-collapse-item title="Observaciones">
+                                        <el-input
+                                            type="textarea"
+                                            autosize 
+                                            v-model="form.additional_information">
+                                        </el-input>                           
+                                            
+                                    </el-collapse-item>
+                                </el-collapse>                
+                            </div>
+
+                            <div class="col-md-4">
                                 <p class="text-right" v-if="form.total_exportation > 0">OP.EXPORTACIÓN: {{ currency_type.symbol }} {{ form.total_exportation }}</p>
                                 <p class="text-right" v-if="form.total_free > 0">OP.GRATUITAS: {{ currency_type.symbol }} {{ form.total_free }}</p>
                                 <p class="text-right" v-if="form.total_unaffected > 0">OP.INAFECTAS: {{ currency_type.symbol }} {{ form.total_unaffected }}</p>
@@ -170,10 +184,13 @@
                                 <p class="text-right" v-if="form.total_taxed > 0">OP.GRAVADA: {{ currency_type.symbol }} {{ form.total_taxed }}</p>
                                 <p class="text-right" v-if="form.total_igv > 0">IGV: {{ currency_type.symbol }} {{ form.total_igv }}</p>
                                 <h3 class="text-right" v-if="form.total > 0"><b>TOTAL A PAGAR: </b>{{ currency_type.symbol }} {{ form.total }}</h3>
-                            </div>
+                            </div> 
+                            
                         </div>
 
                     </div>
+
+                    
                     <div class="form-actions text-right mt-4">
                         <el-button @click.prevent="close()">Cancelar</el-button>
                         <el-button class="submit" type="primary" native-type="submit" :loading="loading_submit" v-if="form.items.length > 0">Generar</el-button>
@@ -234,7 +251,8 @@
                 all_series: [],
                 series: [],
                 currency_type: {},
-                documentNewId: null
+                documentNewId: null,
+                activePanel: 0
             }
         },
         async created() {
@@ -304,12 +322,14 @@
                     discounts: [],
                     attributes: [],
                     guides: [],
+                    additional_information:null,
                     actions: {
                         format_pdf:'a4',
                     }
                 }
             },
             resetForm() {
+                this.activePanel = 0
                 this.initForm()
                 this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                 this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
