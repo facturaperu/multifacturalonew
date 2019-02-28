@@ -64,9 +64,10 @@ Vue.component('tenant-dispatches-form', require('./views/tenant/dispatches/form.
 Vue.component('tenant-purchases-index', require('./views/tenant/purchases/index.vue'));
 Vue.component('tenant-purchases-form', require('./views/tenant/purchases/form.vue'));
 Vue.component('tenant-purchases-items', require('./views/tenant/dispatches/items.vue'));
-
 Vue.component('tenant-attribute_types-index', require('./views/tenant/attribute_types/index.vue'));
 Vue.component('tenant-calendar', require('./views/tenant/components/calendar.vue'));
+Vue.component('tenant-tasks-lists', require('./views/tenant/tasks/lists.vue'));
+Vue.component('tenant-tasks-form', require('./views/tenant/tasks/form.vue'));
 
 // System
 Vue.component('system-clients-index', require('./views/system/clients/index.vue'));

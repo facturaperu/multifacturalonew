@@ -23,6 +23,12 @@ if ($hostname) {
             Route::get('dashboard', 'Tenant\HomeController@index')->name('tenant.dashboard');
             Route::get('catalogs', 'Tenant\CatalogController@index')->name('tenant.catalogs.index');
             Route::get('advanced', 'Tenant\AdvancedController@index')->name('tenant.advanced.index');
+            
+            Route::get('tasks', 'Tenant\TaskController@index')->name('tenant.tasks.index');
+            Route::post('tasks/commands', 'Tenant\TaskController@listsCommand');
+            Route::post('tasks/tables', 'Tenant\TaskController@tables');
+            Route::post('tasks', 'Tenant\TaskController@store');
+            Route::delete('tasks/{task}', 'Tenant\TaskController@destroy');
 
             //Company
             Route::get('companies/create', 'Tenant\CompanyController@create')->name('tenant.companies.create');
