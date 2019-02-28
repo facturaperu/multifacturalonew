@@ -24,7 +24,7 @@
                 <form autocomplete="off" @submit.prevent="submit">
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-lg-2 pb-2">
+                            <div class="col-lg-4 pb-2">
                                 <div class="form-group" :class="{'has-danger': errors.document_type_id}">
                                     <!--<label class="control-label font-weight-bold text-info full-text">Tipo de comprobante</label>-->
                                     <!--<label class="control-label font-weight-bold text-info short-text">Tipo comprobante</label>-->
@@ -71,17 +71,6 @@
                                     <small class="form-control-feedback" v-if="errors.currency_type_id" v-text="errors.currency_type_id[0]"></small>
                                 </div>
                             </div>
-                            <div class="col-lg-2">
-                                <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
-                                    <label class="control-label">Tipo de cambio
-                                        <el-tooltip class="item" effect="dark" content="Tipo de cambio del día, extraído de SUNAT" placement="top-end">
-                                            <i class="fa fa-info-circle"></i>
-                                        </el-tooltip>
-                                    </label>
-                                    <el-input v-model="form.exchange_rate_sale"></el-input>
-                                    <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
-                                </div>
-                            </div>
                         </div>
                         <div class="row mt-1">
                             <div class="col-lg-6 pb-2">
@@ -94,13 +83,6 @@
                                         <el-option v-for="option in customers" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                     </el-select>
                                     <small class="form-control-feedback" v-if="errors.customer_id" v-text="errors.customer_id[0]"></small>
-                                </div>
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="form-group" :class="{'has-danger': errors.purchase_order}">
-                                    <label class="control-label">Orden Compra</label>
-                                    <el-input v-model="form.purchase_order"></el-input>
-                                    <small class="form-control-feedback" v-if="errors.purchase_order" v-text="errors.purchase_order[0]"></small>
                                 </div>
                             </div>
                             <div class="col-lg-2">
@@ -119,6 +101,44 @@
                                     <el-date-picker v-model="form.date_of_due" type="date" value-format="yyyy-MM-dd" :clearable="false"></el-date-picker>
                                     <small class="form-control-feedback" v-if="errors.date_of_due" v-text="errors.date_of_due[0]"></small>
                                 </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
+                                    <label class="control-label">Tipo de cambio
+                                        <el-tooltip class="item" effect="dark" content="Tipo de cambio del día, extraído de SUNAT" placement="top-end">
+                                            <i class="fa fa-info-circle"></i>
+                                        </el-tooltip>
+                                    </label>
+                                    <el-input v-model="form.exchange_rate_sale"></el-input>
+                                    <small class="form-control-feedback" v-if="errors.exchange_rate_sale" v-text="errors.exchange_rate_sale[0]"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-md-12">
+                                <el-collapse v-model="activePanel">
+                                    <el-collapse-item title="Información Adicional">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="form-group">
+                                                    <label class="control-label">Observaciones</label>
+                                                    <el-input
+                                                            type="textarea"
+                                                            autosize
+                                                            v-model="form.additional_information">
+                                                    </el-input>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group" :class="{'has-danger': errors.purchase_order}">
+                                                    <label class="control-label">Orden Compra</label>
+                                                    <el-input v-model="form.purchase_order"></el-input>
+                                                    <small class="form-control-feedback" v-if="errors.purchase_order" v-text="errors.purchase_order[0]"></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </el-collapse-item>
+                                </el-collapse>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -164,16 +184,7 @@
                             </div>
  
                             <div class="col-md-8 mt-3">
-                                <el-collapse v-model="activePanel">
-                                    <el-collapse-item title="Observaciones">
-                                        <el-input
-                                            type="textarea"
-                                            autosize 
-                                            v-model="form.additional_information">
-                                        </el-input>                           
-                                            
-                                    </el-collapse-item>
-                                </el-collapse>                
+
                             </div>
 
                             <div class="col-md-4">
