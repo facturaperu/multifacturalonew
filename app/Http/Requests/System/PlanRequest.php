@@ -27,14 +27,12 @@ class PlanRequest extends FormRequest
             'limit_users' => [
                 'required',
                 'numeric',
-                'integer',
-                'min:1'  
+                'integer', 
             ],
             'limit_documents' => [
                 'required',
                 'numeric' ,
-                'integer',
-                'min:1'  
+                'integer', 
             ],
             'plan_documents' => [
                 'required'
