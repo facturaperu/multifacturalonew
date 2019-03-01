@@ -9,7 +9,10 @@
                                 Producto/Servicio
                                 <a href="#" @click.prevent="showDialogNewItem = true">[+ Nuevo]</a>
                             </label>
-                            <el-select v-model="form.item_id" @change="changeItem" filterable popper-class="el-select-items" dusk="item_id">
+                            <el-select v-model="form.item_id" @change="changeItem" filterable
+                                       popper-class="el-select-items"
+                                       dusk="item_id"
+                                       @visible-change="focusTotalItem">
                                 <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.full_description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.item_id" v-text="errors.item_id[0]"></small>
@@ -42,10 +45,10 @@
                         </div>
                     </div> 
 
-                    <div class="col-md-3 col-sm-6" v-if="form.item.calculate_quantity">
+                    <div class="col-md-3 col-sm-6" v-show="form.item.calculate_quantity">
                         <div class="form-group"  :class="{'has-danger': errors.total_item}">
                             <label class="control-label">Total venta producto</label>
-                            <el-input v-model="total_item" @input="calculateQuantity" :min="0.01">
+                            <el-input v-model="total_item" @input="calculateQuantity" :min="0.01" ref="total_item">
                                 <template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>
@@ -284,16 +287,12 @@
 
 <script>
 
-    import itemForm from '../../items/form.vue'
+    import ItemForm from '../../items/form.vue'
     import {calculateRowItem} from '../../../../helpers/functions'
-    import ElCheckbox from "../../../../../../node_modules/element-ui/packages/checkbox/src/checkbox";
 
     export default {
         props: ['showDialog', 'operationTypeId', 'currencyTypeIdActive', 'exchangeRateSale'],
-        components: {
-            ElCheckbox,
-            itemForm},
-        // mixins: [formDocumentItem],
+        components: {ItemForm},
         data() {
             return {
                 titleDialog: 'Agregar Producto o Servicio',
@@ -428,7 +427,12 @@
                 this.form.unit_price = this.form.item.sale_unit_price
                 this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id
                 this.form.quantity = 1
-                this.cleanTotalItem() 
+                this.cleanTotalItem()
+            },
+            focusTotalItem(change) {
+                if(!change && this.form.item.calculate_quantity) {
+                    this.$refs.total_item.$el.getElementsByTagName('input')[0].focus()
+                }
             },
             calculateQuantity() {
                 if(this.form.item.calculate_quantity) {
@@ -439,7 +443,6 @@
                 this.total_item = null  
             }, 
             clickAddItem() {
-
                 if(this.validateTotalItem().total_item)
                     return
 
