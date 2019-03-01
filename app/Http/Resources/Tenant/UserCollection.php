@@ -21,6 +21,8 @@ class UserCollection extends ResourceCollection
                 'name' => $row->name,
                 'api_token' => $row->api_token,
                 'establishment_description' => optional($row->establishment)->description,
+                'locked' => (bool) $row->locked,
+
             ];
         });
     }

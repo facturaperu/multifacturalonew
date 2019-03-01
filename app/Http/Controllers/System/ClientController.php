@@ -167,13 +167,22 @@ class ClientController extends Controller
             ['establishment_id' => 1, 'document_type_id' => '09', 'number' => 'T001'],
         ]);
 
-        DB::connection('tenant')->table('users')->insert([
+        $user_id = DB::connection('tenant')->table('users')->insert([
             'name' => 'Administrador',
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
             'api_token' => $token,
-            'establishment_id' => $establishment_id
+            'establishment_id' => $establishment_id,
+            'locked' => true
         ]);
+
+        // DB::connection('tenant')->table('module_user')->insert([
+        //     ['module_id' => 1, 'user_id' => $user_id],
+        //     ['module_id' => 2, 'user_id' => $user_id],
+        //     ['module_id' => 3, 'user_id' => $user_id],
+        //     ['module_id' => 4, 'user_id' => $user_id],
+        //     ['module_id' => 5, 'user_id' => $user_id], 
+        // ]);
 
         return [
             'success' => true,
