@@ -29,7 +29,12 @@
         <td class="text-center"><h5>{{ 'RUC '.$company->number }}</h5></td>
     </tr>
     <tr>
-        <td class="text-center">{{ ($establishment->address !== '-')? $establishment->address : '' }}</td>
+        <td class="text-center">
+            {{ ($establishment->address !== '-')? $establishment->address : '' }}
+            {{ ($establishment->district_id !== '-')? ', '.$establishment->district->description : '' }}
+            {{ ($establishment->province_id !== '-')? ', '.$establishment->province->description : '' }}
+            {{ ($establishment->department_id !== '-')? '- '.$establishment->department->description : '' }}
+        </td>
     </tr>
     <tr>
         <td class="text-center">{{ ($establishment->email !== '-')? $establishment->email : '' }}</td>
@@ -68,7 +73,14 @@
     @if ($customer->address !== '')
         <tr>
             <td class="align-top"><p class="desc">Dirección:</p></td>
-            <td><p class="desc">{{ $customer->address }}</p></td>
+            <td>
+                <p class="desc">
+                    {{ $customer->address }}
+                    {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
+                    {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
+                    {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+                </p>
+            </td>
         </tr>
     @endif
     @if ($document->purchase_order)

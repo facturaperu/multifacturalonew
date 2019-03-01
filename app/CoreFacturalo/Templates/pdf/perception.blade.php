@@ -204,7 +204,12 @@
                 @if ($customer->address !== '')
                     <tr>
                         <td width="20%">Dirección:</td>
-                        <td width="80%">{{ $customer->address }}</td>
+                        <td width="80%">
+                            {{ $customer->address }}
+                            {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
+                            {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
+                            {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+                        </td>
                     </tr>
                 @endif
                 </tbody>
