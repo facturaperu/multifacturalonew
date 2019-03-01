@@ -432,7 +432,7 @@
             },
             calculateQuantity() {
                 if(this.form.item.calculate_quantity) {
-                    this.form.quantity = _.round((this.total_item / this.form.unit_price), 2)
+                    this.form.quantity = _.round((this.total_item / this.form.unit_price), 4)
                 }
             },
             cleanTotalItem(){
