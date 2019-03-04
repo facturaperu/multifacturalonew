@@ -20,19 +20,22 @@ class RedirectModule
         $path = explode('/', $request->path());
         $modules = $request->user()->getModules();
 
-        if(!$request->ajax()){
+        if(! $request->ajax()){
 
             if(count($modules)){
                 
-                $group = $this->getGroup($path);
-                if($group){
+                if(count($modules) < 5){
 
-                    if($this->getModuleByGroup($modules,$group) === 0){ 
-                        return $this->redirectRoute($module);                    
-                    }     
-
-                }
-                                     
+                    $group = $this->getGroup($path);
+                    if($group){
+    
+                        if($this->getModuleByGroup($modules,$group) === 0){ 
+                            return $this->redirectRoute($module);                    
+                        }     
+    
+                    }
+                }                
+                                   
             }
         }
  
@@ -172,6 +175,7 @@ class RedirectModule
         }else{
             $group = null;
         } 
+        
         return $group;
     }
  
