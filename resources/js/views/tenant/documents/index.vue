@@ -195,18 +195,19 @@
                     })
             },
             clickSendOnline(document_id) {
-                this.$http.get(`/${this.resource}/send_server/${document_id}`)
-                    .then(response => {
-                        if (response.data.success) {
-                            this.$message.success('Se envio satisfactoriamente el comprobante.')
-                            this.$eventHub.$emit('reloadData')
-                        } else {
-                            this.$message.error(response.data.message)
-                        }
-                    })
-                    .catch(error => {
-                        this.$message.error(error.response.data.message)
-                    })
+                this.$http.get(`/${this.resource}/send_server/${document_id}/1`).then(response => {
+                    if (response.data.success) {
+                        this.$message.success('Se envio satisfactoriamente el comprobante.');
+                        this.$eventHub.$emit('reloadData');
+                        
+                        this.clickCheckOnline(document_id);
+                    }
+                    else {
+                        this.$message.error(response.data.message);
+                    }
+                }).catch(error => {
+                    this.$message.error(error.response.data.message)
+                });
             },
             clickCheckOnline(document_id) {
                 this.$http.get(`/${this.resource}/check_server/${document_id}`)
