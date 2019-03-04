@@ -230,7 +230,7 @@ class DocumentController extends Controller
         ];
     }
     
-    public function sendServer($document_id) {
+    public function sendServer($document_id, $query = false) {
         $document = Document::find($document_id);
         $bearer = config('tenant.token_server');
         $api_url = config('tenant.url_server');
@@ -242,6 +242,7 @@ class DocumentController extends Controller
         $data_json['external_id'] = $document->external_id;
         $data_json['hash'] = $document->hash;
         $data_json['qr'] = $document->qr;
+        $data_json['query'] = $query;
         $data_json['file_xml_signed'] = base64_encode($this->getStorage($document->filename, 'signed'));
         $data_json['file_pdf'] = base64_encode($this->getStorage($document->filename, 'pdf'));
         
