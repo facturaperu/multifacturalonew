@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
         App\Models\System\Plan::create([
             'name' => 'Ilimitado',
             'pricing' =>  99,
-            'limit_users' => 9999999999,
-            'limit_documents' =>  9999999999,
+            'limit_users' => 0,
+            'limit_documents' =>  0,
             'plan_documents' => [1,2,3,4],
             'locked' => true
         ]);

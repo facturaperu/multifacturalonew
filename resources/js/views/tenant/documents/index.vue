@@ -43,17 +43,7 @@
                         <!--<th class="text-center">Anulación</th>-->
                         <th class="text-right">Acciones</th>
                     <tr>
-                    <tr slot-scope="{ index, row }" :class="{
-                                                    'text-danger': (row.state_type_id === '11'),
-                                                    'text-warning': (row.state_type_id === '13'),
-                                                    'border-light': (row.state_type_id === '01'),
-                                                    'border-left border-info': (row.state_type_id === '03'),
-                                                    'border-left border-success': (row.state_type_id === '05'),
-                                                    'border-left border-secondary': (row.state_type_id === '07'),
-                                                    'border-left border-dark': (row.state_type_id === '09'),
-                                                    'border-left border-danger': (row.state_type_id === '11'),
-                                                    'border-left border-warning': (row.state_type_id === '13')
-                    }">
+                    <tr slot-scope="{ index, row }" :class="{'text-danger': (row.state_type_id === '11'), 'text-warning': (row.state_type_id === '13'), 'border-light': (row.state_type_id === '01'), 'border-left border-info': (row.state_type_id === '03'), 'border-left border-success': (row.state_type_id === '05'), 'border-left border-secondary': (row.state_type_id === '07'), 'border-left border-dark': (row.state_type_id === '09'), 'border-left border-danger': (row.state_type_id === '11'), 'border-left border-warning': (row.state_type_id === '13')}">
                         <td>{{ index }}</td>
                         <td class="text-center">{{ row.date_of_issue }}</td>
                         <td>{{ row.customer_name }}<br/><small v-text="row.customer_number"></small></td>
@@ -61,15 +51,13 @@
                             <small v-text="row.document_type_description"></small><br/>
                             <small v-if="row.affected_document" v-text="row.affected_document"></small>
                         </td>
-                        <td><span class="badge bg-secondary text-white" :class="{
-                            'bg-danger': (row.state_type_id === '11'),
-                            'bg-warning': (row.state_type_id === '13'),
-                            'bg-secondary': (row.state_type_id === '01'),
-                            'bg-info': (row.state_type_id === '03'),
-                            'bg-success': (row.state_type_id === '05'),
-                            'bg-secondary': (row.state_type_id === '07'),
-                            'bg-dark': (row.state_type_id === '09')
-                        }">{{ row.state_type_description }}</span></td>
+                        <td>
+                            <el-tooltip v-if="tooltip(row, false)" class="item" effect="dark" placement="bottom">
+                                <div slot="content">{{tooltip(row)}}</div>
+                                <span class="badge bg-secondary text-white" :class="{'bg-danger': (row.state_type_id === '11'), 'bg-warning': (row.state_type_id === '13'), 'bg-secondary': (row.state_type_id === '01'), 'bg-info': (row.state_type_id === '03'), 'bg-success': (row.state_type_id === '05'), 'bg-secondary': (row.state_type_id === '07'), 'bg-dark': (row.state_type_id === '09')}">{{row.state_type_description}}</span>
+                            </el-tooltip>
+                            <span v-else class="badge bg-secondary text-white" :class="{'bg-danger': (row.state_type_id === '11'), 'bg-warning': (row.state_type_id === '13'), 'bg-secondary': (row.state_type_id === '01'), 'bg-info': (row.state_type_id === '03'), 'bg-success': (row.state_type_id === '05'), 'bg-secondary': (row.state_type_id === '07'), 'bg-dark': (row.state_type_id === '09')}">{{row.state_type_description}}</span>
+                        </td>
                         <td class="text-center">{{ row.currency_type_id }}</td>
                         <td class="text-right" v-if="columns.total_exportation.visible">{{ row.total_exportation }}</td>
                         <td class="text-right" v-if="columns.total_free.visible">{{ row.total_free }}</td>
@@ -238,6 +226,19 @@
                 this.recordId = recordId
                 this.showDialogOptions = true
             },
+            tooltip(row, message = true) {
+                if (message) {
+                    if (row.shipping_status) return row.shipping_status.message;
+                    
+                    if (row.sunat_shipping_status) return row.sunat_shipping_status.message;
+                    
+                    if (row.query_status) return row.query_status.message;
+                }
+                
+                if ((row.shipping_status) || (row.sunat_shipping_status) || (row.query_status)) return true;
+                
+                return false;
+            }
         }
     }
 </script>

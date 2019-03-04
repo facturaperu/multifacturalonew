@@ -66,6 +66,15 @@
                             <small class="form-control-feedback" v-if="errors.item_code" v-text="errors.item_code[0]"></small>
                         </div>
                     </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.calculate_quantity}">
+                            <label class="control-label">Calcular cantidad por precio</label>
+                            <el-checkbox v-model="form.calculate_quantity">Activo</el-checkbox><br>                            
+                            <small class="form-control-feedback" v-if="errors.calculate_quantity" v-text="errors.calculate_quantity[0]"></small>
+                        </div>
+                    </div>
+
                     <div class="col-md-12">
                         <h5 class="separator-title">Campos adicionales</h5>
                     </div>
@@ -162,6 +171,7 @@
                     suggested_price: 0,
                     sale_affectation_igv_type_id: null,
                     purchase_affectation_igv_type_id: null,
+                    calculate_quantity: false,
                     stock: 0,
                     stock_min: 1,
                 }

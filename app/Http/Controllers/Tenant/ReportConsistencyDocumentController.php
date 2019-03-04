@@ -28,7 +28,7 @@ class ReportConsistencyDocumentController extends Controller
             ->with(['documents' => function($queryDocuments) {
                 if (!config('tenant.is_client')) $queryDocuments->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()]);
                 
-                $queryDocuments->select('series', 'number');
+                $queryDocuments->select('series', 'number', 'state_type_id');
             }])
             ->get()
             ->map(function($serie) {

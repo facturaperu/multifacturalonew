@@ -24,7 +24,7 @@
                         <td>{{ row.establishment_description }}</td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"  @click.prevent="clickDelete(row.id)" v-show="row.id!=1">Eliminar</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"  @click.prevent="clickDelete(row.id)" v-show="!row.locked">Eliminar</button>
                         </td>
                     </tr>
                     </tbody>
