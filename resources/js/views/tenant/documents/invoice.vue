@@ -79,8 +79,14 @@
                                         Cliente
                                         <a href="#" @click.prevent="showDialogNewPerson = true">[+ Nuevo]</a>
                                     </label>
-                                    <el-select v-model="form.customer_id" filterable class="border-left rounded-left border-info" popper-class="el-select-customers" dusk="customer_id">
+                                    <el-select v-model="form.customer_id" filterable remote class="border-left rounded-left border-info" popper-class="el-select-customers" 
+                                        dusk="customer_id"                                    
+                                        placeholder="Escriba el nombre del cliente"
+                                        :remote-method="searchRemoteCustomers"
+                                        :loading="loading_search">
+
                                         <el-option v-for="option in customers" :key="option.id" :value="option.id" :label="option.description"></el-option>
+
                                     </el-select>
                                     <small class="form-control-feedback" v-if="errors.customer_id" v-text="errors.customer_id[0]"></small>
                                 </div>
@@ -263,7 +269,8 @@
                 series: [],
                 currency_type: {},
                 documentNewId: null,
-                activePanel: 0
+                activePanel: 0,
+                loading_search:false
             }
         },
         async created() {
@@ -275,7 +282,7 @@
                     this.establishments = response.data.establishments
                     this.operation_types = response.data.operation_types
                     this.all_series = response.data.series
-                    this.all_customers = response.data.customers
+                    // this.all_customers = response.data.customers
                     this.discount_types = response.data.discount_types
                     this.charges_types = response.data.charges_types
                     this.company = response.data.company
@@ -297,6 +304,24 @@
             })
         },
         methods: {
+
+              searchRemoteCustomers(input) {  
+
+                if (input !== '') {
+
+                    this.loading_search = true
+                    let parameters = `input=${input}&document_type_id=${this.form.document_type_id}`
+
+                    this.$http.get(`/${this.resource}/search/customers?${parameters}`)
+                            .then(response => { 
+                                this.customers = response.data.customers
+                                this.loading_search = false
+                            }) 
+                } else {
+                    this.customers = []
+                }
+
+            },
             initForm() {
                 this.errors = {}
                 this.form = {
@@ -360,7 +385,12 @@
             },
             changeDocumentType() {
                 this.filterSeries()
-                this.filterCustomers()
+                this.cleanCustomer()
+                // this.filterCustomers()
+            },
+            cleanCustomer(){                
+                this.form.customer_id = null
+                this.customers = []
             },
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
@@ -375,16 +405,16 @@
                 this.form.series_id = (this.series.length > 0)?this.series[0].id:null
             },
             filterCustomers() {
-                this.form.customer_id = null
-                if(this.form.document_type_id === '01') {
-                    this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
-                } else {
-                    if(this.document_type_03_filter) {
-                        this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
-                    } else {
-                        this.customers = this.all_customers
-                    }
-                }
+                // this.form.customer_id = null
+                // if(this.form.document_type_id === '01') {
+                //     this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
+                // } else {
+                //     if(this.document_type_03_filter) {
+                //         this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
+                //     } else {
+                //         this.customers = this.all_customers
+                //     }
+                // }
             },
             addRow(row) {
                 this.form.items.push(row)
@@ -476,10 +506,14 @@
                 location.href = '/documents'
             },
             reloadDataCustomers(customer_id) {
-                this.$http.get(`/${this.resource}/table/customers`).then((response) => {
-                    this.customers = response.data
+                // this.$http.get(`/${this.resource}/table/customers`).then((response) => {
+                //     this.customers = response.data
+                //     this.form.customer_id = customer_id
+                // }) 
+                this.$http.get(`/${this.resource}/search/customer/${customer_id}`).then((response) => {
+                    this.customers = response.data.customers
                     this.form.customer_id = customer_id
-                })
+                })                  
             },
         }
     }

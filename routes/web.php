@@ -129,6 +129,9 @@ if ($hostname) {
             Route::post('persons/import', 'Tenant\PersonController@import');
 
             //Documents
+            Route::get('documents/search/customers', 'Tenant\DocumentController@searchCustomers');
+            Route::get('documents/search/customer/{id}', 'Tenant\DocumentController@searchCustomerById');
+
             Route::get('documents', 'Tenant\DocumentController@index')->name('tenant.documents.index');
             Route::get('documents/columns', 'Tenant\DocumentController@columns');
             Route::get('documents/records', 'Tenant\DocumentController@records');
