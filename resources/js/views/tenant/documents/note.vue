@@ -216,7 +216,7 @@
                     this.document_types = response.data.document_types_note
                     this.currency_types = response.data.currency_types
                     this.all_series = response.data.series
-                    this.customers = response.data.customers
+                    // this.customers = response.data.customers
                     this.note_credit_types = response.data.note_credit_types
                     this.note_debit_types = response.data.note_debit_types
                     this.operation_types = response.data.operation_types
@@ -227,7 +227,9 @@
 
                     this.changeDocumentType()
                     this.changeDateOfIssue()
-                })
+                }) 
+
+            this.getCustomer()               
         },
         mounted() {
 
@@ -369,6 +371,12 @@
                     .then(() => {
                         this.loading_submit = false
                     })
+            },
+            getCustomer(){
+                this.$http.get(`/${this.resource}/search/customer/${this.document.customer_id}`).then((response) => {
+                    this.customers = response.data.customers
+                    this.form.customer_id = this.document.customer_id
+                }) 
             },
             close() {
                 location.href = '/documents'
