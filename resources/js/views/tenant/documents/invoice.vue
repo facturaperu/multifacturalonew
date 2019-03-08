@@ -312,12 +312,11 @@
                     this.establishments = response.data.establishments
                     this.operation_types = response.data.operation_types
                     this.all_series = response.data.series
-                    // this.all_customers = response.data.customers
+                    this.all_customers = response.data.customers
                     this.discount_types = response.data.discount_types
                     this.charges_types = response.data.charges_types
                     this.company = response.data.company
-                    this.document_type_03_filter = response.data.document_type_03_filter
-
+                    this.document_type_03_filter = response.data.document_type_03_filter 
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
                     this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
@@ -336,7 +335,9 @@
         methods: {
 
               searchRemoteCustomers(input) {  
-                if (input.length > 2) {
+                  
+                if (input.length > 0) {
+                // if (input!="") {
 
                     this.loading_search = true
                     let parameters = `input=${input}&document_type_id=${this.form.document_type_id}`
@@ -345,9 +346,11 @@
                             .then(response => { 
                                 this.customers = response.data.customers
                                 this.loading_search = false
-                            }) 
+                                if(this.customers.length == 0){this.filterCustomers()}
+                            })  
                 } else {
-                    this.customers = []
+                    // this.customers = []
+                    this.filterCustomers()
                 }
 
             },
@@ -415,11 +418,11 @@
             changeDocumentType() {
                 this.filterSeries()
                 this.cleanCustomer()
-                // this.filterCustomers()
+                this.filterCustomers()
             },
             cleanCustomer(){                
                 this.form.customer_id = null
-                this.customers = []
+                // this.customers = []
             },
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
@@ -434,16 +437,17 @@
                 this.form.series_id = (this.series.length > 0)?this.series[0].id:null
             },
             filterCustomers() {
+                
                 // this.form.customer_id = null
-                // if(this.form.document_type_id === '01') {
-                //     this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
-                // } else {
-                //     if(this.document_type_03_filter) {
-                //         this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
-                //     } else {
-                //         this.customers = this.all_customers
-                //     }
-                // }
+                if(this.form.document_type_id === '01') {
+                    this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
+                } else {
+                    if(this.document_type_03_filter) {
+                        this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
+                    } else {
+                        this.customers = this.all_customers
+                    }
+                }
             },
             clickAddGuide() {
                 this.form.guides.push({

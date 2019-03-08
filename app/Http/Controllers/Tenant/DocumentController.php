@@ -101,7 +101,7 @@ class DocumentController extends Controller
 
     public function tables()
     {
-        // $customers = $this->table('customers');
+        $customers = $this->table('customers');
         $establishments = Establishment::where('id', auth()->user()->establishment_id)->get();// Establishment::all();
         $series = Series::all();
         $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();
@@ -127,7 +127,7 @@ class DocumentController extends Controller
         //                'discount_types', 'charge_types', 'company', 'document_type_03_filter');
 
                        
-        return compact( 'establishments', 'series', 'document_types_invoice', 'document_types_note',
+        return compact( 'customers','establishments', 'series', 'document_types_invoice', 'document_types_note',
                         'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
                         'discount_types', 'charge_types', 'company', 'document_type_03_filter',
                         'document_types_guide');
@@ -153,7 +153,7 @@ class DocumentController extends Controller
     public function table($table)
     {
         if ($table === 'customers') {
-            $customers = Person::whereType('customers')->orderBy('name')->get()->transform(function($row) {
+            $customers = Person::whereType('customers')->orderBy('name')->take(20)->get()->transform(function($row) {
                 return [
                     'id' => $row->id,
                     'description' => $row->number.' - '.$row->name,
