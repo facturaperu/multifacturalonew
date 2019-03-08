@@ -6,6 +6,7 @@ use App\CoreFacturalo\Requests\Inputs\Common\ActionInput;
 use App\CoreFacturalo\Requests\Inputs\Common\EstablishmentInput;
 use App\CoreFacturalo\Requests\Inputs\Common\LegendInput;
 use App\CoreFacturalo\Requests\Inputs\Common\PersonInput;
+use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Item;
@@ -254,10 +255,10 @@ class DocumentInput
                 foreach ($inputs['guides'] as $row) {
                     $number = $row['number'];
                     $document_type_id = $row['document_type_id'];
-
                     $guides[] = [
                         'number' => $number,
                         'document_type_id' => $document_type_id,
+                        'document_type_description' => DocumentType::find($document_type_id)->description,
                     ];
                 }
                 return $guides;

@@ -125,7 +125,7 @@
                                 <el-collapse v-model="activePanel">
                                     <el-collapse-item title="Información Adicional">
                                         <div class="row">
-                                            <div class="col-md-10">
+                                            <div class="col-md-5">
                                                 <div class="form-group">
                                                     <label class="control-label">Observaciones</label>
                                                     <el-input
@@ -133,6 +133,34 @@
                                                             autosize
                                                             v-model="form.additional_information">
                                                     </el-input>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Guias
+                                                        <a href="#" @click.prevent="clickAddGuide">[+ Agregar]</a>
+                                                    </label>
+                                                    <table style="width: 100%">
+                                                        <tr v-for="guide in form.guides">
+                                                            <td>
+                                                                <el-select v-model="guide.document_type_id">
+                                                                    <el-option v-for="option in document_types_guide" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                                                </el-select>
+                                                            </td>
+                                                            <td>
+                                                                <el-input v-model="guide.number"></el-input>
+                                                            </td>
+                                                            <td align="right">
+                                                                <a href="#" @click.prevent="clickRemoveGuide" style="color:red">Remover</a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <!--<el-input-->
+                                                            <!--type="textarea"-->
+                                                            <!--autosize-->
+                                                            <!--v-model="form.additional_information">-->
+                                                    <!--</el-input>-->
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -259,6 +287,7 @@
                 discount_types: [],
                 charges_types: [],
                 all_customers: [],
+                document_types_guide: [],
                 customers: [],
                 company: null,
                 document_type_03_filter: null,
@@ -278,6 +307,7 @@
             await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.document_types = response.data.document_types_invoice
+                    this.document_types_guide = response.data.document_types_guide
                     this.currency_types = response.data.currency_types
                     this.establishments = response.data.establishments
                     this.operation_types = response.data.operation_types
@@ -415,6 +445,15 @@
                 //         this.customers = this.all_customers
                 //     }
                 // }
+            },
+            clickAddGuide() {
+                this.form.guides.push({
+                    document_type_id: null,
+                    number: null
+                })
+            },
+            clickRemoveGuide(index) {
+                this.form.guides.splice(index, 1)
             },
             addRow(row) {
                 this.form.items.push(row)

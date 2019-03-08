@@ -114,6 +114,13 @@ class DocumentController extends Controller
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
         $company = Company::active();
         $document_type_03_filter = config('tenant.document_type_03_filter');
+        $document_types_guide = DocumentType::whereIn('id', ['09', '31'])->get();
+
+
+//        return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
+//                       'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
+//                       'discount_types', 'charge_types', 'company', 'document_type_03_filter',
+//                       'document_types_guide');
 
         // return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
         //                'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
@@ -121,8 +128,10 @@ class DocumentController extends Controller
 
                        
         return compact( 'establishments', 'series', 'document_types_invoice', 'document_types_note',
-        'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
-        'discount_types', 'charge_types', 'company', 'document_type_03_filter');
+                        'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
+                        'discount_types', 'charge_types', 'company', 'document_type_03_filter',
+                        'document_types_guide');
+
     }
 
     public function item_tables()
