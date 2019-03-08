@@ -176,13 +176,13 @@ class ClientController extends Controller
             'locked' => true
         ]);
 
-        // DB::connection('tenant')->table('module_user')->insert([
-        //     ['module_id' => 1, 'user_id' => $user_id],
-        //     ['module_id' => 2, 'user_id' => $user_id],
-        //     ['module_id' => 3, 'user_id' => $user_id],
-        //     ['module_id' => 4, 'user_id' => $user_id],
-        //     ['module_id' => 5, 'user_id' => $user_id], 
-        // ]);
+        DB::connection('tenant')->table('module_user')->insert([
+            ['module_id' => 1, 'user_id' => $user_id],
+            ['module_id' => 2, 'user_id' => $user_id],
+            ['module_id' => 3, 'user_id' => $user_id],
+            ['module_id' => 4, 'user_id' => $user_id],
+            ['module_id' => 5, 'user_id' => $user_id], 
+        ]);
 
         return [
             'success' => true,

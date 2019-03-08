@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Nexmo\Account\Price;
+use Illuminate\Support\Facades\Cache;
 
 class DocumentController extends Controller
 {
@@ -67,14 +68,39 @@ class DocumentController extends Controller
         return new DocumentCollection($records->paginate(config('tenant.items_per_page')));
     }
 
+    public function searchCustomers(Request $request)
+    {
+
+        //tru de boletas en env esta en true filtra a los con dni   , false a todos
+        $identity_document_type_id = $this->getIdentityDocumentTypeId($request->document_type_id);     
+         
+        $customers = Person::whereType('customers')->orderBy('name')
+                    ->where('name','like', "%{$request->input}%")
+                    ->whereIn('identity_document_type_id',$identity_document_type_id)
+                    ->get()->transform(function($row) {
+                        return [
+                            'id' => $row->id,
+                            'description' => $row->number.' - '.$row->name,
+                            'name' => $row->name,
+                            'number' => $row->number,
+                            'identity_document_type_id' => $row->identity_document_type_id,
+                            'identity_document_type_code' => $row->identity_document_type->code
+                        ];
+                    }); 
+
+        return compact('customers');
+    }
+
+ 
     public function create()
     {
         return view('tenant.documents.form');
     }
+    
 
     public function tables()
     {
-        $customers = $this->table('customers');
+        // $customers = $this->table('customers');
         $establishments = Establishment::where('id', auth()->user()->establishment_id)->get();// Establishment::all();
         $series = Series::all();
         $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();
@@ -89,10 +115,22 @@ class DocumentController extends Controller
         $document_type_03_filter = config('tenant.document_type_03_filter');
         $document_types_guide = DocumentType::whereIn('id', ['09', '31'])->get();
 
-        return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
-                       'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
-                       'discount_types', 'charge_types', 'company', 'document_type_03_filter',
-                       'document_types_guide');
+
+//        return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
+//                       'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
+//                       'discount_types', 'charge_types', 'company', 'document_type_03_filter',
+//                       'document_types_guide');
+
+        // return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
+        //                'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
+        //                'discount_types', 'charge_types', 'company', 'document_type_03_filter');
+
+                       
+        return compact( 'establishments', 'series', 'document_types_invoice', 'document_types_note',
+                        'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
+                        'discount_types', 'charge_types', 'company', 'document_type_03_filter',
+                        'document_types_guide');
+
     }
 
     public function item_tables()
@@ -232,7 +270,7 @@ class DocumentController extends Controller
         ];
     }
     
-    public function sendServer($document_id) {
+    public function sendServer($document_id, $query = false) {
         $document = Document::find($document_id);
         $bearer = config('tenant.token_server');
         $api_url = config('tenant.url_server');
@@ -244,6 +282,7 @@ class DocumentController extends Controller
         $data_json['external_id'] = $document->external_id;
         $data_json['hash'] = $document->hash;
         $data_json['qr'] = $document->qr;
+        $data_json['query'] = $query;
         $data_json['file_xml_signed'] = base64_encode($this->getStorage($document->filename, 'signed'));
         $data_json['file_pdf'] = base64_encode($this->getStorage($document->filename, 'pdf'));
         
@@ -293,5 +332,39 @@ class DocumentController extends Controller
         }
         
         return $response;
+    }
+
+    public function searchCustomerById($id)
+    {        
+   
+        $customers = Person::whereType('customers')
+                    ->where('id',$id) 
+                    ->get()->transform(function($row) {
+                        return [
+                            'id' => $row->id,
+                            'description' => $row->number.' - '.$row->name,
+                            'name' => $row->name,
+                            'number' => $row->number,
+                            'identity_document_type_id' => $row->identity_document_type_id,
+                            'identity_document_type_code' => $row->identity_document_type->code
+                        ];
+                    }); 
+
+        return compact('customers');
+    }
+
+    public function getIdentityDocumentTypeId($document_type_id){
+
+        if($document_type_id == '01'){
+            $identity_document_type_id = [6];
+        }else{
+            if(config('tenant.document_type_03_filter')){
+                $identity_document_type_id = [1];
+            }else{
+                $identity_document_type_id = [1,4,6,7,0];
+            }
+        } 
+
+        return $identity_document_type_id;
     }
 }
