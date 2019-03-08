@@ -74,19 +74,20 @@ class DocumentController extends Controller
         //tru de boletas en env esta en true filtra a los con dni   , false a todos
         $identity_document_type_id = $this->getIdentityDocumentTypeId($request->document_type_id);     
          
-        $customers = Person::whereType('customers')->orderBy('name')
-                    ->where('name','like', "%{$request->input}%")
-                    ->whereIn('identity_document_type_id',$identity_document_type_id)
-                    ->get()->transform(function($row) {
-                        return [
-                            'id' => $row->id,
-                            'description' => $row->number.' - '.$row->name,
-                            'name' => $row->name,
-                            'number' => $row->number,
-                            'identity_document_type_id' => $row->identity_document_type_id,
-                            'identity_document_type_code' => $row->identity_document_type->code
-                        ];
-                    }); 
+        $customers = Person::where('number','like', "%{$request->input}%")
+                            ->orWhere('name','like', "%{$request->input}%")
+                            ->whereType('customers')->orderBy('name')
+                            ->whereIn('identity_document_type_id',$identity_document_type_id)
+                            ->get()->transform(function($row) {
+                                return [
+                                    'id' => $row->id,
+                                    'description' => $row->number.' - '.$row->name,
+                                    'name' => $row->name,
+                                    'number' => $row->number,
+                                    'identity_document_type_id' => $row->identity_document_type_id,
+                                    'identity_document_type_code' => $row->identity_document_type->code
+                                ];
+                            }); 
 
         return compact('customers');
     }
