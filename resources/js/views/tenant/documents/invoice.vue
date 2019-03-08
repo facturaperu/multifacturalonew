@@ -81,7 +81,7 @@
                                     </label>
                                     <el-select v-model="form.customer_id" filterable remote class="border-left rounded-left border-info" popper-class="el-select-customers" 
                                         dusk="customer_id"                                    
-                                        placeholder="Escriba el nombre del cliente"
+                                        placeholder="Escriba el nombre o número de documento del cliente"
                                         :remote-method="searchRemoteCustomers"
                                         :loading="loading_search">
 
@@ -336,8 +336,7 @@
         methods: {
 
               searchRemoteCustomers(input) {  
-
-                if (input !== '') {
+                if (input.length > 2) {
 
                     this.loading_search = true
                     let parameters = `input=${input}&document_type_id=${this.form.document_type_id}`
