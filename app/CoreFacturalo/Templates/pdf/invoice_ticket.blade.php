@@ -16,10 +16,10 @@
     <div class="text-center company_logo_box pt-5">
         <img src="data:{{mime_content_type(public_path("storage/uploads/logos/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/uploads/logos/{$company->logo}")))}}" alt="{{$company->name}}" class="company_logo_ticket contain">
     </div>
-@else
-    <div class="text-center company_logo_box pt-5">
-        <img src="{{ asset('logo/logo.jpg') }}" class="company_logo_ticket contain">
-    </div>
+{{--@else--}}
+    {{--<div class="text-center company_logo_box pt-5">--}}
+        {{--<img src="{{ asset('logo/logo.jpg') }}" class="company_logo_ticket contain">--}}
+    {{--</div>--}}
 @endif
 <table class="full-width">
     <tr>
@@ -29,7 +29,12 @@
         <td class="text-center"><h5>{{ 'RUC '.$company->number }}</h5></td>
     </tr>
     <tr>
-        <td class="text-center">{{ ($establishment->address !== '-')? $establishment->address : '' }}</td>
+        <td class="text-center">
+            {{ ($establishment->address !== '-')? $establishment->address : '' }}
+            {{ ($establishment->district_id !== '-')? ', '.$establishment->district->description : '' }}
+            {{ ($establishment->province_id !== '-')? ', '.$establishment->province->description : '' }}
+            {{ ($establishment->department_id !== '-')? '- '.$establishment->department->description : '' }}
+        </td>
     </tr>
     <tr>
         <td class="text-center">{{ ($establishment->email !== '-')? $establishment->email : '' }}</td>
@@ -46,13 +51,13 @@
 </table>
 <table class="full-width">
     <tr>
-        <td width="45%" class="pt-3"><p class="desc">Fecha de emisión:</p></td>
+        <td width="" class="pt-3"><p class="desc">F. Emisión:</p></td>
         <td width="" class="pt-3"><p class="desc">{{ $document->date_of_issue->format('Y-m-d') }}</p></td>
     </tr>
 
     @isset($invoice->date_of_due)
     <tr>
-        <td><p class="desc">Fecha de vencimiento:</p></td>
+        <td><p class="desc">F. Vencimiento:</p></td>
         <td><p class="desc">{{ $invoice->date_of_due->format('Y-m-d') }}</p></td>
     </tr>
     @endisset
@@ -68,7 +73,14 @@
     @if ($customer->address !== '')
         <tr>
             <td class="align-top"><p class="desc">Dirección:</p></td>
-            <td><p class="desc">{{ $customer->address }}</p></td>
+            <td>
+                <p class="desc">
+                    {{ $customer->address }}
+                    {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
+                    {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
+                    {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+                </p>
+            </td>
         </tr>
     @endif
     @if ($document->purchase_order)
@@ -77,15 +89,24 @@
             <td><p class="desc">{{ $document->purchase_order }}</p></td>
         </tr>
     @endif
-    @if ($document->guides)
-        @foreach($document->guides as $guide)
-            <tr>
-                <td><p class="desc">{{ $guide->document_type_id }}</p></td>
-                <td><p class="desc">{{ $guide->number }}</p></td>
-            </tr>
-        @endforeach
-    @endif
 </table>
+
+@if ($document->guides)
+{{--<strong>Guías:</strong>--}}
+<table>
+    @foreach($document->guides as $guide)
+        <tr>
+            @if(isset($guide->document_type_description))
+                <td>{{ $guide->document_type_description }}</td>
+            @else
+                <td>{{ $guide->document_type_id }}</td>
+            @endif
+            <td>:</td>
+            <td>{{ $guide->number }}</td>
+        </tr>
+    @endforeach
+</table>
+@endif
 <table class="full-width mt-10 mb-10">
     <thead class="">
     <tr>

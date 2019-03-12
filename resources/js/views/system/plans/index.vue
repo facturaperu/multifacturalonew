@@ -19,14 +19,13 @@
 								<div class="plan-ribbon-wrapper "></div>
 								<h3>{{row.name}}<span>S/ {{row.pricing}}</span></h3> 
 								<ul>
-                                    <template v-if="row.locked">
-									    <li><strong>Usuarios</strong> ilimitados</li>
-									    <li><strong>Comprobantes</strong> ilimitados</li>
-                                    </template>
-                                    <template v-else>
-                                        <li><strong>{{row.limit_users}}</strong> usuarios</li>
-                                        <li><strong>{{row.limit_documents}}</strong> comprobantes</li>
-                                    </template>
+ 
+                                    <li v-if="row.limit_users === 0"><strong>Usuarios</strong> ilimitados</li>
+                                    <li v-else><strong>{{row.limit_users}}</strong> usuarios</li>
+
+                                    <li v-if="row.limit_documents === 0"><strong>Comprobantes</strong> ilimitados</li>                                
+                                    <li v-else><strong>{{row.limit_documents}}</strong> comprobantes</li>
+                                
                                     <template v-for="(plan_document, i) in getDescriptions(row.plan_documents)">
                                         <li :key="i" v-if="plan_document">{{plan_document.description}}</li>
                                     </template>                                   

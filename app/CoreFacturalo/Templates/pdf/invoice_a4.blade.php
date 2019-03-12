@@ -19,16 +19,21 @@
                     <img src="data:{{mime_content_type(public_path("storage/uploads/logos/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/uploads/logos/{$company->logo}")))}}" alt="{{$company->name}}" class="company_logo" style="max-width: 150px;">
                 </div>
             </td>
-        @else
-            <td width="20%">
-                <img src="{{ asset('logo/logo.jpg') }}" class="company_logo" style="max-width: 150px">
-            </td>
+        {{--@else--}}
+            {{--<td width="20%">--}}
+                {{--<img src="{{ asset('logo/logo.jpg') }}" class="company_logo" style="max-width: 150px">--}}
+            {{--</td>--}}
         @endif
-        <td width="50%" class="pl-3">
+        <td width="100%" class="pl-3">
             <div class="text-left">
                 <h4 class="">{{ $company->name }}</h4>
                 <h5>{{ 'RUC '.$company->number }}</h5>
-                <h6>{{ ($establishment->address !== '-')? $establishment->address : '' }}</h6>
+                <h6>
+                    {{ ($establishment->address !== '-')? $establishment->address : '' }}
+                    {{ ($establishment->district_id !== '-')? ', '.$establishment->district->description : '' }}
+                    {{ ($establishment->province_id !== '-')? ', '.$establishment->province->description : '' }}
+                    {{ ($establishment->department_id !== '-')? '- '.$establishment->department->description : '' }}
+                </h6>
                 <h6>{{ ($establishment->email !== '-')? $establishment->email : '' }}</h6>
                 <h6>{{ ($establishment->telephone !== '-')? $establishment->telephone : '' }}</h6>
             </div>
@@ -57,7 +62,12 @@
     @if ($customer->address !== '')
     <tr>
         <td class="align-top">Dirección:</td>
-        <td colspan="3">{{ $customer->address }}</td>
+        <td colspan="3">
+            {{ $customer->address }}
+            {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
+            {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
+            {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+        </td>
     </tr>
     @endif
 </table>
@@ -66,18 +76,29 @@
     @if ($document->purchase_order)
         <tr>
             <td width="25%">Orden de Compra: </td>
+            <td>:</td>
             <td class="text-left">{{ $document->purchase_order }}</td>
         </tr>
     @endif
-    @if ($document->guides)
-        @foreach($document->guides as $guide)
-            <tr>
-                <td>{{ $guide->document_type_id }}</td>
-                <td>{{ $guide->number }}</td>
-            </tr>
-        @endforeach
-    @endif
 </table>
+
+@if ($document->guides)
+<br/>
+{{--<strong>Guías:</strong>--}}
+<table>
+    @foreach($document->guides as $guide)
+        <tr>
+            @if(isset($guide->document_type_description))
+            <td>{{ $guide->document_type_description }}</td>
+            @else
+            <td>{{ $guide->document_type_id }}</td>
+            @endif
+            <td>:</td>
+            <td>{{ $guide->number }}</td>
+        </tr>
+    @endforeach
+</table>
+@endif
 
 <table class="full-width mt-10 mb-10">
     <thead class="">

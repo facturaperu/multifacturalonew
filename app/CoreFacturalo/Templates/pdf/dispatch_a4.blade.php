@@ -22,7 +22,12 @@
             <div class="text-left">
                 <h3 class="">{{ $company->name }}</h3>
                 <h4>{{ 'RUC '.$company->number }}</h4>
-                <h5>{{ ($establishment->address !== '-')? $establishment->address : '' }}</h5>
+                <h5>
+                    {{ ($establishment->address !== '-')? $establishment->address : '' }}
+                    {{ ($establishment->district_id !== '-')? ', '.$establishment->district->description : '' }}
+                    {{ ($establishment->province_id !== '-')? ', '.$establishment->province->description : '' }}
+                    {{ ($establishment->department_id !== '-')? '- '.$establishment->department->description : '' }}
+                </h5>
                 <h5>{{ ($establishment->email !== '-')? $establishment->email : '' }}</h5>
                 <h5>{{ ($establishment->telephone !== '-')? $establishment->telephone : '' }}</h5>
             </div>
@@ -44,7 +49,11 @@
         <td>Razón Social: {{ $customer->name }}</td>
     </tr>
     <tr>
-        <td>RUC: {{ $customer->number }}</td>
+        <td>RUC: {{ $customer->number }}
+                 {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
+                 {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
+                 {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+        </td>
     </tr>
     <tr>
         <td>Dirección: {{ $customer->address }}</td>

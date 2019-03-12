@@ -12,8 +12,7 @@ class DocumentCollection extends ResourceCollection
      * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
-    public function toArray($request)
-    {
+    public function toArray($request) {
         return $this->collection->transform(function($row, $key) {
             $has_xml = true;
             $has_pdf = true;
@@ -22,34 +21,37 @@ class DocumentCollection extends ResourceCollection
             $btn_resend = false;
             $btn_voided = false;
             $btn_consult_cdr = false;
-
+            
             $affected_document = null;
-
-            if($row->group_id === '01') {
-                if($row->state_type_id === '01') {
+            
+            if ($row->group_id === '01') {
+                if ($row->state_type_id === '01') {
                     $btn_resend = true;
                 }
-                if($row->state_type_id === '05') {
+                
+                if ($row->state_type_id === '05') {
                     $has_cdr = true;
                     $btn_note = true;
                     $btn_resend = false;
                     $btn_voided = true;
                     $btn_consult_cdr = true;
                 }
+                
                 if(in_array($row->document_type_id, ['07', '08'])) {
                     $btn_note = false;
                 }
             }
-            if($row->group_id === '02') {
-                if($row->state_type_id === '05') {
+            if ($row->group_id === '02') {
+                if ($row->state_type_id === '05') {
                     $btn_note = true;
                     $btn_voided = true;
                 }
-                if(in_array($row->document_type_id, ['07', '08'])) {
+                
+                if (in_array($row->document_type_id, ['07', '08'])) {
                     $btn_note = false;
                 }
             }
-
+            
             return [
                 'id' => $row->id,
                 'group_id' => $row->group_id,
@@ -87,6 +89,9 @@ class DocumentCollection extends ResourceCollection
 //                'has_cdr_voided' => $has_cdr_voided,
 //                'download_xml_voided' => $download_xml_voided,
 //                'download_cdr_voided' => $download_cdr_voided,
+                'shipping_status' => json_decode($row->shipping_status) ,
+                'sunat_shipping_status' => json_decode($row->sunat_shipping_status) ,
+                'query_status' => json_decode($row->query_status) ,
                 'created_at' => $row->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $row->updated_at->format('Y-m-d H:i:s'),
             ];

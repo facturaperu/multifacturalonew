@@ -321,8 +321,8 @@
             @if($row->attributes)
             @foreach($row->attributes as $attr)
             <cac:AdditionalItemProperty>
-                <cbc:Name>{{ $attr->name }}</cbc:Name>
-                <cbc:NameCode>{{ $attr->code }}</cbc:NameCode>
+                <cbc:Name><![CDATA[{{ $attr->description }}]]></cbc:Name>
+                <cbc:NameCode>{{ $attr->attribute_type_id }}</cbc:NameCode>
                 @if($attr->value)
                 <cbc:Value>{{ $attr->value }}</cbc:Value>
                 @endif

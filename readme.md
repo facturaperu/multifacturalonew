@@ -8,9 +8,11 @@ Estamos enfocados en crear herramientas y soluciones para desarrolladores de sof
 
 Para conocer el proceso de instalación del facturador, visite la documentación
 
-[Manual - forge](https://docs.google.com/document/d/1NVV2yv8ys8tjdz5ByvEPhIUdm0GJ95XiB-iMlElaJTA/edit# "Clic")
+[Manual - Forge](https://docs.google.com/document/d/1NVV2yv8ys8tjdz5ByvEPhIUdm0GJ95XiB-iMlElaJTA/edit# "Clic")
 <br>
-[Manual - windows - linux](https://drive.google.com/open?id=1Jf0vgGvx27MbOB4JYsk9Gzgd5QIl32j35pwU1LI_Woo "Clic")
+[Manual - Windows - Linux](https://drive.google.com/open?id=1Jf0vgGvx27MbOB4JYsk9Gzgd5QIl32j35pwU1LI_Woo "Clic")
+<br>
+[Manual - Docker - Linux](https://docs.google.com/document/d/1E8jOrnbASjzBqhvgjhlJdhHExUjq4A0DoRKhkFEuFyY/edit?usp=sharing "Clic")
 
 ## Manejo del facturador
 
@@ -39,6 +41,10 @@ Visite el siguiente enlace: [FACTURADOR PRO](http://demo.2facturaloperuonline.co
 <br>
 Usuario: demo@gmail.com<br>
 Contraseña: 123456
+
+## Actualización Docker-Git
+
+Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/11PI1a9yjCPfH9CCuWmJSrdj1V8IEUffqurqvdkw29co/edit?usp=sharing "Clic")
 
 ## Cambio de entornos (Prueba - Producción)
 

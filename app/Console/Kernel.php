@@ -23,11 +23,8 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule) {
-        $schedule->command('tenancy:run summary:send')
-            ->dailyAt('02:00');
-        
-        $schedule->command('tenancy:run summary:query')
-            ->dailyAt('03:00');
+        $schedule->command('tenancy:run tenant:run')
+            ->everyMinute();
     }
     
     /**

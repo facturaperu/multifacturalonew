@@ -23,7 +23,13 @@ if ($hostname) {
             Route::get('dashboard', 'Tenant\HomeController@index')->name('tenant.dashboard');
             Route::get('catalogs', 'Tenant\CatalogController@index')->name('tenant.catalogs.index');
             Route::get('advanced', 'Tenant\AdvancedController@index')->name('tenant.advanced.index');
-
+            
+            Route::get('tasks', 'Tenant\TaskController@index')->name('tenant.tasks.index');
+            Route::post('tasks/commands', 'Tenant\TaskController@listsCommand');
+            Route::post('tasks/tables', 'Tenant\TaskController@tables');
+            Route::post('tasks', 'Tenant\TaskController@store');
+            Route::delete('tasks/{task}', 'Tenant\TaskController@destroy');
+            
             //Company
             Route::get('companies/create', 'Tenant\CompanyController@create')->name('tenant.companies.create');
             Route::get('companies/tables', 'Tenant\CompanyController@tables');
@@ -123,6 +129,9 @@ if ($hostname) {
             Route::post('persons/import', 'Tenant\PersonController@import');
 
             //Documents
+            Route::get('documents/search/customers', 'Tenant\DocumentController@searchCustomers');
+            Route::get('documents/search/customer/{id}', 'Tenant\DocumentController@searchCustomerById');
+
             Route::get('documents', 'Tenant\DocumentController@index')->name('tenant.documents.index');
             Route::get('documents/columns', 'Tenant\DocumentController@columns');
             Route::get('documents/records', 'Tenant\DocumentController@records');
@@ -137,7 +146,7 @@ if ($hostname) {
             Route::get('documents/item/tables', 'Tenant\DocumentController@item_tables');
             Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
 
-            Route::get('documents/send_server/{document}', 'Tenant\DocumentController@sendServer');
+            Route::get('documents/send_server/{document}/{query?}', 'Tenant\DocumentController@sendServer');
             Route::get('documents/check_server/{document}', 'Tenant\DocumentController@checkServer');
 
             //Summaries
@@ -196,9 +205,12 @@ if ($hostname) {
             Route::post('reports/kardex/search', 'Tenant\ReportKardexController@search')->name('tenant.reports.kardex.search');
             Route::post('reports/kardex/pdf', 'Tenant\ReportKardexController@pdf')->name('tenant.report.kardex.pdf');
             Route::post('reports/kardex/excel', 'Tenant\ReportKardexController@excel')->name('tenant.report.kardex.report_excel');
-
+            
+            Route::get('reports/consistency-documents', 'Tenant\ReportConsistencyDocumentController@index')->name('tenant.consistency-documents.index');
+            Route::post('reports/consistency-documents/lists', 'Tenant\ReportConsistencyDocumentController@lists');
+            
             Route::post('options/delete_documents', 'Tenant\OptionController@deleteDocuments');
-
+            
             Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
             Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
             Route::post('services/exchange_rate', 'Tenant\Api\ServiceController@exchange_rate');
