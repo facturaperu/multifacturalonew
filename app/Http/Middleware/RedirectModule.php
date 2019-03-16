@@ -90,6 +90,10 @@ class RedirectModule
             $group = "documents";
             
         }
+        elseif($path[0] == "quotations"){
+            $group = "documents";
+            
+        }
         elseif($path[0] == "items"){
             $group = "documents";
             

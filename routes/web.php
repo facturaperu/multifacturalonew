@@ -284,6 +284,20 @@ if ($hostname) {
             Route::get('purchases/item/tables', 'Tenant\PurchaseController@item_tables');
             // Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
 
+            //quotations
+            Route::get('quotations', 'Tenant\QuotationController@index')->name('tenant.quotations.index');
+            Route::get('quotations/columns', 'Tenant\QuotationController@columns');
+            Route::get('quotations/records', 'Tenant\QuotationController@records');
+            Route::get('quotations/create', 'Tenant\QuotationController@create')->name('tenant.quotations.create');
+            Route::get('quotations/tables', 'Tenant\QuotationController@tables');
+            Route::get('quotations/table/{table}', 'Tenant\QuotationController@table');
+            Route::post('quotations', 'Tenant\QuotationController@store');
+            Route::get('quotations/record/{document}', 'Tenant\QuotationController@record'); 
+            Route::get('quotations/item/tables', 'Tenant\QuotationController@item_tables');
+            Route::get('quotations/option/tables', 'Tenant\QuotationController@option_tables');
+            Route::get('quotations/search/customers', 'Tenant\QuotationController@searchCustomers');
+            Route::get('quotations/search/customer/{id}', 'Tenant\QuotationController@searchCustomerById');
+
         });
     });
 } else {
