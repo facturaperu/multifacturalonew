@@ -3,13 +3,20 @@
         <el-dialog :title="titleDialog" :visible="showDialog" @open="create" width="30%"
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
-                :show-close="false">
-
-            
-            <div class="row">
-                <div class="col-md-4">
+                :show-close="false"> 
+            <div class="row" v-show="!showGenerate">
+                <div class="col-lg-12 col-md-12 col-sm-12 text-center font-weight-bold">
+                    <p>Descargar PDF</p>
+                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickDownload()">
+                        <i class="fa fa-file-alt"></i>
+                    </button>
+                </div> 
+            </div>
+            <br>
+            <div class="row"> 
+                <div class="col-md-9" v-show="!showGenerate">
                     <div class="form-group"> 
-                        <el-checkbox v-model="generate" v-show="!showGenerate">Generar comprobante electrónico</el-checkbox>                            
+                        <el-checkbox v-model="generate" >Generar comprobante electrónico</el-checkbox>                            
                     </div>
                 </div>
             </div>
@@ -248,6 +255,9 @@
                 this.initForm()
                 this.resetDocument()
             },
+            clickDownload(){
+                window.open(`/downloads/quotation/quotation/${this.form.external_id}`, '_blank');
+            }
         }
     }
 </script>

@@ -187,7 +187,6 @@
                 all_customers: [], 
                 customers: [],
                 company: null,
-                document_type_03_filter: null, 
                 establishments: [],
                 establishment: null, 
                 currency_type: {},
@@ -213,7 +212,7 @@
                     this.changeEstablishment()
                     this.changeDateOfIssue() 
                     this.changeCurrencyType()
-                    this.filterCustomers()
+                    this.allCustomers()
                 })
             this.loading_form = true
             this.$eventHub.$on('reloadDataPersons', (customer_id) => {
@@ -226,16 +225,16 @@
                   
                 if (input.length > 0) { 
                     this.loading_search = true
-                    let parameters = `input=${input}&document_type_id=${this.form.document_type_id}`
+                    let parameters = `input=${input}`
 
                     this.$http.get(`/${this.resource}/search/customers?${parameters}`)
                             .then(response => { 
                                 this.customers = response.data.customers
                                 this.loading_search = false
-                                if(this.customers.length == 0){this.filterCustomers()}
+                                if(this.customers.length == 0){this.allCustomers()}
                             })  
                 } else { 
-                    this.filterCustomers()
+                    this.allCustomers()
                 }
 
             },
@@ -287,6 +286,7 @@
                 this.changeEstablishment() 
                 this.changeDateOfIssue()
                 this.changeCurrencyType()
+                this.allCustomers()
             }, 
             changeEstablishment() {
                 this.establishment = _.find(this.establishments, {'id': this.form.establishment_id})
@@ -301,17 +301,8 @@
                     this.form.exchange_rate_sale = response
                 })
             }, 
-            filterCustomers() {
-                 
-                if(this.form.document_type_id === '01') {
-                    this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
-                } else {
-                    if(this.document_type_03_filter) {
-                        this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
-                    } else {
-                        this.customers = this.all_customers
-                    }
-                }
+            allCustomers() {
+                this.customers = this.all_customers
             }, 
             addRow(row) {
                 this.form.items.push(row)

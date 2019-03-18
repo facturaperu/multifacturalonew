@@ -26,7 +26,7 @@
                         <th class="text-right">T.Gravado</th>
                         <th class="text-right">T.Igv</th>
                         <th class="text-right">Total</th>
-                        <!-- <th class="text-center">Descargas</th> -->
+                        <th class="text-center">Descargas</th>
                         <th class="text-right">Acciones</th>
                     <tr>
                     <tr slot-scope="{ index, row }">
@@ -44,10 +44,14 @@
                         <td class="text-right">{{ row.total_taxed }}</td>
                         <td class="text-right">{{ row.total_igv }}</td>
                         <td class="text-right">{{ row.total }}</td>
+                        <td class="text-right">
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickDownload(row.external_id)">PDF</button>
+                        </td>
                         
                         <td class="text-right"> 
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
-                                    @click.prevent="clickOptions(row.id)"><i class="fas fa-file-alt"></i> Generar comprobante</button>
+                                    @click.prevent="clickOptions(row.id)">Generar comprobante</button>
                         </td>
                     </tr>
                 </data-table>
@@ -79,8 +83,8 @@
         created() {
         },
         methods: { 
-            clickDownload(download) {
-                window.open(download, '_blank');
+            clickDownload(external_id) {
+                window.open(`/downloads/quotation/quotation/${external_id}`, '_blank');                
             },  
             clickOptions(recordId = null) {
                 this.recordId = recordId

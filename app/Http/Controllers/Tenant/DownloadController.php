@@ -34,7 +34,11 @@ class DownloadController extends Controller
                 break;
             case 'cdr':
                 $folder = 'cdr';
-                break;
+                break;                
+            case 'quotation':
+                $folder = 'quotation';
+            break;
+
             default:
                 throw new Exception('Tipo de archivo a descargar es inválido');
         }

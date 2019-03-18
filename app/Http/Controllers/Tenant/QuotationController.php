@@ -25,10 +25,17 @@ use App\Http\Requests\Tenant\QuotationRequest;
 use Illuminate\Support\Str;
 use App\CoreFacturalo\Requests\Inputs\Common\PersonInput;
 use App\CoreFacturalo\Requests\Inputs\Common\EstablishmentInput;
+use App\CoreFacturalo\Helpers\Storage\StorageDocument;
+use App\CoreFacturalo\Template;
+use Mpdf\Mpdf;
 
 class QuotationController extends Controller
 {
+
+    use StorageDocument;
+
     protected $quotation;
+    protected $company;
     
     public function index()
     {
@@ -57,15 +64,11 @@ class QuotationController extends Controller
     }
 
     public function searchCustomers(Request $request)
-    {
-
-        //tru de boletas en env esta en true filtra a los con dni   , false a todos
-        $identity_document_type_id = $this->getIdentityDocumentTypeId($request->document_type_id);     
+    {    
          
         $customers = Person::where('number','like', "%{$request->input}%")
                             ->orWhere('name','like', "%{$request->input}%")
-                            ->whereType('customers')->orderBy('name')
-                            ->whereIn('identity_document_type_id',$identity_document_type_id)
+                            ->whereType('customers')->orderBy('name') 
                             ->get()->transform(function($row) {
                                 return [
                                     'id' => $row->id,
@@ -128,7 +131,7 @@ class QuotationController extends Controller
 
     public function store(QuotationRequest $request)
     {
-        $data = self::mergeData($request);
+        $data = $this->mergeData($request);
         $this->quotation = DB::connection('tenant')->transaction(function () use ($data) {
             
             $instance_quotation = Quotation::create($data);
@@ -141,6 +144,7 @@ class QuotationController extends Controller
         });       
         
         $this->setFilename();
+        $this->createPdf();
 
         return [
             'success' => true,
@@ -150,15 +154,17 @@ class QuotationController extends Controller
         ];
     }
 
-    public static function mergeData($inputs)
+    public function mergeData($inputs)
     {
-        $company = Company::active();
+
+        $this->company = Company::active();
+
         $values = [
             'user_id' => auth()->id(),
             'external_id' => Str::uuid()->toString(),
             'customer' => PersonInput::set($inputs['customer_id']),
             'establishment' => EstablishmentInput::set($inputs['establishment_id']),
-            'soap_type_id' => $company->soap_type_id, 
+            'soap_type_id' => $this->company->soap_type_id, 
             'state_type_id' => '01'
         ]; 
 
@@ -175,12 +181,31 @@ class QuotationController extends Controller
 
     }
 
+    public function createPdf() {
+
+        $template = new Template();
+        $pdf = new Mpdf();   
+        $document = $this->quotation;
+        
+        $html = $template->pdf("quotation", $this->company, $document,"a4");
+        $pdf->WriteHTML($html); 
+       
+
+        $this->uploadFile($pdf->output('', 'S'), 'quotation');
+    }
+
+    public function uploadFile($file_content, $file_type)
+    {
+        $this->uploadStorage($this->quotation->filename, $file_content, $file_type);
+    }
+
+
     public function table($table)
     {
         switch ($table) {
             case 'customers':
 
-                $customers = Person::whereType('customers')->orderBy('name')->get()->transform(function($row) {
+                $customers = Person::whereType('customers')->orderBy('name')->take(20)->get()->transform(function($row) {
                     return [
                         'id' => $row->id,
                         'description' => $row->number.' - '.$row->name,
@@ -240,19 +265,5 @@ class QuotationController extends Controller
 
         return compact('customers');
     }
-
-    public function getIdentityDocumentTypeId($document_type_id){
-
-        if($document_type_id == '01'){
-            $identity_document_type_id = [6];
-        }else{
-            if(config('tenant.document_type_03_filter')){
-                $identity_document_type_id = [1];
-            }else{
-                $identity_document_type_id = [1,4,6,7,0];
-            }
-        } 
-
-        return $identity_document_type_id;
-    }
+ 
 }
