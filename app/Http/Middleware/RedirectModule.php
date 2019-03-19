@@ -20,19 +20,22 @@ class RedirectModule
         $path = explode('/', $request->path());
         $modules = $request->user()->getModules();
 
-        if(!$request->ajax()){
+        if(! $request->ajax()){
 
             if(count($modules)){
                 
-                $group = $this->getGroup($path);
-                if($group){
+                if(count($modules) < 5){
 
-                    if($this->getModuleByGroup($modules,$group) === 0){ 
-                        return $this->redirectRoute($module);                    
-                    }     
-
-                }
-                                     
+                    $group = $this->getGroup($path, $module);
+                    if($group){
+    
+                        if($this->getModuleByGroup($modules,$group) === 0){ 
+                            return $this->redirectRoute($module);                    
+                        }     
+    
+                    }
+                }                
+                                   
             }
         }
  
@@ -75,7 +78,7 @@ class RedirectModule
     }
 
 
-    private function getGroup($path){
+    private function getGroup($path, $module){
          
         ///* Module Documents */
         
@@ -84,6 +87,10 @@ class RedirectModule
 
         }
         elseif($path[0] == "dashboard"){
+            $group = "documents";
+            
+        }
+        elseif($path[0] == "quotations"){
             $group = "documents";
             
         }
@@ -143,7 +150,7 @@ class RedirectModule
             
             $group = "configuration";
 
-            if(count($path)>1 && $path[1] == "uploads"){
+            if(count($path) > 0 && $path[1] == "uploads" && $module == "documents"){
                 $group = "documents";
             }
             
@@ -172,6 +179,7 @@ class RedirectModule
         }else{
             $group = null;
         } 
+        
         return $group;
     }
  

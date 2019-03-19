@@ -1,14 +1,15 @@
 <?php
 namespace App\Http\Controllers\Tenant\Api;
 
-use App\CoreFacturalo\Facturalo;
+use Facades\App\Http\Controllers\Tenant\DocumentController as DocumentControllerSend;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
-use App\CoreFacturalo\WS\Zip\ZipFly;
 use App\Http\Controllers\Controller;
-use App\Models\Tenant\Document;
-use Exception;
-use Illuminate\Http\Request;
+use App\CoreFacturalo\WS\Zip\ZipFly;
 use Illuminate\Support\Facades\DB;
+use App\CoreFacturalo\Facturalo;
+use App\Models\Tenant\Document;
+use Illuminate\Http\Request;
+use Exception;
 
 class DocumentController extends Controller
 {
@@ -108,6 +109,9 @@ class DocumentController extends Controller
         $document->hash = $data_json->hash;
         $document->qr = $data_json->qr;
         $document->save();
+        
+        // Send SUNAT
+        if ($data_json->query) DocumentControllerSend::send($document->id);
         
         return [
             'success' => true,

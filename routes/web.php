@@ -129,6 +129,9 @@ if ($hostname) {
             Route::post('persons/import', 'Tenant\PersonController@import');
 
             //Documents
+            Route::get('documents/search/customers', 'Tenant\DocumentController@searchCustomers');
+            Route::get('documents/search/customer/{id}', 'Tenant\DocumentController@searchCustomerById');
+
             Route::get('documents', 'Tenant\DocumentController@index')->name('tenant.documents.index');
             Route::get('documents/columns', 'Tenant\DocumentController@columns');
             Route::get('documents/records', 'Tenant\DocumentController@records');
@@ -143,7 +146,7 @@ if ($hostname) {
             Route::get('documents/item/tables', 'Tenant\DocumentController@item_tables');
             Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
 
-            Route::get('documents/send_server/{document}', 'Tenant\DocumentController@sendServer');
+            Route::get('documents/send_server/{document}/{query?}', 'Tenant\DocumentController@sendServer');
             Route::get('documents/check_server/{document}', 'Tenant\DocumentController@checkServer');
 
             //Summaries
@@ -280,6 +283,20 @@ if ($hostname) {
             // Route::get('documents/note/{document}', 'Tenant\NoteController@create');
             Route::get('purchases/item/tables', 'Tenant\PurchaseController@item_tables');
             // Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
+
+            //quotations
+            Route::get('quotations', 'Tenant\QuotationController@index')->name('tenant.quotations.index');
+            Route::get('quotations/columns', 'Tenant\QuotationController@columns');
+            Route::get('quotations/records', 'Tenant\QuotationController@records');
+            Route::get('quotations/create', 'Tenant\QuotationController@create')->name('tenant.quotations.create');
+            Route::get('quotations/tables', 'Tenant\QuotationController@tables');
+            Route::get('quotations/table/{table}', 'Tenant\QuotationController@table');
+            Route::post('quotations', 'Tenant\QuotationController@store');
+            Route::get('quotations/record/{document}', 'Tenant\QuotationController@record'); 
+            Route::get('quotations/item/tables', 'Tenant\QuotationController@item_tables');
+            Route::get('quotations/option/tables', 'Tenant\QuotationController@option_tables');
+            Route::get('quotations/search/customers', 'Tenant\QuotationController@searchCustomers');
+            Route::get('quotations/search/customer/{id}', 'Tenant\QuotationController@searchCustomerById');
 
         });
     });

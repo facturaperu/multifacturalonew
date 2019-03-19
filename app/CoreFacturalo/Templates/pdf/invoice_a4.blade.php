@@ -4,6 +4,7 @@
     $invoice = $document->invoice;
     $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
+    $accounts = \App\Models\Tenant\BankAccount::all();
 @endphp
 <html>
 <head>
@@ -21,7 +22,7 @@
             </td>
         @else
             <td width="20%">
-                <img src="{{ asset('logo/logo.jpg') }}" class="company_logo" style="max-width: 150px">
+                {{--<img src="{{ asset('logo/logo.jpg') }}" class="company_logo" style="max-width: 150px">--}}
             </td>
         @endif
         <td width="50%" class="pl-3">
@@ -76,45 +77,56 @@
     @if ($document->purchase_order)
         <tr>
             <td width="25%">Orden de Compra: </td>
+            <td>:</td>
             <td class="text-left">{{ $document->purchase_order }}</td>
         </tr>
     @endif
-    @if ($document->guides)
-        @foreach($document->guides as $guide)
-            <tr>
-                <td>{{ $guide->document_type_id }}</td>
-                <td>{{ $guide->number }}</td>
-            </tr>
-        @endforeach
-    @endif
 </table>
+
+@if ($document->guides)
+<br/>
+{{--<strong>Guías:</strong>--}}
+<table>
+    @foreach($document->guides as $guide)
+        <tr>
+            @if(isset($guide->document_type_description))
+            <td>{{ $guide->document_type_description }}</td>
+            @else
+            <td>{{ $guide->document_type_id }}</td>
+            @endif
+            <td>:</td>
+            <td>{{ $guide->number }}</td>
+        </tr>
+    @endforeach
+</table>
+@endif
 
 <table class="full-width mt-10 mb-10">
     <thead class="">
     <tr class="bg-grey">
-        <th class="border-top-bottom text-center py-2">CANT.</th>
-        <th class="border-top-bottom text-center py-2">UNIDAD</th>
+        <th class="border-top-bottom text-center py-2" width="8%">CANT.</th>
+        <th class="border-top-bottom text-center py-2" width="8%">UNIDAD</th>
         <th class="border-top-bottom text-left py-2">DESCRIPCIÓN</th>
-        <th class="border-top-bottom text-right py-2">P.UNIT</th>
-        <th class="border-top-bottom text-right py-2">DTO.</th>
-        <th class="border-top-bottom text-right py-2">TOTAL</th>
+        <th class="border-top-bottom text-right py-2" width="8%">P.UNIT</th>
+        <th class="border-top-bottom text-right py-2" width="8%">DTO.</th>
+        <th class="border-top-bottom text-right py-2" width="8%">TOTAL</th>
     </tr>
     </thead>
     <tbody>
     @foreach($document->items as $row)
         <tr>
-            <td class="text-center align-top">{{ $row->quantity }}</td>
+            <td class="text-center align-top">{{ number_format($row->quantity, 0) }}</td>
             <td class="text-center align-top">{{ $row->item->unit_type_id }}</td>
             <td class="text-left">
                 {!! $row->item->description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
-                        <br/>{!! $attr->description !!} : {{ $attr->value }}
+                        <br/><span style="font-size: 9px">{!! $attr->description !!} : {{ $attr->value }}</span>
                     @endforeach
                 @endif
                 @if($row->discounts)
                     @foreach($row->discounts as $dtos)
-                        <br/><small>{{ $dtos->factor * 100 }}% {{$dtos->description }}</small>
+                        <br/><span style="font-size: 9px">{{ $dtos->factor * 100 }}% {{$dtos->description }}</span>
                     @endforeach
                 @endif
             </td>
@@ -186,17 +198,27 @@
 </table>
 <table class="full-width">
     <tr>
-        <td width="65%">
+        <td width="65%" style="text-align: top; vertical-align: top;">
             @foreach($document->legends as $row)
                 <p>Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></p>
             @endforeach
             <br/>
-            <strong>Información adicional</strong>
             @foreach($document->additional_information as $information)
-                <p>{{ $information }}</p>
+                @if ($information)
+                    @if ($loop->first)
+                        <strong>Información adicional</strong>
+                    @endif
+                    <p>{{ $information }}</p>
+                @endif
             @endforeach
-            <div class="text-left"><img class="qr_code" src="data:image/png;base64, {{ $document->qr }}" /></div>
-            <p>Código Hash: {{ $document->hash }}</p>
+            <br>
+            @foreach($accounts as $account)
+                <p><span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} {{$account->number}}</p>
+            @endforeach
+        </td>
+        <td width="35%" class="text-right">
+            <img src="data:image/png;base64, {{ $document->qr }}" style="margin-right: -10px;" />
+            <p style="font-size: 9px">Código Hash: {{ $document->hash }}</p>
         </td>
     </tr>
 </table>

@@ -6,7 +6,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.identity_document_type_id}">
                             <label class="control-label">Tipo Doc. Identidad <span class="text-danger">*</span></label>
-                            <el-select v-model="form.identity_document_type_id" filterable  popper-class="el-select-identity_document_type" dusk="identity_document_type_id" >
+                            <el-select v-model="form.identity_document_type_id" filterable  popper-class="el-select-identity_document_type" dusk="identity_document_type_id" @change="changeIdentityDocType">
                                 <el-option v-for="option in identity_document_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.identity_document_type_id" v-text="errors.identity_document_type_id[0]"></small>
@@ -232,6 +232,20 @@
                     .then(() => {
                         this.loading_submit = false
                     })
+            },
+            changeIdentityDocType(){
+                (this.recordId == null) ? this.setDataDefaultCustomer() : null 
+            },
+            setDataDefaultCustomer(){
+
+                if(this.form.identity_document_type_id == '0'){
+                    this.form.number = 99999999
+                    this.form.name = "Clientes - Varios"
+                }else{
+                    this.form.number = null
+                    this.form.name = null
+                }
+
             },
             close() {
                 this.$emit('update:showDialog', false)

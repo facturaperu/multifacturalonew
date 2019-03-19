@@ -70,6 +70,9 @@ Vue.component('tenant-tasks-lists', require('./views/tenant/tasks/lists.vue'));
 Vue.component('tenant-tasks-form', require('./views/tenant/tasks/form.vue'));
 Vue.component('tenant-reports-consistency-documents-lists', require('./views/tenant/reports/consistency-documents/lists.vue'));
 
+Vue.component('tenant-quotations-index', require('./views/tenant/quotations/index.vue'));
+Vue.component('tenant-quotations-form', require('./views/tenant/quotations/form.vue')); 
+
 // System
 Vue.component('system-clients-index', require('./views/system/clients/index.vue'));
 Vue.component('system-clients-form', require('./views/system/clients/form.vue'));
