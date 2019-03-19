@@ -122,12 +122,12 @@
 <table class="full-width mt-10 mb-10">
     <thead class="">
     <tr class="bg-grey">
-        <th class="border-top-bottom text-center py-2">CANT.</th>
-        <th class="border-top-bottom text-center py-2">UNIDAD</th>
+        <th class="border-top-bottom text-center py-2" width="8%">CANT.</th>
+        <th class="border-top-bottom text-center py-2" width="8%">UNIDAD</th>
         <th class="border-top-bottom text-left py-2">DESCRIPCIÓN</th>
-        <th class="border-top-bottom text-right py-2">P.UNIT</th>
-        <th class="border-top-bottom text-right py-2">DTO.</th>
-        <th class="border-top-bottom text-right py-2">TOTAL</th>
+        <th class="border-top-bottom text-right py-2" width="8%">P.UNIT</th>
+        <th class="border-top-bottom text-right py-2" width="8%">DTO.</th>
+        <th class="border-top-bottom text-right py-2" width="8%">TOTAL</th>
     </tr>
     </thead>
     <tbody>
@@ -139,12 +139,12 @@
                 {!! $row->item->description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
-                        <br/>{!! $attr->description !!} : {{ $attr->value }}
+                        <br/><span style="font-size: 9px">{!! $attr->description !!} : {{ $attr->value }}</span>
                     @endforeach
                 @endif
                 @if($row->discounts)
                     @foreach($row->discounts as $dtos)
-                        <br/><small>{{ $dtos->factor * 100 }}% {{$dtos->description }}</small>
+                        <br/><span style="font-size: 9px">{{ $dtos->factor * 100 }}% {{$dtos->description }}</span>
                     @endforeach
                 @endif
             </td>

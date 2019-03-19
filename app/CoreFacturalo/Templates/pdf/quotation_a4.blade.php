@@ -1,6 +1,6 @@
 @php
     $establishment = $document->establishment;
-    $customer = $document->customer; 
+    $customer = $document->customer;
     $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
     $tittle = $document->prefix.'-'.str_pad($document->id, 8, '0', STR_PAD_LEFT);
 @endphp
@@ -17,9 +17,13 @@
                 <div class="company_logo_box">
                     <img src="data:{{mime_content_type(public_path("storage/uploads/logos/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/uploads/logos/{$company->logo}")))}}" alt="{{$company->name}}" class="company_logo" style="max-width: 150px;">
                 </div>
-            </td> 
+            </td>
+        @else
+            <td width="20%">
+                {{--<img src="{{ asset('logo/logo.jpg') }}" class="company_logo" style="max-width: 150px">--}}
+            </td>
         @endif
-        <td width="100%" class="pl-3">
+        <td width="50%" class="pl-3">
             <div class="text-left">
                 <h4 class="">{{ $company->name }}</h4>
                 <h5>{{ 'RUC '.$company->number }}</h5>
@@ -48,7 +52,7 @@
     </tr>
     <tr>
         <td>{{ $customer->identity_document_type->description }}:</td>
-        <td>{{ $customer->number }}</td> 
+        <td>{{ $customer->number }}</td>
     </tr>
     @if ($customer->address !== '')
     <tr>
@@ -94,12 +98,12 @@
 <table class="full-width mt-10 mb-10">
     <thead class="">
     <tr class="bg-grey">
-        <th class="border-top-bottom text-center py-2">CANT.</th>
-        <th class="border-top-bottom text-center py-2">UNIDAD</th>
+        <th class="border-top-bottom text-center py-2" width="8%">CANT.</th>
+        <th class="border-top-bottom text-center py-2" width="8%">UNIDAD</th>
         <th class="border-top-bottom text-left py-2">DESCRIPCIÓN</th>
-        <th class="border-top-bottom text-right py-2">P.UNIT</th>
-        <th class="border-top-bottom text-right py-2">DTO.</th>
-        <th class="border-top-bottom text-right py-2">TOTAL</th>
+        <th class="border-top-bottom text-right py-2" width="8%">P.UNIT</th>
+        <th class="border-top-bottom text-right py-2" width="8%">DTO.</th>
+        <th class="border-top-bottom text-right py-2" width="8%">TOTAL</th>
     </tr>
     </thead>
     <tbody>
@@ -111,12 +115,12 @@
                 {!! $row->item->description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
-                        <br/>{!! $attr->description !!} : {{ $attr->value }}
+                        <br/><span style="font-size: 9px">{!! $attr->description !!} : {{ $attr->value }}</span>
                     @endforeach
                 @endif
                 @if($row->discounts)
                     @foreach($row->discounts as $dtos)
-                        <br/><small>{{ $dtos->factor * 100 }}% {{$dtos->description }}</small>
+                        <br/><span style="font-size: 9px">{{ $dtos->factor * 100 }}% {{$dtos->description }}</span>
                     @endforeach
                 @endif
             </td>

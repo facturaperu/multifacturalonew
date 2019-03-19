@@ -120,7 +120,7 @@
     <tbody>
     @foreach($document->items as $row)
         <tr>
-            <td class="text-center desc-9 align-top">{{ $row->quantity }}</td>
+            <td class="text-center desc-9 align-top">{{ number_format($row->quantity, 0) }}</td>
             <td class="text-center desc-9 align-top">{{ $row->item->unit_type_id }}</td>
             <td class="text-left desc-9 align-top">
                 {!! $row->item->description !!}

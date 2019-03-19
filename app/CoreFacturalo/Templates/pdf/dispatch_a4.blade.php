@@ -17,6 +17,10 @@
             <td width="10%">
                 <img src="data:{{mime_content_type(public_path("storage/uploads/logos/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/uploads/logos/{$company->logo}")))}}" alt="{{$company->name}}" alt="{{ $company->name }}"  class="company_logo" style="max-width: 300px">
             </td>
+        @else
+            <td width="10%">
+                {{--<img src="{{ asset('logo/logo.jpg') }}" class="company_logo" style="max-width: 150px">--}}
+            </td>
         @endif
         <td width="50%" class="pl-3">
             <div class="text-left">
