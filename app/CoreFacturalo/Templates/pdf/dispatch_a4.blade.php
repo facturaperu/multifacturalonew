@@ -123,7 +123,13 @@
             <td class="text-center">{{ $row->item->internal_id }}</td>
             <td class="text-left">{{ $row->item->description }}</td>
             <td class="text-center">{{ $row->item->unit_type_id }}</td>
-            <td class="text-right">{{ $row->quantity }}</td>
+            <td class="text-right">
+                @if(((int)$row->quantity != $row->quantity))
+                    {{ $row->quantity }}
+                @else
+                    {{ number_format($row->quantity, 0) }}
+                @endif
+            </td>
         </tr>
     @endforeach
     </tbody>

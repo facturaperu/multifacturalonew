@@ -250,7 +250,13 @@
     <tbody>
     @foreach($details as $row)
         <tr>
-            <td class="text-center">{{ $row->quantity }}</td>
+            <td class="text-center">
+                @if(((int)$row->quantity != $row->quantity))
+                    {{ $row->quantity }}
+                @else
+                    {{ number_format($row->quantity, 0) }}
+                @endif
+            </td>
             <td>{{ $row->item->unit_type_id }}</td>
             <td>
                 {!! $row->item->description !!}

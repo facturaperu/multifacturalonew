@@ -115,7 +115,13 @@
     <tbody>
     @foreach($document->items as $row)
         <tr>
-            <td class="text-center align-top">{{ number_format($row->quantity, 0) }}</td>
+            <td class="text-center align-top">
+                @if(((int)$row->quantity != $row->quantity))
+                    {{ $row->quantity }}
+                @else
+                    {{ number_format($row->quantity, 0) }}
+                @endif
+            </td>
             <td class="text-center align-top">{{ $row->item->unit_type_id }}</td>
             <td class="text-left">
                 {!! $row->item->description !!}
