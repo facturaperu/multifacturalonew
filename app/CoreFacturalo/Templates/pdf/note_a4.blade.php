@@ -122,29 +122,35 @@
 <table class="full-width mt-10 mb-10">
     <thead class="">
     <tr class="bg-grey">
-        <th class="border-top-bottom text-center py-2">CANT.</th>
-        <th class="border-top-bottom text-center py-2">UNIDAD</th>
+        <th class="border-top-bottom text-center py-2" width="8%">CANT.</th>
+        <th class="border-top-bottom text-center py-2" width="8%">UNIDAD</th>
         <th class="border-top-bottom text-left py-2">DESCRIPCIÓN</th>
-        <th class="border-top-bottom text-right py-2">P.UNIT</th>
-        <th class="border-top-bottom text-right py-2">DTO.</th>
-        <th class="border-top-bottom text-right py-2">TOTAL</th>
+        <th class="border-top-bottom text-right py-2" width="8%">P.UNIT</th>
+        <th class="border-top-bottom text-right py-2" width="8%">DTO.</th>
+        <th class="border-top-bottom text-right py-2" width="8%">TOTAL</th>
     </tr>
     </thead>
     <tbody>
     @foreach($document->items as $row)
         <tr>
-            <td class="text-center">{{ $row->quantity }}</td>
+            <td class="text-center">
+                @if(((int)$row->quantity != $row->quantity))
+                    {{ $row->quantity }}
+                @else
+                    {{ number_format($row->quantity, 0) }}
+                @endif
+            </td>
             <td class="text-center">{{ $row->item->unit_type_id }}</td>
             <td class="text-left">
                 {!! $row->item->description !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
-                        <br/>{!! $attr->description !!} : {{ $attr->value }}
+                        <br/><span style="font-size: 9px">{!! $attr->description !!} : {{ $attr->value }}</span>
                     @endforeach
                 @endif
                 @if($row->discounts)
                     @foreach($row->discounts as $dtos)
-                        <br/><small>{{ $dtos->factor * 100 }}% {{$dtos->description }}</small>
+                        <br/><span style="font-size: 9px">{{ $dtos->factor * 100 }}% {{$dtos->description }}</span>
                     @endforeach
                 @endif
             </td>
