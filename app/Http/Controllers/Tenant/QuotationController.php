@@ -131,20 +131,20 @@ class QuotationController extends Controller
 
     public function store(QuotationRequest $request)
     {
-        $data = $this->mergeData($request);
-        $this->quotation = DB::connection('tenant')->transaction(function () use ($data) {
-            
-            $instance_quotation = Quotation::create($data);
+
+        DB::connection('tenant')->transaction(function () use ($request) {
+
+            $data = $this->mergeData($request);
+            $this->quotation =  Quotation::create($data);
             foreach ($data['items'] as $row)
             {
-                $instance_quotation->items()->create($row);
-            }     
+                $this->quotation->items()->create($row);
+            }        
+            
+            $this->setFilename();
+            $this->createPdf();
 
-            return $instance_quotation;
-        });       
-        
-        $this->setFilename();
-        $this->createPdf();
+        }); 
 
         return [
             'success' => true,

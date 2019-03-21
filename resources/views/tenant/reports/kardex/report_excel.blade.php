@@ -62,7 +62,18 @@
                                 <td class="celda">{{$value->id}}</td>
                                 <td class="celda">{{$value->created_at}}</td>
                                 <td class="celda">{{($value->type == 'sale') ? 'Venta' : 'Compra'}}</td>
-                                <td class="celda">{{($value->type == 'sale') ? "{$value->document->series}-{$value->document->number}" : "{$value->purchase->series}-{$value->purchase->number}"}}</td>
+                                <td class="celda">
+                                    @switch($value->type)
+                                        @case('sale')
+                                            {{($value->document_id) ? "{$value->document->series}-{$value->document->number}" : "{$value->sale_note->prefix}-{$value->sale_note->id}"}}
+                                            @break
+                                        @case('purchase')
+                                            {{($value->purchase_id) ? "{$value->purchase->series}-{$value->purchase->number}" : ""}}                                                    
+                                            @break
+                                        @default
+                                            
+                                    @endswitch
+                                </td>     
                                 <td class="celda">{{($value->type == 'purchase') ? number_format($value->quantity, 4) : number_format(0, 4)}}</td>
                                 <td class="celda">{{($value->type == 'sale') ? number_format($value->quantity, 4) : number_format(0, 4)}}</td>
                                 @php

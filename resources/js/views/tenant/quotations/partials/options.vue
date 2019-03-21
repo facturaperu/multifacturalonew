@@ -233,7 +233,6 @@
                     .then(response => {
                         this.form = response.data.data
                         this.titleDialog = 'Cotización registrada: '+this.form.identifier
-                        console.log(this.form)
                     })
             },
             changeDocumentType() {

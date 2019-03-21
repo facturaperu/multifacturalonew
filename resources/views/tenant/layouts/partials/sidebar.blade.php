@@ -28,6 +28,7 @@
                         {{ ($path[0] === 'summaries')?'nav-active nav-expanded':'' }}
                         {{ ($path[0] === 'voided')?'nav-active nav-expanded':'' }}
                         {{ ($path[0] === 'quotations')?'nav-active nav-expanded':'' }}
+                        {{ ($path[0] === 'sale-notes')?'nav-active nav-expanded':'' }}
                         ">
                         <a class="nav-link" href="#">
                             <i class="fas fa-receipt" aria-hidden="true"></i>
@@ -77,6 +78,11 @@
                             <li class="{{ ($path[0] === 'quotations')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.quotations.index')}}">
                                     Cotizaciones
+                                </a>
+                            </li>
+                            <li class="{{ ($path[0] === 'sale-notes')?'nav-active':'' }}">
+                                <a class="nav-link" href="{{route('tenant.sale_notes.index')}}">
+                                    Notas de Venta
                                 </a>
                             </li>
                             <li class="#">

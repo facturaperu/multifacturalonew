@@ -63,7 +63,18 @@
                                         <td>{{$value->id}}</td>
                                         <td>{{$value->created_at}}</td>
                                         <td>{{($value->type == 'sale') ? 'Venta' : 'Compra'}}</td>
-                                        <td>{{($value->type == 'sale') ? "{$value->document->series}-{$value->document->number}" : "{$value->purchase->series}-{$value->purchase->number}"}}</td>
+                                        <td>
+                                            @switch($value->type)
+                                                @case('sale')
+                                                    {{($value->document_id) ? "{$value->document->series}-{$value->document->number}" : "{$value->sale_note->prefix}-{$value->sale_note->id}"}}
+                                                    @break
+                                                @case('purchase')
+                                                    {{($value->purchase_id) ? "{$value->purchase->series}-{$value->purchase->number}" : ""}}                                                    
+                                                    @break
+                                                @default
+                                                    
+                                            @endswitch
+                                        </td>
                                         <td>{{($value->type == 'purchase') ? number_format($value->quantity, 4) : number_format(0, 4)}}</td>
                                         <td>{{($value->type == 'sale') ? number_format($value->quantity, 4) : number_format(0, 4)}}</td>
                                         @php
