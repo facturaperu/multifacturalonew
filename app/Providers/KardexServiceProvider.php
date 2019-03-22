@@ -17,9 +17,12 @@ class KardexServiceProvider extends ServiceProvider
      
     public function boot()
     {        
+
+        $this->save_item();
         $this->sale();
         $this->purchase();
         $this->sale_note();
+        
     }
  
     public function register()
@@ -65,6 +68,17 @@ class KardexServiceProvider extends ServiceProvider
             $this->updateStock($sale_note_item->item_id, $kardex->quantity, true);                 
                 
         });
+    }
+
+    private function save_item(){
+
+        Item::created(function ($item) { 
+
+            $stock = ($item->stock) ? $item->stock : 0;
+            $kardex = $this->saveKardex(null, $item->id, null, $stock, null);
+                            
+        });
+
     }
  
 }

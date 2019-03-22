@@ -96,10 +96,10 @@
                     </div>
                     <div class="col-md-12">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" v-show="recordId==null">
                         <div class="form-group" :class="{'has-danger': errors.stock}">
                             <label class="control-label">Stock</label>
-                            <el-input v-model="form.stock"></el-input>
+                            <el-input v-model="form.stock" ></el-input>
                             <small class="form-control-feedback" v-if="errors.stock" v-text="errors.stock[0]"></small>
                         </div>
                     </div>

@@ -33,11 +33,13 @@ class AnulationServiceProvider extends ServiceProvider
 
                     foreach ($document['items'] as $detail) {     
     
-                        $item = Item::find($detail['item_id']);
-                        $item->stock = $item->stock + $detail['quantity'];
-                        $item->save();                        
+                        // $item = Item::find($detail['item_id']);
+                        // $item->stock = $item->stock + $detail['quantity'];
+                        // $item->save();  
+
+                        $this->updateStock($detail['item_id'], $detail['quantity'], false);                 
  
-                        $this->saveKardex('sale', $item->id, $document['id'], -$detail['quantity'],'document');
+                        $this->saveKardex('sale', $detail['item_id'], $document['id'], -$detail['quantity'],'document');
                          
                     }
 

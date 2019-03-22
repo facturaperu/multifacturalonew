@@ -62,23 +62,36 @@
                                     <tr>
                                         <td>{{$value->id}}</td>
                                         <td>{{$value->created_at}}</td>
-                                        <td>{{($value->type == 'sale') ? 'Venta' : 'Compra'}}</td>
+                                        <td>
+                                            @switch($value->type)
+                                                @case('sale')
+                                                    {{($value->sale_note_id) ? "Nota de Venta" : (($value->quantity >= 0) ? "Venta" : "Anulación")}}
+                                                    @break
+                                                @case('purchase')
+                                                    {{"Compra"}}                                                    
+                                                    @break
+                                                @default                                                    
+                                                    {{"Stock Inicial"}}                                                    
+                                                @break
+                                            @endswitch
+                                        </td>
                                         <td>
                                             @switch($value->type)
                                                 @case('sale')
                                                     {{($value->document_id) ? "{$value->document->series}-{$value->document->number}" : "{$value->sale_note->prefix}-{$value->sale_note->id}"}}
                                                     @break
                                                 @case('purchase')
-                                                    {{($value->purchase_id) ? "{$value->purchase->series}-{$value->purchase->number}" : ""}}                                                    
+                                                    {{"{$value->purchase->series}-{$value->purchase->number}"}}                                                    
                                                     @break
-                                                @default
-                                                    
+                                                @default                                                    
+                                                    {{"-"}}                                                    
+                                                @break
                                             @endswitch
                                         </td>
-                                        <td>{{($value->type == 'purchase') ? number_format($value->quantity, 4) : number_format(0, 4)}}</td>
+                                        <td>{{($value->type == 'purchase' || !$value->type) ? number_format($value->quantity, 4) : number_format(0, 4)}}</td>
                                         <td>{{($value->type == 'sale') ? number_format($value->quantity, 4) : number_format(0, 4)}}</td>
                                         @php
-                                            if ($value->type == 'purchase') $balance += $value->quantity;
+                                            if ($value->type == 'purchase' || !$value->type) $balance += $value->quantity;
                                             if ($value->type == 'sale') $balance -= $value->quantity;
                                         @endphp
                                         <td>{{number_format($balance, 4)}}</td>
