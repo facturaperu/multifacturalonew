@@ -79,6 +79,7 @@ class ItemController extends Controller
     public function destroy($id)
     {
         $item = Item::findOrFail($id);
+        $this->deleteRecordInitialKardex($item);
         $item->delete();
 
         return [
@@ -111,4 +112,13 @@ class ItemController extends Controller
             'message' =>  __('app.actions.upload.error'),
         ];
     }
+
+    private function deleteRecordInitialKardex($item){
+
+        if($item->kardex->count() == 1){
+            ($item->kardex[0]->type == null) ? $item->kardex[0]->delete() : false;
+        }
+
+    }
+
 }
