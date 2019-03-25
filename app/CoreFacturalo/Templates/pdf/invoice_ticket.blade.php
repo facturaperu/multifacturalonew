@@ -213,9 +213,12 @@
                 @endif
             @endforeach
             <br>
-            @foreach($accounts as $account)
-                <span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} {{$account->number}}
-            @endforeach
+            @if(in_array($document->document_type->id,['01','03']))
+                @foreach($accounts as $account)
+                    <span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} {{$account->number}}
+                @endforeach
+            @endif
+
         </td>
     </tr>
     <tr>

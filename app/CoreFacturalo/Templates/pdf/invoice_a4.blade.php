@@ -218,9 +218,11 @@
                 @endif
             @endforeach
             <br>
-            @foreach($accounts as $account)
-                <p><span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} {{$account->number}}</p>
-            @endforeach
+            @if(in_array($document->document_type->id,['01','03']))
+                @foreach($accounts as $account)
+                    <p><span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} {{$account->number}}</p>
+                @endforeach
+            @endif
         </td>
         <td width="35%" class="text-right">
             <img src="data:image/png;base64, {{ $document->qr }}" style="margin-right: -10px;" />
