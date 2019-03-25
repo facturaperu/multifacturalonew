@@ -4,6 +4,8 @@
     $invoice = $document->invoice;
     $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
+    $accounts = \App\Models\Tenant\BankAccount::all();
+
 @endphp
 <html>
 <head>
@@ -201,10 +203,18 @@
         @endforeach
     </tr>
     <tr>
-        <td class="desc pt-3">
-            <strong>Información adicional</strong>
+        <td class="desc pt-3"> 
             @foreach($document->additional_information as $information)
-                <p class="desc">{{ $information }}</p>
+                @if ($information)
+                    @if ($loop->first)
+                        <strong>Información adicional</strong>
+                    @endif
+                    <p>{{ $information }}</p>
+                @endif
+            @endforeach
+            <br>
+            @foreach($accounts as $account)
+                <span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} {{$account->number}}
             @endforeach
         </td>
     </tr>

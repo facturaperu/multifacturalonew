@@ -85,11 +85,11 @@
                                     Notas de Venta
                                 </a>
                             </li>
-                            <li class="#">
+                            {{-- <li class="#">
                                 <a class="nav-link" href="#">
                                     Ventas sin facturar (Pronto)
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
                     @endif
