@@ -156,6 +156,10 @@ class ClientController extends Controller
             'code' => '0000'
         ]);
 
+        DB::connection('tenant')->table('warehouses')->insert([
+            ['establishment_id' => 1, 'description' => 'Almacén'],
+        ]);
+
         DB::connection('tenant')->table('series')->insert([
             ['establishment_id' => 1, 'document_type_id' => '01', 'number' => 'F001'],
             ['establishment_id' => 1, 'document_type_id' => '03', 'number' => 'B001'],

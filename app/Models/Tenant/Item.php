@@ -86,4 +86,12 @@ class Item extends ModelTenant
     {
         return $this->belongsTo(AffectationIgvType::class, 'purchase_affectation_igv_type_id');
     }
+
+    public function scopeWhereWarehouse($query, $warehouse)
+    {
+        if ($warehouse) {
+            return $query->where('warehouse_id', $warehouse->id);
+        }
+        return $query;
+    }
 }

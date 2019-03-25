@@ -156,6 +156,7 @@ if ($hostname) {
             Route::post('summaries', 'Tenant\SummaryController@store');
             Route::get('summaries/status/{summary}', 'Tenant\SummaryController@status');
             Route::get('summaries/columns', 'Tenant\SummaryController@columns');
+           Route::delete('summaries/{summary}', 'Tenant\SummaryController@destroy');
 
             //Voided
             Route::get('voided', 'Tenant\VoidedController@index')->name('tenant.voided.index');
@@ -164,6 +165,7 @@ if ($hostname) {
             Route::post('voided', 'Tenant\VoidedController@store');
 //            Route::get('voided/download/{type}/{voided}', 'Tenant\VoidedController@download')->name('tenant.voided.download');
             Route::get('voided/status/{voided}', 'Tenant\VoidedController@status');
+            Route::delete('voided/{voided}', 'Tenant\VoidedController@destroy');
 //            Route::get('voided/ticket/{voided_id}/{group_id}', 'Tenant\VoidedController@ticket');
 
             //Retentions

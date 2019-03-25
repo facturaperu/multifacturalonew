@@ -46,6 +46,9 @@
                                     @click.prevent="clickTicket(row.id)"
                                     dusk="consult-ticket"
                                     v-if="row.btn_ticket">Consultar</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
+                                    @click.prevent="clickDelete(row.id)"
+                                    v-if="row.btn_ticket">Eliminar</button>
                         </td>
                     </tr>
                 </data-table>
@@ -62,8 +65,10 @@
 
     import SummaryForm from './form.vue'
     import DataTable from '../../../components/DataTable.vue'
+    import {deletable} from '../../../mixins/deletable'
 
     export default {
+        mixins: [deletable],
         components: {DataTable, SummaryForm},
         data () {
             return {
@@ -92,6 +97,11 @@
                     .catch(error => {
                         this.$message.error(error.response.data.message)
                     })
+            },
+            clickDelete(id) {
+                this.destroy(`/${this.resource}/${id}`).then(() =>
+                    this.$eventHub.$emit('reloadData')
+                )
             },
             clickDownload(download) {
                 window.open(download, '_blank');

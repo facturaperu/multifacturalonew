@@ -28,6 +28,7 @@ use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Item;
 use App\Models\Tenant\Person;
 use App\Models\Tenant\Series;
+use App\Models\Tenant\Warehouse;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
@@ -166,7 +167,10 @@ class DocumentController extends Controller
             return $customers;
         }
         if ($table === 'items') {
-            $items = Item::orderBy('description')->get()->transform(function($row) {
+            $establishment_id = auth()->user()->establishment->id;
+            $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
+
+            $items = Item::whereWarehouse($warehouse)->orderBy('description')->get()->transform(function($row) {
                 $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
                 return [
                     'id' => $row->id,

@@ -28,6 +28,7 @@ class TenantAddEstablishmentIdToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign('establishment_id');
             $table->dropColumn('establishment_id');
         });
     }

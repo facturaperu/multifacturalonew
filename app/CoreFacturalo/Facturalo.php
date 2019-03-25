@@ -31,6 +31,8 @@ class Facturalo
 
     const SENT = '03';
     const ACCEPTED = '05';
+    const OBSERVED = '07';
+    const REJECTED = '09';
     const CANCELING = '13';
     const VOIDED = '11';
 
@@ -324,7 +326,11 @@ class Facturalo
         if($res->isSuccess()) {
             $cdrResponse = $res->getCdrResponse();
             $this->uploadFile($res->getCdrZip(), 'cdr');
-            $this->updateState(self::ACCEPTED);
+
+            $code = $cdrResponse->getCode();
+            $description = $cdrResponse->getDescription();
+            $this->validationCodeResponse($code, $description);
+
             $this->response = [
                 'sent' => true,
                 'code' => $cdrResponse->getCode(),
@@ -332,8 +338,35 @@ class Facturalo
                 'notes' => $cdrResponse->getNotes()
             ];
         } else {
-            throw new Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
+            $code = $res->getError()->getCode();
+            $message = $res->getError()->getMessage();
+            $this->validationCodeResponse($code, $message);
+            $this->response = [
+                'sent' => true,
+                'code' => $code,
+                'description' => $message
+            ];
         }
+    }
+
+    public function validationCodeResponse($code, $message)
+    {
+        if((int)$code === 0) {
+            $this->updateState(self::ACCEPTED);
+            return;
+        }
+        if((int)$code < 2000) {
+            //Excepciones
+            throw new Exception("Code: {$code}; Description: {$message}");
+        } elseif ((int)$code < 4000) {
+            //Rechazo
+            $this->updateState(self::REJECTED);
+
+        } else {
+            $this->updateState(self::OBSERVED);
+            //Observaciones
+        }
+        return;
     }
 
     public function senderXmlSignedSummary()

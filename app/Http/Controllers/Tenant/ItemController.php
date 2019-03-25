@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\ItemRequest;
 use App\Http\Resources\Tenant\ItemCollection;
 use App\Http\Resources\Tenant\ItemResource;
+use App\Models\Tenant\User;
+use App\Models\Tenant\Warehouse;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
@@ -63,9 +65,12 @@ class ItemController extends Controller
 
     public function store(ItemRequest $request)
     {
+        $establishment_id = auth()->user()->establishment->id;
+        $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
         $id = $request->input('id');
         $item = Item::firstOrNew(['id' => $id]);
         $item->item_type_id = '01';
+        $item->warehouse_id = optional($warehouse)->id;
         $item->fill($request->all());
         $item->save();
 
