@@ -170,7 +170,8 @@ class DocumentController extends Controller
             $establishment_id = auth()->user()->establishment->id;
             $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
 
-            $items = Item::whereWarehouse($warehouse)->orderBy('description')->get()->transform(function($row) {
+//            $items = Item::whereWarehouse($warehouse)->orderBy('description')->get()->transform(function($row) {
+            $items = Item::orderBy('description')->get()->transform(function($row) {
                 $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
                 return [
                     'id' => $row->id,
