@@ -87,4 +87,21 @@ class VoidedController extends Controller
             'message' => $response['description'],
         ];
     }
+
+    public function destroy($voided_id)
+    {
+        $document = Voided::find($voided_id);
+        foreach ($document->documents as $doc)
+        {
+            $doc->document->update([
+                'state_type_id' => '05'
+            ]);
+        }
+        $document->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Anulación eliminada con éxito'
+        ];
+    }
 }
