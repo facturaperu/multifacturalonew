@@ -166,8 +166,11 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
         App\Providers\KardexServiceProvider::class,
-        App\Providers\AnulationServiceProvider::class,
+        App\Providers\AnulationServiceProvider::class,        
         
+        App\Providers\InventoryKardexServiceProvider::class,
+        App\Providers\InventoryAnulationServiceProvider::class,
+
     ],
 
     /*

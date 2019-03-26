@@ -208,6 +208,11 @@ class Purchase extends ModelTenant
         return $this->hasMany(Kardex::class);
     }
 
+    public function inventory_kardex()
+    {
+        return $this->morphMany(InventoryKardex::class, 'inventory_kardexable');
+    }
+
     public function purchase_items()
     {
         return $this->hasMany(PurchaseItem::class);

@@ -100,4 +100,9 @@ class SaleNoteItem extends ModelTenant
     {
         return $this->belongsTo(PriceType::class, 'price_type_id');
     }
+
+    public function sale_note()
+    {
+        return $this->belongsTo(SaleNote::class);
+    }
 }

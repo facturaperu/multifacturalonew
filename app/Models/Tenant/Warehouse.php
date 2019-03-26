@@ -13,4 +13,11 @@ class Warehouse extends ModelTenant
         'establishment_id',
         'description',
     ];
+
+
+    public function inventory_kardex()
+    {
+        return $this->hasMany(InventoryKardex::class);
+    }
+    
 }

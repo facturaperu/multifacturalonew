@@ -70,6 +70,11 @@ class Item extends ModelTenant
         return $this->hasMany(Kardex::class);
     }
 
+    public function inventory_kardex()
+    {
+        return $this->hasMany(InventoryKardex::class);
+    }
+
     public function purchase_item()
     {
         return $this->hasMany(PurchaseItem::class);
