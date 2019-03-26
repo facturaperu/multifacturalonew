@@ -77,7 +77,7 @@
                 this.initForm()
             },
             clickDownload(){
-                window.open(`/downloads/salenote/sale_note/${this.form.external_id}`, '_blank');
+                window.open(`/downloads/saleNote/sale_note/${this.form.external_id}`, '_blank');
             }
         }
     }

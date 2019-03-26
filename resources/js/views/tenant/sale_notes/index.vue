@@ -67,7 +67,7 @@
         },
         methods: { 
             clickDownload(external_id) {
-                window.open(`/downloads/salenote/sale_note/${external_id}`, '_blank');                
+                window.open(`/downloads/saleNote/sale_note/${external_id}`, '_blank');                
             },  
             clickOptions(recordId = null) {
                 this.recordId = recordId
