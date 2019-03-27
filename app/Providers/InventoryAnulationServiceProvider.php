@@ -23,26 +23,26 @@ class InventoryAnulationServiceProvider extends ServiceProvider
     }
 
 
-    // private function anulation(){
+    private function anulation(){
 
-    //     Document::updated(function ($document) { 
+        Document::updated(function ($document) { 
 
-    //         if($document['document_type_id'] == '01' || $document['document_type_id'] == '03'){
+            if($document['document_type_id'] == '01' || $document['document_type_id'] == '03'){
 
-    //             if($document['state_type_id'] == 11){
+                if($document['state_type_id'] == 11){
 
-    //                 foreach ($document['items'] as $detail) {      
+                    foreach ($document['items'] as $detail) {      
                         
-    //                     $this->updateStock($detail['item_id'], $document['establishment_id'], $detail['quantity'], false); 
-    //                     $this->saveInventoryKardex($document, $detail['item_id'], $document['establishment_id'], -$detail['quantity']);
+                        $this->updateStock($detail['item_id'], $document['establishment_id'], $detail['quantity'], false); 
+                        $this->saveInventoryKardex($document, $detail['item_id'], $document['establishment_id'], -$detail['quantity']);
             
-    //                 }
+                    }
 
-    //             }
-    //         }         
+                }
+            }         
 
             
-    //     });
+        });
         
-    // }
+    }
 }

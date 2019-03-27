@@ -25,18 +25,33 @@ trait InventoryKardexTrait
 
     public function updateStock($item_id, $establishment_id, $quantity, $is_sale){
 
-        $item_warehouse = ItemWarehouse::where([['item_id',$item_id],['warehouse_id',$this->getWarehouseId($establishment_id)]])->first();
+        $item_warehouse = $this->getItemWarehouse($item_id, $establishment_id); 
         $item_warehouse->stock = ($is_sale) ? $item_warehouse->stock - $quantity : $item_warehouse->stock + $quantity;
         $item_warehouse->save();
         
     }
 
 
-    private function getWarehouseId($establishment_id){
+    public function getWarehouseId($establishment_id){
 
         $warehouse = Warehouse::where('establishment_id',$establishment_id)->first();
         return $warehouse->id;
 
+    }
+
+    public function getItemWarehouse($item_id, $establishment_id){
+        $item_warehouse = ItemWarehouse::where([['item_id',$item_id],['warehouse_id',$this->getWarehouseId($establishment_id)]])->first();
+        return $item_warehouse;
+    }
+
+    public function saveItemWarehouse($item_id, $establishment_id, $stock){
+
+        $item_warehouse = ItemWarehouse::create([
+            'item_id' => $item_id,
+            'warehouse_id' => $this->getWarehouseId($establishment_id),
+            'stock' => $stock
+            ]);
+            
     }
 
 }

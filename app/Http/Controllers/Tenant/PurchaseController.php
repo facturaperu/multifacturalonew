@@ -56,7 +56,7 @@ class PurchaseController extends Controller
     public function tables()
     {
         $suppliers = $this->table('suppliers');
-        $establishment = Establishment::first();              
+        $establishment = Establishment::where('id', auth()->user()->establishment_id)->first();    
         $currency_types = CurrencyType::whereActive()->get();
         $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();        
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
