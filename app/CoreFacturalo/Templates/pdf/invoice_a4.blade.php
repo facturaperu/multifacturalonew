@@ -81,6 +81,12 @@
             <td class="text-left">{{ $document->purchase_order }}</td>
         </tr>
     @endif
+    @if ($document->quotation_id)
+        <tr>
+            <td width="15%">Cotización:</td>
+            <td class="text-left" width="85%">{{ $document->quotation->identifier }}</td>
+        </tr>
+    @endif
 </table>
 
 @if ($document->guides)
@@ -205,8 +211,16 @@
 <table class="full-width">
     <tr>
         <td width="65%" style="text-align: top; vertical-align: top;">
-            @foreach($document->legends as $row)
-                <p>Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></p>
+            @foreach(array_reverse( (array) $document->legends) as $row)
+                @if ($row->code == "1000")
+                    <p>Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></p>                      
+                    @if (count((array) $document->legends)>1)
+                        <p><span class="font-bold">Leyendas</span></p>
+                    @endif                  
+                @else
+                    <p> {{$row->code}}: {{ $row->value }} </p>                                    
+                @endif
+            
             @endforeach
             <br/>
             @foreach($document->additional_information as $information)

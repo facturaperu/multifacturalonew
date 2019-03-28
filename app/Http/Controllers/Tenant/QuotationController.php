@@ -28,6 +28,7 @@ use App\CoreFacturalo\Requests\Inputs\Common\EstablishmentInput;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\CoreFacturalo\Template;
 use Mpdf\Mpdf;
+use Exception;
 
 class QuotationController extends Controller
 {
@@ -173,6 +174,24 @@ class QuotationController extends Controller
         return $inputs->all();
     }
 
+
+    public function quotationDocument(Request $request)
+    {
+
+        $quotation = Quotation::findOrFail($request->id);
+        $quotation->document_id = $request->document_id;
+        $quotation->save();
+
+        return [
+            'success' => true,
+            'data' => [
+                'document_id' => $quotation->document_id,
+            ],
+        ];
+    }
+
+
+
     private function setFilename(){
         
         $name = [$this->quotation->prefix,$this->quotation->id,date('Ymd')];
@@ -197,6 +216,16 @@ class QuotationController extends Controller
     public function uploadFile($file_content, $file_type)
     {
         $this->uploadStorage($this->quotation->filename, $file_content, $file_type);
+    }
+
+    public function toPrint($external_id) {
+
+        $quotation = Quotation::where('external_id', $external_id)->first();        
+        if (!$quotation) throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");       
+        $temp = tempnam(sys_get_temp_dir(), 'quotation');
+        file_put_contents($temp, $this->getStorage($quotation->filename, 'quotation'));
+        
+        return response()->file($temp);
     }
 
 

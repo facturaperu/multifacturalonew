@@ -27,6 +27,7 @@ class Document extends ModelTenant
         'customer',
         'currency_type_id',
         'purchase_order',
+        'quotation_id',
         'exchange_rate_sale',
         'total_prepayment',
         'total_discount',
@@ -246,6 +247,11 @@ class Document extends ModelTenant
     public function inventory_kardex()
     {
         return $this->morphMany(InventoryKardex::class, 'inventory_kardexable');
+    }
+
+    public function quotation()
+    {
+        return $this->belongsTo(Quotation::class);
     }
 
 

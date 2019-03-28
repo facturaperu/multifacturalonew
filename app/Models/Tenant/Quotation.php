@@ -14,7 +14,7 @@ class Quotation extends ModelTenant
         'establishment_id',
         'establishment',
         'soap_type_id',
-        'state_type_id',
+        'state_type_id', 
 
         'prefix', 
 
@@ -190,6 +190,13 @@ class Quotation extends ModelTenant
     {
         return $this->hasMany(QuotationItem::class);
     }
+
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
   
     public function getNumberToLetterAttribute()
     {

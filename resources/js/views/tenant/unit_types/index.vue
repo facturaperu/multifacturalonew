@@ -40,11 +40,11 @@
                     </tbody>
                 </table>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col">
                     <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
                 </div>
-            </div>
+            </div> -->
         </div>
         <unit-types-form :showDialog.sync="showDialog"
                          :recordId="recordId"></unit-types-form>
