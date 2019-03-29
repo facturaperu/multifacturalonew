@@ -2,30 +2,29 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\Catalogs\OperationType;
-
 class Inventory extends ModelTenant
 {
-    protected $with = ['operation_type'];
-    public $timestamps = false;
-
     protected $fillable = [
-        'document_id',
-        'operation_type_id',
-        'date_of_due',
+        'type',
+        'description',
+        'item_id',
+        'warehouse_id',
+        'warehouse_destination_id',
+        'quantity',
     ];
 
-    protected $casts = [
-        'date_of_due' => 'date',
-    ];
-
-    public function document()
+    public function warehouse()
     {
-        return $this->hasOne(Document::class);
+        return $this->belongsTo(Warehouse::class);
     }
 
-    public function operation_type()
+    public function warehouse_destination()
     {
-        return $this->belongsTo(OperationType::class, 'operation_type_id');
+        return $this->belongsTo(Warehouse::class, 'warehouse_destination_id');
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
     }
 }

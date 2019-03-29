@@ -166,6 +166,7 @@ if ($hostname) {
            Route::get('inventories/record/{inventory}', 'Tenant\InventoryController@record');
            Route::post('inventories', 'Tenant\InventoryController@store');
            Route::post('inventories/move', 'Tenant\InventoryController@move');
+           Route::post('inventories/remove', 'Tenant\InventoryController@remove');
 
             //Voided
             Route::get('voided', 'Tenant\VoidedController@index')->name('tenant.voided.index');

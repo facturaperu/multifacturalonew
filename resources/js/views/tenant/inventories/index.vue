@@ -31,15 +31,18 @@
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
                                     @click.prevent="clickMove(row.id)">Trasladar</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-warning"
+                                    @click.prevent="clickRemove(row.id)">Remover</button>
                         </td>
                     </tr>
                 </data-table>
             </div>
 
-            <inventories-form :showDialog.sync="showDialog"
-                              :recordId="recordId"></inventories-form>
+            <inventories-form :showDialog.sync="showDialog"></inventories-form>
             <inventories-move :showDialog.sync="showDialogMove"
                               :recordId="recordId"></inventories-move>
+            <inventories-remove :showDialog.sync="showDialogRemove"
+                                :recordId="recordId"></inventories-remove>
         </div>
     </div>
 </template>
@@ -48,19 +51,18 @@
 
     import InventoriesForm from './form.vue'
     import InventoriesMove from './move.vue'
+    import InventoriesRemove from './remove.vue'
     import DataTable from '../../../components/DataTable.vue'
-//    import {deletable} from '../../../mixins/deletable'
 
     export default {
-//        mixins: [deletable],
         props: ['type'],
-        components: {DataTable, InventoriesForm, InventoriesMove},
+        components: {DataTable, InventoriesForm, InventoriesMove, InventoriesRemove},
         data() {
             return {
                 title: null,
                 showDialog: false,
                 showDialogMove: false,
-//                showImportDialog: false,
+                showDialogRemove: false,
                 resource: 'inventories',
                 recordId: null,
             }
@@ -78,13 +80,9 @@
                 this.recordId = null
                 this.showDialog = true
             },
-//            clickImport() {
-//                this.showImportDialog = true
-//            },
-            clickDelete(id) {
-                this.destroy(`/${this.resource}/${id}`).then(() =>
-                    this.$eventHub.$emit('reloadData')
-                )
+            clickRemove(recordId) {
+                this.recordId = recordId
+                this.showDialogRemove = true
             }
         }
     }

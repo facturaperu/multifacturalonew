@@ -14,7 +14,7 @@ class TenantAddRecordToWarehouses extends Migration
      */
     public function up()
     { 
-        DB::table('warehouses')->insert(['establishment_id' => 1,'description' => 'Almacén']);
+        //DB::table('warehouses')->insert(['establishment_id' => 1,'description' => 'Almacén']);
     }
 
     /**
@@ -24,7 +24,7 @@ class TenantAddRecordToWarehouses extends Migration
      */
     public function down()
     {
-        DB::table('warehouses')->where('id',1)->delete();
+        //DB::table('warehouses')->where('id',1)->delete();
 
     }
 }
