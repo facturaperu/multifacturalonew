@@ -45,7 +45,7 @@ class InventoryController extends Controller
 
     public function store(Request $request)
     {
-        DB::connection('tenant')->transaction(function () use ($request) {
+        $result = DB::connection('tenant')->transaction(function () use ($request) {
             $item_id = $request->input('item_id');
             $warehouse_id = $request->input('warehouse_id');
             $quantity = $request->input('quantity');
@@ -70,17 +70,18 @@ class InventoryController extends Controller
             $inventory->quantity = $quantity;
             $inventory->save();
 
+            return  [
+                'success' => true,
+                'message' => 'Producto registrado en almacén'
+            ];
         });
 
-        return  [
-            'success' => true,
-            'message' => 'Producto registrado en almacén'
-        ];
+        return $result;
     }
 
     public function move(Request $request)
     {
-        DB::connection('tenant')->transaction(function () use ($request) {
+        $result = DB::connection('tenant')->transaction(function () use ($request) {
             $id = $request->input('id');
             $item_id = $request->input('item_id');
             $warehouse_id = $request->input('warehouse_id');
@@ -88,6 +89,18 @@ class InventoryController extends Controller
             $quantity = $request->input('quantity');
             $quantity_move = $request->input('quantity_move');
 
+            if($warehouse_id === $warehouse_new_id) {
+                return  [
+                    'success' => false,
+                    'message' => 'El almacén destino no puede ser igual al de origen'
+                ];
+            }
+            if($quantity < $quantity_move) {
+                return  [
+                    'success' => false,
+                    'message' => 'La cantidad a trasladar no puede ser mayor al que se tiene en el almacén.'
+                ];
+            }
             //Transaction
             $item_warehouse_new = ItemWarehouse::firstOrNew(['item_id' => $item_id,
                                                              'warehouse_id' => $warehouse_new_id]);
@@ -109,20 +122,22 @@ class InventoryController extends Controller
             $inventory->quantity = $quantity;
             $inventory->save();
 
+            return  [
+                'success' => true,
+                'message' => 'Producto trasladado con éxito'
+            ];
         });
 
-        return  [
-            'success' => true,
-            'message' => 'Producto trasladado con éxito'
-        ];
+        return $result;
     }
 
     public function remove(Request $request)
     {
-        DB::connection('tenant')->transaction(function () use ($request) {
+        $result = DB::connection('tenant')->transaction(function () use ($request) {
             $item_id = $request->input('item_id');
             $warehouse_id = $request->input('warehouse_id');
             $quantity = $request->input('quantity');
+            $quantity_remove = $request->input('quantity_remove');
 
             //Transaction
             $item_warehouse = ItemWarehouse::where('item_id', $item_id)
@@ -134,8 +149,15 @@ class InventoryController extends Controller
                     'message' => 'El producto no se encuentra en el almacén indicado'
                 ];
             }
-            $stock = $item_warehouse->stock;
-            $item_warehouse->stock = $stock - $quantity;
+
+            if($quantity < $quantity_remove) {
+                return  [
+                    'success' => false,
+                    'message' => 'La cantidad a retirar no puede ser mayor al que se tiene en el almacén.'
+                ];
+            }
+
+            $item_warehouse->stock = $quantity - $quantity_remove;
             $item_warehouse->save();
 
             $inventory = new Inventory();
@@ -143,13 +165,15 @@ class InventoryController extends Controller
             $inventory->description = 'Retirar';
             $inventory->item_id = $item_id;
             $inventory->warehouse_id = $warehouse_id;
-            $inventory->quantity = $quantity;
+            $inventory->quantity = $quantity_remove;
             $inventory->save();
+
+            return  [
+                'success' => true,
+                'message' => 'Producto trasladado con éxito'
+            ];
         });
 
-        return  [
-            'success' => true,
-            'message' => 'Producto retirado con éxito'
-        ];
+        return $result;
     }
 }
