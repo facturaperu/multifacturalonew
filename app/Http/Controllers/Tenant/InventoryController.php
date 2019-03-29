@@ -119,7 +119,7 @@ class InventoryController extends Controller
             $inventory->item_id = $item_id;
             $inventory->warehouse_id = $warehouse_id;
             $inventory->warehouse_destination_id = $warehouse_new_id;
-            $inventory->quantity = $quantity;
+            $inventory->quantity = $quantity_move;
             $inventory->save();
 
             return  [
