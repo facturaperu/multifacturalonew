@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Tenant\InventoryCollection;
 use App\Http\Resources\Tenant\InventoryResource;
+use App\Models\Tenant\Inventory;
 use App\Models\Tenant\Item;
 use App\Models\Tenant\ItemWarehouse;
 use App\Models\Tenant\Warehouse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InventoryController extends Controller
 {
@@ -43,51 +45,124 @@ class InventoryController extends Controller
 
     public function store(Request $request)
     {
-        $item_id = $request->input('item_id');
-        $warehouse_id = $request->input('warehouse_id');
-        $quantity = $request->input('quantity');
+        DB::connection('tenant')->transaction(function () use ($request) {
+            $item_id = $request->input('item_id');
+            $warehouse_id = $request->input('warehouse_id');
+            $quantity = $request->input('quantity');
 
-        $item_warehouse = ItemWarehouse::firstOrNew(['item_id' => $item_id,
-                                                     'warehouse_id' => $warehouse_id]);
-        if($item_warehouse->id) {
-            return [
-                'success' => false,
-                'message' => 'El producto ya se encuentra registrado en el almacén indicado.'
+            $item_warehouse = ItemWarehouse::firstOrNew(['item_id' => $item_id,
+                                                         'warehouse_id' => $warehouse_id]);
+            if($item_warehouse->id) {
+                return [
+                    'success' => false,
+                    'message' => 'El producto ya se encuentra registrado en el almacén indicado.'
+                ];
+            }
+
+            $item_warehouse->stock = $quantity;
+            $item_warehouse->save();
+
+            $inventory = new Inventory();
+            $inventory->type = 1;
+            $inventory->description = 'Stock inicial';
+            $inventory->item_id = $item_id;
+            $inventory->warehouse_id = $warehouse_id;
+            $inventory->quantity = $quantity;
+            $inventory->save();
+
+            return  [
+                'success' => true,
+                'message' => 'Producto registrado en almacén'
             ];
-        }
-
-        $item_warehouse->stock = $quantity;
-        $item_warehouse->save();
+        });
 
         return  [
-            'success' => true,
-            'message' => 'Producto registrado en almacén'
+            'success' => false,
+            'message' => 'Error en el proceso'
         ];
     }
 
     public function move(Request $request)
     {
-        $id = $request->input('id');
-        $item_id = $request->input('item_id');
-        $warehouse_new_id = $request->input('warehouse_new_id');
-        $quantity = $request->input('quantity');
-        $quantity_move = $request->input('quantity_move');
+        DB::connection('tenant')->transaction(function () use ($request) {
+            $id = $request->input('id');
+            $item_id = $request->input('item_id');
+            $warehouse_id = $request->input('warehouse_id');
+            $warehouse_new_id = $request->input('warehouse_new_id');
+            $quantity = $request->input('quantity');
+            $quantity_move = $request->input('quantity_move');
 
-        //Transaction
-        $item_warehouse_new = ItemWarehouse::firstOrNew(['item_id' => $item_id,
-                                                         'warehouse_id' => $warehouse_new_id]);
+            //Transaction
+            $item_warehouse_new = ItemWarehouse::firstOrNew(['item_id' => $item_id,
+                                                             'warehouse_id' => $warehouse_new_id]);
 
-        $stock_new = ($item_warehouse_new)?$item_warehouse_new->stock + $quantity_move:$quantity_move;
-        $item_warehouse_new->stock = $stock_new;
-        $item_warehouse_new->save();
+            $stock_new = ($item_warehouse_new)?$item_warehouse_new->stock + $quantity_move:$quantity_move;
+            $item_warehouse_new->stock = $stock_new;
+            $item_warehouse_new->save();
 
-        $item_warehouse = ItemWarehouse::find($id);
-        $item_warehouse->stock = (float) $quantity - (float)$quantity_move;
-        $item_warehouse->save();
+            $item_warehouse = ItemWarehouse::find($id);
+            $item_warehouse->stock = (float) $quantity - (float)$quantity_move;
+            $item_warehouse->save();
+
+            $inventory = new Inventory();
+            $inventory->type = 2;
+            $inventory->description = 'Traslado';
+            $inventory->item_id = $item_id;
+            $inventory->warehouse_id = $warehouse_id;
+            $inventory->warehouse_destination_id = $warehouse_new_id;
+            $inventory->quantity = $quantity;
+            $inventory->save();
+
+            return  [
+                'success' => true,
+                'message' => 'Producto trasladado con éxito'
+            ];
+        });
 
         return  [
-            'success' => true,
-            'message' => 'Producto trasladado con éxito'
+            'success' => false,
+            'message' => 'Error en el proceso'
+        ];
+    }
+
+    public function remove(Request $request)
+    {
+        DB::connection('tenant')->transaction(function () use ($request) {
+            $item_id = $request->input('item_id');
+            $warehouse_id = $request->input('warehouse_id');
+            $quantity = $request->input('quantity');
+
+            //Transaction
+            $item_warehouse = ItemWarehouse::where('item_id', $item_id)
+                                           ->where('warehouse_id', $warehouse_id)
+                                           ->first();
+            if(!$item_warehouse) {
+                return [
+                    'success' => false,
+                    'message' => 'El producto no se encuentra en el almacén indicado'
+                ];
+            }
+            $stock = $item_warehouse->stock;
+            $item_warehouse->stock = $stock - $quantity;
+            $item_warehouse->save();
+
+            $inventory = new Inventory();
+            $inventory->type = 3;
+            $inventory->description = 'Retirar';
+            $inventory->item_id = $item_id;
+            $inventory->warehouse_id = $warehouse_id;
+            $inventory->quantity = $quantity;
+            $inventory->save();
+
+            return  [
+                'success' => true,
+                'message' => 'Producto retirado con éxito'
+            ];
+        });
+
+        return  [
+            'success' => false,
+            'message' => 'Error en el proceso'
         ];
     }
 }

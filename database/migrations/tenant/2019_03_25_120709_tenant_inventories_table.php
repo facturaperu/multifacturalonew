@@ -16,11 +16,11 @@ class TenantInventoriesTable extends Migration
         Schema::create('inventories', function (Blueprint $table) {
            
             $table->increments('id');
-            $table->date('date_of_issue');
+            $table->enum('type', [1, 2, 3]);
+            $table->string('description');
             $table->unsignedInteger('item_id');
-            $table->unsignedInteger('inventory_kardexable_id');
-            $table->string('inventory_kardexable_type');
             $table->unsignedInteger('warehouse_id');
+            $table->unsignedInteger('warehouse_destination_id')->nullable();
             $table->decimal('quantity', 12, 4);
             $table->timestamps(); 
 
