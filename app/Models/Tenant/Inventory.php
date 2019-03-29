@@ -27,4 +27,9 @@ class Inventory extends ModelTenant
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function inventory_kardex()
+    {
+        return $this->morphMany(InventoryKardex::class, 'inventory_kardexable');
+    }
 }

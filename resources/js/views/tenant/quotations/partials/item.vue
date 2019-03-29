@@ -193,12 +193,14 @@
         created() {
             this.initForm()
             this.$http.get(`/${this.resource}/item/tables`).then(response => {
-                this.items = response.data.items
+                this.items = response.data.items  
                 this.affectation_igv_types = response.data.affectation_igv_types
                 this.system_isc_types = response.data.system_isc_types
                 this.discount_types = response.data.discount_types
                 this.charge_types = response.data.charge_types
                 this.attribute_types = response.data.attribute_types
+                // this.filterItems()
+
             })
 
             this.$eventHub.$on('reloadDataItems', (item_id) => {
@@ -206,6 +208,9 @@
             })
         },
         methods: {
+            filterItems(){
+                this.items = this.items.filter(item => item.warehouses.length >0)
+            },
             initForm() {
                 this.errors = {}
                 this.form = {
@@ -306,6 +311,8 @@
                     this.items = response.data
                     this.form.item_id = item_id
                     this.changeItem()
+                    // this.filterItems()
+
                 })
             },
         }

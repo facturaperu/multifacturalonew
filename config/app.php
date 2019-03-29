@@ -170,6 +170,7 @@ return [
         
         App\Providers\InventoryKardexServiceProvider::class,
         App\Providers\InventoryAnulationServiceProvider::class,
+        App\Providers\InventoryServiceProvider::class,
 
     ],
 

@@ -22,6 +22,7 @@ use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\Catalogs\AttributeType;
 use App\Models\Tenant\Company;
 use App\Http\Requests\Tenant\QuotationRequest;
+use App\Models\Tenant\Warehouse;
 use Illuminate\Support\Str;
 use App\CoreFacturalo\Requests\Inputs\Common\PersonInput;
 use App\CoreFacturalo\Requests\Inputs\Common\EstablishmentInput;
@@ -250,7 +251,13 @@ class QuotationController extends Controller
             
             case 'items':
 
-                $items = Item::orderBy('description')->get()->transform(function($row) {
+                $warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first(); 
+
+                $items = Item::orderBy('description')
+                    // ->with(['warehouses' => function($query) use($warehouse){
+                    //     return $query->where('warehouse_id', $warehouse->id);
+                    // }])
+                    ->get()->transform(function($row) {
                     $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
                     return [
                         'id' => $row->id,
@@ -262,7 +269,14 @@ class QuotationController extends Controller
                         'purchase_unit_price' => $row->purchase_unit_price,
                         'unit_type_id' => $row->unit_type_id,
                         'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
-                        'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id
+                        'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
+                        'warehouses' => collect($row->warehouses)->transform(function($row) {
+                            return [
+                                'warehouse_id' => $row->warehouse->id,
+                                'warehouse_description' => $row->warehouse->description,
+                                'stock' => $row->stock,
+                            ];
+                        })
                     ];
                 });
                 return $items;

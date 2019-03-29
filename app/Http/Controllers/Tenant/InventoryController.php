@@ -59,8 +59,8 @@ class InventoryController extends Controller
                 ];
             }
 
-            $item_warehouse->stock = $quantity;
-            $item_warehouse->save();
+            // $item_warehouse->stock = $quantity;
+            // $item_warehouse->save();
 
             $inventory = new Inventory();
             $inventory->type = 1;
@@ -101,17 +101,18 @@ class InventoryController extends Controller
                     'message' => 'La cantidad a trasladar no puede ser mayor al que se tiene en el almacén.'
                 ];
             }
+            
             //Transaction
-            $item_warehouse_new = ItemWarehouse::firstOrNew(['item_id' => $item_id,
-                                                             'warehouse_id' => $warehouse_new_id]);
+            // $item_warehouse_new = ItemWarehouse::firstOrNew(['item_id' => $item_id,
+            //                                                  'warehouse_id' => $warehouse_new_id]);
 
-            $stock_new = ($item_warehouse_new)?$item_warehouse_new->stock + $quantity_move:$quantity_move;
-            $item_warehouse_new->stock = $stock_new;
-            $item_warehouse_new->save();
+            // $stock_new = ($item_warehouse_new)?$item_warehouse_new->stock + $quantity_move:$quantity_move;
+            // $item_warehouse_new->stock = $stock_new;
+            // $item_warehouse_new->save();
 
-            $item_warehouse = ItemWarehouse::find($id);
-            $item_warehouse->stock = (float) $quantity - (float)$quantity_move;
-            $item_warehouse->save();
+            // $item_warehouse = ItemWarehouse::find($id);
+            // $item_warehouse->stock = (float) $quantity - (float)$quantity_move;
+            // $item_warehouse->save();
 
             $inventory = new Inventory();
             $inventory->type = 2;
@@ -157,8 +158,8 @@ class InventoryController extends Controller
                 ];
             }
 
-            $item_warehouse->stock = $quantity - $quantity_remove;
-            $item_warehouse->save();
+            // $item_warehouse->stock = $quantity - $quantity_remove;
+            // $item_warehouse->save();
 
             $inventory = new Inventory();
             $inventory->type = 3;
