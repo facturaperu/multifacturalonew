@@ -70,15 +70,11 @@ class InventoryController extends Controller
             $inventory->quantity = $quantity;
             $inventory->save();
 
-            return  [
-                'success' => true,
-                'message' => 'Producto registrado en almacén'
-            ];
         });
 
         return  [
-            'success' => false,
-            'message' => 'Error en el proceso'
+            'success' => true,
+            'message' => 'Producto registrado en almacén'
         ];
     }
 
@@ -113,15 +109,11 @@ class InventoryController extends Controller
             $inventory->quantity = $quantity;
             $inventory->save();
 
-            return  [
-                'success' => true,
-                'message' => 'Producto trasladado con éxito'
-            ];
         });
 
         return  [
-            'success' => false,
-            'message' => 'Error en el proceso'
+            'success' => true,
+            'message' => 'Producto trasladado con éxito'
         ];
     }
 
@@ -153,16 +145,11 @@ class InventoryController extends Controller
             $inventory->warehouse_id = $warehouse_id;
             $inventory->quantity = $quantity;
             $inventory->save();
-
-            return  [
-                'success' => true,
-                'message' => 'Producto retirado con éxito'
-            ];
         });
 
         return  [
-            'success' => false,
-            'message' => 'Error en el proceso'
+            'success' => true,
+            'message' => 'Producto retirado con éxito'
         ];
     }
 }
