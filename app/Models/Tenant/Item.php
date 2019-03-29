@@ -9,7 +9,7 @@ use App\Models\Tenant\Catalogs\UnitType;
 
 class Item extends ModelTenant
 {
-    protected $with = ['item_type', 'unit_type', 'currency_type'];
+    protected $with = ['item_type', 'unit_type', 'currency_type', 'warehouses'];
     protected $fillable = [
         'description',
         'item_type_id',
@@ -80,13 +80,11 @@ class Item extends ModelTenant
         return $this->hasMany(PurchaseItem::class);
     }
 
-
     public function sale_affectation_igv_type()
     {
         return $this->belongsTo(AffectationIgvType::class, 'sale_affectation_igv_type_id');
     }
 
-    
     public function purchase_affectation_igv_type()
     {
         return $this->belongsTo(AffectationIgvType::class, 'purchase_affectation_igv_type_id');
@@ -98,5 +96,10 @@ class Item extends ModelTenant
             return $query->where('warehouse_id', $warehouse->id);
         }
         return $query;
+    }
+
+    public function warehouses()
+    {
+        return $this->hasMany(ItemWarehouse::class)->with('warehouse');
     }
 }

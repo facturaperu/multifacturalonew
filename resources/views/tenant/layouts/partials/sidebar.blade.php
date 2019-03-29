@@ -122,6 +122,24 @@
                         </ul>
                     </li>
                     @endif
+                    {{--@if(in_array('inventories', $vc_modules))--}}
+                    <li class="
+                        nav-parent
+                        {{ ($path[0] === 'inventories')?'nav-active nav-expanded':'' }}
+                        ">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-boxes" aria-hidden="true"></i>
+                            <span>Inventario</span>
+                        </a>
+                        <ul class="nav nav-children" style="">
+                            <li class="{{ ($path[0] === 'inventories' && $path[1] != 'create')?'nav-active':'' }}">
+                                <a class="nav-link" href="{{route('tenant.inventories.index')}}">
+                                    Listado
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{--@endif--}}
                     @if(in_array('configuration', $vc_modules))
                     <li class="nav-parent {{ in_array($path[0], ['users', 'establishments'])?'nav-active nav-expanded':'' }}">
                         <a class="nav-link" href="#">

@@ -54,8 +54,23 @@
                             <small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>
                         </div>
                     </div>
-
-                    <div class="col-md-12 mt-3">
+                    <div class="col-md-12 mt-2" v-if="form.item.warehouses">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Ubicación</th>
+                                <th class="text-right">Stock</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="row in form.item.warehouses">
+                                <th>{{ row.warehouse_description }}</th>
+                                <th class="text-right">{{ row.stock }}</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 mt-2">
                         <el-collapse v-model="activePanel">
                             <el-collapse-item title="Información adicional atributos UBL 2.1" name="1">
                                 <!--<div>-->

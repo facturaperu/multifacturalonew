@@ -110,6 +110,22 @@
                             <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small>
                         </div>
                     </div>
+                    <div class="col-md-12" v-if="form.warehouses">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Ubicación</th>
+                                <th class="text-right">Stock</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="row in form.warehouses">
+                                <th>{{ row.warehouse_description }}</th>
+                                <th class="text-right">{{ row.stock }}</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="form-actions text-right pt-2">

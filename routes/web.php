@@ -156,7 +156,16 @@ if ($hostname) {
             Route::post('summaries', 'Tenant\SummaryController@store');
             Route::get('summaries/status/{summary}', 'Tenant\SummaryController@status');
             Route::get('summaries/columns', 'Tenant\SummaryController@columns');
-           Route::delete('summaries/{summary}', 'Tenant\SummaryController@destroy');
+            Route::delete('summaries/{summary}', 'Tenant\SummaryController@destroy');
+
+           //Inventories
+           Route::get('inventories', 'Tenant\InventoryController@index')->name('tenant.inventories.index');
+           Route::get('inventories/records', 'Tenant\InventoryController@records');
+           Route::get('inventories/columns', 'Tenant\InventoryController@columns');
+           Route::get('inventories/tables', 'Tenant\InventoryController@tables');
+           Route::get('inventories/record/{inventory}', 'Tenant\InventoryController@record');
+           Route::post('inventories', 'Tenant\InventoryController@store');
+           Route::post('inventories/move', 'Tenant\InventoryController@move');
 
             //Voided
             Route::get('voided', 'Tenant\VoidedController@index')->name('tenant.voided.index');

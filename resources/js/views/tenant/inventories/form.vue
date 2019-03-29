@@ -1,38 +1,38 @@
+
 <template>
     <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create">
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
                     <div class="col-md-8">
-                        <div class="form-group" :class="{'has-danger': errors.description}">
-                            <label class="control-label">Descripción</label>
-                            <el-input v-model="form.description"></el-input>
-                            <small class="form-control-feedback" v-if="errors.description" v-text="errors.description[0]"></small>
+                        <div class="form-group" :class="{'has-danger': errors.item_id}">
+                            <label class="control-label">Producto</label>
+                            <el-select v-model="form.item_id">
+                                <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.item_id" v-text="errors.item_id[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group" :class="{'has-danger': errors.warehouse_id}">
+                            <label class="control-label">Almacén</label>
+                            <el-select v-model="form.warehouse_id">
+                                <el-option v-for="option in warehouses" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.warehouse_id" v-text="errors.warehouse_id[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group" :class="{'has-danger': errors.percentage}">
-                            <label class="control-label">Porcentaje</label>
-                            <el-input v-model="form.percentage"></el-input>
-                            <small class="form-control-feedback" v-if="errors.percentage" v-text="errors.percentage[0]"></small>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group" :class="{'has-danger': errors.discount_type_id}">
-                            <label class="control-label">Tipo de Cargo</label>
-                            <el-select v-model="form.discount_type_id">
-                                <el-option v-for="option in discount_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                            </el-select>
-                            <small class="form-control-feedback" v-if="errors.discount_type_id" v-text="errors.discount_type_id[0]"></small>
+                        <div class="form-group">
+                            <label class="control-label">Cantidad</label>
+                            <el-input v-model="form.quantity"></el-input>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="form-actions text-right mt-4">
                 <el-button @click.prevent="close()">Cancelar</el-button>
-                <el-button type="primary" native-type="submit" :loading="loading_submit">Guardar</el-button>
+                <el-button type="primary" native-type="submit" :loading="loading_submit">Aceptar</el-button>
             </div>
         </form>
     </el-dialog>
@@ -41,25 +41,25 @@
 
 <script>
 
-    import {EventBus} from '../../../helpers/bus'
-
     export default {
         props: ['showDialog', 'recordId'],
         data() {
             return {
                 loading_submit: false,
                 titleDialog: null,
-                resource: 'discounts',
+                resource: 'inventories',
                 errors: {},
                 form: {},
-                discount_types: [],
+                items: [],
+                warehouses: [],
             }
         },
         created() {
             this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
-                    this.discount_types = response.data.discount_types
+                    this.items = response.data.items
+                    this.warehouses = response.data.warehouses
                 })
         },
         methods: {
@@ -67,19 +67,17 @@
                 this.errors = {}
                 this.form = {
                     id: null,
-                    description: null,
-                    percentage: null,
-                    discount_type_id: null,
+                    item_id: null,
+                    warehouse_id: null,
+                    quantity: null,
                 }
             },
             create() {
-                this.titleDialog = (this.recordId)? 'Editar Descuento':'Nuevo Descuento'
-                if (this.recordId) {
-                    this.$http.get(`/${this.resource}/record/${this.recordId}`)
-                        .then(response => {
-                            this.form = response.data.data
-                        })
-                }
+                this.titleDialog = 'Registrar producto en almacén'
+//                this.$http.get(`/${this.resource}/record/${this.recordId}`)
+//                    .then(response => {
+//                        this.form = response.data.data
+//                    })
             },
             submit() {
                 this.loading_submit = true
