@@ -33,6 +33,7 @@ class ItemResource extends JsonResource
             'sale_affectation_igv_type_id' => $this->sale_affectation_igv_type_id,
             'purchase_affectation_igv_type_id' => $this->purchase_affectation_igv_type_id,
             'calculate_quantity' => (bool) $this->calculate_quantity,
+            'has_igv' => (bool) $this->has_igv,
             'warehouses' => collect($this->warehouses)->transform(function($row) {
                 return [
                     'warehouse_description' => $row->warehouse->description,

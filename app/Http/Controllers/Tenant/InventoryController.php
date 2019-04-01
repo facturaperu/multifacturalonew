@@ -24,8 +24,13 @@ class InventoryController extends Controller
     }
     
     public function records(Request $request) {
-        $records = ItemWarehouse::with(['item', 'warehouse'])->orderBy('item_id');
-        
+        $item_description = $request->input('value');
+        $records = ItemWarehouse::with(['item', 'warehouse'])
+                                ->whereHas('item', function($query) use($item_description) {
+                                    $query->where('description', 'like', '%' . $item_description . '%');
+                                })->orderBy('item_id');
+
+//        dd($records);
         return new InventoryCollection($records->paginate(config('tenant.items_per_page')));
     }
 

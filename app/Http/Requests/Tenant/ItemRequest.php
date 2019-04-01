@@ -30,16 +30,20 @@ class ItemRequest extends FormRequest
                 'required'
             ],
             'sale_unit_price' => [
-                'required', 'numeric'
+                'required',
+                'numeric',
+                'gt:0'
             ],
             'purchase_unit_price' => [
                 'required', 'numeric'
             ],
             'stock' => [
-                'required'
+                'required',
+                'gt:0'
             ],
             'stock_min' => [
-                'required'
+                'required',
+                'gt:0'
             ],
             'sale_affectation_igv_type_id' => [
                 'required'

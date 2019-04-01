@@ -15,6 +15,7 @@ class InventoryCollection extends ResourceCollection
     public function toArray($request)
     {
         return $this->collection->transform(function($row, $key) {
+//            dd($row);
             return [
                 'id' => $row->id,
                 'item_description' => $row->item->description,

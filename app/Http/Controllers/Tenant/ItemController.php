@@ -67,12 +67,18 @@ class ItemController extends Controller
     {
         $establishment_id = auth()->user()->establishment->id;
         $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
+
         $id = $request->input('id');
         $item = Item::firstOrNew(['id' => $id]);
         $item->item_type_id = '01';
         $item->warehouse_id = optional($warehouse)->id;
         $item->fill($request->all());
         $item->save();
+
+//        $item->warehouses()->create([
+//            'warehouse_id' => $warehouse->id,
+//            'stock' => $item->stock,
+//        ]);
 
         return [
             'success' => true,

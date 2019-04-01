@@ -6,14 +6,10 @@ use Illuminate\Database\Migrations\Migration;
 
 class TenantItemWarehouseTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        Schema::create('item_warehouse', function (Blueprint $table) {
+        Schema::create('item_warehouse', function (Blueprint $table)
+        {
             $table->increments('id');
             $table->unsignedInteger('item_id');
             $table->unsignedInteger('warehouse_id');
@@ -22,11 +18,6 @@ class TenantItemWarehouseTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('item_warehouse');

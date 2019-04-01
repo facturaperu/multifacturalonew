@@ -36,15 +36,20 @@
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6">
-                        <div class="form-group" :class="{'has-danger': errors.unit_price}">
+                        <div class="form-group" :class="{'has-danger': errors.unit_price_value}">
                             <label class="control-label">Precio Unitario</label>
-                            <el-input v-model="form.unit_price" @input="calculateQuantity">
+                            <el-input v-model="form.unit_price_value" @input="calculateQuantity">
                                 <template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>
                             </el-input>
-                            <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
+                            <small class="form-control-feedback" v-if="errors.unit_price_value" v-text="errors.unit_price[0]"></small>
                         </div>
-                    </div> 
-
+                    </div>
+                    <div class="col-md-3 center-el-checkbox">
+                        <div class="form-group" :class="{'has-danger': errors.has_igv}">
+                            <el-checkbox v-model="form.has_igv">Incluye Igv</el-checkbox><br>
+                            <small class="form-control-feedback" v-if="errors.has_igv" v-text="errors.has_igv[0]"></small>
+                        </div>
+                    </div>
                     <div class="col-md-3 col-sm-6" v-show="form.item.calculate_quantity">
                         <div class="form-group"  :class="{'has-danger': errors.total_item}">
                             <label class="control-label">Total venta producto</label>
@@ -367,10 +372,12 @@
                     percentage_isc: 0,
                     suggested_price: 0,
                     quantity: 1,
+                    unit_price_value: 0,
                     unit_price: 0,
                     charges: [],
                     discounts: [],
                     attributes: [],
+                    has_igv: null
                 }
                 this.activePanel = 0
                 this.total_item = 0
@@ -444,7 +451,8 @@
             },
             changeItem() {
                 this.form.item = _.find(this.items, {'id': this.form.item_id})
-                this.form.unit_price = this.form.item.sale_unit_price
+                this.form.unit_price_value = this.form.item.sale_unit_price
+                this.form.has_igv = this.form.item.has_igv
                 this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id
                 this.form.quantity = 1
                 this.cleanTotalItem()
@@ -456,7 +464,7 @@
             },
             calculateQuantity() {
                 if(this.form.item.calculate_quantity) {
-                    this.form.quantity = _.round((this.total_item / this.form.unit_price), 4)
+                    this.form.quantity = _.round((this.total_item / this.form.unit_price_value), 4)
                 }
             },
             cleanTotalItem(){
@@ -466,7 +474,10 @@
                 if(this.validateTotalItem().total_item)
                     return
 
-                this.form.item.unit_price = this.form.unit_price
+                let unit_price = (this.form.has_igv)?this.form.unit_price_value:this.form.unit_price_value*1.18
+
+                this.form.unit_price = unit_price
+                this.form.item.unit_price = unit_price
                 this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
                 this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale)
                 this.initForm()

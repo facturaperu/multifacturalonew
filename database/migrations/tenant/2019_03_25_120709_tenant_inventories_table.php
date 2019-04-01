@@ -13,8 +13,8 @@ class TenantInventoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventories', function (Blueprint $table) {
-           
+        Schema::create('inventories', function (Blueprint $table)
+        {
             $table->increments('id');
             $table->enum('type', [1, 2, 3]);
             $table->string('description');
@@ -22,8 +22,7 @@ class TenantInventoriesTable extends Migration
             $table->unsignedInteger('warehouse_id');
             $table->unsignedInteger('warehouse_destination_id')->nullable();
             $table->decimal('quantity', 12, 4);
-            $table->timestamps(); 
-
+            $table->timestamps();
         });
     }
 
@@ -35,6 +34,5 @@ class TenantInventoriesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('inventories');
-        
     }
 }

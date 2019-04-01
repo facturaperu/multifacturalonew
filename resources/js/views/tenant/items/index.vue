@@ -24,6 +24,7 @@
                         <th>Código SUNAT</th>
                         <th>Stock</th>
                         <th class="text-right">P.Unitario (Venta)</th>
+                        <th class="text-center">Tiene Igv</th>
                         <th class="text-right">Acciones</th>
                     <tr>
                     <tr slot-scope="{ index, row }">
@@ -34,6 +35,7 @@
                         <td>{{ row.item_code }}</td>
                         <td>{{ row.stock }}<br/>Mín:{{ row.stock_min }}</td>
                         <td class="text-right">{{ row.sale_unit_price }}</td>
+                        <td class="text-center">{{ (row.has_igv)?'Si':'No' }}</td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickCreate(row.id)">Editar</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickDelete(row.id)">Eliminar</button>

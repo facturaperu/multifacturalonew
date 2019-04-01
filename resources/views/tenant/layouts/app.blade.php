@@ -77,7 +77,16 @@
         ul.nav-main > li.nav-active > a {
             box-shadow: 2px 0 0 #0088CC inset;
         }
-
+        .el-checkbox__label {
+            font-size: 13px;
+        }
+        .center-el-checkbox {
+            display: flex;
+            align-items: center;
+        }
+        .center-el-checkbox .el-checkbox {
+            margin-bottom: 0
+        }
     </style>
 
 </head>

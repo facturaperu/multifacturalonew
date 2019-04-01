@@ -28,6 +28,7 @@ class Item extends ModelTenant
         'sale_affectation_igv_type_id',
         'purchase_affectation_igv_type_id',
         'calculate_quantity',
+        'has_igv',
 
         'stock',
         'stock_min',
