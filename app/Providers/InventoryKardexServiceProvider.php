@@ -24,9 +24,9 @@ class InventoryKardexServiceProvider extends ServiceProvider
 
     public function boot()
     {        
-        // $this->sale();
-        // $this->purchase();
-        // $this->sale_note();
+        $this->sale();
+        $this->purchase();
+        $this->sale_note();
 
     }
 

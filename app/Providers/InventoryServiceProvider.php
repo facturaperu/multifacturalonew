@@ -79,6 +79,7 @@ class InventoryServiceProvider extends ServiceProvider
 
     }
 
+    
     private function saveInventory($item){
 
         Inventory::create([
