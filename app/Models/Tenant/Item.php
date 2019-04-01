@@ -34,6 +34,7 @@ class Item extends ModelTenant
         'stock_min',
 
         'attributes',
+        'warehouse_id'
     ];
 
     public function getAttributesAttribute($value)
