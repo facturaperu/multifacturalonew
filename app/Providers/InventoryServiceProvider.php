@@ -19,8 +19,8 @@ class InventoryServiceProvider extends ServiceProvider
      
     public function boot()
     {
-         $this->saveItem();
-         $this->inventory();
+        //  $this->saveItem();
+        //  $this->inventory();
     }
 
 

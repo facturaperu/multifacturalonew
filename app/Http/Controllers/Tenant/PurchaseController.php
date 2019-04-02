@@ -168,13 +168,13 @@ class PurchaseController extends Controller
                         'unit_type_id' => $row->unit_type_id,
                         'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
                         'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
-                        'warehouses' => collect($row->warehouses)->transform(function($row) {
-                            return [
-                                'warehouse_id' => $row->warehouse->id,
-                                'warehouse_description' => $row->warehouse->description,
-                                'stock' => $row->stock,
-                            ];
-                        })
+                        // 'warehouses' => collect($row->warehouses)->transform(function($row) {
+                        //     return [
+                        //         'warehouse_id' => $row->warehouse->id,
+                        //         'warehouse_description' => $row->warehouse->description,
+                        //         'stock' => $row->stock,
+                        //     ];
+                        // })
                     ];
                 });
                 return $items;

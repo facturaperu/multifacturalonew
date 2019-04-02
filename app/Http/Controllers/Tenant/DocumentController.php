@@ -190,12 +190,12 @@ class DocumentController extends Controller
                     'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
                     'calculate_quantity' => (bool) $row->calculate_quantity,
                     'has_igv' => (bool) $row->has_igv,
-                    'warehouses' => collect($row->warehouses)->transform(function($row) {
-                        return [
-                            'warehouse_description' => $row->warehouse->description,
-                            'stock' => $row->stock,
-                        ];
-                    })
+                    // 'warehouses' => collect($row->warehouses)->transform(function($row) {
+                    //     return [
+                    //         'warehouse_description' => $row->warehouse->description,
+                    //         'stock' => $row->stock,
+                    //     ];
+                    // })
                 ];
             });
             return $items;

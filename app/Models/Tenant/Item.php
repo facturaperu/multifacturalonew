@@ -34,7 +34,7 @@ class Item extends ModelTenant
         'stock_min',
 
         'attributes',
-        'warehouse_id'
+        // 'warehouse_id'
     ];
 
     public function getAttributesAttribute($value)
@@ -92,13 +92,13 @@ class Item extends ModelTenant
         return $this->belongsTo(AffectationIgvType::class, 'purchase_affectation_igv_type_id');
     }
 
-    public function scopeWhereWarehouse($query, $warehouse)
-    {
-        if ($warehouse) {
-            return $query->where('warehouse_id', $warehouse->id);
-        }
-        return $query;
-    }
+    // public function scopeWhereWarehouse($query, $warehouse)
+    // {
+    //     if ($warehouse) {
+    //         return $query->where('warehouse_id', $warehouse->id);
+    //     }
+    //     return $query;
+    // }
 
     public function warehouses()
     {

@@ -123,7 +123,7 @@
                     </li>
                     @endif
                     {{--@if(in_array('inventories', $vc_modules))--}}
-                    <li class="
+                    {{-- <li class="
                         nav-parent
                         {{ ($path[0] === 'inventories')?'nav-active nav-expanded':'' }}
                         ">
@@ -138,7 +138,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                     {{--@endif--}}
                     @if(in_array('configuration', $vc_modules))
                     <li class="nav-parent {{ in_array($path[0], ['users', 'establishments'])?'nav-active nav-expanded':'' }}">

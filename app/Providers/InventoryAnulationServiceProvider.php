@@ -18,8 +18,7 @@ class InventoryAnulationServiceProvider extends ServiceProvider
     
     public function boot()
     {
-        $this->anulation();
-        
+        // $this->anulation();
     }
 
 
