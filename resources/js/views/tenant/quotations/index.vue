@@ -51,11 +51,11 @@
                         <td class="text-right">{{ row.total_igv }}</td>
                         <td class="text-right">{{ row.total }}</td>
                         <td class="text-right">
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-custom"
-                                    @click.prevent="clickDownload(row.external_id)"><i class="icons icon-arrow-down-circle"></i></button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickDownload(row.external_id, 'a4')">A4</button>
 
-                                <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
-                                    @click.prevent="clickPrint(row.external_id)"><i class="icons icon-printer"></i></button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                    @click.prevent="clickDownload(row.external_id, 'ticket')">Ticket</button>
                         </td>
                         
                         <td class="text-right"> 
@@ -91,17 +91,14 @@
         },
         created() {
         },
-        methods: { 
-            clickDownload(external_id) {
-                window.open(`/downloads/quotation/quotation/${external_id}`, '_blank');                
-            },  
+        methods: {  
             clickOptions(recordId = null) {
                 this.recordId = recordId
                 this.showDialogOptions = true
-            },
-            clickPrint(external_id){
-                window.open(`/quotations/print/${external_id}`, '_blank');
-            }
+            }, 
+            clickDownload(external_id,format){
+                window.open(`/quotations/download/${external_id}/${format}`, '_blank');
+            } 
         }
     }
 </script>

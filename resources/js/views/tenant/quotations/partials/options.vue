@@ -6,15 +6,15 @@
                 :show-close="false"> 
             <div class="row" v-show="!showGenerate">
                 <div class="col-lg-6 col-md-6 col-sm-6 text-center font-weight-bold">
-                    <p>Descargar PDF</p>
-                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickDownload()">
-                        <i class="icons icon-arrow-down-circle"></i>
+                    <p>Descargar A4</p>
+                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickDownload('a4')">
+                        <i class="fa fa-file-alt"></i>
                     </button>
                 </div> 
                 <div class="col-lg-6 col-md-6 col-sm-6 text-center font-weight-bold">
-                    <p>Imprimir PDF</p>
-                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickPrint()">
-                        <i class="icons icon-printer"></i>
+                    <p>Descargar Ticket</p>
+                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickDownload('ticket')">
+                        <i class="fa fa-receipt"></i>
                     </button>
                 </div> 
             </div>
@@ -265,12 +265,9 @@
                 this.initForm()
                 this.resetDocument()
             },
-            clickDownload(){
-                window.open(`/downloads/quotation/quotation/${this.form.external_id}`, '_blank');
-            },
-            clickPrint(external_id){
-                window.open(`/quotations/print/${this.form.external_id}`, '_blank');
-            }
+            clickDownload(format){
+                window.open(`/quotations/download/${this.form.external_id}/${format}`, '_blank');
+            } 
         }
     }
 </script>

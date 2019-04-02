@@ -309,7 +309,7 @@ if ($hostname) {
             Route::get('quotations/option/tables', 'Tenant\QuotationController@option_tables');
             Route::get('quotations/search/customers', 'Tenant\QuotationController@searchCustomers');
             Route::get('quotations/search/customer/{id}', 'Tenant\QuotationController@searchCustomerById');
-            Route::get('quotations/print/{external_id}', 'Tenant\QuotationController@toPrint');
+            Route::get('quotations/download/{external_id}/{format?}', 'Tenant\QuotationController@download');
 
             
             //sale-notes
