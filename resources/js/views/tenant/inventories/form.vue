@@ -7,7 +7,7 @@
                     <div class="col-md-8">
                         <div class="form-group" :class="{'has-danger': errors.item_id}">
                             <label class="control-label">Producto</label>
-                            <el-select v-model="form.item_id">
+                            <el-select v-model="form.item_id" filterable>
                                 <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.item_id" v-text="errors.item_id[0]"></small>
@@ -16,7 +16,7 @@
                     <div class="col-md-8">
                         <div class="form-group" :class="{'has-danger': errors.warehouse_id}">
                             <label class="control-label">Almacén</label>
-                            <el-select v-model="form.warehouse_id">
+                            <el-select v-model="form.warehouse_id" filterable>
                                 <el-option v-for="option in warehouses" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.warehouse_id" v-text="errors.warehouse_id[0]"></small>
