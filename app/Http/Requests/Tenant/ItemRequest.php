@@ -39,11 +39,11 @@ class ItemRequest extends FormRequest
             ],
             'stock' => [
                 'required',
-                'gt:0'
+                // 'gt:0'
             ],
             'stock_min' => [
                 'required',
-                'gt:0'
+                // 'gt:0'
             ],
             'sale_affectation_igv_type_id' => [
                 'required'
