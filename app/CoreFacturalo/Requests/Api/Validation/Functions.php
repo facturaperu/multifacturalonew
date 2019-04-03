@@ -48,8 +48,8 @@ class Functions
     
     public static function item($inputs) {
 
-        $establishment_id = auth()->user()->establishment->id;
-        $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
+        // $establishment_id = auth()->user()->establishment->id;
+        // $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
 
         $item = Item::updateOrCreate([
             'internal_id' => $inputs['internal_id'],
@@ -63,7 +63,7 @@ class Functions
             'sale_unit_price' =>  $inputs['unit_price'],
             'sale_affectation_igv_type_id' => $inputs['affectation_igv_type_id'],
             'purchase_affectation_igv_type_id' => $inputs['affectation_igv_type_id'],
-            'warehouse_id' => $warehouse->id
+            // 'warehouse_id' => $warehouse->id
         ]);
         return $item->id;
     }

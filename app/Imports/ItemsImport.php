@@ -42,8 +42,8 @@ class ItemsImport implements ToCollection
                     $item = null;
                 }
 
-                $establishment_id = auth()->user()->establishment->id;
-                $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
+                // $establishment_id = auth()->user()->establishment->id;
+                // $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
 
                 if(!$item) {
                     Item::create([
@@ -60,7 +60,7 @@ class ItemsImport implements ToCollection
                         'purchase_affectation_igv_type_id' => $purchase_affectation_igv_type_id,
                         'stock' => $stock,
                         'stock_min' => $stock_min,
-                        'warehouse_id' => $warehouse->id
+                        // 'warehouse_id' => $warehouse->id
                     ]);
                     $registered += 1;
                 }
