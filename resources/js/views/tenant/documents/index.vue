@@ -31,6 +31,7 @@
                         <th>Cliente</th>
                         <th>Número</th>
                         <th>Estado</th>
+                        <th v-if="columns.user_name.visible">Usuario</th>
                         <th class="text-center">Moneda</th>
                         <th class="text-right" v-if="columns.total_exportation.visible">T.Exportación</th>
                         <th class="text-right" v-if="columns.total_free.visible">T.Gratuita</th>
@@ -51,12 +52,17 @@
                             <small v-text="row.document_type_description"></small><br/>
                             <small v-if="row.affected_document" v-text="row.affected_document"></small>
                         </td>
+                        
                         <td>
                             <el-tooltip v-if="tooltip(row, false)" class="item" effect="dark" placement="bottom">
                                 <div slot="content">{{tooltip(row)}}</div>
                                 <span class="badge bg-secondary text-white" :class="{'bg-danger': (row.state_type_id === '11'), 'bg-warning': (row.state_type_id === '13'), 'bg-secondary': (row.state_type_id === '01'), 'bg-info': (row.state_type_id === '03'), 'bg-success': (row.state_type_id === '05'), 'bg-secondary': (row.state_type_id === '07'), 'bg-dark': (row.state_type_id === '09')}">{{row.state_type_description}}</span>
                             </el-tooltip>
                             <span v-else class="badge bg-secondary text-white" :class="{'bg-danger': (row.state_type_id === '11'), 'bg-warning': (row.state_type_id === '13'), 'bg-secondary': (row.state_type_id === '01'), 'bg-info': (row.state_type_id === '03'), 'bg-success': (row.state_type_id === '05'), 'bg-secondary': (row.state_type_id === '07'), 'bg-dark': (row.state_type_id === '09')}">{{row.state_type_description}}</span>
+                        </td>
+                        <td v-if="columns.user_name.visible">
+                            {{row.user_name}}
+                            <br/><small v-text="row.user_email"></small>
                         </td>
                         <td class="text-center">{{ row.currency_type_id }}</td>
                         <td class="text-right" v-if="columns.total_exportation.visible">{{ row.total_exportation }}</td>
@@ -137,6 +143,10 @@
                 recordId: null,
                 showDialogOptions: false,
                 columns: {
+                    user_name: {
+                        title: 'Usuario',
+                        visible: false
+                    },
                     total_exportation: {
                         title: 'T.Exportación',
                         visible: false
