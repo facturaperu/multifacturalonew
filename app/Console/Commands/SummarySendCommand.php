@@ -63,6 +63,7 @@ class SummarySendCommand extends Command
                     'state_type_id' => '01',
                     'group_id' => '02'
                 ])
+                ->take(500)
                 ->get();
             
             if ($documents->count() > 0) {

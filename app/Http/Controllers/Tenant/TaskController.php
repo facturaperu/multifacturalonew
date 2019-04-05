@@ -69,7 +69,7 @@ class TaskController extends Controller
             
             return [
                 'success' => true,
-                'message' => 'Se registro la tarea con éxito.'
+                'message' => 'Se registró la tarea con éxito.'
             ];
         }
         catch (\Exception $e) {
@@ -91,7 +91,7 @@ class TaskController extends Controller
         
         return [
             'success' => true,
-            'message' => 'Se eliminio la tara con éxito.'
+            'message' => 'Se eliminó la tarea con éxito.'
         ];
     }
 }
