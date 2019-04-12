@@ -44,6 +44,11 @@
         @if(!empty($records))
             <div class="">
                 <div class=" ">
+                    @php
+                        $acum_total_taxed=0;
+                        $acum_total_igv=0;
+                        $acum_total=0;
+                    @endphp
                     <table class="">
                         <thead>
                             <tr>
@@ -73,7 +78,19 @@
                                 <td class="celda">{{$value->total_igv}}</td>
                                 <td class="celda">{{$value->total}}</td>
                             </tr>
+                            @php
+                                $acum_total_taxed += $value->total_taxed;
+                                $acum_total_igv += $value->total_igv;
+                                $acum_total += $value->total;
+                            @endphp
                             @endforeach
+                            <tr>
+                                <td colspan="6"></td>
+                                <td >Totales</td>
+                                <td>{{$acum_total_taxed}}</td>
+                                <td>{{$acum_total_igv}}</td>
+                                <td>{{$acum_total}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
