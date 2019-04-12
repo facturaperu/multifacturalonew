@@ -50,12 +50,10 @@
                         <td class="text-right">{{ row.total_taxed }}</td>
                         <td class="text-right">{{ row.total_igv }}</td>
                         <td class="text-right">{{ row.total }}</td>
-                        <td class="text-right">
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
-                                    @click.prevent="clickDownload(row.external_id, 'a4')">A4</button>
+                        <td class="text-right"> 
 
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
-                                    @click.prevent="clickDownload(row.external_id, 'ticket')">Ticket</button>
+                                    @click.prevent="clickOptionsPdf(row.id)">PDF</button>
                         </td>
                         
                         <td class="text-right"> 
@@ -71,6 +69,10 @@
                               :recordId="recordId"
                               :showGenerate="true"
                               :showClose="true"></quotation-options>
+
+            <quotation-options-pdf :showDialog.sync="showDialogOptionsPdf"
+                              :recordId="recordId" 
+                              :showClose="true"></quotation-options-pdf>
         </div>
     </div>
 </template>
@@ -78,15 +80,17 @@
 <script>
  
     import QuotationOptions from './partials/options.vue'
+    import QuotationOptionsPdf from './partials/options_pdf.vue'
     import DataTable from '../../../components/DataTable.vue'
 
     export default { 
-        components: {DataTable,QuotationOptions},
+        components: {DataTable,QuotationOptions, QuotationOptionsPdf},
         data() {
             return { 
                 resource: 'quotations',
                 recordId: null,
-                showDialogOptions: false
+                showDialogOptions: false,
+                showDialogOptionsPdf: false
             }
         },
         created() {
@@ -95,10 +99,11 @@
             clickOptions(recordId = null) {
                 this.recordId = recordId
                 this.showDialogOptions = true
-            }, 
-            clickDownload(external_id,format){
-                window.open(`/quotations/download/${external_id}/${format}`, '_blank');
-            } 
+            },
+            clickOptionsPdf(recordId = null) {
+                this.recordId = recordId
+                this.showDialogOptionsPdf = true
+            }
         }
     }
 </script>

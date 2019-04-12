@@ -6,14 +6,14 @@
                 :show-close="false"> 
             <div class="row" v-show="!showGenerate">
                 <div class="col-lg-6 col-md-6 col-sm-6 text-center font-weight-bold">
-                    <p>Descargar A4</p>
-                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickDownload('a4')">
+                    <p>Imprimir A4</p>
+                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickToPrint('a4')">
                         <i class="fa fa-file-alt"></i>
                     </button>
                 </div> 
                 <div class="col-lg-6 col-md-6 col-sm-6 text-center font-weight-bold">
-                    <p>Descargar Ticket</p>
-                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickDownload('ticket')">
+                    <p>Imprimir Ticket</p>
+                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickToPrint('ticket')">
                         <i class="fa fa-receipt"></i>
                     </button>
                 </div> 
@@ -107,9 +107,9 @@
                 this.form = {
                     id: null,
                     external_id: null, 
-                    download_pdf: null,
+                    identifier: null,
+                    date_of_issue:null,
                     quotation:null,
-                    document_id:null
                 }
             },
             initDocument(){
@@ -243,7 +243,6 @@
                     .then(response => {
                         this.form = response.data.data
                         this.titleDialog = 'Cotización registrada: '+this.form.identifier
-                        console.log(this.form)
                     })
             },
             changeDocumentType() {
@@ -265,8 +264,8 @@
                 this.initForm()
                 this.resetDocument()
             },
-            clickDownload(format){
-                window.open(`/quotations/download/${this.form.external_id}/${format}`, '_blank');
+            clickToPrint(format){
+                window.open(`/${this.resource}/print/${this.form.external_id}/${format}`, '_blank');
             } 
         }
     }

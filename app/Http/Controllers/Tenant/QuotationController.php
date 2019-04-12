@@ -143,7 +143,6 @@ class QuotationController extends Controller
                 $this->quotation->items()->create($row);
             }        
             $this->setFilename();
-            // $this->createPdf(null, $request->actions['format_pdf'], null);
 
         }); 
 
@@ -174,23 +173,7 @@ class QuotationController extends Controller
         return $inputs->all();
     }
 
-
-    public function quotationDocument(Request $request)
-    {
-
-        $quotation = Quotation::findOrFail($request->id);
-        $quotation->document_id = $request->document_id;
-        $quotation->save();
-
-        return [
-            'success' => true,
-            'data' => [
-                'document_id' => $quotation->document_id,
-            ],
-        ];
-    }
-
-
+ 
 
     private function setFilename(){
         
@@ -201,14 +184,108 @@ class QuotationController extends Controller
     }
 
 
-    public function download($external_id, $format = null) {
+    public function table($table)
+    {
+        switch ($table) {
+            case 'customers':
+
+                $customers = Person::whereType('customers')->orderBy('name')->take(20)->get()->transform(function($row) {
+                    return [
+                        'id' => $row->id,
+                        'description' => $row->number.' - '.$row->name,
+                        'name' => $row->name,
+                        'number' => $row->number,
+                        'identity_document_type_id' => $row->identity_document_type_id,
+                        'identity_document_type_code' => $row->identity_document_type->code
+                    ];
+                });
+                return $customers;
+
+                break;
+            
+            case 'items':
+
+                $warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first(); 
+
+                $items = Item::orderBy('description')
+                    // ->with(['warehouses' => function($query) use($warehouse){
+                    //     return $query->where('warehouse_id', $warehouse->id);
+                    // }])
+                    ->get()->transform(function($row) {
+                    $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
+                    return [
+                        'id' => $row->id,
+                        'full_description' => $full_description,
+                        'description' => $row->description,
+                        'currency_type_id' => $row->currency_type_id,
+                        'currency_type_symbol' => $row->currency_type->symbol,
+                        'sale_unit_price' => $row->sale_unit_price,
+                        'purchase_unit_price' => $row->purchase_unit_price,
+                        'unit_type_id' => $row->unit_type_id,
+                        'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
+                        'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
+                        // 'warehouses' => collect($row->warehouses)->transform(function($row) {
+                        //     return [
+                        //         'warehouse_id' => $row->warehouse->id,
+                        //         'warehouse_description' => $row->warehouse->description,
+                        //         'stock' => $row->stock,
+                        //     ];
+                        // })
+                    ];
+                });
+                return $items;
+
+                break;
+            default:
+
+                return [];
+
+                break;
+        } 
+    }
+
+    public function searchCustomerById($id)
+    {        
+   
+        $customers = Person::whereType('customers')
+                    ->where('id',$id) 
+                    ->get()->transform(function($row) {
+                        return [
+                            'id' => $row->id,
+                            'description' => $row->number.' - '.$row->name,
+                            'name' => $row->name,
+                            'number' => $row->number,
+                            'identity_document_type_id' => $row->identity_document_type_id,
+                            'identity_document_type_code' => $row->identity_document_type->code
+                        ];
+                    }); 
+
+        return compact('customers');
+    }
+
+
+    
+    public function download($external_id, $format) {
 
         $quotation = Quotation::where('external_id', $external_id)->first();        
         if (!$quotation) throw new Exception("El código {$external_id} es inválido, no se encontro la cotización relacionada");        
-        if ($format != null) $this->reloadPDF($quotation, $format, $quotation->filename);        
+        $this->reloadPDF($quotation, $format, $quotation->filename);        
         return $this->downloadStorage($quotation->filename, 'quotation');
 
     }
+
+
+    public function toPrint($external_id, $format) {
+ 
+        $quotation = Quotation::where('external_id', $external_id)->first();        
+        if (!$quotation) throw new Exception("El código {$external_id} es inválido, no se encontro la cotización relacionada");        
+        $this->reloadPDF($quotation, $format, $quotation->filename);       
+        $temp = tempnam(sys_get_temp_dir(), 'quotation');
+        file_put_contents($temp, $this->getStorage($quotation->filename, 'quotation'));       
+        return response()->file($temp);
+        
+    }
+
 
     private function reloadPDF($quotation, $format, $filename) {
         $this->createPdf($quotation, $format, $filename);
@@ -295,83 +372,5 @@ class QuotationController extends Controller
     }
  
 
-    public function table($table)
-    {
-        switch ($table) {
-            case 'customers':
-
-                $customers = Person::whereType('customers')->orderBy('name')->take(20)->get()->transform(function($row) {
-                    return [
-                        'id' => $row->id,
-                        'description' => $row->number.' - '.$row->name,
-                        'name' => $row->name,
-                        'number' => $row->number,
-                        'identity_document_type_id' => $row->identity_document_type_id,
-                        'identity_document_type_code' => $row->identity_document_type->code
-                    ];
-                });
-                return $customers;
-
-                break;
-            
-            case 'items':
-
-                $warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first(); 
-
-                $items = Item::orderBy('description')
-                    // ->with(['warehouses' => function($query) use($warehouse){
-                    //     return $query->where('warehouse_id', $warehouse->id);
-                    // }])
-                    ->get()->transform(function($row) {
-                    $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
-                    return [
-                        'id' => $row->id,
-                        'full_description' => $full_description,
-                        'description' => $row->description,
-                        'currency_type_id' => $row->currency_type_id,
-                        'currency_type_symbol' => $row->currency_type->symbol,
-                        'sale_unit_price' => $row->sale_unit_price,
-                        'purchase_unit_price' => $row->purchase_unit_price,
-                        'unit_type_id' => $row->unit_type_id,
-                        'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
-                        'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
-                        // 'warehouses' => collect($row->warehouses)->transform(function($row) {
-                        //     return [
-                        //         'warehouse_id' => $row->warehouse->id,
-                        //         'warehouse_description' => $row->warehouse->description,
-                        //         'stock' => $row->stock,
-                        //     ];
-                        // })
-                    ];
-                });
-                return $items;
-
-                break;
-            default:
-
-                return [];
-
-                break;
-        } 
-    }
-
-    public function searchCustomerById($id)
-    {        
-   
-        $customers = Person::whereType('customers')
-                    ->where('id',$id) 
-                    ->get()->transform(function($row) {
-                        return [
-                            'id' => $row->id,
-                            'description' => $row->number.' - '.$row->name,
-                            'name' => $row->name,
-                            'number' => $row->number,
-                            'identity_document_type_id' => $row->identity_document_type_id,
-                            'identity_document_type_code' => $row->identity_document_type->code
-                        ];
-                    }); 
-
-        return compact('customers');
-    }
  
 }
