@@ -97,6 +97,7 @@ class ClientController extends Controller
 
         $website = new Website();
         $hostname = new Hostname();
+        $this->validateWebsite($uuid, $website);
 
         DB::connection('system')->beginTransaction();
         try {
@@ -193,6 +194,16 @@ class ClientController extends Controller
             'success' => true,
             'message' => 'Cliente Registrado satisfactoriamente'
         ];
+    }
+
+    public function validateWebsite($uuid, $website){
+
+        $exists = $website::where('uuid', $uuid)->first();
+
+        if($exists){
+            throw new Exception("El subdominio ya se encuentra registrado");            
+        }
+
     }
 
     public function destroy($id)

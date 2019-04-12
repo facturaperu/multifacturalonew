@@ -107,7 +107,6 @@
                 .then(response => {
                     this.url_base = response.data.url_base
                     this.plans = response.data.plans
-                    console.log(this.plans)
                 })
         },
         methods: {
@@ -144,7 +143,10 @@
                     .catch(error => {
                         if (error.response.status === 422) {
                             this.errors = error.response.data
-                        } else {
+                        }else if(error.response.status === 500){
+                            this.$message.error(error.response.data.message);
+                        }
+                         else {
                             console.log(error.response)
                         }
                     })
