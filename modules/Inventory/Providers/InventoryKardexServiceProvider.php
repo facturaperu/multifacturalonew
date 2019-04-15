@@ -27,7 +27,7 @@ class InventoryKardexServiceProvider extends ServiceProvider
     {
         PurchaseItem::created(function ($purchase_item) {
             $warehouse = $this->findWarehouse();
-            $this->createInventory($purchase_item->item_id, $purchase_item->quantity, $warehouse->id);
+            //$this->createInventory($purchase_item->item_id, $purchase_item->quantity, $warehouse->id);
             $this->createInventoryKardex($purchase_item->purchase, $purchase_item->item_id, $purchase_item->quantity, $warehouse->id);
             $this->updateStock($purchase_item->item_id, $purchase_item->quantity, $warehouse->id);
         });
@@ -39,7 +39,7 @@ class InventoryKardexServiceProvider extends ServiceProvider
             $document = $document_item->document;
             $factor = ($document->document_type_id === '07')?1:-1;
             $warehouse = $this->findWarehouse();
-            $this->createInventory($document_item->item_id, $factor * $document_item->quantity, $warehouse->id);
+            //$this->createInventory($document_item->item_id, $factor * $document_item->quantity, $warehouse->id);
             $this->createInventoryKardex($document_item->document, $document_item->item_id, $factor * $document_item->quantity, $warehouse->id);
             $this->updateStock($document_item->item_id, $factor * $document_item->quantity, $warehouse->id);
         });
@@ -49,7 +49,7 @@ class InventoryKardexServiceProvider extends ServiceProvider
     {
         SaleNoteItem::created(function ($sale_note_item) {
             $warehouse = $this->findWarehouse();
-            $this->createInventory($sale_note_item->item_id, -1 * $sale_note_item->quantity, $warehouse->id);
+            //$this->createInventory($sale_note_item->item_id, -1 * $sale_note_item->quantity, $warehouse->id);
             $this->createInventoryKardex($sale_note_item->sale_note, $sale_note_item->item_id, -1 * $sale_note_item->quantity, $warehouse->id);
             $this->updateStock($sale_note_item->item_id, -1 * $sale_note_item->quantity, $warehouse->id);
         });

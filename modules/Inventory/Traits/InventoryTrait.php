@@ -60,7 +60,7 @@ trait InventoryTrait
 
     private function createInitialInventory($item_id, $quantity, $warehouse_id)
     {
-        Inventory::create([
+        return Inventory::create([
             'type' => 1,
             'description' => 'Stock inicial',
             'item_id' => $item_id,
@@ -97,12 +97,21 @@ trait InventoryTrait
 
     public function initializeInventory()
     {
+//        $establishments = Establishment::all();
+//        foreach ($establishments as $establishment)
+//        {
+//            Warehouse::firstOrCreate(['establishment_id' => $establishment->id],
+//                                     ['description' => $establishment->description]);
+//        }
+
+        $warehouse = $this->findWarehouse();
         $items = Item::all();
         foreach ($items as $item)
         {
-            $warehouse = $this->findWarehouse();
             if(!$this->checkInventory($item->id, $warehouse->id)) {
-                $this->createInitialInventory($item->id, $item->stock, $warehouse->id);
+                $inventory = $this->createInitialInventory($item->id, $item->stock, $warehouse->id);
+//                $this->createInventoryKardex($inventory, $item->id, $item->stock, $warehouse->id);
+//                $this->updateStock($item->id, $item->stock, $warehouse->id);
             }
         }
     }
