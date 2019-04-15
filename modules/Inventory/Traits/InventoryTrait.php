@@ -4,6 +4,8 @@ namespace Modules\Inventory\Traits;
 
 use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Item;
+use Modules\Inventory\Models\Inventory;
+use Modules\Inventory\Models\ItemWarehouse;
 use Modules\Inventory\Models\Warehouse;
 
 trait InventoryTrait
@@ -19,7 +21,6 @@ trait InventoryTrait
             ];
         });
     }
-
 
     public function optionsItem()
     {
@@ -45,10 +46,64 @@ trait InventoryTrait
         });
     }
 
+    public function findItem($item_id)
+    {
+        return Item::find($item_id);
+    }
+
     public function findWarehouse()
     {
         $establishment = auth()->user()->establishment;
         return Warehouse::firstOrCreate(['establishment_id' => $establishment->id],
             ['description' => 'Almacén '.$establishment->description]);
+    }
+
+    private function createInitialInventory($item_id, $quantity, $warehouse_id)
+    {
+        Inventory::create([
+            'type' => 1,
+            'description' => 'Stock inicial',
+            'item_id' => $item_id,
+            'warehouse_id' => $warehouse_id,
+            'quantity' => $quantity
+        ]);
+    }
+
+    private function createInventoryKardex($model, $item_id, $quantity, $warehouse_id)
+    {
+        $model->inventory_kardex()->create([
+            'date_of_issue' => date('Y-m-d'),
+            'item_id' => $item_id,
+            'warehouse_id' => $warehouse_id,
+            'quantity' => $quantity,
+        ]);
+    }
+
+    private function updateStock($item_id, $quantity, $warehouse_id)
+    {
+        $item_warehouse = ItemWarehouse::firstOrNew(['item_id' => $item_id, 'warehouse_id' => $warehouse_id]);
+        $item_warehouse->stock = $item_warehouse->stock + $quantity;
+        $item_warehouse->save();
+    }
+
+    public function checkInventory($item_id, $warehouse_id)
+    {
+        $inventory = Inventory::where('item_id', $item_id)
+                            ->where('warehouse_id', $warehouse_id)
+                            ->first();
+
+        return ($inventory)?true:false;
+    }
+
+    public function initializeInventory()
+    {
+        $items = Item::all();
+        foreach ($items as $item)
+        {
+            $warehouse = $this->findWarehouse();
+            if(!$this->checkInventory($item->id, $warehouse->id)) {
+                $this->createInitialInventory($item->id, $item->stock, $warehouse->id);
+            }
+        }
     }
 }

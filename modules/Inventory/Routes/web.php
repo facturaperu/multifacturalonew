@@ -25,6 +25,19 @@ if($hostname) {
                 Route::post('/', 'InventoryController@store');
                 Route::post('move', 'InventoryController@move');
                 Route::post('remove', 'InventoryController@remove');
+                Route::get('initialize', 'InventoryController@initialize');
+            });
+
+            Route::prefix('reports')->group(function () {
+                Route::get('inventory', 'ReportInventoryController@index')->name('reports.inventory.index');
+                Route::post('inventory/search', 'ReportInventoryController@search')->name('reports.inventory.search');
+                Route::post('inventory/pdf', 'ReportInventoryController@pdf')->name('reports.inventory.pdf');
+                Route::post('inventory/excel', 'ReportInventoryController@excel')->name('reports.inventory.report_excel');
+
+                Route::get('kardex', 'ReportKardexController@index')->name('reports.kardex.index');
+                Route::post('kardex/search', 'ReportKardexController@search')->name('reports.kardex.search');
+                Route::post('kardex/pdf', 'ReportKardexController@pdf')->name('reports.kardex.pdf');
+                Route::post('kardex/excel', 'ReportKardexController@excel')->name('reports.kardex.report_excel');
             });
 
         });

@@ -10,11 +10,9 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Exports\DocumentExport;
 use Illuminate\Http\Request;
 use App\Traits\ReportTrait;
-use App\Models\Tenant\{
-    Establishment,
-    Document,
-    Company,
-};
+use App\Models\Tenant\Establishment;
+use App\Models\Tenant\Document;
+use App\Models\Tenant\Company;
 use Carbon\Carbon;
 
 class ReportController extends Controller

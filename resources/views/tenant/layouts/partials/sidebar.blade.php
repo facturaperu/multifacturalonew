@@ -122,7 +122,8 @@
                         </ul>
                     </li>
                     @endif
-                    <li class="nav-parent {{ (in_array($path[0], ['inventory', 'warehouses']))?'nav-active nav-expanded':'' }}">
+                    <li class="nav-parent {{ (in_array($path[0], ['inventory', 'warehouses']) ||
+                                             ($path[0] === 'reports' && in_array($path[1], ['kardex', 'inventory'])))?'nav-active nav-expanded':'' }}">
                         <a class="nav-link" href="#">
                             <i class="fas fa-boxes" aria-hidden="true"></i>
                             <span>Inventario</span>
@@ -132,7 +133,17 @@
                                 <a class="nav-link" href="{{route('warehouses.index')}}">Almacenes</a>
                             </li>
                             <li class="{{ ($path[0] === 'inventory')?'nav-active':'' }}">
-                                <a class="nav-link" href="{{route('inventory.index')}}">Movimiento de inventario</a>
+                                <a class="nav-link" href="{{route('inventory.index')}}">Movimientos</a>
+                            </li>
+                            <li class="{{(($path[0] === 'reports') && ($path[1] === 'kardex')) ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('reports.kardex.index')}}">
+                                    Reporte Kardex
+                                </a>
+                            </li>
+                            <li class="{{(($path[0] === 'reports') && ($path[1] == 'inventory')) ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('reports.inventory.index')}}">
+                                    Reporte Inventario
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -188,7 +199,7 @@
                     </li>
                     @endif
                     @if(in_array('reports', $vc_modules))
-                    <li class="nav-parent {{  (($path[0] === 'reports') && in_array($path[1], ['', 'purchases', 'kardex', 'inventories'])) ? 'nav-active nav-expanded' : ''}}">
+                    <li class="nav-parent {{  (($path[0] === 'reports') && in_array($path[1], ['', 'purchases'])) ? 'nav-active nav-expanded' : ''}}">
                         <a class="nav-link" href="#">
                             <i class="fas fa-chart-area" aria-hidden="true"></i>
                             <span>Reportes</span>
@@ -204,16 +215,7 @@
                                     Ventas
                                 </a>
                             </li>
-                            <li class="{{(($path[0] === 'reports') && ($path[1] === 'kardex')) ? 'nav-active' : ''}}">
-                                <a class="nav-link" href="{{route('tenant.reports.kardex.index')}}">
-                                    Kardex
-                                </a>
-                            </li>
-                            <li class="{{(($path[0] === 'reports') && ($path[1] == 'inventories')) ? 'nav-active' : ''}}">
-                                <a class="nav-link" href="{{route('tenant.reports.inventories.index')}}">
-                                    Inventarios
-                                </a>
-                            </li>
+
                             <li class="{{(($path[0] === 'reports') && ($path[1] == 'consistency-documents')) ? 'nav-active' : ''}}">
                                 <a class="nav-link" href="{{route('tenant.consistency-documents.index')}}">Consistencia documentos</a>
                             </li>

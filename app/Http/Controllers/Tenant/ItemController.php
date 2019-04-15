@@ -34,8 +34,9 @@ class ItemController extends Controller
 
     public function records(Request $request)
     {
-        $records = Item::where($request->column, 'like', "%{$request->value}%")
-                       ->orderBy('description');
+        $records = Item::whereWarehouse()
+                        ->where($request->column, 'like', "%{$request->value}%")
+                        ->orderBy('description');
 
         return new ItemCollection($records->paginate(config('tenant.items_per_page')));
     }

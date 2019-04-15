@@ -167,15 +167,8 @@ class DocumentController extends Controller
             return $customers;
         }
         if ($table === 'items') {
-            $establishment_id = auth()->user()->establishment->id;
-            $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
-
-//            $items = Item::whereWarehouse($warehouse)->orderBy('description')->get()->transform(function($row) {
-            $items = Item::orderBy('description')
-                // ->with(['warehouses' => function($query) use($warehouse){
-                //     return $query->where('warehouse_id', $warehouse->id);
-                // }])
-                ->get()->transform(function($row) {
+            $items = Item::whereWarehouse()->orderBy('description')->get();
+            return collect($items)->transform(function($row) {
                 $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
                 return [
                     'id' => $row->id,
@@ -198,7 +191,7 @@ class DocumentController extends Controller
                     // })
                 ];
             });
-            return $items;
+//            return $items;
         }
 
         return [];

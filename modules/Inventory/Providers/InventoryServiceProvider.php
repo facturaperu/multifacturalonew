@@ -29,7 +29,8 @@ class InventoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
-        $this->app->register(InventoryCreateServiceProvider::class);
+        $this->app->register(InventoryChangeServiceProvider::class);
+        $this->app->register(InventoryKardexServiceProvider::class);
     }
 
     /**

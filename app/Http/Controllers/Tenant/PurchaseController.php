@@ -149,13 +149,8 @@ class PurchaseController extends Controller
             
             case 'items':
 
-                $warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first(); 
-
-                $items = Item::orderBy('description')
-                    // ->with(['warehouses' => function($query) use($warehouse){
-                    //     return $query->where('warehouse_id', $warehouse->id);
-                    // }])
-                    ->get()->transform(function($row) {
+                $items = Item::whereWarehouse()->orderBy('description')->get();
+                return collect($items)->transform(function($row) {
                     $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
                     return [
                         'id' => $row->id,
@@ -177,7 +172,7 @@ class PurchaseController extends Controller
                         // })
                     ];
                 });
-                return $items;
+//                return $items;
 
                 break;
             default:
