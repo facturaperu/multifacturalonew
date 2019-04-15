@@ -28,17 +28,26 @@
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.quantity}">
                             <label class="control-label">Cantidad</label>
-                            <el-input-number v-model="form.quantity" :min="0.01"></el-input-number>
+                            <el-input-number v-model="form.quantity" :min="0.01" :disabled="form.item.calculate_quantity"></el-input-number>
                             <small class="form-control-feedback" v-if="errors.quantity" v-text="errors.quantity[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.unit_price}">
                             <label class="control-label">Precio Unitario</label>
-                            <el-input v-model="form.unit_price">
+                            <el-input v-model="form.unit_price" @input="calculateQuantity">
                                 <template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>
                             </el-input>
                             <small class="form-control-feedback" v-if="errors.unit_price" v-text="errors.unit_price[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6" v-show="form.item.calculate_quantity">
+                        <div class="form-group"  :class="{'has-danger': errors.total_item}">
+                            <label class="control-label">Total venta producto</label>
+                            <el-input v-model="total_item" @input="calculateQuantity" :min="0.01" ref="total_item">
+                                <template slot="prepend" v-if="form.item.currency_type_symbol">{{ form.item.currency_type_symbol }}</template>
+                            </el-input>
+                            <small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-12 mt-3">
@@ -157,7 +166,7 @@
             </div>
             <div class="form-actions text-right pt-2">
                 <el-button @click.prevent="close()">Cerrar</el-button>
-                <el-button type="primary" native-type="submit">Agregar</el-button>
+                <el-button type="primary" native-type="submit" v-if="form.item_id">Agregar</el-button>
             </div>
         </form>
         <item-form :showDialog.sync="showDialogNewItem"
@@ -187,7 +196,9 @@
                 charge_types: [],
                 attribute_types: [],
                 use_price: 1,
-                change_affectation_igv_type_id: false
+                change_affectation_igv_type_id: false,
+                total_item: 0
+
             }
         },
         created() {
@@ -228,6 +239,7 @@
                     discounts: [],
                     attributes: [],
                 }
+                this.total_item = 0
             },
             // initializeFields() {
             //     this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
@@ -297,8 +309,15 @@
                 this.form.item = _.find(this.items, {'id': this.form.item_id})
                 this.form.unit_price = this.form.item.sale_unit_price
                 this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id
+                this.form.quantity = 1
+                this.cleanTotalItem()
+
             },
             clickAddItem() {
+                
+                if(this.validateTotalItem().total_item)
+                    return
+
                 this.form.item.unit_price = this.form.unit_price
                 this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
                 this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale)
@@ -306,6 +325,25 @@
                 // this.initializeFields()
                 this.$emit('add', this.row)
             },
+            cleanTotalItem(){
+                this.total_item = null  
+            },  
+            calculateQuantity() {
+                if(this.form.item.calculate_quantity) { 
+                    this.form.quantity = _.round((this.total_item / this.form.unit_price), 4)
+                }
+            },
+            validateTotalItem(){
+
+                this.errors = {} 
+
+                if(this.form.item.calculate_quantity){
+                    if(this.total_item < 0.01)
+                        this.$set(this.errors, 'total_item', ['total venta producto debe ser mayor a 0']);
+                } 
+
+                return this.errors 
+            }, 
             reloadDataItems(item_id) {
                 this.$http.get(`/${this.resource}/table/items`).then((response) => {
                     this.items = response.data
