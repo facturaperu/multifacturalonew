@@ -51,11 +51,15 @@ trait InventoryTrait
         return Item::find($item_id);
     }
 
-    public function findWarehouse()
+    public function findWarehouse($establishment_id = null)
     {
-        $establishment = auth()->user()->establishment;
+        if($establishment_id) {
+            $establishment = Establishment::find($establishment_id);
+        } else {
+            $establishment = auth()->user()->establishment;
+        }
         return Warehouse::firstOrCreate(['establishment_id' => $establishment->id],
-            ['description' => 'Almacén '.$establishment->description]);
+                                        ['description' => 'Almacén '.$establishment->description]);
     }
 
     private function createInitialInventory($item_id, $quantity, $warehouse_id)
