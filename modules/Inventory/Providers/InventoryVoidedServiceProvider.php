@@ -25,7 +25,7 @@ class InventoryVoidedServiceProvider extends ServiceProvider
         Document::updated(function ($document) {
             if($document['document_type_id'] == '01' || $document['document_type_id'] == '03'){
                 if($document['state_type_id'] == 11){
-                    $warehouse = $this->findWarehouse();
+                    $warehouse = $this->findWarehouse($document['establishment_id']);
                     foreach ($document['items'] as $detail) {
                         $this->createInventoryKardex($document, $detail['item_id'], $detail['quantity'], $warehouse->id);
                         $this->updateStock($detail['item_id'], $detail['quantity'], $warehouse->id);
