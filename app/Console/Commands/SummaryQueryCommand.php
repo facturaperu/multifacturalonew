@@ -2,22 +2,19 @@
 
 namespace App\Console\Commands;
 
+use GuzzleHttp\Client as ClientGuzzleHttp;
 use Illuminate\Console\Command;
-use App\Traits\SummaryTrait;
+use Hyn\Tenancy\Models\Website;
 use App\Models\Tenant\{
     Configuration,
-    Document,
     Summary,
     Company,
     User
 };
-use Carbon\Carbon;
 use Auth;
 
 class SummaryQueryCommand extends Command
 {
-    use SummaryTrait;
-    
     /**
      * The name and signature of the console command.
      *
@@ -52,26 +49,44 @@ class SummaryQueryCommand extends Command
         Auth::login(User::firstOrFail());
         
         if (Configuration::firstOrFail()->cron) {
-            $date = Carbon::now()->subDay()->format('Y-m-d');
+            $hostname = Website::query()
+                ->where('uuid', app(\Hyn\Tenancy\Environment::class)->tenant()->uuid)
+                ->first()
+                ->hostnames
+                ->first();
             
-            $documents = Summary::query()
+            $summaries = Summary::query()
                 ->where([
                     'soap_type_id' => Company::firstOrFail()->active()->soap_type_id,
                     'summary_status_type_id' => '1',
-                    'date_of_reference' => $date,
                     'state_type_id' => '03',
                 ])
                 ->get();
             
-            if ($documents->count() > 0) {
-                foreach ($documents as $document) $this->query($document->id);
-            }
-            else {
-                $this->info('No data to process');
+            foreach ($summaries as $summary) {
+                $clientGuzzleHttp = new ClientGuzzleHttp([
+                    'base_uri' => config('tenant.force_https') ? "https://{$hostname->fqdn}" : "http://{$hostname->fqdn}"
+                ]);
+                
+                $response = $clientGuzzleHttp->post('/api/summaries/status', [
+                    'http_errors' => false,
+                    'headers' => [
+                        'Authorization' => 'Bearer '.auth()->user()->api_token,
+                        'Accept' => 'application/json',
+                    ],
+                    'form_params' => [
+                        'external_id' => $summary->external_id,
+                        'ticket' => $summary->ticket
+                    ]
+                ]);
+                
+                $res = json_decode($response->getBody()->getContents(), true);
+                
+                if (!$res['success']) $this->info("{$summary->external_id} - {$summary->ticket} - {$res['message']}");
             }
         }
         else {
-            $this->info('The cron is disabled');
+            $this->info('The crontab is disabled');
         }
         
         $this->info('The command is finished');

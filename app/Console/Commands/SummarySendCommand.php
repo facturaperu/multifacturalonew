@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\CoreFacturalo\Requests\Web\Validation\SummaryValidation;
-use App\CoreFacturalo\Requests\Inputs\SummaryInput;
+use GuzzleHttp\Client as ClientGuzzleHttp;
 use Illuminate\Console\Command;
-use App\Traits\SummaryTrait;
-use Illuminate\Http\Request;
+use Hyn\Tenancy\Models\Website;
 use App\Models\Tenant\{
     Configuration,
     Document,
@@ -18,8 +16,6 @@ use Auth;
 
 class SummarySendCommand extends Command
 {
-    use SummaryTrait;
-    
     /**
      * The name and signature of the console command.
      *
@@ -54,40 +50,46 @@ class SummarySendCommand extends Command
         Auth::login(User::firstOrFail());
         
         if (Configuration::firstOrFail()->cron) {
-            $date = Carbon::now()->subDay()->format('Y-m-d');
+            $hostname = Website::query()
+                ->where('uuid', app(\Hyn\Tenancy\Environment::class)->tenant()->uuid)
+                ->first()
+                ->hostnames
+                ->first();
             
             $documents = Document::query()
+                ->select('date_of_issue')
                 ->where([
                     'soap_type_id' => Company::firstOrFail()->active()->soap_type_id,
-                    'date_of_issue' => $date,
                     'state_type_id' => '01',
                     'group_id' => '02'
                 ])
-                ->take(500)
+                ->groupBy('date_of_issue')
                 ->get();
             
-            if ($documents->count() > 0) {
-                $data = [
-                    'documents' => $documents->toArray(),
-                    'summary_status_type_id' => '1',
-                    'date_of_reference' => $date,
-                    'date_of_issue' => null
-                ];
+            foreach ($documents as $document) {
+                $clientGuzzleHttp = new ClientGuzzleHttp([
+                    'base_uri' => config('tenant.force_https') ? "https://{$hostname->fqdn}" : "http://{$hostname->fqdn}"
+                ]);
                 
-                $data = SummaryValidation::validation($data);
-                $data = SummaryInput::set($data);
+                $response = $clientGuzzleHttp->post('/api/summaries', [
+                    'http_errors' => false,
+                    'headers' => [
+                        'Authorization' => 'Bearer '.auth()->user()->api_token,
+                        'Accept' => 'application/json',
+                    ],
+                    'form_params' => [
+                        'fecha_de_emision_de_documentos' => Carbon::parse($document->date_of_issue)->format('Y-m-d'),
+                        'codigo_tipo_proceso' => 1
+                    ]
+                ]);
                 
-                $request = new Request;
-                $request->merge($data);
+                $res = json_decode($response->getBody()->getContents(), true);
                 
-                $this->save($request);
-            }
-            else {
-                $this->info('No data to process');
+                if (!$res['success']) $this->info("{$document->date_of_issue} - {$res['message']}");
             }
         }
         else {
-            $this->info('The cron is disabled');
+            $this->info('The crontab is disabled');
         }
         
         $this->info('The command is finished');

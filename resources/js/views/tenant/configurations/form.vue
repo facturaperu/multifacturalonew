@@ -15,7 +15,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label class="control-label">Envio de Resumenes automático <small>(2:00 am - 3:00 am)</small></label>
+                            <label class="control-label">Crontab</small></label>
                             <div class="form-group" :class="{'has-danger': errors.cron}">
                                 <el-switch v-model="form.cron" active-text="Si" inactive-text="No" @change="submit"></el-switch>
                                 <small class="form-control-feedback" v-if="errors.cron" v-text="errors.cron[0]"></small>
