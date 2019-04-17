@@ -4,11 +4,13 @@ namespace Modules\Inventory\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade as PDF;
-use App\Exports\InventoryExport;
 use Illuminate\Http\Request;
 use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Item;
+use Modules\Inventory\Models\ItemWarehouse;
+use Modules\Inventory\Exports\InventoryExport;
+
 use Carbon\Carbon;
 
 class ReportInventoryController extends Controller
@@ -19,12 +21,11 @@ class ReportInventoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $reports = Item::query()
-            ->with(['unit_type'])
-            ->where('item_type_id', '01')
-            ->latest()
-            ->get();
-            
+
+        $reports = ItemWarehouse::with(['item'=>function($q){
+                                    $q->where('item_type_id', '01');
+                                }])->latest()->get();
+                    
         return view('inventory::reports.inventory.index', compact('reports'));
     }
     
@@ -34,11 +35,10 @@ class ReportInventoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function search(Request $request) {
-        $reports = Item::query()
-            ->with(['unit_type'])
-            ->where('item_type_id', '01')
-            ->latest()
-            ->get();
+        
+        $reports = ItemWarehouse::with(['item'=>function($q){
+            $q->where('item_type_id', '01');
+        }])->latest()->get();
         
         return view('inventory::reports.inventory.index', compact('reports'));
     }
@@ -49,14 +49,13 @@ class ReportInventoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function pdf(Request $request) {
+
         $company = Company::first();
         $establishment = Establishment::first();
         
-        $reports = Item::query()
-            ->with(['unit_type'])
-            ->where('item_type_id', '01')
-            ->latest()
-            ->get();
+        $reports = ItemWarehouse::with(['item'=>function($q){
+            $q->where('item_type_id', '01');
+        }])->latest()->get();
         
         $pdf = PDF::loadView('inventory::reports.inventory.report_pdf', compact("reports", "company", "establishment"));
         $filename = 'Reporte_Inventario'.date('YmdHis');
@@ -73,12 +72,10 @@ class ReportInventoryController extends Controller
         $company = Company::first();
         $establishment = Establishment::first();
        
-        $records = Item::query()
-            ->with(['unit_type'])
-            ->where('item_type_id', '01')
-            ->latest()
-            ->get();
-        
+        $records = ItemWarehouse::with(['item'=>function($q){
+            $q->where('item_type_id', '01');
+        }])->latest()->get();
+
         return (new InventoryExport)
             ->records($records)
             ->company($company)

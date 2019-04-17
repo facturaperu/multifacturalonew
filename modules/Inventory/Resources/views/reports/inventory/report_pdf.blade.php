@@ -84,14 +84,18 @@
                                 <th>#</th>
                                 <th>Descripción</th>
                                 <th>Inventario actual</th>
+                                <th>Almacén</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($reports as $key => $value)
                                 <tr>
-                                    <td class="celda">{{$value->id}}</td>
-                                    <td class="celda">{{$value->description}}</td>
+                                    <td class="celda">{{$loop->iteration}}</td>
+                                    <td class="celda">{{$value->item->description}}</td>
                                     <td class="celda">{{$value->stock}}</td>
+                                    <td class="celda">{{$value->warehouse->description}}</td>
+
                                 </tr>
                             @endforeach
                         </tbody>

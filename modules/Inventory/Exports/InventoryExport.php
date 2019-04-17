@@ -13,7 +13,6 @@ class InventoryExport implements  FromView, ShouldAutoSize
     
     public function records($records) {
         $this->records = $records;
-        
         return $this;
     }
     
@@ -30,6 +29,7 @@ class InventoryExport implements  FromView, ShouldAutoSize
     }
     
     public function view(): View {
+        
         return view('inventory::reports.inventory.report_excel', [
             'records'=> $this->records,
             'company' => $this->company,
