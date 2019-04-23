@@ -17,6 +17,12 @@ class KardexExport implements  FromView, ShouldAutoSize
         
         return $this;
     }
+
+    public function models($models) {
+        $this->models = $models;
+        
+        return $this;
+    }
     
     public function records($records) {
         $this->records = $records;
@@ -40,6 +46,7 @@ class KardexExport implements  FromView, ShouldAutoSize
         return view('inventory::reports.kardex.report_excel', [
             'balance'=> $this->balance,
             'records'=> $this->records,
+            'models'=> $this->models,
             'company' => $this->company,
             'establishment'=>$this->establishment
         ]);

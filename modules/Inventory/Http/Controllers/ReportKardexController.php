@@ -4,13 +4,17 @@ namespace Modules\Inventory\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade as PDF;
-use App\Exports\KardexExport;
+use Modules\Inventory\Exports\KardexExport;
 use Illuminate\Http\Request;
 use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Kardex;
 use App\Models\Tenant\Item;
 use Carbon\Carbon;
+use Modules\Inventory\Models\InventoryKardex;
+use Modules\Inventory\Models\Warehouse;
+use Modules\Inventory\Http\Resources\ReportKardexCollection;
+
 
 class ReportKardexController extends Controller
 {
@@ -19,7 +23,16 @@ class ReportKardexController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    protected $models = [
+        "App\Models\Tenant\Document", 
+        "App\Models\Tenant\Purchase", 
+        "App\Models\Tenant\SaleNote", 
+        "Modules\Inventory\Models\Inventory"
+    ];
+
     public function index() {
+        
         $items = Item::query()
             ->where('item_type_id', '01')
             ->latest()
@@ -33,7 +46,8 @@ class ReportKardexController extends Controller
      * @param  Request $request
      * @return \Illuminate\Http\Response
      */
-    public function search(Request $request) {
+    public function search(Request $request) { 
+
         $balance = 0;
         
         $items = Item::query()
@@ -41,15 +55,16 @@ class ReportKardexController extends Controller
             ->latest()
             ->get();
         
-        $reports = Kardex::query()
-            ->with(['document', 'purchase', 'item' => function($queryItem) {
-                return $queryItem->where('item_type_id', '01');
-            }])
-            ->where('item_id', $request->item_id)
-            ->orderBy('id')
-            ->get();
+        $warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first();
+
+        $reports = InventoryKardex::with(['inventory_kardexable'])
+                                    ->where([['item_id', $request->item_id],['warehouse_id', $warehouse->id]])  
+                                    ->orderBy('id')     
+                                    ->get();
         
-        return view('inventory::reports.kardex.index', compact('items', 'reports', 'balance'));
+        $models = $this->models;
+        
+        return view('inventory::reports.kardex.index', compact('items', 'reports', 'balance','models'));
     }
     
     /**
@@ -58,19 +73,21 @@ class ReportKardexController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function pdf(Request $request) {
+
         $balance = 0;
         $company = Company::first();
         $establishment = Establishment::first();
         
-        $reports = Kardex::query()
-            ->with(['document', 'purchase', 'item' => function($queryItem) {
-                return $queryItem->where('item_type_id', '01');
-            }])
-            ->where('item_id', $request->item_id)
-            ->orderBy('id')
-            ->get();
+        $warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first();
+
+        $reports = InventoryKardex::with(['inventory_kardexable'])
+                                    ->where([['item_id', $request->item_id],['warehouse_id', $warehouse->id]])  
+                                    ->orderBy('id')     
+                                    ->get();
+
+        $models = $this->models;
         
-        $pdf = PDF::loadView('inventory::reports.kardex.report_pdf', compact("reports", "company", "establishment", "balance"));
+        $pdf = PDF::loadView('inventory::reports.kardex.report_pdf', compact("reports", "company", "establishment", "balance","models"));
         $filename = 'Reporte_Kardex'.date('YmdHis');
         
         return $pdf->download($filename.'.pdf');
@@ -82,21 +99,24 @@ class ReportKardexController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function excel(Request $request) {
+
         $balance = 0;
         $company = Company::first();
         $establishment = Establishment::first();
        
-        $records = Kardex::query()
-            ->with(['document', 'purchase', 'item' => function($queryItem) {
-                return $queryItem->where('item_type_id', '01');
-            }])
-            ->where('item_id', $request->item_id)
-            ->orderBy('id')
-            ->get();
+        $warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first();
+
+        $records = InventoryKardex::with(['inventory_kardexable'])
+                                    ->where([['item_id', $request->item_id],['warehouse_id', $warehouse->id]])  
+                                    ->orderBy('id')     
+                                    ->get();
+
+        $models = $this->models;
         
         return (new KardexExport)
             ->balance($balance)
             ->records($records)
+            ->models($models)
             ->company($company)
             ->establishment($establishment)
             ->download('ReporteKar'.Carbon::now().'.xlsx');

@@ -93,39 +93,87 @@
                         <tbody>
                             @foreach($reports as $key => $value)
                                 <tr>
-                                    <td class="celda">{{$value->id}}</td>
+                                    <td class="celda">{{$loop->iteration}}</td>
                                     <td class="celda">{{$value->created_at}}</td>
                                     <td class="celda">
-                                        @switch($value->type)
-                                            @case('sale') 
-                                                {{($value->sale_note_id) ? "Nota de Venta" : (($value->quantity >= 0) ? "Venta" : "Anulación")}}
+
+                                        @switch($value->inventory_kardexable_type)
+                                            @case($models[0])
+                                                {{($value->quantity < 0) ? "Venta":"Anulación"}}
                                                 @break
-                                            @case('purchase')
+                                            @case($models[1])
                                                 {{"Compra"}}                                                    
+                                                @break 
+                                                
+                                            @case($models[2])
+                                                {{"Nota de venta"}}                                                    
+                                                @break  
+
+                                            @case($models[3])
+                                                {{$value->inventory_kardexable->description}}                                                    
+                                                @break  
+                                        @endswitch
+
+                                        
+                                    </td>
+                                    <td class="celda">
+                                        @switch($value->inventory_kardexable_type)
+                                            @case($models[0])
+                                                {{ "{$value->inventory_kardexable->series}-{$value->inventory_kardexable->number}" }}
                                                 @break
-                                            @default                                                    
-                                                {{"Stock Inicial"}}                                                    
-                                            @break
+                                            @case($models[1])
+                                                {{"{$value->inventory_kardexable->series}-{$value->inventory_kardexable->number}"}}                                                    
+                                                @break 
+                                                
+                                            @case($models[2])
+                                                {{  "{$value->inventory_kardexable->prefix}-{$value->inventory_kardexable->id}" }}                                                    
+                                                @break  
+
+                                            @case($models[3])
+                                                {{"-"}}                                                 
+                                                @break  
+                                        @endswitch
+
+                                    </td>
+                                    <td class="celda">
+                                        @switch($value->inventory_kardexable_type) 
+
+                                            @case($models[0])
+                                                {{ ($value->quantity > 0) ?  $value->quantity:"-"}}
+                                                @break
+                                            @case($models[1])
+                                                {{  $value->quantity }}                                                    
+                                                @break 
+                                                
+                                            @case($models[3])
+                                                {{ ($value->inventory_kardexable->type == 1) ? $value->quantity : "-" }}                                                    
+                                                @break  
+
+                                            @default
+                                                {{"-"}}                                                 
+                                                @break  
                                         @endswitch
                                     </td>
                                     <td class="celda">
-                                        @switch($value->type)
-                                            @case('sale')
-                                                {{($value->document_id) ? "{$value->document->series}-{$value->document->number}" : "{$value->sale_note->prefix}-{$value->sale_note->id}"}}
-                                                @break
-                                            @case('purchase')
-                                                {{"{$value->purchase->series}-{$value->purchase->number}"}}                                                    
-                                                @break
-                                            @default                                                    
-                                                {{"-"}}                                                    
-                                            @break
+                                    
+                                        @switch($value->inventory_kardexable_type) 
+                                            @case($models[0])
+                                                {{ ($value->quantity < 0) ?  $value->quantity:"-" }}                                                    
+                                                @break  
+                                            @case($models[2])
+                                                {{  $value->quantity }}                                                    
+                                                @break      
+                                            @case($models[3])
+                                                {{ ($value->inventory_kardexable->type == 2 || $value->inventory_kardexable->type == 3) ? $value->quantity : "-" }}                                                    
+                                                @break  
+                                            @default
+                                                {{"-"}}                                                 
+                                                @break  
                                         @endswitch
-                                    </td>    
-                                    <td class="celda">{{($value->type == 'purchase' || !$value->type) ? number_format($value->quantity, 4) : number_format(0, 4)}}</td>
-                                    <td class="celda">{{($value->type == 'sale') ? number_format($value->quantity, 4) : number_format(0, 4)}}</td>
-                                    @php
-                                        if ($value->type == 'purchase' || !$value->type) $balance += $value->quantity;
-                                        if ($value->type == 'sale') $balance -= $value->quantity;
+                                    
+                                    </td>
+                                    @php                        
+                                        $balance += $value->quantity;     
                                     @endphp
                                     <td class="celda">{{number_format($balance, 4)}}</td>
                                 </tr>
