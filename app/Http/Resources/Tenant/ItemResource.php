@@ -28,7 +28,7 @@ class ItemResource extends JsonResource
             'system_isc_type_id' => $this->system_isc_type_id,
             'percentage_isc' => $this->percentage_isc,
             'suggested_price' => $this->suggested_price,
-            'stock' => $this->stock,
+            'stock' => $this->getStockByWarehouse(),
             'stock_min' => $this->stock_min,
             'sale_affectation_igv_type_id' => $this->sale_affectation_igv_type_id,
             'purchase_affectation_igv_type_id' => $this->purchase_affectation_igv_type_id,
