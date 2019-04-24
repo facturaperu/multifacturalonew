@@ -223,29 +223,32 @@
                     </li>
                     @endif
                     @if(in_array('configuration', $vc_modules))
-                    <li class="nav-parent {{ in_array($path[0], ['companies', 'catalogs', 'advanced'])?'nav-active nav-expanded':'' }}">
+                    <li class="nav-parent {{in_array($path[0], ['companies', 'catalogs', 'advanced', 'tasks', 'inventories']) ? 'nav-active nav-expanded' : ''}}">
                         <a class="nav-link" href="#">
                             <i class="fas fa-cogs" aria-hidden="true"></i>
                             <span>Configuración</span>
                         </a>
                         <ul class="nav nav-children" style="">
-                            <li class="{{ ($path[0] === 'companies')?'nav-active':'' }}">
+                            <li class="{{($path[0] === 'companies') ? 'nav-active': ''}}">
                                 <a class="nav-link" href="{{route('tenant.companies.create')}}">
                                     Empresa
                                 </a>
                             </li>
-                            <li class="{{ ($path[0] === 'catalogs')?'nav-active':'' }}">
+                            <li class="{{($path[0] === 'catalogs') ? 'nav-active' : ''}}">
                                 <a class="nav-link" href="{{route('tenant.catalogs.index')}}">
                                     Catálogos
                                 </a>
                             </li>
-                            <li class="{{ ($path[0] === 'advanced')?'nav-active':'' }}">
+                            <li class="{{($path[0] === 'advanced') ? 'nav-active' : ''}}">
                                 <a class="nav-link" href="{{route('tenant.advanced.index')}}">
                                     Avanzado
                                 </a>
                             </li>
                             <li class="{{($path[0] === 'tasks') ? 'nav-active': ''}}">
                                 <a class="nav-link" href="{{route('tenant.tasks.index')}}">Tareas programadas</a>
+                            </li>
+                            <li class="{{($path[0] === 'inventories') ? 'nav-active': ''}}">
+                                <a class="nav-link" href="{{route('tenant.inventories.index')}}">Invetarios</a>
                             </li>
                         </ul>
                     </li>

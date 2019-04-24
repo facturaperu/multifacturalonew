@@ -5,6 +5,8 @@ $hostname = app(Hyn\Tenancy\Contracts\CurrentHostname::class);
 if($hostname) {
     Route::domain($hostname->fqdn)->group(function () {
         Route::middleware('auth')->group(function() {
+            // Config inventory
+            Route::get('inventories', 'InventoryController@config')->name('tenant.inventories.index');
 
             Route::prefix('warehouses')->group(function () {
                 Route::get('/', 'WarehouseController@index')->name('warehouses.index');
