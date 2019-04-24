@@ -93,7 +93,7 @@ trait InventoryTrait
         $item_warehouse = ItemWarehouse::firstOrNew(['item_id' => $item_id, 'warehouse_id' => $warehouse_id]);
         $item_warehouse->stock = $item_warehouse->stock + $quantity;
         
-        if (($configuration->stock) && ($item_warehouse->stock < 0)) throw new \Exception("El producto {$item_warehouse->item->description} no tiene el stock suficiente!.");
+        if ((!$configuration->stock) && ($item_warehouse->stock < 0)) throw new \Exception("El producto {$item_warehouse->item->description} no tiene el stock suficiente!.");
         
         $item_warehouse->save();
     }
