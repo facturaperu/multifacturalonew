@@ -10,8 +10,16 @@
         <div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
             <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
         </div>
-    </div>
+    </div> 
     <div class="header-right">
+        @if($vc_company->soap_type_id == "01")
+        <ul class="notifications">
+            <span class="separator"></span>
+            <li class="warning-demo"> 
+                Demo
+            </li> 
+        </ul>
+        @endif
         <span class="separator"></span>
         <div id="userbox" class="userbox">
             <a href="#" data-toggle="dropdown">

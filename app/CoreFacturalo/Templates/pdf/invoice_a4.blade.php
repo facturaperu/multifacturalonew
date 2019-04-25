@@ -2,6 +2,8 @@
     $establishment = $document->establishment;
     $customer = $document->customer;
     $invoice = $document->invoice;
+    $document_base = ($document->note) ? $document->note : null;
+
     $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
     $accounts = \App\Models\Tenant\BankAccount::all();
@@ -104,6 +106,21 @@
             <td>{{ $guide->number }}</td>
         </tr>
     @endforeach
+</table>
+@endif
+
+@if(!is_null($document_base))
+<table class="full-width mt-3">
+    <tr>
+        <td width="25%">Documento Afectado:</td>
+        <td width="20%">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
+        <td width="15%">Tipo de nota:</td>
+        <td width="40%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
+    </tr>
+    <tr>
+        <td class="align-top">Descripción:</td>
+        <td class="text-left" colspan="3">{{ $document_base->note_description }}</td>
+    </tr>
 </table>
 @endif
 

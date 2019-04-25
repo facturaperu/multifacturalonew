@@ -13,7 +13,7 @@
                     <div>
                         <form action="{{route('tenant.search')}}" class="el-form demo-form-inline el-form--inline" method="POST">
                             {{csrf_field()}}
-                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}" data_d="{{$d ?? ''}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}"></tenant-calendar>
+                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}" :establishments="{{json_encode($establishments)}}" establishment="{{$establishment ?? null}}" data_d="{{$d ?? ''}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}"></tenant-calendar>
                         </form>
                     </div>
                     @if(!empty($reports) && $reports->count())
@@ -26,6 +26,7 @@
                                         <input type="hidden" value="{{$d}}" name="d">
                                         <input type="hidden" value="{{$a}}" name="a">
                                         <input type="hidden" value="{{$td}}" name="td">
+                                        <input type="hidden" value="{{$establishment}}" name="establishment">
                                         <button class="btn btn-custom   mt-2 mr-2" type="submit"><i class="fa fa-file-pdf"></i> Exportar PDF</button>
                                         {{-- <label class="pull-right">Se encontraron {{$reports->count()}} registros.</label> --}}
                                     </form>
@@ -34,6 +35,7 @@
                                     <input type="hidden" value="{{$d}}" name="d">
                                     <input type="hidden" value="{{$td}}" name="td">
                                     <input type="hidden" value="{{$a}} " name="a">
+                                    <input type="hidden" value="{{$establishment}}" name="establishment">
                                     <button class="btn btn-custom   mt-2 mr-2" type="submit"><i class="fa fa-file-excel"></i> Exportar Excel</button>
                                     {{-- <label class="pull-right">Se encontraron {{$reports->count()}} registros.</label> --}}
                                 </form>
