@@ -29,6 +29,7 @@
                         {{ ($path[0] === 'voided')?'nav-active nav-expanded':'' }}
                         {{ ($path[0] === 'quotations')?'nav-active nav-expanded':'' }}
                         {{ ($path[0] === 'sale-notes')?'nav-active nav-expanded':'' }}
+                        {{ ($path[0] === 'contingencies')?'nav-active nav-expanded':'' }}
                         ">
                         <a class="nav-link" href="#">
                             <i class="fas fa-receipt" aria-hidden="true"></i>
@@ -43,6 +44,11 @@
                             <li class="{{ ($path[0] === 'documents' && $path[1] != 'create')?'nav-active':'' }}">
                                 <a class="nav-link" href="{{route('tenant.documents.index')}}">
                                     Listado de comprobantes
+                                </a>
+                            </li>
+                            <li class="{{ ($path[0] === 'contingencies' )?'nav-active':'' }}">
+                                <a class="nav-link" href="{{route('tenant.contingencies.index')}}">
+                                    Documentos de contingencia
                                 </a>
                             </li>
                             <li class="{{ ($path[0] === 'items')?'nav-active':'' }}">
@@ -199,7 +205,7 @@
                     </li>
                     @endif
                     @if(in_array('reports', $vc_modules))
-                    <li class="nav-parent {{  (($path[0] === 'reports') ) ? 'nav-active nav-expanded' : ''}}">
+                    <li class="nav-parent {{  ($path[0] === 'reports' && in_array($path[1], ['purchases', 'search'])) ? 'nav-active nav-expanded' : ''}}">
                         <a class="nav-link" href="#">
                             <i class="fas fa-chart-area" aria-hidden="true"></i>
                             <span>Reportes</span>

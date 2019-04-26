@@ -149,6 +149,13 @@ if ($hostname) {
             Route::get('documents/send_server/{document}/{query?}', 'Tenant\DocumentController@sendServer');
             Route::get('documents/check_server/{document}', 'Tenant\DocumentController@checkServer');
 
+            //Contingencies
+            Route::get('contingencies', 'Tenant\ContingencyController@index')->name('tenant.contingencies.index');
+            Route::get('contingencies/columns', 'Tenant\ContingencyController@columns');
+            Route::get('contingencies/records', 'Tenant\ContingencyController@records');
+            Route::get('contingencies/create', 'Tenant\ContingencyController@create')->name('tenant.contingencies.create');
+
+
             //Summaries
             Route::get('summaries', 'Tenant\SummaryController@index')->name('tenant.summaries.index');
             Route::get('summaries/records', 'Tenant\SummaryController@records');

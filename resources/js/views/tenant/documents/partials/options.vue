@@ -54,7 +54,7 @@
 
 <script>
     export default {
-        props: ['showDialog', 'recordId', 'showClose'],
+        props: ['showDialog', 'recordId', 'showClose','isContingency'],
         data() {
             return {
                 titleDialog: null,
@@ -139,7 +139,7 @@
                     })
             },
             clickFinalize() {
-                location.href = `/${this.resource}`
+                location.href = (this.isContingency) ? `/contingencies` : `/${this.resource}`
             },
             clickNewDocument() {
                 this.clickClose()

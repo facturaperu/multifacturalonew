@@ -65,6 +65,7 @@
     
         <document-options :showDialog.sync="showDialogOptions"
                           :recordId="documentNewId"
+                          :isContingency="false"
                           :showClose="true"></document-options>
     </div>
 </template>

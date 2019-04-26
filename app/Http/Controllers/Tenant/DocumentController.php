@@ -63,7 +63,10 @@ class DocumentController extends Controller
 
     public function records(Request $request)
     {
+        $series = Series::select('number')->where('contingency', false)->get();
+
         $records = Document::where($request->column, 'like', "%{$request->value}%")
+                            ->whereIn('series',$series)
                             ->latest();
 
         return new DocumentCollection($records->paginate(config('tenant.items_per_page')));
@@ -96,12 +99,15 @@ class DocumentController extends Controller
  
     public function create()
     {
-        return view('tenant.documents.form');
+        $is_contingency = 0;
+
+        return view('tenant.documents.form', compact('is_contingency'));
     }
     
 
     public function tables()
     {
+
         $customers = $this->table('customers');
         $establishments = Establishment::where('id', auth()->user()->establishment_id)->get();// Establishment::all();
         $series = Series::all();

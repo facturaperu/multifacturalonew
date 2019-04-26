@@ -257,6 +257,7 @@
 
         <document-options :showDialog.sync="showDialogOptions"
                           :recordId="documentNewId"
+                          :isContingency="is_contingency"
                           :showClose="false"></document-options>
     </div>
 </template>
@@ -270,6 +271,7 @@
     import Logo from '../companies/logo.vue'
 
     export default {
+        props: ['is_contingency'],
         components: {DocumentFormItem, PersonForm, DocumentOptions, Logo},
         mixins: [functions, exchangeRate],
         data() {
@@ -303,6 +305,7 @@
             }
         },
         async created() {
+            console.log(this.is_contingency )
             await this.initForm()
             await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
@@ -433,7 +436,8 @@
             filterSeries() {
                 this.form.series_id = null
                 this.series = _.filter(this.all_series, {'establishment_id': this.form.establishment_id,
-                                                         'document_type_id': this.form.document_type_id})
+                                                         'document_type_id': this.form.document_type_id,
+                                                         'contingency': this.is_contingency})
                 this.form.series_id = (this.series.length > 0)?this.series[0].id:null
             },
             filterCustomers() {
@@ -545,7 +549,7 @@
                 });
             },
             close() {
-                location.href = '/documents'
+                location.href = (this.is_contingency) ? `/contingencies` : `/${this.resource}`
             },
             reloadDataCustomers(customer_id) {
                 // this.$http.get(`/${this.resource}/table/customers`).then((response) => {
