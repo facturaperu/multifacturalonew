@@ -121,4 +121,17 @@ class Functions
             if (!in_array($person->identity_document_type_id, ['01','04','06','07'])) throw new Exception("El tipo doc. identidad {$person->identity_document_type->description} del cliente no es valido.");
         }
     }
+
+
+    public static function identityDocumentTypeInvoice($inputs){
+
+        if (($inputs['document_type_id'] == '01')) {
+
+            $person = Person::find($inputs['customer_id']);
+            
+            if (!in_array($person->identity_document_type_id, ['6'], true)) throw new Exception("El tipo doc. identidad {$person->identity_document_type->description} del cliente no es válido.");
+        }
+
+    }
+
 }

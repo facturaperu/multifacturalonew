@@ -22,6 +22,7 @@ class DocumentValidation
         $inputs['items'] = self::items($inputs['items']);
         
         Functions::DNI($inputs);
+        Functions::identityDocumentTypeInvoice($inputs);
         
         return $inputs;
     }

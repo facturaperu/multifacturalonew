@@ -10,6 +10,7 @@ class DocumentValidation
         unset($inputs['series_id']);
         
         Functions::DNI($inputs);
+        Functions::identityDocumentTypeInvoice($inputs);
         
         return $inputs;
     }
