@@ -236,6 +236,32 @@ class DocumentController extends Controller
         ];
     }
 
+    public function reStore($document_id)
+    {
+        $fact = DB::connection('tenant')->transaction(function () use ($document_id) {
+            $document = Document::find($document_id);
+            $facturalo = new Facturalo();
+            $facturalo->setDocument($document);
+            $facturalo->setType('invoice');
+            $facturalo->createXmlUnsigned();
+            $facturalo->signXmlUnsigned();
+            $facturalo->updateHash();
+            $facturalo->updateQr();
+            $facturalo->updateSoap('02');
+            $facturalo->updateState('01');
+            $facturalo->createPdf($document, 'invoice', 'ticket');
+//            $facturalo->senderXmlSignedBill();
+        });
+
+//        $document = $fact->getDocument();
+//        $response = $fact->getResponse();
+
+        return [
+            'success' => true,
+            'message' => 'El documento se volvio a generar.',
+        ];
+    }
+
     public function email(DocumentEmailRequest $request)
     {
         $company = Company::active();

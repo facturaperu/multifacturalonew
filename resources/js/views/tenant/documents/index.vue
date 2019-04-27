@@ -96,6 +96,8 @@
                         <!--</td>-->
 
                         <td class="text-right">
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
+                                    @click.prevent="clickReStore(row.id)">Volver a generar</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger m-1__2"
                                     @click.prevent="clickVoided(row.id)"
                                     v-if="row.btn_voided"  >Anular</button>
@@ -236,6 +238,20 @@
             clickOptions(recordId = null) {
                 this.recordId = recordId
                 this.showDialogOptions = true
+            },
+            clickReStore(document_id) {
+                this.$http.get(`/${this.resource}/re_store/${document_id}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            this.$message.success(response.data.message)
+                            this.$eventHub.$emit('reloadData')
+                        } else {
+                            this.$message.error(response.data.message)
+                        }
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data.message)
+                    })
             },
             tooltip(row, message = true) {
                 if (message) {

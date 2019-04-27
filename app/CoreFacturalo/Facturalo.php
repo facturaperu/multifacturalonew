@@ -185,6 +185,13 @@ class Facturalo
         ]);
     }
 
+    public function updateSoap($soap_type_id)
+    {
+        $this->document->update([
+            'soap_type_id' => $soap_type_id
+        ]);
+    }
+
     public function updateStateDocuments($state_type_id)
     {
         foreach ($this->document->documents as $doc)
