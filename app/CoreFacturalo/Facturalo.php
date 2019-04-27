@@ -190,6 +190,9 @@ class Facturalo
         $this->document->update([
             'soap_type_id' => $soap_type_id
         ]);
+        $this->document->invoice()->update([
+            'date_of_due' => $this->document->date_of_issue
+        ]);
     }
 
     public function updateStateDocuments($state_type_id)

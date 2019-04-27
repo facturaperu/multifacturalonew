@@ -56,6 +56,7 @@ class DocumentCollection extends ResourceCollection
                 'id' => $row->id,
                 'group_id' => $row->group_id,
                 'soap_type_id' => $row->soap_type_id,
+                'soap_type_description' => $row->soap_type->description,
                 'date_of_issue' => $row->date_of_issue->format('Y-m-d'),
                 'number' => $row->number_full,
                 'customer_name' => $row->customer->name,
