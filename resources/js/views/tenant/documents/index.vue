@@ -98,8 +98,8 @@
                         <!--</td>-->
 
                         <td class="text-right">
-                            <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"-->
-                                    <!--@click.prevent="clickReStore(row.id)">Volver a generar</button>-->
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
+                                    @click.prevent="clickReStore(row.id)">Volver a generar</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger m-1__2"
                                     @click.prevent="clickVoided(row.id)"
                                     v-if="row.btn_voided"  >Anular</button>
