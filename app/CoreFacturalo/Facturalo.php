@@ -16,6 +16,7 @@ use App\CoreFacturalo\WS\Signed\XmlSigned;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
 use App\Models\Tenant\Company;
 use App\Mail\Tenant\DocumentEmail;
+use App\Models\Tenant\Invoice;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Tenant\Dispatch;
 use App\Models\Tenant\Document;
@@ -190,9 +191,9 @@ class Facturalo
         $this->document->update([
             'soap_type_id' => $soap_type_id
         ]);
-        $this->document->invoice()->update([
-            'date_of_due' => $this->document->date_of_issue
-        ]);
+        $invoice = Invoice::where('document_id', $this->document->id)->first();
+        $invoice->date_of_due = $this->document->date_of_issue;
+        $invoice->save();
     }
 
     public function updateStateDocuments($state_type_id)
