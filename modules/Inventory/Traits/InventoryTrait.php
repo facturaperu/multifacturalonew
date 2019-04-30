@@ -5,6 +5,7 @@ namespace Modules\Inventory\Traits;
 use Modules\Inventory\Models\{
     ItemWarehouse,
     Warehouse,
+    InventoryConfiguration,
     Inventory
 };
 use App\Models\Tenant\{
@@ -88,13 +89,21 @@ trait InventoryTrait
     }
     
     private function updateStock($item_id, $quantity, $warehouse_id) {
-        $configuration = Configuration::firstOrFail();
+
+        $inventory_configuration = InventoryConfiguration::firstOrFail();
         
         $item_warehouse = ItemWarehouse::firstOrNew(['item_id' => $item_id, 'warehouse_id' => $warehouse_id]);
         $item_warehouse->stock = $item_warehouse->stock + $quantity;
         
-        if ((!$configuration->stock) && ($item_warehouse->stock < 0)) throw new \Exception("El producto {$item_warehouse->item->description} no tiene el stock suficiente!.");
-        
+        // dd($item_warehouse->item->unit_type_id);
+
+        if($quantity < 0 && $item_warehouse->item->unit_type_id !== 'ZZ'){
+            if (($inventory_configuration->stock_control) && ($item_warehouse->stock < 0)){             
+                throw new Exception("El producto {$item_warehouse->item->description} no tiene suficiente stock!");
+            }
+        }
+            
+
         $item_warehouse->save();
     }
     

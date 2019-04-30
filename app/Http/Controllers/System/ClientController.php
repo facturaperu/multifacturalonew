@@ -190,6 +190,8 @@ class ClientController extends Controller
             ['module_id' => 5, 'user_id' => $user_id], 
         ]);
 
+        
+
         return [
             'success' => true,
             'message' => 'Cliente Registrado satisfactoriamente'

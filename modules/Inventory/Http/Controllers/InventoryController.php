@@ -195,7 +195,5 @@ class InventoryController extends Controller
         $this->initializeInventory();
     }
     
-    public function config() {
-        return view('inventory::config.index');
-    }
+    
 }

@@ -8,10 +8,10 @@
                 <div class="form-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <label class="control-label">Facturar sin inventario</label>
-                            <div class="form-group" :class="{'has-danger': errors.stock}">
-                                <el-switch v-model="form.stock" active-text="Si" inactive-text="No" @change="submit"></el-switch>
-                                <small class="form-control-feedback" v-if="errors.stock" v-text="errors.stock[0]"></small>
+                            <label class="control-label">Venta con stock</label>
+                            <div class="form-group" :class="{'has-danger': errors.stock_control}">
+                                <el-switch v-model="form.stock_control" active-text="Si" inactive-text="No" @change="submit"></el-switch>
+                                <small class="form-control-feedback" v-if="errors.stock_control" v-text="errors.stock_control[0]"></small>
                             </div>
                         </div>
                     </div>
@@ -21,10 +21,54 @@
     </div>
 </template>
 
+
 <script>
-    import Config from '../../../../../../resources/js/views/tenant/configurations/form.vue';
-    
     export default {
-        mixins: [Config]
+        data() {
+            return {
+                loading_submit: false,
+                resource: 'inventories/configuration',
+                errors: {},
+                form: {}
+            }
+        },
+        async created() {
+            await this.initForm();
+            
+            await this.$http.get(`/${this.resource}/record`) .then(response => {
+                if (response.data !== '') this.form = response.data.data;
+            });
+        },
+        methods: {
+            initForm() {
+                this.errors = {};
+                
+                this.form = {
+                    id: null,
+                    stock_control: false,
+                };
+            },
+            submit() {
+                this.loading_submit = true;
+                
+                this.$http.post(`/${this.resource}`, this.form).then(response => {
+                    if (response.data.success) {
+                        this.$message.success(response.data.message);
+                    }
+                    else {
+                        this.$message.error(response.data.message);
+                    }
+                }).catch(error => {
+                    if (error.response.status === 422) {
+                        this.errors = error.response.data.errors;
+                    }
+                    else {
+                        console.log(error);
+                    }
+                }).then(() => {
+                    this.loading_submit = false;
+                });
+            }
+        }
     }
 </script>

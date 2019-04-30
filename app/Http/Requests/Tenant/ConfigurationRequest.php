@@ -17,7 +17,7 @@ class ConfigurationRequest extends FormRequest
         return [
             'send_auto' => ['required', 'boolean'],
             'cron' => ['required', 'boolean'],
-            'stock' => ['required', 'boolean']
+            // 'stock' => ['required', 'boolean']
         ];
     }
 }

@@ -253,8 +253,8 @@
                             <li class="{{($path[0] === 'tasks') ? 'nav-active': ''}}">
                                 <a class="nav-link" href="{{route('tenant.tasks.index')}}">Tareas programadas</a>
                             </li>
-                            <li class="{{($path[0] === 'inventories') ? 'nav-active': ''}}">
-                                <a class="nav-link" href="{{route('tenant.inventories.index')}}">Inventarios</a>
+                            <li class="{{($path[0] === 'inventories' && $path[1] === 'configuration') ? 'nav-active': ''}}">
+                                <a class="nav-link" href="{{route('tenant.inventories.configuration.index')}}">Inventarios</a>
                             </li>
                         </ul>
                     </li>
