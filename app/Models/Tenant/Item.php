@@ -101,9 +101,14 @@ class Item extends ModelTenant
                             $query->where('warehouse_id', $warehouse->id);
                         });
         }
-         return $query;
+        return $query;
      }
  
+    public function scopeWhereTypeUser($query)
+    {
+        $user = auth()->user();         
+        return ($user->type == 'seller') ? $this->scopeWhereWarehouse($query) : null; 
+    }
 
     public function getStockByWarehouse()
     {

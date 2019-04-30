@@ -30,6 +30,12 @@ class ItemCollection extends ResourceCollection
                 'purchase_unit_price' => "{$row->currency_type->symbol} {$row->purchase_unit_price}",
                 'created_at' => $row->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $row->updated_at->format('Y-m-d H:i:s'),
+                'warehouses' => collect($row->warehouses)->transform(function($row) {
+                    return [
+                        'warehouse_description' => $row->warehouse->description,
+                        'stock' => $row->stock,
+                    ];
+                })
             ];
         });
     }
