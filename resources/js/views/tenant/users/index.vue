@@ -11,6 +11,7 @@
                         <th>#</th>
                         <th>Email</th>
                         <th>Nombre</th>
+                        <th>Perfil</th>
                         <th>Api Token</th>
                         <th>Establecimiento</th>
                     </tr>
@@ -20,6 +21,7 @@
                         <td>{{ index + 1 }}</td>
                         <td>{{ row.email }}</td>
                         <td>{{ row.name }}</td>
+                        <td>{{ row.type }}</td>
                         <td>{{ row.api_token }}</td>
                         <td>{{ row.establishment_description }}</td>
                         <td class="text-right">

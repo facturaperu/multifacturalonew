@@ -27,8 +27,9 @@ class UserController extends Controller
     {
         $modules = Module::orderBy('description')->get();
         $establishments = Establishment::orderBy('description')->get();
+        $types = [['type' => 'admin', 'description'=>'Administrador'], ['type' => 'seller', 'description'=>'Vendedor']];
 
-        return compact('modules', 'establishments');
+        return compact('modules', 'establishments','types');
     }
 
     public function store(UserRequest $request)
@@ -38,6 +39,7 @@ class UserController extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->establishment_id = $request->input('establishment_id');
+        $user->type = $request->input('type');
         if (!$id) {
             $user->api_token = str_random(50);
             $user->password = bcrypt($request->input('password'));

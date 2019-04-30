@@ -33,18 +33,27 @@
                             <small class="form-control-feedback" v-if="errors.api_token" v-text="errors.api_token[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.password}">
                             <label class="control-label">Contraseña</label>
                             <el-input v-model="form.password"></el-input>
                             <small class="form-control-feedback" v-if="errors.password" v-text="errors.password[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.password_confirmation}">
                             <label class="control-label">Confirmar Contraseña</label>
                             <el-input v-model="form.password_confirmation"></el-input>
                             <small class="form-control-feedback" v-if="errors.password_confirmation" v-text="errors.password_confirmation[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" :class="{'has-danger': errors.type}">
+                            <label class="control-label">Perfil</label>
+                            <el-select v-model="form.type" :disabled="form.id===1">
+                                <el-option v-for="option in types" :key="option.type" :value="option.type" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.type" v-text="errors.type[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -82,7 +91,8 @@
                 errors: {},
                 form: {},
                 modules: [],
-                establishments: []
+                establishments: [],
+                types: [],
             }
         },
         async created() {
@@ -90,6 +100,7 @@
                 .then(response => {
                     this.modules = response.data.modules
                     this.establishments = response.data.establishments
+                    this.types = response.data.types
                 })
             await this.initForm()
         },
@@ -105,6 +116,7 @@
                     password: null,
                     password_confirmation: null,
                     locked:false,
+                    type:null,
                     modules: []
                 }
 

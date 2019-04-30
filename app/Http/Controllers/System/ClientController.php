@@ -179,6 +179,7 @@ class ClientController extends Controller
             'password' => bcrypt($request->input('password')),
             'api_token' => $token,
             'establishment_id' => $establishment_id,
+            'type' => 'admin',
             'locked' => true
         ]);
 

@@ -94,13 +94,13 @@ class Item extends ModelTenant
 
      public function scopeWhereWarehouse($query)
      {
-         $establishment_id = auth()->user()->establishment_id;
-         $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
-         if ($warehouse) {
-             return $query->whereHas('warehouses', function($query) use($warehouse) {
-                             $query->where('warehouse_id', $warehouse->id);
-                         });
-         }
+        $establishment_id = auth()->user()->establishment_id;
+        $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
+        if ($warehouse) {
+            return $query->whereHas('warehouses', function($query) use($warehouse) {
+                            $query->where('warehouse_id', $warehouse->id);
+                        });
+        }
          return $query;
      }
  
