@@ -8,7 +8,7 @@
                 <div class="form-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <label class="control-label">Venta con stock</label>
+                            <label class="control-label">Venta con restricción de stock</label>
                             <div class="form-group" :class="{'has-danger': errors.stock_control}">
                                 <el-switch v-model="form.stock_control" active-text="Si" inactive-text="No" @change="submit"></el-switch>
                                 <small class="form-control-feedback" v-if="errors.stock_control" v-text="errors.stock_control[0]"></small>
