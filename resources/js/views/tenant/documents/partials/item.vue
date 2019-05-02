@@ -44,12 +44,12 @@
                             <small class="form-control-feedback" v-if="errors.unit_price_value" v-text="errors.unit_price[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-3 center-el-checkbox">
-                        <div class="form-group" :class="{'has-danger': errors.has_igv}">
-                            <el-checkbox v-model="form.has_igv">Incluye Igv</el-checkbox><br>
-                            <small class="form-control-feedback" v-if="errors.has_igv" v-text="errors.has_igv[0]"></small>
-                        </div>
-                    </div>
+                    <!--<div class="col-md-3 center-el-checkbox">-->
+                        <!--<div class="form-group" :class="{'has-danger': errors.has_igv}">-->
+                            <!--<el-checkbox v-model="form.has_igv">Incluye Igv</el-checkbox><br>-->
+                            <!--<small class="form-control-feedback" v-if="errors.has_igv" v-text="errors.has_igv[0]"></small>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="col-md-3 col-sm-6" v-show="form.item.calculate_quantity">
                         <div class="form-group"  :class="{'has-danger': errors.total_item}">
                             <label class="control-label">Total venta producto</label>
