@@ -13,7 +13,7 @@
                     <div>
                         <form action="{{route('tenant.search')}}" class="el-form demo-form-inline el-form--inline" method="POST">
                             {{csrf_field()}}
-                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}" data_d="{{$d ?? ''}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}"></tenant-calendar>
+                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}" :establishments="{{json_encode($establishments)}}" establishment="{{$establishment ?? null}}" data_d="{{$d ?? ''}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}"></tenant-calendar>
                         </form>
                     </div>
                     @if(!empty($reports) && $reports->count())
@@ -26,6 +26,7 @@
                                         <input type="hidden" value="{{$d}}" name="d">
                                         <input type="hidden" value="{{$a}}" name="a">
                                         <input type="hidden" value="{{$td}}" name="td">
+                                        <input type="hidden" value="{{$establishment}}" name="establishment">
                                         <button class="btn btn-custom   mt-2 mr-2" type="submit"><i class="fa fa-file-pdf"></i> Exportar PDF</button>
                                         {{-- <label class="pull-right">Se encontraron {{$reports->count()}} registros.</label> --}}
                                     </form>
@@ -34,17 +35,23 @@
                                     <input type="hidden" value="{{$d}}" name="d">
                                     <input type="hidden" value="{{$td}}" name="td">
                                     <input type="hidden" value="{{$a}} " name="a">
+                                    <input type="hidden" value="{{$establishment}}" name="establishment">
                                     <button class="btn btn-custom   mt-2 mr-2" type="submit"><i class="fa fa-file-excel"></i> Exportar Excel</button>
                                     {{-- <label class="pull-right">Se encontraron {{$reports->count()}} registros.</label> --}}
                                 </form>
                                 @endif
                             </div>
+                            @php
+                                $acum_total_taxed=0;
+                                $acum_total_igv=0;
+                                $acum_total=0;
+                            @endphp
                             <table width="100%" class="table table-striped table-responsive-xl table-bordered table-hover">
                                 <thead class="">
                                     <tr>
                                         <th class="">#</th>
                                         <th class="">Tipo Documento</th>
-                                        <th class="">Número</th>
+                                        <th class="">Comprobante</th>
                                         <th class="">Fecha emisión</th>
                                         <th class="">Cliente</th>
                                         <th class="">RUC</th>
@@ -57,7 +64,7 @@
                                 <tbody>
                                     @foreach($reports as $key => $value)
                                     <tr>
-                                        <td>{{$value->number}}</td>
+                                        <td>{{$loop->iteration}}</td>
                                         <td>{{$value->document_type->id}}</td>
                                         <td>{{$value->series}}-{{$value->number}}</td>
                                         <td>{{$value->date_of_issue->format('Y-m-d')}}</td>
@@ -68,7 +75,19 @@
                                         <td>{{$value->total_igv}}</td>
                                         <td>{{$value->total}}</td>
                                     </tr>
+                                    @php
+                                        $acum_total_taxed += $value->total_taxed;
+                                        $acum_total_igv += $value->total_igv;
+                                        $acum_total += $value->total;
+                                    @endphp
                                     @endforeach
+                                    <tr>
+                                        <td colspan="6"></td>
+                                        <td >Totales</td>
+                                        <td>{{$acum_total_taxed}}</td>
+                                        <td>{{$acum_total_igv}}</td>
+                                        <td>{{$acum_total}}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <div class="pagination-wrapper">

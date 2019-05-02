@@ -21,7 +21,7 @@
 
 @section('content')
 
-    <tenant-documents-invoice></tenant-documents-invoice>
+    <tenant-documents-invoice :is_contingency="{{ json_encode($is_contingency) }}"></tenant-documents-invoice>
 
 @endsection
 

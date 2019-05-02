@@ -22,12 +22,14 @@ use App\Models\Tenant\Catalogs\SystemIscType;
 use App\Models\Tenant\Catalogs\AttributeType;
 use App\Models\Tenant\Company;
 use App\Http\Requests\Tenant\QuotationRequest;
+use App\Models\Tenant\Warehouse;
 use Illuminate\Support\Str;
 use App\CoreFacturalo\Requests\Inputs\Common\PersonInput;
 use App\CoreFacturalo\Requests\Inputs\Common\EstablishmentInput;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\CoreFacturalo\Template;
 use Mpdf\Mpdf;
+use Exception;
 
 class QuotationController extends Controller
 {
@@ -131,20 +133,18 @@ class QuotationController extends Controller
 
     public function store(QuotationRequest $request)
     {
-        $data = $this->mergeData($request);
-        $this->quotation = DB::connection('tenant')->transaction(function () use ($data) {
-            
-            $instance_quotation = Quotation::create($data);
+
+        DB::connection('tenant')->transaction(function () use ($request) {
+
+            $data = $this->mergeData($request);
+            $this->quotation =  Quotation::create($data);
             foreach ($data['items'] as $row)
             {
-                $instance_quotation->items()->create($row);
-            }     
+                $this->quotation->items()->create($row);
+            }        
+            $this->setFilename();
 
-            return $instance_quotation;
-        });       
-        
-        $this->setFilename();
-        $this->createPdf();
+        }); 
 
         return [
             'success' => true,
@@ -173,30 +173,14 @@ class QuotationController extends Controller
         return $inputs->all();
     }
 
+ 
+
     private function setFilename(){
         
         $name = [$this->quotation->prefix,$this->quotation->id,date('Ymd')];
         $this->quotation->filename = join('-', $name);
         $this->quotation->save(); 
 
-    }
-
-    public function createPdf() {
-
-        $template = new Template();
-        $pdf = new Mpdf();   
-        $document = $this->quotation;
-        
-        $html = $template->pdf("quotation", $this->company, $document,"a4");
-        $pdf->WriteHTML($html); 
-       
-
-        $this->uploadFile($pdf->output('', 'S'), 'quotation');
-    }
-
-    public function uploadFile($file_content, $file_type)
-    {
-        $this->uploadStorage($this->quotation->filename, $file_content, $file_type);
     }
 
 
@@ -221,7 +205,13 @@ class QuotationController extends Controller
             
             case 'items':
 
-                $items = Item::orderBy('description')->get()->transform(function($row) {
+                $warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first(); 
+
+                $items = Item::orderBy('description')
+                    // ->with(['warehouses' => function($query) use($warehouse){
+                    //     return $query->where('warehouse_id', $warehouse->id);
+                    // }])
+                    ->get()->transform(function($row) {
                     $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
                     return [
                         'id' => $row->id,
@@ -233,7 +223,16 @@ class QuotationController extends Controller
                         'purchase_unit_price' => $row->purchase_unit_price,
                         'unit_type_id' => $row->unit_type_id,
                         'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
-                        'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id
+                        'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
+                        'calculate_quantity' => (bool) $row->calculate_quantity,
+
+                        // 'warehouses' => collect($row->warehouses)->transform(function($row) {
+                        //     return [
+                        //         'warehouse_id' => $row->warehouse->id,
+                        //         'warehouse_description' => $row->warehouse->description,
+                        //         'stock' => $row->stock,
+                        //     ];
+                        // })
                     ];
                 });
                 return $items;
@@ -265,5 +264,115 @@ class QuotationController extends Controller
 
         return compact('customers');
     }
+
+
+    
+    public function download($external_id, $format) {
+
+        $quotation = Quotation::where('external_id', $external_id)->first();        
+        if (!$quotation) throw new Exception("El código {$external_id} es inválido, no se encontro la cotización relacionada");        
+        $this->reloadPDF($quotation, $format, $quotation->filename);        
+        return $this->downloadStorage($quotation->filename, 'quotation');
+
+    }
+
+
+    public function toPrint($external_id, $format) {
+ 
+        $quotation = Quotation::where('external_id', $external_id)->first();        
+        if (!$quotation) throw new Exception("El código {$external_id} es inválido, no se encontro la cotización relacionada");        
+        $this->reloadPDF($quotation, $format, $quotation->filename);       
+        $temp = tempnam(sys_get_temp_dir(), 'quotation');
+        file_put_contents($temp, $this->getStorage($quotation->filename, 'quotation'));       
+        return response()->file($temp);
+        
+    }
+
+
+    private function reloadPDF($quotation, $format, $filename) {
+        $this->createPdf($quotation, $format, $filename);
+    }
+ 
+
+    public function createPdf($quotation = null, $format_pdf = null, $filename = null) {
+        
+        $template = new Template();
+        $pdf = new Mpdf();
+
+
+        $document = ($quotation != null) ? $quotation : $this->quotation;
+        $company = ($this->company != null) ? $this->company : Company::active();
+        $filename = ($filename != null) ? $filename : $this->quotation->filename;
+
+
+        $html = $template->pdf("quotation", $company, $document, $format_pdf);
+
+        if ($format_pdf === 'ticket') {
+
+            $company_name      = (strlen($company->name) / 20) * 10;
+            $company_address   = (strlen($document->establishment->address) / 30) * 10;
+            $company_number    = $document->establishment->telephone != '' ? '10' : '0';
+            $customer_name     = strlen($document->customer->name) > '25' ? '10' : '0';
+            $customer_address  = (strlen($document->customer->address) / 200) * 10;
+            $p_order           = $document->purchase_order != '' ? '10' : '0';
+
+            $total_exportation = $document->total_exportation != '' ? '10' : '0';
+            $total_free        = $document->total_free != '' ? '10' : '0';
+            $total_unaffected  = $document->total_unaffected != '' ? '10' : '0';
+            $total_exonerated  = $document->total_exonerated != '' ? '10' : '0';
+            $total_taxed       = $document->total_taxed != '' ? '10' : '0';
+            $quantity_rows     = count($document->items);
+            $discount_global = 0;
+            foreach ($document->items as $it) {
+                if ($it->discounts) {
+                    $discount_global = $discount_global + 1;
+                }
+            }
+            $legends           = $document->legends != '' ? '10' : '0';
+
+            $pdf = new Mpdf([
+                'mode' => 'utf-8',
+                'format' => [
+                    78,
+                    120 +
+                    ($quantity_rows * 8) +
+                    ($discount_global * 3) +
+                    $company_name +
+                    $company_address +
+                    $company_number +
+                    $customer_name +
+                    $customer_address +
+                    $p_order +
+                    $legends +
+                    $total_exportation +
+                    $total_free +
+                    $total_unaffected +
+                    $total_exonerated +
+                    $total_taxed],
+                'margin_top' => 2,
+                'margin_right' => 5,
+                'margin_bottom' => 0,
+                'margin_left' => 5
+            ]);
+        }
+
+        $pdf->WriteHTML($html);
+
+        if ($format_pdf != 'ticket') {
+            $html_footer = $template->pdfFooter();
+            $pdf->SetHTMLFooter($html_footer);
+        }
+        $this->uploadFile($filename, $pdf->output('', 'S'), 'quotation');
+    }
+
+
+
+
+    public function uploadFile($filename, $file_content, $file_type)
+    {
+        $this->uploadStorage($filename, $file_content, $file_type);
+    }
+ 
+
  
 }

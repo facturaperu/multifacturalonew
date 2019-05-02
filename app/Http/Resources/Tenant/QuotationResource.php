@@ -19,7 +19,7 @@ class QuotationResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'external_id' => $this->external_id, 
+            'external_id' => $this->external_id,  
             'identifier' => $this->identifier,
             'date_of_issue' => $this->date_of_issue->format('Y-m-d'), 
             'quotation' => $quotation

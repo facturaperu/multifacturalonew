@@ -33,9 +33,13 @@ class QuotationCollection extends ResourceCollection
                 'total_taxed' => $row->total_taxed,
                 'total_igv' => $row->total_igv,
                 'total' => $row->total,
-                'state_type_id' => $row->state_type_id,
+                'state_type_id' => $row->state_type_id, 
                 'state_type_description' => $row->state_type->description, 
-             
+                'documents' => $row->documents->transform(function($row) {
+                    return [
+                        'number_full' => $row->number_full, 
+                    ];
+                }),
                 'created_at' => $row->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $row->updated_at->format('Y-m-d H:i:s'),
             ];

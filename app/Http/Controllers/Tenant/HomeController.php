@@ -24,6 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('tenant.documents.form');
+        $is_contingency = 0;
+
+        return view('tenant.documents.form', compact('is_contingency'));
     }
 }

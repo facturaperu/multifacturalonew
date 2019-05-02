@@ -9,6 +9,7 @@
                             <tr>
                                 <th>Tipo de documento</th>
                                 <th>Número</th>
+                                <th class="text-center">D. Contingencia</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -17,6 +18,7 @@
                                 <template v-if="row.id">
                                     <td>{{ row.document_type_description }}</td>
                                     <td>{{ row.number }}</td>
+                                    <td class="text-center">{{ (row.contingency) ? "SI" : "NO" }}</td>
                                     <td class="series-table-actions text-right">
                                         <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickDelete(row.id)">Eliminar</button>
                                         <!--<el-button type="danger" icon="el-icon-delete" plain @click.prevent="clickDelete(row.id)"></el-button>-->
@@ -35,6 +37,14 @@
                                         <div class="form-group mb-0" :class="{'has-danger': row.errors.number}">
                                             <el-input v-model="row.number" :maxlength="4"></el-input>
                                             <small class="form-control-feedback" v-if="row.errors.number" v-text="row.errors.number[0]"></small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-md-3 center-el-checkbox">
+                                            <div class="form-group" :class="{'has-danger': row.errors.contingency}">
+                                                <el-checkbox v-model="row.contingency" @change="filterDocumentType(row)">Contingencia</el-checkbox> 
+                                                <small class="form-control-feedback" v-if="row.errors.contingency" v-text="row.errors.contingency[0]"></small>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="series-table-actions text-right">
@@ -72,6 +82,7 @@
                 resource: 'series',
                 records: [],
                 document_types: [],
+                all_document_types: [],
                 showAddButton: true,
             }
         },
@@ -79,7 +90,8 @@
             await this.initForm()
             await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
-                    this.document_types = response.data.document_types
+                    this.all_document_types = response.data.document_types
+                    this.initDocumentTypes()
                 })
         },
         methods: {
@@ -102,6 +114,7 @@
                     id: null,
                     document_type_id: null,
                     number: null,
+                    contingency: false,
                     errors: {},
                     loading: false
                 })
@@ -109,6 +122,7 @@
             },
             clickCancel(index) {
                 this.records.splice(index, 1)
+                this.initDocumentTypes()
                 this.showAddButton = true
             },
             clickSubmit(index) {
@@ -117,12 +131,14 @@
                     establishment_id: this.establishmentId,
                     document_type_id: this.records[index].document_type_id,
                     number: this.records[index].number,
+                    contingency: this.records[index].contingency,
                 }
                 this.$http.post(`/${this.resource}`, form)
                     .then(response => {
                         if (response.data.success) {
                             this.$message.success(response.data.message)
                             this.getData()
+                            this.initDocumentTypes()
                             this.showAddButton = true
                         } else {
                             this.$message.error(response.data.message)
@@ -136,13 +152,28 @@
                         }
                     })
             },
+            filterDocumentType(row){
+                
+                if(row.contingency){
+                    this.document_types = _.filter(this.all_document_types, item => (item.id == '01' || item.id =='03'))
+                    row.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
+                }else{
+                    row.document_type_id = null
+                    this.document_types = this.all_document_types
+                }
+            },
+            initDocumentTypes(){
+                this.document_types = (this.all_document_types.length > 0) ? this.all_document_types : []
+            },
             close() {
                 this.$emit('update:showDialog', false)
+                this.initDocumentTypes()
                 this.initForm()
             },
             clickDelete(id) {
                 this.destroy(`/${this.resource}/${id}`).then(() =>
-                    this.getData()
+                    this.getData(),
+                    this.initDocumentTypes()                    
                 )
             }
         }

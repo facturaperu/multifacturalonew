@@ -4,8 +4,11 @@ namespace App\Console\Commands;
 
 use Facades\App\Http\Controllers\Tenant\DocumentController;
 use Illuminate\Console\Command;
-use App\Models\Tenant\Document;
 use App\Traits\CommandTrait;
+use App\Models\Tenant\{
+    Configuration,
+    Document
+};
 
 class SendAllSunatCommand extends Command
 {
@@ -40,33 +43,38 @@ class SendAllSunatCommand extends Command
      * @return mixed
      */
     public function handle() {
-        if ($this->isOffline()) {
-            $this->info('Offline service is enabled');
+        if (Configuration::firstOrFail()->cron) {
+            if ($this->isOffline()) {
+                $this->info('Offline service is enabled');
+                
+                return;
+            }
             
-            return;
+            $documents = Document::query()
+                ->where('send_server', 0)
+                ->where('state_type_id', '!=', '05')
+                ->orWhere('sunat_shipping_status', '!=', '')
+                ->get();
+            
+            foreach ($documents as $document) {
+                try {
+                    DocumentController::send($document->id);
+                    
+                    $document->sunat_shipping_status = '';
+                    $document->save();
+                }
+                catch (\Exception $e) {
+                    $document->sunat_shipping_status = json_encode([
+                        'message' => $e->getMessage(),
+                        'payload' => $e
+                    ]);
+                    
+                    $document->save();
+                }
+            }
         }
-        
-        $documents = Document::query()
-            ->where('send_server', 0)
-            ->where('state_type_id', '!=', '05')
-            ->orWhere('sunat_shipping_status', '!=', '')
-            ->get();
-        
-        foreach ($documents as $document) {
-            try {
-                DocumentController::send($document->id);
-                
-                $document->sunat_shipping_status = '';
-                $document->save();
-            }
-            catch (\Exception $e) {
-                $document->sunat_shipping_status = json_encode([
-                    'message' => $e->getMessage(),
-                    'payload' => $e
-                ]);
-                
-                $document->save();
-            }
+        else {
+            $this->info('The crontab is disabled');
         }
         
         $this->info('The command is finished');

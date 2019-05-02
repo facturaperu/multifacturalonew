@@ -41,6 +41,9 @@ trait StorageDocument
             case 'quotation':
                 $extension = 'pdf';
                 break;
+            case 'sale_note':
+                $extension = 'pdf';
+                break;
             case 'cdr':
                 $filename = 'R-'.$filename;
                 $extension = 'zip';

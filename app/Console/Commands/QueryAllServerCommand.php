@@ -4,8 +4,11 @@ namespace App\Console\Commands;
 
 use Facades\App\Http\Controllers\Tenant\DocumentController;
 use Illuminate\Console\Command;
-use App\Models\Tenant\Document;
 use App\Traits\CommandTrait;
+use App\Models\Tenant\{
+    Configuration,
+    Document
+};
 
 class QueryAllServerCommand extends Command
 {
@@ -40,33 +43,38 @@ class QueryAllServerCommand extends Command
      * @return mixed
      */
     public function handle() {
-        if (!$this->isOffline()) {
-            $this->info('The offline service is disabled');
+        if (Configuration::firstOrFail()->cron) {
+            if (!$this->isOffline()) {
+                $this->info('The offline service is disabled');
+                
+                return;
+            };
             
-            return;
-        };
-        
-        $documents = Document::query()
-            ->where('send_server', 1)
-            ->where('state_type_id', '!=', '05')
-            ->orWhere('query_status', '!=', '')
-            ->get();
-        
-        foreach ($documents as $document) {
-            try {
-                DocumentController::checkServer($document->id);
-                
-                $document->query_status = '';
-                $document->save();
+            $documents = Document::query()
+                ->where('send_server', 1)
+                ->where('state_type_id', '!=', '05')
+                ->orWhere('query_status', '!=', '')
+                ->get();
+            
+            foreach ($documents as $document) {
+                try {
+                    DocumentController::checkServer($document->id);
+                    
+                    $document->query_status = '';
+                    $document->save();
+                }
+                catch (\Exception $e) {
+                    $document->query_status = json_encode([
+                        'message' => $e->getMessage(),
+                        'payload' => $e
+                    ]);
+                    
+                    $document->save();
+                }
             }
-            catch (\Exception $e) {
-                $document->query_status = json_encode([
-                    'message' => $e->getMessage(),
-                    'payload' => $e
-                ]);
-                
-                $document->save();
-            }
+        }
+        else {
+            $this->info('The crontab is disabled');
         }
         
         $this->info('The command is finished');

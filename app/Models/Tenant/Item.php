@@ -9,7 +9,7 @@ use App\Models\Tenant\Catalogs\UnitType;
 
 class Item extends ModelTenant
 {
-    protected $with = ['item_type', 'unit_type', 'currency_type'];
+    protected $with = ['item_type', 'unit_type', 'currency_type', 'warehouses'];
     protected $fillable = [
         'description',
         'item_type_id',
@@ -28,11 +28,13 @@ class Item extends ModelTenant
         'sale_affectation_igv_type_id',
         'purchase_affectation_igv_type_id',
         'calculate_quantity',
+        'has_igv',
 
         'stock',
         'stock_min',
 
         'attributes',
+        // 'warehouse_id'
     ];
 
     public function getAttributesAttribute($value)
@@ -70,20 +72,59 @@ class Item extends ModelTenant
         return $this->hasMany(Kardex::class);
     }
 
+    public function inventory_kardex()
+    {
+        return $this->hasMany(InventoryKardex::class);
+    }
+
     public function purchase_item()
     {
         return $this->hasMany(PurchaseItem::class);
     }
-
 
     public function sale_affectation_igv_type()
     {
         return $this->belongsTo(AffectationIgvType::class, 'sale_affectation_igv_type_id');
     }
 
-    
     public function purchase_affectation_igv_type()
     {
         return $this->belongsTo(AffectationIgvType::class, 'purchase_affectation_igv_type_id');
+    }
+
+     public function scopeWhereWarehouse($query)
+     {
+        $establishment_id = auth()->user()->establishment_id;
+        $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
+        if ($warehouse) {
+            return $query->whereHas('warehouses', function($query) use($warehouse) {
+                            $query->where('warehouse_id', $warehouse->id);
+                        });
+        }
+        return $query;
+     }
+ 
+    public function scopeWhereTypeUser($query)
+    {
+        $user = auth()->user();         
+        return ($user->type == 'seller') ? $this->scopeWhereWarehouse($query) : null; 
+    }
+
+    public function getStockByWarehouse()
+    {
+        $establishment_id = auth()->user()->establishment_id;
+        $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
+
+        if ($warehouse) {
+            $item_warehouse = $this->warehouses->where('warehouse_id',$warehouse->id)->first();
+            return ($item_warehouse) ? $item_warehouse->stock : 0;
+        } 
+        
+        return 0;
+    }
+
+    public function warehouses()
+    {
+        return $this->hasMany(ItemWarehouse::class)->with('warehouse');
     }
 }

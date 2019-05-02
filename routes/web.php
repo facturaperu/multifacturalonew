@@ -145,9 +145,17 @@ if ($hostname) {
             Route::get('documents/note/{document}', 'Tenant\NoteController@create');
             Route::get('documents/item/tables', 'Tenant\DocumentController@item_tables');
             Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
+            Route::get('documents/re_store/{document}', 'Tenant\DocumentController@reStore');
 
             Route::get('documents/send_server/{document}/{query?}', 'Tenant\DocumentController@sendServer');
             Route::get('documents/check_server/{document}', 'Tenant\DocumentController@checkServer');
+
+            //Contingencies
+            Route::get('contingencies', 'Tenant\ContingencyController@index')->name('tenant.contingencies.index');
+            Route::get('contingencies/columns', 'Tenant\ContingencyController@columns');
+            Route::get('contingencies/records', 'Tenant\ContingencyController@records');
+            Route::get('contingencies/create', 'Tenant\ContingencyController@create')->name('tenant.contingencies.create');
+
 
             //Summaries
             Route::get('summaries', 'Tenant\SummaryController@index')->name('tenant.summaries.index');
@@ -156,6 +164,17 @@ if ($hostname) {
             Route::post('summaries', 'Tenant\SummaryController@store');
             Route::get('summaries/status/{summary}', 'Tenant\SummaryController@status');
             Route::get('summaries/columns', 'Tenant\SummaryController@columns');
+            Route::delete('summaries/{summary}', 'Tenant\SummaryController@destroy');
+
+           //Inventories
+        //    Route::get('inventories', 'Tenant\InventoryController@index')->name('tenant.inventories.index');
+        //    Route::get('inventories/records', 'Tenant\InventoryController@records');
+        //    Route::get('inventories/columns', 'Tenant\InventoryController@columns');
+        //    Route::get('inventories/tables', 'Tenant\InventoryController@tables');
+        //    Route::get('inventories/record/{inventory}', 'Tenant\InventoryController@record');
+        //    Route::post('inventories', 'Tenant\InventoryController@store');
+        //    Route::post('inventories/move', 'Tenant\InventoryController@move');
+        //    Route::post('inventories/remove', 'Tenant\InventoryController@remove');
 
             //Voided
             Route::get('voided', 'Tenant\VoidedController@index')->name('tenant.voided.index');
@@ -164,6 +183,7 @@ if ($hostname) {
             Route::post('voided', 'Tenant\VoidedController@store');
 //            Route::get('voided/download/{type}/{voided}', 'Tenant\VoidedController@download')->name('tenant.voided.download');
             Route::get('voided/status/{voided}', 'Tenant\VoidedController@status');
+            Route::delete('voided/{voided}', 'Tenant\VoidedController@destroy');
 //            Route::get('voided/ticket/{voided_id}/{group_id}', 'Tenant\VoidedController@ticket');
 
             //Retentions
@@ -196,15 +216,15 @@ if ($hostname) {
             Route::post('reports/purchases/pdf', 'Tenant\ReportPurchaseController@pdf')->name('tenant.report.purchases.pdf');
             Route::post('reports/purchases/excel', 'Tenant\ReportPurchaseController@excel')->name('tenant.report.purchases.report_excel');
 
-            Route::get('reports/inventories', 'Tenant\ReportInventoryController@index')->name('tenant.reports.inventories.index');
-            Route::post('reports/inventories/search', 'Tenant\ReportInventoryController@search')->name('tenant.reports.inventories.search');
-            Route::post('reports/inventories/pdf', 'Tenant\ReportInventoryController@pdf')->name('tenant.report.inventories.pdf');
-            Route::post('reports/inventories/excel', 'Tenant\ReportInventoryController@excel')->name('tenant.report.inventories.report_excel');
-            
-            Route::get('reports/kardex', 'Tenant\ReportKardexController@index')->name('tenant.reports.kardex.index');
-            Route::post('reports/kardex/search', 'Tenant\ReportKardexController@search')->name('tenant.reports.kardex.search');
-            Route::post('reports/kardex/pdf', 'Tenant\ReportKardexController@pdf')->name('tenant.report.kardex.pdf');
-            Route::post('reports/kardex/excel', 'Tenant\ReportKardexController@excel')->name('tenant.report.kardex.report_excel');
+//            Route::get('reports/inventories', 'Tenant\ReportInventoryController@index')->name('tenant.reports.inventories.index');
+//            Route::post('reports/inventories/search', 'Tenant\ReportInventoryController@search')->name('tenant.reports.inventories.search');
+//            Route::post('reports/inventories/pdf', 'Tenant\ReportInventoryController@pdf')->name('tenant.report.inventories.pdf');
+//            Route::post('reports/inventories/excel', 'Tenant\ReportInventoryController@excel')->name('tenant.report.inventories.report_excel');
+//
+//            Route::get('reports/kardex', 'Tenant\ReportKardexController@index')->name('tenant.reports.kardex.index');
+//            Route::post('reports/kardex/search', 'Tenant\ReportKardexController@search')->name('tenant.reports.kardex.search');
+//            Route::post('reports/kardex/pdf', 'Tenant\ReportKardexController@pdf')->name('tenant.report.kardex.pdf');
+//            Route::post('reports/kardex/excel', 'Tenant\ReportKardexController@excel')->name('tenant.report.kardex.report_excel');
             
             Route::get('reports/consistency-documents', 'Tenant\ReportConsistencyDocumentController@index')->name('tenant.consistency-documents.index');
             Route::post('reports/consistency-documents/lists', 'Tenant\ReportConsistencyDocumentController@lists');
@@ -292,11 +312,27 @@ if ($hostname) {
             Route::get('quotations/tables', 'Tenant\QuotationController@tables');
             Route::get('quotations/table/{table}', 'Tenant\QuotationController@table');
             Route::post('quotations', 'Tenant\QuotationController@store');
-            Route::get('quotations/record/{document}', 'Tenant\QuotationController@record'); 
+            Route::get('quotations/record/{quotation}', 'Tenant\QuotationController@record'); 
             Route::get('quotations/item/tables', 'Tenant\QuotationController@item_tables');
             Route::get('quotations/option/tables', 'Tenant\QuotationController@option_tables');
             Route::get('quotations/search/customers', 'Tenant\QuotationController@searchCustomers');
             Route::get('quotations/search/customer/{id}', 'Tenant\QuotationController@searchCustomerById');
+            Route::get('quotations/download/{external_id}/{format?}', 'Tenant\QuotationController@download');
+            Route::get('quotations/print/{external_id}/{format?}', 'Tenant\QuotationController@toPrint');
+
+            
+            //sale-notes
+            Route::get('sale-notes', 'Tenant\SaleNoteController@index')->name('tenant.sale_notes.index');
+            Route::get('sale-notes/columns', 'Tenant\SaleNoteController@columns');
+            Route::get('sale-notes/records', 'Tenant\SaleNoteController@records');
+            Route::get('sale-notes/create', 'Tenant\SaleNoteController@create')->name('tenant.sale_notes.create');
+            Route::get('sale-notes/tables', 'Tenant\SaleNoteController@tables');
+            Route::get('sale-notes/table/{table}', 'Tenant\SaleNoteController@table');
+            Route::post('sale-notes', 'Tenant\SaleNoteController@store');
+            Route::get('sale-notes/record/{salenote}', 'Tenant\SaleNoteController@record'); 
+            Route::get('sale-notes/item/tables', 'Tenant\SaleNoteController@item_tables');
+            Route::get('sale-notes/search/customers', 'Tenant\SaleNoteController@searchCustomers');
+            Route::get('sale-notes/search/customer/{id}', 'Tenant\SaleNoteController@searchCustomerById');
 
         });
     });
@@ -329,8 +365,6 @@ if ($hostname) {
             Route::get('plans/record/{plan}', 'System\PlanController@record');
             Route::post('plans', 'System\PlanController@store');
             Route::delete('plans/{plan}', 'System\PlanController@destroy');
-
-
 
             //Users
             Route::get('users/create', 'System\UserController@create')->name('system.users.create');

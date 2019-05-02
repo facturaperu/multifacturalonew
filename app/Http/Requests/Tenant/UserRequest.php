@@ -20,6 +20,9 @@ class UserRequest extends FormRequest
             'email' => [
                 'required'
             ],
+            'type' => [
+                'required'
+            ],
             'password' => [
                 'min:6',
                 'confirmed',

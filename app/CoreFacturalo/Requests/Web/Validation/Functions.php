@@ -88,6 +88,7 @@ class Functions
     }
     
     public static function findSeries($inputs) {
+        if(!$inputs['series_id']) throw new Exception("La serie no existe");
         return Series::find($inputs['series_id']);
     }
     
@@ -106,4 +107,18 @@ class Functions
         }
 
     }
+
+    public static function identityDocumentTypeInvoice($inputs){
+
+        if (($inputs['document_type_id'] == '01')) {
+
+            $person = Person::find($inputs['customer_id']);
+            
+            if($person){
+                if (!in_array($person->identity_document_type_id, ['6'], true)) throw new Exception("El tipo doc. identidad {$person->identity_document_type->description} del cliente no es válido.");
+            }
+        }
+
+    }
+    
 }

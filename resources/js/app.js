@@ -70,9 +70,20 @@ Vue.component('tenant-tasks-lists', require('./views/tenant/tasks/lists.vue'));
 Vue.component('tenant-tasks-form', require('./views/tenant/tasks/form.vue'));
 Vue.component('tenant-reports-consistency-documents-lists', require('./views/tenant/reports/consistency-documents/lists.vue'));
 
+
+Vue.component('tenant-contingencies-index', require('./views/tenant/contingencies/index.vue'));
+
+
 Vue.component('tenant-quotations-index', require('./views/tenant/quotations/index.vue'));
 Vue.component('tenant-quotations-form', require('./views/tenant/quotations/form.vue')); 
 
+Vue.component('tenant-sale-notes-index', require('./views/tenant/sale_notes/index.vue'));
+Vue.component('tenant-sale-notes-form', require('./views/tenant/sale_notes/form.vue'));
+
+// Modules
+Vue.component('inventory-index', require('../../modules/Inventory/Resources/assets/js/inventory/index.vue'));
+Vue.component('warehouses-index', require('../../modules/Inventory/Resources/assets/js/warehouses/index.vue'));
+Vue.component('tenant-inventories-form', require('../../modules/Inventory/Resources/assets/js/config/form.vue'));
 // System
 Vue.component('system-clients-index', require('./views/system/clients/index.vue'));
 Vue.component('system-clients-form', require('./views/system/clients/form.vue'));

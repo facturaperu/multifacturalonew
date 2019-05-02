@@ -12,6 +12,7 @@ class Series extends ModelTenant
         'establishment_id',
         'document_type_id',
         'number',
+        'contingency',
     ];
     
     public function establishment() {

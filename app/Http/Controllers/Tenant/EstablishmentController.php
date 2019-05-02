@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\EstablishmentRequest;
 use App\Http\Resources\Tenant\EstablishmentResource;
 use App\Http\Resources\Tenant\EstablishmentCollection;
+use App\Models\Tenant\Warehouse;
 
 class EstablishmentController extends Controller
 {
@@ -46,6 +47,13 @@ class EstablishmentController extends Controller
         $establishment = Establishment::firstOrNew(['id' => $id]);
         $establishment->fill($request->all());
         $establishment->save();
+
+        if(!$id) {
+            $warehouse = new Warehouse();
+            $warehouse->establishment_id = $establishment->id;
+            $warehouse->description = 'Almacén - '.$establishment->description;
+            $warehouse->save();
+        }
 
         return [
             'success' => true,

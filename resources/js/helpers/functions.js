@@ -4,6 +4,12 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
     let currency_type_id_old = row_old.item.currency_type_id
     let unit_price = parseFloat(row_old.item.unit_price)
+    // } else {
+    //     unit_price = parseFloat(row_old.item.unit_price) * 1.18
+    // }
+
+
+
     if (currency_type_id_old === 'PEN' && currency_type_id_old !== currency_type_id_new)
     {
         unit_price = _.round(unit_price / exchange_rate_sale, 2)

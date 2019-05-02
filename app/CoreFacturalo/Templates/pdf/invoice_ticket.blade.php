@@ -4,6 +4,9 @@
     $invoice = $document->invoice;
     $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
+    $accounts = \App\Models\Tenant\BankAccount::all();
+    $document_base = ($document->note) ? $document->note : null;
+
 @endphp
 <html>
 <head>
@@ -89,6 +92,12 @@
             <td><p class="desc">{{ $document->purchase_order }}</p></td>
         </tr>
     @endif
+    @if ($document->quotation_id)
+        <tr>
+            <td><p class="desc">Cotización:</p></td>
+            <td><p class="desc">{{ $document->quotation->identifier }}</p></td>
+        </tr>
+    @endif
 </table>
 
 @if ($document->guides)
@@ -107,6 +116,24 @@
     @endforeach
 </table>
 @endif
+
+@if(!is_null($document_base))
+<table>
+    <tr>
+        <td class="desc">Documento Afectado:</td>
+        <td class="desc">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
+    </tr>
+    <tr>
+        <td class="desc">Tipo de nota:</td>
+        <td class="desc">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
+    </tr>
+    <tr>
+        <td class="align-top desc">Descripción:</td>
+        <td class="text-left desc">{{ $document_base->note_description }}</td>
+    </tr>
+</table>
+@endif
+
 <table class="full-width mt-10 mb-10">
     <thead class="">
     <tr>
@@ -120,7 +147,13 @@
     <tbody>
     @foreach($document->items as $row)
         <tr>
-            <td class="text-center desc-9 align-top">{{ number_format($row->quantity, 0) }}</td>
+            <td class="text-center desc-9 align-top">
+                @if(((int)$row->quantity != $row->quantity))
+                    {{ $row->quantity }}
+                @else
+                    {{ number_format($row->quantity, 0) }}
+                @endif
+            </td>
             <td class="text-center desc-9 align-top">{{ $row->item->unit_type_id }}</td>
             <td class="text-left desc-9 align-top">
                 {!! $row->item->description !!}
@@ -174,7 +207,7 @@
         @endif
         @if($document->total_discount > 0)
             <tr>
-                <td colspan="5" class="text-right font-bold">DESCUENTO TOTAL: {{ $document->currency_type->symbol }}</td>
+                <td colspan="4" class="text-right font-bold">DESCUENTO TOTAL: {{ $document->currency_type->symbol }}</td>
                 <td class="text-right font-bold">{{ number_format($document->total_discount, 2) }}</td>
             </tr>
         @endif
@@ -190,16 +223,39 @@
 </table>
 <table class="full-width">
     <tr>
-        @foreach($document->legends as $row)
-            <td class="desc pt-3">Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></td>
+
+        @foreach(array_reverse((array) $document->legends) as $row)
+            <tr>
+                @if ($row->code == "1000")
+                    <td class="desc pt-3">Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></td>
+                    @if (count((array) $document->legends)>1)
+                    <tr><td class="desc pt-3"><span class="font-bold">Leyendas</span></td></tr>
+                    @endif 
+                @else
+                    <td class="desc pt-3">{{$row->code}}: {{ $row->value }}</td>                                                  
+                @endif
+            </tr>
         @endforeach
     </tr>
+
+
     <tr>
-        <td class="desc pt-3">
-            <strong>Información adicional</strong>
+        <td class="desc pt-3"> 
             @foreach($document->additional_information as $information)
-                <p class="desc">{{ $information }}</p>
+                @if ($information)
+                    @if ($loop->first)
+                        <strong>Información adicional</strong>
+                    @endif
+                    <p>{{ $information }}</p>
+                @endif
             @endforeach
+            <br>
+            @if(in_array($document->document_type->id,['01','03']))
+                @foreach($accounts as $account)
+                    <span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} {{$account->number}}
+                @endforeach
+            @endif
+
         </td>
     </tr>
     <tr>

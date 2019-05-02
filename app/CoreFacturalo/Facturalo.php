@@ -16,6 +16,7 @@ use App\CoreFacturalo\WS\Signed\XmlSigned;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
 use App\Models\Tenant\Company;
 use App\Mail\Tenant\DocumentEmail;
+use App\Models\Tenant\Invoice;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Tenant\Dispatch;
 use App\Models\Tenant\Document;
@@ -31,6 +32,8 @@ class Facturalo
 
     const SENT = '03';
     const ACCEPTED = '05';
+    const OBSERVED = '07';
+    const REJECTED = '09';
     const CANCELING = '13';
     const VOIDED = '11';
 
@@ -183,6 +186,16 @@ class Facturalo
         ]);
     }
 
+    public function updateSoap($soap_type_id)
+    {
+        $this->document->update([
+            'soap_type_id' => $soap_type_id
+        ]);
+        $invoice = Invoice::where('document_id', $this->document->id)->first();
+        $invoice->date_of_due = $this->document->date_of_issue;
+        $invoice->save();
+    }
+
     public function updateStateDocuments($state_type_id)
     {
         foreach ($this->document->documents as $doc)
@@ -324,7 +337,11 @@ class Facturalo
         if($res->isSuccess()) {
             $cdrResponse = $res->getCdrResponse();
             $this->uploadFile($res->getCdrZip(), 'cdr');
-            $this->updateState(self::ACCEPTED);
+
+            $code = $cdrResponse->getCode();
+            $description = $cdrResponse->getDescription();
+            $this->validationCodeResponse($code, $description);
+
             $this->response = [
                 'sent' => true,
                 'code' => $cdrResponse->getCode(),
@@ -332,8 +349,40 @@ class Facturalo
                 'notes' => $cdrResponse->getNotes()
             ];
         } else {
-            throw new Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
+            $code = $res->getError()->getCode();
+            $message = $res->getError()->getMessage();
+            $this->validationCodeResponse($code, $message);
+            $this->response = [
+                'sent' => true,
+                'code' => $code,
+                'description' => $message
+            ];
         }
+    }
+
+    public function validationCodeResponse($code, $message)
+    {
+        //Errors
+        if($code === 'HTTP') {
+            $message = 'La SUNAT no responde a su solicitud, vuelva a intentarlo.';
+            throw new Exception("Code: {$code}; Description: {$message}");
+        }
+        if((int)$code === 0) {
+            $this->updateState(self::ACCEPTED);
+            return;
+        }
+        if((int)$code < 2000) {
+            //Excepciones
+            throw new Exception("Code: {$code}; Description: {$message}");
+        } elseif ((int)$code < 4000) {
+            //Rechazo
+            $this->updateState(self::REJECTED);
+
+        } else {
+            $this->updateState(self::OBSERVED);
+            //Observaciones
+        }
+        return;
     }
 
     public function senderXmlSignedSummary()

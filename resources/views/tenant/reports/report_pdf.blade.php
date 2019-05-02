@@ -78,6 +78,11 @@
         @if(!empty($reports))
             <div class="">
                 <div class=" ">
+                    @php
+                        $acum_total_taxed=0;
+                        $acum_total_igv=0;
+                        $acum_total=0;
+                    @endphp
                     <table class="">
                         <thead>
                             <tr>
@@ -96,7 +101,7 @@
                         <tbody>
                             @foreach($reports as $key => $value)
                                 <tr>
-                                    <td class="celda">{{$value->number}}</td>
+                                    <td class="celda">{{$loop->iteration}}</td>
                                     <td class="celda">{{$value->document_type->id}}</td>
                                     <td class="celda">{{$value->series}}-{{$value->number}}</td>
                                     <td class="celda">{{$value->date_of_issue->format('Y-m-d')}}</td>
@@ -107,7 +112,19 @@
                                     <td class="celda">{{$value->total_igv}}</td>
                                     <td class="celda">{{$value->total}}</td>
                                 </tr>
+                            @php
+                                $acum_total_taxed += $value->total_taxed;
+                                $acum_total_igv += $value->total_igv;
+                                $acum_total += $value->total;
+                            @endphp
                             @endforeach
+                            <tr>
+                                <td colspan="6" class="celda"></td>
+                                <td class="celda">Totales</td>
+                                <td class="celda">{{$acum_total_taxed}}</td>
+                                <td class="celda">{{$acum_total_igv}}</td>
+                                <td class="celda">{{$acum_total}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

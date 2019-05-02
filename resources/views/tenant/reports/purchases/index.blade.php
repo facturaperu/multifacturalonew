@@ -13,7 +13,7 @@
                     <div>
                         <form action="{{route('tenant.reports.purchases.search')}}" class="el-form demo-form-inline el-form--inline" method="POST">
                             {{csrf_field()}}
-                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}" data_d="{{$d ?? ''}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}"></tenant-calendar>
+                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}" data_d="{{$d ?? ''}}" :establishments="{{json_encode($establishments)}}" establishment="{{$establishment ?? null}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}"></tenant-calendar>
                         </form>
                     </div>
                     @if(!empty($reports) && $reports->count())
@@ -25,6 +25,7 @@
                                         {{csrf_field()}}
                                         <input type="hidden" value="{{$d}}" name="d">
                                         <input type="hidden" value="{{$a}}" name="a">
+                                        <input type="hidden" value="{{$establishment}}" name="establishment">
                                         <input type="hidden" value="{{$td}}" name="td">
                                         <button class="btn btn-custom   mt-2 mr-2" type="submit"><i class="fa fa-file-pdf"></i> Exportar PDF</button>
                                         {{-- <label class="pull-right">Se encontraron {{$reports->count()}} registros.</label> --}}
@@ -33,6 +34,7 @@
                                     {{csrf_field()}}
                                     <input type="hidden" value="{{$d}}" name="d">
                                     <input type="hidden" value="{{$td}}" name="td">
+                                    <input type="hidden" value="{{$establishment}}" name="establishment">
                                     <input type="hidden" value="{{$a}} " name="a">
                                     <button class="btn btn-custom   mt-2 mr-2" type="submit"><i class="fa fa-file-excel"></i> Exportar Excel</button>
                                     {{-- <label class="pull-right">Se encontraron {{$reports->count()}} registros.</label> --}}
@@ -57,7 +59,7 @@
                                 <tbody>
                                     @foreach($reports as $key => $value)
                                     <tr>
-                                        <td>{{$value->number}}</td>
+                                        <td>{{$loop->iteration}}</td>
                                         <td>{{$value->document_type->id}}</td>
                                         <td>{{$value->series}}-{{$value->number}}</td>
                                         <td>{{$value->date_of_issue->format('Y-m-d')}}</td>

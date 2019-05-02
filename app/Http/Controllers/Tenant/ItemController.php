@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\ItemRequest;
 use App\Http\Resources\Tenant\ItemCollection;
 use App\Http\Resources\Tenant\ItemResource;
+use App\Models\Tenant\User;
+use App\Models\Tenant\Warehouse;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
@@ -32,9 +34,11 @@ class ItemController extends Controller
 
     public function records(Request $request)
     {
-        $records = Item::where($request->column, 'like', "%{$request->value}%")
-                       ->orderBy('description');
+        $records = Item::whereTypeUser()
+                        ->where($request->column, 'like', "%{$request->value}%")
+                        ->orderBy('description');
 
+        
         return new ItemCollection($records->paginate(config('tenant.items_per_page')));
     }
 
@@ -63,11 +67,20 @@ class ItemController extends Controller
 
     public function store(ItemRequest $request)
     {
+        // $establishment_id = auth()->user()->establishment->id;
+        // $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
+
         $id = $request->input('id');
         $item = Item::firstOrNew(['id' => $id]);
         $item->item_type_id = '01';
+        // $item->warehouse_id = optional($warehouse)->id;
         $item->fill($request->all());
         $item->save();
+
+//        $item->warehouses()->create([
+//            'warehouse_id' => $warehouse->id,
+//            'stock' => $item->stock,
+//        ]);
 
         return [
             'success' => true,
@@ -79,6 +92,7 @@ class ItemController extends Controller
     public function destroy($id)
     {
         $item = Item::findOrFail($id);
+        $this->deleteRecordInitialKardex($item);
         $item->delete();
 
         return [
@@ -111,4 +125,13 @@ class ItemController extends Controller
             'message' =>  __('app.actions.upload.error'),
         ];
     }
+
+    private function deleteRecordInitialKardex($item){
+
+        if($item->kardex->count() == 1){
+            ($item->kardex[0]->type == null) ? $item->kardex[0]->delete() : false;
+        }
+
+    }
+
 }

@@ -28,6 +28,7 @@ use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Item;
 use App\Models\Tenant\Person;
 use App\Models\Tenant\Series;
+use App\Models\Tenant\Warehouse;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
@@ -62,7 +63,11 @@ class DocumentController extends Controller
 
     public function records(Request $request)
     {
+        $series = Series::select('number')->where('contingency', false)->get();
+
         $records = Document::where($request->column, 'like', "%{$request->value}%")
+                            ->whereIn('series',$series)
+                            ->whereTypeUser()
                             ->latest();
 
         return new DocumentCollection($records->paginate(config('tenant.items_per_page')));
@@ -95,12 +100,15 @@ class DocumentController extends Controller
  
     public function create()
     {
-        return view('tenant.documents.form');
+        $is_contingency = 0;
+
+        return view('tenant.documents.form', compact('is_contingency'));
     }
     
 
     public function tables()
     {
+
         $customers = $this->table('customers');
         $establishments = Establishment::where('id', auth()->user()->establishment_id)->get();// Establishment::all();
         $series = Series::all();
@@ -166,7 +174,8 @@ class DocumentController extends Controller
             return $customers;
         }
         if ($table === 'items') {
-            $items = Item::orderBy('description')->get()->transform(function($row) {
+            $items = Item::whereWarehouse()->orderBy('description')->get();
+            return collect($items)->transform(function($row) {
                 $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
                 return [
                     'id' => $row->id,
@@ -179,10 +188,17 @@ class DocumentController extends Controller
                     'unit_type_id' => $row->unit_type_id,
                     'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
                     'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
-                    'calculate_quantity' => (bool) $row->calculate_quantity
+                    'calculate_quantity' => (bool) $row->calculate_quantity,
+                    'has_igv' => (bool) $row->has_igv,
+                    // 'warehouses' => collect($row->warehouses)->transform(function($row) {
+                    //     return [
+                    //         'warehouse_description' => $row->warehouse->description,
+                    //         'stock' => $row->stock,
+                    //     ];
+                    // })
                 ];
             });
-            return $items;
+//            return $items;
         }
 
         return [];
@@ -218,6 +234,32 @@ class DocumentController extends Controller
             'data' => [
                 'id' => $document->id,
             ],
+        ];
+    }
+
+    public function reStore($document_id)
+    {
+        $fact = DB::connection('tenant')->transaction(function () use ($document_id) {
+            $document = Document::find($document_id);
+            $facturalo = new Facturalo();
+            $facturalo->setDocument($document);
+            $facturalo->setType('invoice');
+            $facturalo->createXmlUnsigned();
+            $facturalo->signXmlUnsigned();
+            $facturalo->updateHash();
+            $facturalo->updateQr();
+            $facturalo->updateSoap('02');
+            $facturalo->updateState('01');
+            $facturalo->createPdf($document, 'invoice', 'ticket');
+//            $facturalo->senderXmlSignedBill();
+        });
+
+//        $document = $fact->getDocument();
+//        $response = $fact->getResponse();
+
+        return [
+            'success' => true,
+            'message' => 'El documento se volvio a generar.',
         ];
     }
 

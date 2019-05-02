@@ -28,8 +28,10 @@ class ReportPurchaseController extends Controller
         $documentTypes = DocumentType::query()
             ->where('active', 1)
             ->get();
+
+        $establishments = Establishment::all();
         
-        return view('tenant.reports.purchases.index', compact('documentTypes'));
+        return view('tenant.reports.purchases.index', compact('documentTypes','establishments'));
     }
     
     /**
@@ -42,6 +44,9 @@ class ReportPurchaseController extends Controller
         $td = $this->getTypeDoc($request->document_type);
         $d = null;
         $a = null;
+        $establishments = Establishment::all();
+        $establishment = $request->establishment;
+        $establishment_id = $this->getEstablishmentId($establishment);
         
         if ($request->has('d') && $request->has('a') && ($request->d != null && $request->a != null)) {
             $d = $request->d;
@@ -73,8 +78,12 @@ class ReportPurchaseController extends Controller
                     ->get();
             }
         }
-        
-        return view('tenant.reports.purchases.index', compact('reports', 'a', 'd', 'td', 'documentTypes'));
+
+        if(!is_null($establishment_id)){
+            $reports = $reports->where('establishment_id', $establishment_id);
+        }
+
+        return view('tenant.reports.purchases.index', compact('reports', 'a', 'd', 'td', 'documentTypes',"establishment","establishments"));
     }
     
     /**
@@ -86,6 +95,7 @@ class ReportPurchaseController extends Controller
         $company = Company::first();
         $establishment = Establishment::first();
         $td = $request->td;
+        $establishment_id = $this->getEstablishmentId($request->establishment);
         
         if ($request->has('d') && $request->has('a') && ($request->d != null && $request->a != null)) {
             $d = $request->d;
@@ -118,7 +128,11 @@ class ReportPurchaseController extends Controller
                     ->get();
             }
         }
-        
+
+        if(!is_null($establishment_id)){
+            $reports = $reports->where('establishment_id', $establishment_id);
+        }
+
         $pdf = PDF::loadView('tenant.reports.purchases.report_pdf', compact("reports", "company", "establishment"));
         $filename = 'Reporte_Compras'.date('YmdHis');
         
@@ -134,6 +148,7 @@ class ReportPurchaseController extends Controller
         $company = Company::first();
         $establishment = Establishment::first();
         $td= $request->td;
+        $establishment_id = $this->getEstablishmentId($request->establishment);
        
         if ($request->has('d') && $request->has('a') && ($request->d != null && $request->a != null)) {
             $d = $request->d;
@@ -165,6 +180,10 @@ class ReportPurchaseController extends Controller
                     ->latest()
                     ->get();
             }
+        }
+
+        if(!is_null($establishment_id)){
+            $records = $records->where('establishment_id', $establishment_id);
         }
         
         return (new PurchaseExport)

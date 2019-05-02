@@ -19,6 +19,7 @@ class SeriesCollection extends ResourceCollection
                 'id' => $row->id,
                 'document_type_description' => $row->document_type->description,
                 'number' => $row->number,
+                'contingency' => (bool) $row->contingency,
             ];
         });
     }

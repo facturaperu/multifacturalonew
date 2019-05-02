@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create" append-to-body top="7vh">
+    <el-dialog :title="titleDialog" :visible="showDialog" :close-on-click-modal="false" @close="close" @open="create" append-to-body top="7vh">
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
@@ -44,6 +44,18 @@
                             <small class="form-control-feedback" v-if="errors.sale_affectation_igv_type_id" v-text="errors.sale_affectation_igv_type_id[0]"></small>
                         </div>
                     </div>
+                    <div class="col-md-3 center-el-checkbox">
+                        <div class="form-group" :class="{'has-danger': errors.calculate_quantity}">
+                            <el-checkbox v-model="form.calculate_quantity">Calcular cantidad por precio</el-checkbox><br>
+                            <small class="form-control-feedback" v-if="errors.calculate_quantity" v-text="errors.calculate_quantity[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 center-el-checkbox">
+                        <div class="form-group" :class="{'has-danger': errors.has_igv}">
+                            <el-checkbox v-model="form.has_igv">Incluye Igv</el-checkbox><br>
+                            <small class="form-control-feedback" v-if="errors.has_igv" v-text="errors.has_igv[0]"></small>
+                        </div>
+                    </div>
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.internal_id}">
                             <label class="control-label">Código Interno
@@ -66,12 +78,18 @@
                             <small class="form-control-feedback" v-if="errors.item_code" v-text="errors.item_code[0]"></small>
                         </div>
                     </div>
-
-                    <div class="col-md-4">
-                        <div class="form-group" :class="{'has-danger': errors.calculate_quantity}">
-                            <label class="control-label">Calcular cantidad por precio</label>
-                            <el-checkbox v-model="form.calculate_quantity">Activo</el-checkbox><br>                            
-                            <small class="form-control-feedback" v-if="errors.calculate_quantity" v-text="errors.calculate_quantity[0]"></small>
+                    <div class="col-md-3" v-show="recordId==null">
+                        <div class="form-group" :class="{'has-danger': errors.stock}">
+                            <label class="control-label">Stock Inicial</label>
+                            <el-input v-model="form.stock" ></el-input>
+                            <small class="form-control-feedback" v-if="errors.stock" v-text="errors.stock[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.stock_min}">
+                            <label class="control-label">Stock Mínimo</label>
+                            <el-input v-model="form.stock_min"></el-input>
+                            <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small>
                         </div>
                     </div>
 
@@ -94,21 +112,21 @@
                             <small class="form-control-feedback" v-if="errors.purchase_affectation_igv_type_id" v-text="errors.purchase_affectation_igv_type_id[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group" :class="{'has-danger': errors.stock}">
-                            <label class="control-label">Stock</label>
-                            <el-input v-model="form.stock"></el-input>
-                            <small class="form-control-feedback" v-if="errors.stock" v-text="errors.stock[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group" :class="{'has-danger': errors.stock_min}">
-                            <label class="control-label">Stock Mínimo</label>
-                            <el-input v-model="form.stock_min"></el-input>
-                            <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small>
-                        </div>
+                    <div class="col-md-12" v-if="form.warehouses">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Ubicación</th>
+                                <th class="text-right">Stock</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="row in form.warehouses">
+                                <th>{{ row.warehouse_description }}</th>
+                                <th class="text-right">{{ row.stock }}</th>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -174,6 +192,7 @@
                     calculate_quantity: false,
                     stock: 0,
                     stock_min: 1,
+                    has_igv: true
                 }
             },
             resetForm() {

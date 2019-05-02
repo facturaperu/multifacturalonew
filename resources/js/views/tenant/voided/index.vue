@@ -38,10 +38,13 @@
                                     v-if="row.has_cdr">CDR</button>
                         </td>
                         <td class="text-right">
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-warning"
                                     @click.prevent="clickTicket(row.type, row.id)"
                                     dusk="consult-voided"
                                     v-if="row.btn_ticket">Consultar</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
+                                    @click.prevent="clickDelete(row.type, row.id)"
+                                    v-if="row.btn_ticket">Eliminar</button>
                         </td>
                     </tr>
                 </data-table>
@@ -54,8 +57,10 @@
 <script>
 
     import DataTable from '../../../components/DataTable.vue'
+    import {deletable} from '../../../mixins/deletable'
 
     export default {
+        mixins: [deletable],
         components: {DataTable},
         data () {
             return {
@@ -80,6 +85,11 @@
                     .catch(error => {
                         this.$message.error(error.response.data.message)
                     })
+            },
+            clickDelete(type, id) {
+                this.destroy(`/${type}/${id}`).then(() =>
+                    this.$eventHub.$emit('reloadData')
+                )
             },
             clickDownload(download) {
                 window.open(download, '_blank');

@@ -37,7 +37,10 @@ class DownloadController extends Controller
                 break;                
             case 'quotation':
                 $folder = 'quotation';
-            break;
+                break;                
+            case 'sale_note':
+                $folder = 'sale_note';
+                break;
 
             default:
                 throw new Exception('Tipo de archivo a descargar es inválido');

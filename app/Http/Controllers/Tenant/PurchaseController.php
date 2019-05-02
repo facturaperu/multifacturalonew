@@ -11,6 +11,7 @@ use App\Models\Tenant\Establishment;
 use App\Models\Tenant\Purchase;
 use App\CoreFacturalo\Requests\Inputs\Common\LegendInput;
 use App\Models\Tenant\Item;
+use App\Models\Tenant\Warehouse;
 use App\Http\Resources\Tenant\PurchaseCollection;
 use App\Http\Resources\Tenant\PurchaseResource;
 use App\Models\Tenant\Catalogs\AffectationIgvType;  
@@ -56,7 +57,7 @@ class PurchaseController extends Controller
     public function tables()
     {
         $suppliers = $this->table('suppliers');
-        $establishment = Establishment::first();              
+        $establishment = Establishment::where('id', auth()->user()->establishment_id)->first();    
         $currency_types = CurrencyType::whereActive()->get();
         $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();        
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
@@ -68,6 +69,7 @@ class PurchaseController extends Controller
 
     public function item_tables()
     {
+
         $items = $this->table('items');
         $categories = []; 
         $affectation_igv_types = AffectationIgvType::whereActive()->get();
@@ -147,7 +149,8 @@ class PurchaseController extends Controller
             
             case 'items':
 
-                $items = Item::orderBy('description')->get()->transform(function($row) {
+                $items = Item::whereWarehouse()->orderBy('description')->get();
+                return collect($items)->transform(function($row) {
                     $full_description = ($row->internal_id)?$row->internal_id.' - '.$row->description:$row->description;
                     return [
                         'id' => $row->id,
@@ -159,10 +162,17 @@ class PurchaseController extends Controller
                         'purchase_unit_price' => $row->purchase_unit_price,
                         'unit_type_id' => $row->unit_type_id,
                         'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
-                        'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id
+                        'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
+                        // 'warehouses' => collect($row->warehouses)->transform(function($row) {
+                        //     return [
+                        //         'warehouse_id' => $row->warehouse->id,
+                        //         'warehouse_description' => $row->warehouse->description,
+                        //         'stock' => $row->stock,
+                        //     ];
+                        // })
                     ];
                 });
-                return $items;
+//                return $items;
 
                 break;
             default:

@@ -27,6 +27,7 @@ class Document extends ModelTenant
         'customer',
         'currency_type_id',
         'purchase_order',
+        'quotation_id',
         'exchange_rate_sale',
         'total_prepayment',
         'total_discount',
@@ -220,6 +221,8 @@ class Document extends ModelTenant
         return $this->belongsTo(CurrencyType::class, 'currency_type_id');
     }
 
+    
+
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
@@ -239,6 +242,18 @@ class Document extends ModelTenant
     {
         return $this->hasMany(Kardex::class);
     }
+    
+
+    public function inventory_kardex()
+    {
+        return $this->morphMany(InventoryKardex::class, 'inventory_kardexable');
+    }
+
+    public function quotation()
+    {
+        return $this->belongsTo(Quotation::class);
+    }
+
 
     public function getNumberFullAttribute()
     {
@@ -265,5 +280,12 @@ class Document extends ModelTenant
     public function getDownloadExternalCdrAttribute()
     {
         return route('tenant.download.external_id', ['model' => 'document', 'type' => 'cdr', 'external_id' => $this->external_id]);
+    }
+
+
+    public function scopeWhereTypeUser($query)
+    {
+        $user = auth()->user();         
+        return ($user->type == 'seller') ? $query->where('user_id', $user->id) : null; 
     }
 }

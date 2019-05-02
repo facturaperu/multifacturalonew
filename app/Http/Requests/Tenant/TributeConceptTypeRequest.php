@@ -18,7 +18,7 @@ class TributeConceptTypeRequest extends FormRequest
         return [
             'id' => [
                 'required', 
-                Rule::unique('tenant.cat_tribute_concept_types')->ignore($id),
+                Rule::unique('tenant.cat_attribute_types')->ignore($id),
             ],
             'description' => [
                 'required',

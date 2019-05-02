@@ -27,10 +27,12 @@
                 <data-table :resource="resource">
                     <tr slot="heading">
                         <th>#</th>
+                        <th>SOAP</th>
                         <th class="text-center">Fecha Emisión</th>
                         <th>Cliente</th>
                         <th>Número</th>
                         <th>Estado</th>
+                        <th v-if="columns.user_name.visible">Usuario</th>
                         <th class="text-center">Moneda</th>
                         <th class="text-right" v-if="columns.total_exportation.visible">T.Exportación</th>
                         <th class="text-right" v-if="columns.total_free.visible">T.Gratuita</th>
@@ -45,18 +47,24 @@
                     <tr>
                     <tr slot-scope="{ index, row }" :class="{'text-danger': (row.state_type_id === '11'), 'text-warning': (row.state_type_id === '13'), 'border-light': (row.state_type_id === '01'), 'border-left border-info': (row.state_type_id === '03'), 'border-left border-success': (row.state_type_id === '05'), 'border-left border-secondary': (row.state_type_id === '07'), 'border-left border-dark': (row.state_type_id === '09'), 'border-left border-danger': (row.state_type_id === '11'), 'border-left border-warning': (row.state_type_id === '13')}">
                         <td>{{ index }}</td>
+                        <td>{{ row.soap_type_description }}</td>
                         <td class="text-center">{{ row.date_of_issue }}</td>
                         <td>{{ row.customer_name }}<br/><small v-text="row.customer_number"></small></td>
                         <td>{{ row.number }}<br/>
                             <small v-text="row.document_type_description"></small><br/>
                             <small v-if="row.affected_document" v-text="row.affected_document"></small>
                         </td>
+                        
                         <td>
                             <el-tooltip v-if="tooltip(row, false)" class="item" effect="dark" placement="bottom">
                                 <div slot="content">{{tooltip(row)}}</div>
                                 <span class="badge bg-secondary text-white" :class="{'bg-danger': (row.state_type_id === '11'), 'bg-warning': (row.state_type_id === '13'), 'bg-secondary': (row.state_type_id === '01'), 'bg-info': (row.state_type_id === '03'), 'bg-success': (row.state_type_id === '05'), 'bg-secondary': (row.state_type_id === '07'), 'bg-dark': (row.state_type_id === '09')}">{{row.state_type_description}}</span>
                             </el-tooltip>
                             <span v-else class="badge bg-secondary text-white" :class="{'bg-danger': (row.state_type_id === '11'), 'bg-warning': (row.state_type_id === '13'), 'bg-secondary': (row.state_type_id === '01'), 'bg-info': (row.state_type_id === '03'), 'bg-success': (row.state_type_id === '05'), 'bg-secondary': (row.state_type_id === '07'), 'bg-dark': (row.state_type_id === '09')}">{{row.state_type_description}}</span>
+                        </td>
+                        <td v-if="columns.user_name.visible">
+                            {{row.user_name}}
+                            <br/><small v-text="row.user_email"></small>
                         </td>
                         <td class="text-center">{{ row.currency_type_id }}</td>
                         <td class="text-right" v-if="columns.total_exportation.visible">{{ row.total_exportation }}</td>
@@ -90,6 +98,8 @@
                         <!--</td>-->
 
                         <td class="text-right">
+                            <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"-->
+                                    <!--@click.prevent="clickReStore(row.id)">Volver a generar</button>-->
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger m-1__2"
                                     @click.prevent="clickVoided(row.id)"
                                     v-if="row.btn_voided"  >Anular</button>
@@ -137,6 +147,10 @@
                 recordId: null,
                 showDialogOptions: false,
                 columns: {
+                    user_name: {
+                        title: 'Usuario',
+                        visible: false
+                    },
                     total_exportation: {
                         title: 'T.Exportación',
                         visible: false
@@ -226,6 +240,20 @@
             clickOptions(recordId = null) {
                 this.recordId = recordId
                 this.showDialogOptions = true
+            },
+            clickReStore(document_id) {
+                this.$http.get(`/${this.resource}/re_store/${document_id}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            this.$message.success(response.data.message)
+                            this.$eventHub.$emit('reloadData')
+                        } else {
+                            this.$message.error(response.data.message)
+                        }
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data.message)
+                    })
             },
             tooltip(row, message = true) {
                 if (message) {

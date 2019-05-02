@@ -56,6 +56,7 @@ class DocumentCollection extends ResourceCollection
                 'id' => $row->id,
                 'group_id' => $row->group_id,
                 'soap_type_id' => $row->soap_type_id,
+                'soap_type_description' => $row->soap_type->description,
                 'date_of_issue' => $row->date_of_issue->format('Y-m-d'),
                 'number' => $row->number_full,
                 'customer_name' => $row->customer->name,
@@ -94,6 +95,8 @@ class DocumentCollection extends ResourceCollection
                 'query_status' => json_decode($row->query_status) ,
                 'created_at' => $row->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $row->updated_at->format('Y-m-d H:i:s'),
+                'user_name' => ($row->user) ? $row->user->name : '',
+                'user_email' => ($row->user) ? $row->user->email : '',
             ];
         });
     }

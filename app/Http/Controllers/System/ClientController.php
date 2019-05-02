@@ -97,6 +97,7 @@ class ClientController extends Controller
 
         $website = new Website();
         $hostname = new Hostname();
+        $this->validateWebsite($uuid, $website);
 
         DB::connection('system')->beginTransaction();
         try {
@@ -156,6 +157,11 @@ class ClientController extends Controller
             'code' => '0000'
         ]);
 
+        // DB::connection('tenant')->table('warehouses')->insertGetId([
+        //     'establishment_id' => $establishment_id,
+        //     'description' => 'Almacén - '.'Oficina Principal',
+        // ]);
+
         DB::connection('tenant')->table('series')->insert([
             ['establishment_id' => 1, 'document_type_id' => '01', 'number' => 'F001'],
             ['establishment_id' => 1, 'document_type_id' => '03', 'number' => 'B001'],
@@ -173,6 +179,7 @@ class ClientController extends Controller
             'password' => bcrypt($request->input('password')),
             'api_token' => $token,
             'establishment_id' => $establishment_id,
+            'type' => 'admin',
             'locked' => true
         ]);
 
@@ -184,10 +191,22 @@ class ClientController extends Controller
             ['module_id' => 5, 'user_id' => $user_id], 
         ]);
 
+        
+
         return [
             'success' => true,
             'message' => 'Cliente Registrado satisfactoriamente'
         ];
+    }
+
+    public function validateWebsite($uuid, $website){
+
+        $exists = $website::where('uuid', $uuid)->first();
+
+        if($exists){
+            throw new Exception("El subdominio ya se encuentra registrado");            
+        }
+
     }
 
     public function destroy($id)

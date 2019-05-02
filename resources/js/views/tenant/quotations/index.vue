@@ -17,7 +17,8 @@
                         <th class="text-center">Fecha Emisión</th>
                         <th>Cliente</th>
                         <th>Cotización</th>
-                        <th>Estado</th>
+                        <th>Comprobantes</th>
+                        <!-- <th>Estado</th> -->
                         <th class="text-center">Moneda</th>
                         <!-- <th class="text-right">T.Exportación</th>
                         <th class="text-right">T.Gratuita</th>
@@ -26,7 +27,7 @@
                         <th class="text-right">T.Gravado</th>
                         <th class="text-right">T.Igv</th>
                         <th class="text-right">Total</th>
-                        <th class="text-center">Descargas</th>
+                        <th class="text-center">PDF</th>
                         <th class="text-right">Acciones</th>
                     <tr>
                     <tr slot-scope="{ index, row }">
@@ -35,7 +36,12 @@
                         <td>{{ row.customer_name }}<br/><small v-text="row.customer_number"></small></td>
                         <td>{{ row.identifier }} 
                         </td>
-                        <td>{{ row.state_type_description }}</td>
+                        <td>
+                            <template v-for="(document,i) in row.documents">
+                                <label :key="i" v-text="document.number_full" class="d-block"></label>
+                            </template>
+                        </td>
+                        <!-- <td>{{ row.state_type_description }}</td> -->
                         <td class="text-center">{{ row.currency_type_id }}</td>
                         <!-- <td class="text-right">{{ row.total_exportation }}</td>
                         <td class="text-right">{{ row.total_free }}</td>
@@ -44,13 +50,14 @@
                         <td class="text-right">{{ row.total_taxed }}</td>
                         <td class="text-right">{{ row.total_igv }}</td>
                         <td class="text-right">{{ row.total }}</td>
-                        <td class="text-right">
+                        <td class="text-right"> 
+
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
-                                    @click.prevent="clickDownload(row.external_id)">PDF</button>
+                                    @click.prevent="clickOptionsPdf(row.id)">PDF</button>
                         </td>
                         
                         <td class="text-right"> 
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info" 
                                     @click.prevent="clickOptions(row.id)">Generar comprobante</button>
                         </td>
                     </tr>
@@ -62,6 +69,10 @@
                               :recordId="recordId"
                               :showGenerate="true"
                               :showClose="true"></quotation-options>
+
+            <quotation-options-pdf :showDialog.sync="showDialogOptionsPdf"
+                              :recordId="recordId" 
+                              :showClose="true"></quotation-options-pdf>
         </div>
     </div>
 </template>
@@ -69,27 +80,30 @@
 <script>
  
     import QuotationOptions from './partials/options.vue'
+    import QuotationOptionsPdf from './partials/options_pdf.vue'
     import DataTable from '../../../components/DataTable.vue'
 
     export default { 
-        components: {DataTable,QuotationOptions},
+        components: {DataTable,QuotationOptions, QuotationOptionsPdf},
         data() {
             return { 
                 resource: 'quotations',
                 recordId: null,
-                showDialogOptions: false
+                showDialogOptions: false,
+                showDialogOptionsPdf: false
             }
         },
         created() {
         },
-        methods: { 
-            clickDownload(external_id) {
-                window.open(`/downloads/quotation/quotation/${external_id}`, '_blank');                
-            },  
+        methods: {  
             clickOptions(recordId = null) {
                 this.recordId = recordId
                 this.showDialogOptions = true
             },
+            clickOptionsPdf(recordId = null) {
+                this.recordId = recordId
+                this.showDialogOptionsPdf = true
+            }
         }
     }
 </script>

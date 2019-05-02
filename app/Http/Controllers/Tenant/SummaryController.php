@@ -73,4 +73,21 @@ class SummaryController extends Controller
     public function status($summary_id) {
         return $this->query($summary_id);
     }
+
+    public function destroy($voided_id)
+    {
+        $summary = Summary::find($voided_id);
+        foreach ($summary->documents as $doc)
+        {
+            $doc->document->update([
+                'state_type_id' => ($summary->summary_status_type_id === '1')?'01':'05'
+            ]);
+        }
+        $summary->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Resumen eliminada con éxito'
+        ];
+    }
 }
