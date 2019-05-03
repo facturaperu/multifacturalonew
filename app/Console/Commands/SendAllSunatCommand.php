@@ -51,6 +51,7 @@ class SendAllSunatCommand extends Command
             }
             
             $documents = Document::query()
+                ->where('group_id', '01')
                 ->where('send_server', 0)
                 ->where('state_type_id', '!=', '05')
                 ->orWhere('sunat_shipping_status', '!=', '')
