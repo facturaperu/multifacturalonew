@@ -17,6 +17,9 @@
         '6' => 'RUC',
     ];
 
+    $document_base_series = ($document_base->affected_document) ? $document_base->affected_document->series : $document_base->data_affected_document->series;
+    $document_base_number = ($document_base->affected_document) ? $document_base->affected_document->number : $document_base->data_affected_document->number;
+    
     $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
 @endphp
 <html>
@@ -110,7 +113,7 @@
 <table class="full-width mt-3">
     <tr>
         <td width="25%">Documento Afectado:</td>
-        <td width="20%">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
+        <td width="20%">{{ $document_base_series }}-{{ $document_base_number }}</td>
         <td width="15%">Tipo de nota:</td>
         <td width="40%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
     </tr>

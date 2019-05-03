@@ -17,6 +17,7 @@ class Note extends ModelTenant
         'note_debit_type_id',
         'note_description',
         'affected_document_id',
+        'data_affected_document',
     ];
 
     public function document()
@@ -37,5 +38,15 @@ class Note extends ModelTenant
     public function note_debit_type()
     {
         return $this->belongsTo(NoteDebitType::class, 'note_debit_type_id');
+    }
+
+    public function getDataAffectedDocumentAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setDataAffectedDocumentAttribute($value)
+    {
+        $this->attributes['data_affected_document'] = (is_null($value))?null:json_encode($value);
     }
 }

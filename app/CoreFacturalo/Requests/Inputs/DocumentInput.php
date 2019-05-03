@@ -355,20 +355,36 @@ class DocumentInput
         $note_credit_or_debit_type_id = $inputs['note_credit_or_debit_type_id'];
         $note_description = $inputs['note_description'];
         $affected_document_id = $inputs['affected_document_id'];
+        $data_affected_document = isset($inputs['data_affected_document']) ? $inputs['data_affected_document'] : null;
 
         $affected_document = Document::find($affected_document_id);
 
         $type = ($document_type_id === '07')?'credit':'debit';
 
+        if($affected_document){
+
+            $group_id = $affected_document->group_id;
+            $$affected_document_id = $affected_document->id;
+
+        }else{
+
+            $affected_document_id = null;
+            $group_id = ($data_affected_document['document_type_id'] == '01') ? '01' : '02';
+
+        }
+
+        // dd($affected_document);
         return [
             'type' => $type,
-            'group_id' => $affected_document->group_id,
+            'group_id' => $group_id,
             'note' => [
                 'note_type' => $type,
                 'note_credit_type_id' => ($type === 'credit')?$note_credit_or_debit_type_id:null,
                 'note_debit_type_id' => ($type === 'debit')?$note_credit_or_debit_type_id:null,
                 'note_description' => $note_description,
-                'affected_document_id' => $affected_document->id
+                'affected_document_id' => $affected_document_id,
+                //aca se arma para insertar
+                'data_affected_document' => $data_affected_document
             ]
         ];
     }
