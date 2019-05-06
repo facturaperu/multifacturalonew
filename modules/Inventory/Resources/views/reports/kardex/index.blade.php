@@ -86,16 +86,14 @@
                                         <td>
                                             @switch($value->inventory_kardexable_type)
                                                 @case($models[0])
-                                                    {{"{optional($value->inventory_kardexable)->series}-{optional($value->inventory_kardexable)->number}" }}
+                                                    {{ optional($value->inventory_kardexable)->series.'-'.optional($value->inventory_kardexable)->number }}
                                                     @break
                                                 @case($models[1])
-                                                    {{"{optional($value->inventory_kardexable)->series}-{optional($value->inventory_kardexable)->number}"}}
-                                                    @break 
-                                                    
+                                                    {{ optional($value->inventory_kardexable)->series.'-'.optional($value->inventory_kardexable)->number }}
+                                                    @break
                                                 @case($models[2])
-                                                    {{"{optional($value->inventory_kardexable)->prefix}-{optional($value->inventory_kardexable)->id}" }}
-                                                    @break  
-
+                                                    {{ optional($value->inventory_kardexable)->series.'-'.optional($value->inventory_kardexable)->number }}
+                                                    @break
                                                 @case($models[3])
                                                     {{"-"}}                                                 
                                                     @break  
