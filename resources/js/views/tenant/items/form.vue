@@ -38,7 +38,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.sale_affectation_igv_type_id}">
                             <label class="control-label">Tipo de afectación (Venta)</label>
-                            <el-select v-model="form.sale_affectation_igv_type_id">
+                            <el-select v-model="form.sale_affectation_igv_type_id" @change="changeAffectationIgvType">
                                 <el-option v-for="option in affectation_igv_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.sale_affectation_igv_type_id" v-text="errors.sale_affectation_igv_type_id[0]"></small>
@@ -50,7 +50,7 @@
                             <small class="form-control-feedback" v-if="errors.calculate_quantity" v-text="errors.calculate_quantity[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-3 center-el-checkbox">
+                    <div class="col-md-3 center-el-checkbox" v-show="show_has_igv">
                         <div class="form-group" :class="{'has-danger': errors.has_igv}">
                             <el-checkbox v-model="form.has_igv">Incluye Igv</el-checkbox><br>
                             <small class="form-control-feedback" v-if="errors.has_igv" v-text="errors.has_igv[0]"></small>
@@ -152,7 +152,8 @@
                 unit_types: [],
                 currency_types: [],
                 system_isc_types: [],
-                affectation_igv_types: []
+                affectation_igv_types: [],
+                show_has_igv:true
             }
         },
         created() {
@@ -194,6 +195,20 @@
                     stock_min: 1,
                     has_igv: true
                 }
+                this.show_has_igv = true
+            },
+            changeAffectationIgvType(){
+
+                let affectation_igv_type_exonerated = [20,21,30,31,32,33,34,35,36,37]
+                let is_exonerated = affectation_igv_type_exonerated.includes((parseInt(this.form.sale_affectation_igv_type_id)));
+
+                if(is_exonerated){
+                    this.show_has_igv = false
+                    this.form.has_igv = true
+                }else{
+                    this.show_has_igv = true
+                }
+
             },
             resetForm() {
                 this.initForm()
@@ -206,6 +221,7 @@
                     this.$http.get(`/${this.resource}/record/${this.recordId}`)
                         .then(response => {
                             this.form = response.data.data
+                            this.changeAffectationIgvType()
                         })
                 }
             },
