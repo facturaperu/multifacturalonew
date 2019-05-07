@@ -10,6 +10,8 @@ class Template
             $template = 'note';
         }
         $template = 'pdf.'.$template.'_'.$format_pdf;
+
+//        dd($template);
         return self::render($template, $company, $document);
     }
 

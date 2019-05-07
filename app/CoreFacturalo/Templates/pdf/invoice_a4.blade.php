@@ -7,6 +7,14 @@
     $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
     $accounts = \App\Models\Tenant\BankAccount::all();
+
+    if($document_base) {
+        $affected_document_number = $document_base->affected_document->series.'-'.str_pad($document_base->affected_document->number, 8, '0', STR_PAD_LEFT);
+    } else {
+        $affected_document_number = null;
+    }
+
+
 @endphp
 <html>
 <head>
@@ -49,23 +57,29 @@
 </table>
 <table class="full-width mt-5">
     <tr>
-        <td width="15%">Cliente:</td>
-        <td width="45%">{{ $customer->name }}</td>
-        <td width="25%">Fecha de emisión:</td>
-        <td width="15%">{{ $document->date_of_issue->format('Y-m-d') }}</td>
+        <td width="120px">FECHA DE EMISIÓN</td>
+        <td width="8px">:</td>
+        <td>{{ $document->date_of_issue->format('Y-m-d') }}</td>
     </tr>
     <tr>
-        <td>{{ $customer->identity_document_type->description }}:</td>
+        <td>CLIENTE:</td>
+        <td>:</td>
+        <td>{{ $customer->name }}</td>
+    </tr>
+    <tr>
+        <td>{{ $customer->identity_document_type->description }}</td>
+        <td>:</td>
         <td>{{ $customer->number }}</td>
-        @if($invoice)
-        <td>Fecha de vencimiento:</td>
-        <td>{{ $invoice->date_of_due->format('Y-m-d') }}</td>
-        @endif
+        {{--@if($invoice)--}}
+        {{--<td>Fecha de vencimiento:</td>--}}
+        {{--<td>{{ $invoice->date_of_due->format('Y-m-d') }}</td>--}}
+        {{--@endif--}}
     </tr>
     @if ($customer->address !== '')
     <tr>
-        <td class="align-top">Dirección:</td>
-        <td colspan="3">
+        <td class="align-top">DIRECCIÓN:</td>
+        <td>:</td>
+        <td>
             {{ $customer->address }}
             {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
             {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
@@ -75,21 +89,21 @@
     @endif
 </table>
 
-<table class="full-width mt-3">
-    @if ($document->purchase_order)
-        <tr>
-            <td width="25%">Orden de Compra: </td>
-            <td>:</td>
-            <td class="text-left">{{ $document->purchase_order }}</td>
-        </tr>
-    @endif
-    @if ($document->quotation_id)
-        <tr>
-            <td width="15%">Cotización:</td>
-            <td class="text-left" width="85%">{{ $document->quotation->identifier }}</td>
-        </tr>
-    @endif
-</table>
+{{--<table class="full-width mt-3">--}}
+    {{--@if ($document->purchase_order)--}}
+        {{--<tr>--}}
+            {{--<td width="25%">Orden de Compra: </td>--}}
+            {{--<td>:</td>--}}
+            {{--<td class="text-left">{{ $document->purchase_order }}</td>--}}
+        {{--</tr>--}}
+    {{--@endif--}}
+    {{--@if ($document->quotation_id)--}}
+        {{--<tr>--}}
+            {{--<td width="15%">Cotización:</td>--}}
+            {{--<td class="text-left" width="85%">{{ $document->quotation->identifier }}</td>--}}
+        {{--</tr>--}}
+    {{--@endif--}}
+{{--</table>--}}
 
 @if ($document->guides)
 <br/>
@@ -109,20 +123,52 @@
 </table>
 @endif
 
-@if(!is_null($document_base))
 <table class="full-width mt-3">
+    @if ($document->purchase_order)
+        <tr>
+            <td>ORDEN DE COMPRA</td>
+            <td>:</td>
+            <td>{{ $document->purchase_order }}</td>
+        </tr>
+    @endif
+    @if ($document->quotation_id)
+        <tr>
+            <td>COTIZACIÓN</td>
+            <td>:</td>
+            <td>{{ $document->quotation->identifier }}</td>
+        </tr>
+    @endif
+    @if(!is_null($document_base))
     <tr>
-        <td width="25%">Documento Afectado:</td>
-        <td width="20%">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
-        <td width="15%">Tipo de nota:</td>
-        <td width="40%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
+        <td width="120px">DOC. AFECTADO</td>
+        <td width="8px">:</td>
+        <td>{{ $affected_document_number }}</td>
     </tr>
     <tr>
-        <td class="align-top">Descripción:</td>
-        <td class="text-left" colspan="3">{{ $document_base->note_description }}</td>
+        <td>TIPO DE NOTA</td>
+        <td>:</td>
+        <td>{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
     </tr>
+    <tr>
+        <td>DESCRIPCIÓN</td>
+        <td>:</td>
+        <td>{{ $document_base->note_description }}</td>
+    </tr>
+    @endif
 </table>
-@endif
+
+{{--<table class="full-width mt-3">--}}
+    {{--<tr>--}}
+        {{--<td width="25%">Documento Afectado:</td>--}}
+        {{--<td width="20%">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>--}}
+        {{--<td width="15%">Tipo de nota:</td>--}}
+        {{--<td width="40%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>--}}
+    {{--</tr>--}}
+    {{--<tr>--}}
+        {{--<td class="align-top">Descripción:</td>--}}
+        {{--<td class="text-left" colspan="3">{{ $document_base->note_description }}</td>--}}
+    {{--</tr>--}}
+{{--</table>--}}
 
 <table class="full-width mt-10 mb-10">
     <thead class="">
