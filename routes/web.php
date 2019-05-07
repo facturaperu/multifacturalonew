@@ -98,6 +98,7 @@ if ($hostname) {
             Route::get('items/record/{item}', 'Tenant\ItemController@record');
             Route::post('items', 'Tenant\ItemController@store');
             Route::delete('items/{item}', 'Tenant\ItemController@destroy');
+            Route::delete('items/item-unit-type/{item}', 'Tenant\ItemController@destroyItemUnitType');
             Route::post('items/import', 'Tenant\ItemController@import');
 
             //Customers

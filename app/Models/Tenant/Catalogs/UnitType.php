@@ -18,4 +18,9 @@ class UnitType extends ModelCatalog
         'symbol',
         'description',
     ];
+
+    public function item_unit_types()
+    {
+        return $this->hasMany(ItemUnitType::class);
+    }
 }
