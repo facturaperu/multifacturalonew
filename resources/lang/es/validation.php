@@ -183,6 +183,7 @@ return [
         'note.note_debit_type_id' => 'tipo de nota de débito',
         'note.note_description' => 'descripción',
         'exchange_rate_sale' => 'tipo de cambio',
+        'type' => 'perfil',
       
     ],
 ];
