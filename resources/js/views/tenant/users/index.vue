@@ -32,14 +32,15 @@
                     </tbody>
                 </table>
             </div>
-            <div class="row">
+            <div class="row" v-if="typeUser != 'integrator'">
                 <div class="col">
                     <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickCreate()"><i class="fa fa-plus-circle"></i> Nuevo</button>
                 </div>
             </div>
         </div>
         <users-form :showDialog.sync="showDialog"
-                            :recordId="recordId"></users-form>
+                    :typeUser="typeUser"
+                    :recordId="recordId"></users-form>
     </div>
 </template>
 
@@ -49,6 +50,7 @@
     import {deletable} from '../../../mixins/deletable'
 
     export default {
+        props: ['typeUser'],
         mixins: [deletable],
         components: {UsersForm},
         data() {

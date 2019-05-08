@@ -100,8 +100,10 @@ class DocumentController extends Controller
  
     public function create()
     {
-        $is_contingency = 0;
+        if(auth()->user()->type == 'integrator')
+            return redirect('/documents');
 
+        $is_contingency = 0;
         return view('tenant.documents.form', compact('is_contingency'));
     }
     
