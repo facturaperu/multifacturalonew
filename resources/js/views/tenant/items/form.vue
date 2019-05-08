@@ -94,7 +94,10 @@
                     </div>
 
                     <div class="col-md-12">
-                        <h5 class="separator-title">Adicional</h5>
+                        <h5 class="separator-title ">
+                            Listado de precios
+                             <a href="#" class="control-label font-weight-bold text-info" @click="clickAddRow"> [ + Nuevo]</a>
+                        </h5> 
                     </div>
                     <div class="col-md-12" v-if="form.item_unit_types.length > 0">
                     <div class="table-responsive">
@@ -170,10 +173,7 @@
                         </table>
                         
                     </div>
-                </div>  
-                    <div class="col-md-12 text-center pt-2" >
-                            <el-button type="primary" icon="el-icon-plus" @click="clickAddRow">Nuevo</el-button>
-                        </div>
+                </div>   
                     <div class="col-md-12">
                         <h5 class="separator-title">Campos adicionales</h5>
                     </div>
