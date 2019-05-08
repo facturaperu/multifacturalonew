@@ -14,6 +14,7 @@ use App\Http\Resources\Tenant\ItemCollection;
 use App\Http\Resources\Tenant\ItemResource;
 use App\Models\Tenant\User;
 use App\Models\Tenant\Warehouse;
+use App\Models\Tenant\ItemUnitType;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
@@ -70,12 +71,30 @@ class ItemController extends Controller
         // $establishment_id = auth()->user()->establishment->id;
         // $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
 
+        // dd($request->item_unit_types);
+        
         $id = $request->input('id');
         $item = Item::firstOrNew(['id' => $id]);
         $item->item_type_id = '01';
         // $item->warehouse_id = optional($warehouse)->id;
         $item->fill($request->all());
         $item->save();
+
+        foreach ($request->item_unit_types as $value) {
+
+            $item_unit_type = ItemUnitType::firstOrNew(['id' => $value['id']]);
+            $item_unit_type->item_id = $item->id;
+            $item_unit_type->unit_type_id = $value['unit_type_id'];
+            $item_unit_type->quantity_unit = $value['quantity_unit'];
+            $item_unit_type->price1 = $value['price1'];
+            $item_unit_type->price2 = $value['price2'];
+            $item_unit_type->price3 = $value['price3'];
+            $item_unit_type->save();
+        
+        }
+        
+
+
 
 //        $item->warehouses()->create([
 //            'warehouse_id' => $warehouse->id,
@@ -100,6 +119,18 @@ class ItemController extends Controller
             'message' => 'Producto eliminado con éxito'
         ];
     }
+
+    public function destroyItemUnitType($id)
+    {
+        $item_unit_type = ItemUnitType::findOrFail($id);
+        $item_unit_type->delete();
+
+        return [
+            'success' => true,
+            'message' => 'Registro eliminado con éxito'
+        ];
+    }
+
 
     public function import(Request $request)
     {
