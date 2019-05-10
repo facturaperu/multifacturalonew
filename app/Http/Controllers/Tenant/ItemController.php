@@ -89,6 +89,7 @@ class ItemController extends Controller
             $item_unit_type->price1 = $value['price1'];
             $item_unit_type->price2 = $value['price2'];
             $item_unit_type->price3 = $value['price3'];
+            $item_unit_type->price_default = $value['price_default'];
             $item_unit_type->save();
         
         }

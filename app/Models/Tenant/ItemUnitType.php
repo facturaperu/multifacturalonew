@@ -21,6 +21,7 @@ class ItemUnitType extends ModelTenant
         'price_1',
         'price_2',  
         'price_3',  
+        'price_default',  
     ];
  
  

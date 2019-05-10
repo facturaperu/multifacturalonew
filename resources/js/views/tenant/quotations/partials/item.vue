@@ -332,10 +332,22 @@
                 this.cleanTotalItem()
             },
             changePresentation(){
+
                 this.item_unit_type = _.find(this.form.item.item_unit_types, {'id': this.form.item_unit_type_id})
-                this.form.unit_price = this.item_unit_type.price2
-                this.form.item.unit_type_id = this.item_unit_type.unit_type_id
-                 
+
+                let price = 0
+
+                switch (this.item_unit_type.price_default) {
+                    case 1: price = this.item_unit_type.price1
+                        break;
+                    case 2: price = this.item_unit_type.price2
+                        break;
+                    case 3: price = this.item_unit_type.price3                    
+                        break;
+                }
+                
+                this.form.unit_price = price
+                this.form.item.unit_type_id = this.item_unit_type.unit_type_id                 
                 
             },
             clickAddItem() {

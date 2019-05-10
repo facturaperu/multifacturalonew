@@ -234,6 +234,7 @@ class QuotationController extends Controller
                                 'price1' => $row->price1,
                                 'price2' => $row->price2,
                                 'price3' => $row->price3,
+                                'price_default' => $row->price_default,
                             ];
                         })
 

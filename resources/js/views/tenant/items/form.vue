@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" :close-on-click-modal="false" @close="close" @open="create" append-to-body top="7vh">
+    <el-dialog width="65%" :title="titleDialog" :visible="showDialog" :close-on-click-modal="false" @close="close" @open="create" append-to-body top="7vh">
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
@@ -104,22 +104,24 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Unidad</th>
-                                <th>C. Unidades</th>
-                                <th>Precio 1</th>
-                                <th>Precio 2</th>
-                                <th>Precio 3</th>
+                                <th class="text-center">Unidad</th>
+                                <th class="text-center">C. Unidades</th>
+                                <th class="text-center">Precio 1</th>
+                                <th class="text-center">Precio 2</th>
+                                <th class="text-center">Precio 3</th>
+                                <th class="text-center">P. Defecto</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="(row, index) in form.item_unit_types">
                                 <template v-if="row.id">
-                                    <td>{{ row.unit_type_id }}</td>
-                                    <td>{{ row.quantity_unit }}</td>
-                                    <td>{{ row.price1 }}</td>
-                                    <td>{{ row.price2 }}</td>
-                                    <td>{{ row.price3 }}</td>
+                                    <td class="text-center">{{ row.unit_type_id }}</td>
+                                    <td class="text-center">{{ row.quantity_unit }}</td>
+                                    <td class="text-center">{{ row.price1 }}</td>
+                                    <td class="text-center">{{ row.price2 }}</td>
+                                    <td class="text-center">{{ row.price3 }}</td>
+                                    <td class="text-center">Precio {{ row.price_default }}</td>
                                     <td class="series-table-actions text-right">
                                        <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickDelete(row.id)">
                                             <i class="fa fa-trash"></i>
@@ -157,6 +159,15 @@
                                         <div class="form-group">
                                             <el-input v-model="row.price3"></el-input>
                                             <!-- <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small> -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <el-radio-group v-model="row.price_default">
+                                                <el-radio :label="1" class="d-block">Precio 1</el-radio>
+                                                <el-radio :label="2" class="d-block">Precio 2</el-radio>
+                                                <el-radio :label="3" class="d-block">Precio 3</el-radio>
+                                            </el-radio-group>
                                         </div>
                                     </td>
                                     <td class="series-table-actions text-right">
@@ -242,6 +253,7 @@
                         price1:0,
                         price2:0,
                         price3:0,
+                        price_default:2,
 
                 }
             }
@@ -286,6 +298,7 @@
                     price1:0,
                     price2:0,
                     price3:0,
+                    price_default:2,                    
                 })
             },
             clickCancel(index) {
