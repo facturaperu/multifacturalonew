@@ -50,6 +50,15 @@
                             <small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>
                         </div>
                     </div>
+                    <div class="col-md-6" v-show="has_list_prices">
+                        <div class="form-group" :class="{'has-danger': errors.item_unit_type_id}">
+                            <label class="control-label">Presentación</label>
+                            <el-select v-model="form.item_unit_type_id"   filterable @change="changePresentation">
+                                <el-option v-for="option in item_unit_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select> 
+                            <small class="form-control-feedback" v-if="errors.item_unit_type_id" v-text="errors.item_unit_type_id[0]"></small>
+                        </div>
+                    </div>
                     <div class="col-md-12 mt-3">
                         <section class="card mb-2 card-transparent card-collapsed" id="card-section">
                                 <header class="card-header hoverable bg-light border-top rounded-0 py-1" data-card-toggle style="cursor: pointer;" id="card-click">
@@ -190,6 +199,7 @@
                 errors: {},
                 form: {},
                 items: [],
+                aux_items: [],
                 affectation_igv_types: [],
                 system_isc_types: [],
                 discount_types: [],
@@ -197,7 +207,10 @@
                 attribute_types: [],
                 use_price: 1,
                 change_affectation_igv_type_id: false,
-                total_item: 0
+                total_item: 0,
+                has_list_prices:false,
+                item_unit_types:[],
+                item_unit_type:{},
 
             }
         },
@@ -220,7 +233,7 @@
         },
         methods: {
             filterItems(){
-                this.items = this.items.filter(item => item.warehouses.length >0)
+                // this.items = this.items.filter(item => item.warehouses.length >0)
             },
             initForm() {
                 this.errors = {}
@@ -238,8 +251,11 @@
                     charges: [],
                     discounts: [],
                     attributes: [],
+                    item_unit_type_id: null,
+                    unit_type_id: null,
                 }
                 this.total_item = 0
+                this.has_list_prices = false
             },
             // initializeFields() {
             //     this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
@@ -306,12 +322,21 @@
                 this.$emit('update:showDialog', false)
             },
             changeItem() {
+                this.getItems()
                 this.form.item = _.find(this.items, {'id': this.form.item_id})
                 this.form.unit_price = this.form.item.sale_unit_price
                 this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id
                 this.form.quantity = 1
+                this.item_unit_types = this.form.item.item_unit_types;
+                (this.item_unit_types.length > 0) ? this.has_list_prices = true : this.has_list_prices = false
                 this.cleanTotalItem()
-
+            },
+            changePresentation(){
+                this.item_unit_type = _.find(this.form.item.item_unit_types, {'id': this.form.item_unit_type_id})
+                this.form.unit_price = this.item_unit_type.price2
+                this.form.item.unit_type_id = this.item_unit_type.unit_type_id
+                 
+                
             },
             clickAddItem() {
                 
@@ -324,6 +349,7 @@
                 this.initForm()
                 // this.initializeFields()
                 this.$emit('add', this.row)
+
             },
             cleanTotalItem(){
                 this.total_item = null  
@@ -332,6 +358,11 @@
                 if(this.form.item.calculate_quantity) { 
                     this.form.quantity = _.round((this.total_item / this.form.unit_price), 4)
                 }
+            },
+            getItems(){
+                this.$http.get(`/${this.resource}/item/tables`).then(response => {
+                    this.items = response.data.items
+                })
             },
             validateTotalItem(){
 

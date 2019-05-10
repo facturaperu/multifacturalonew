@@ -225,6 +225,17 @@ class QuotationController extends Controller
                         'sale_affectation_igv_type_id' => $row->sale_affectation_igv_type_id,
                         'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
                         'calculate_quantity' => (bool) $row->calculate_quantity,
+                        'item_unit_types' => collect($row->item_unit_types)->transform(function($row) {
+                            return [
+                                'id' => $row->id,
+                                'item_id' => $row->item_id,
+                                'unit_type_id' => $row->unit_type_id,
+                                'description' => "{$row->unit_type->id} - {$row->unit_type->description} ({$row->quantity_unit} und)",
+                                'price1' => $row->price1,
+                                'price2' => $row->price2,
+                                'price3' => $row->price3,
+                            ];
+                        })
 
                         // 'warehouses' => collect($row->warehouses)->transform(function($row) {
                         //     return [
