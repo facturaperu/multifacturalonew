@@ -200,6 +200,7 @@ class ClientController extends Controller
 
             DB::connection('tenant')->table('module_user')->insert([
                 ['module_id' => 1, 'user_id' => $user_id],
+                ['module_id' => 3, 'user_id' => $user_id],
                 ['module_id' => 5, 'user_id' => $user_id], 
             ]);
 
