@@ -94,6 +94,87 @@
                     </div>
 
                     <div class="col-md-12">
+                        <h5 class="separator-title ">
+                            Listado de precios
+                             <a href="#" class="control-label font-weight-bold text-info" @click="clickAddRow"> [ + Nuevo]</a>
+                        </h5> 
+                    </div>
+                    <div class="col-md-12" v-if="form.item_unit_types.length > 0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Unidad</th>
+                                <th>C. Unidades</th>
+                                <th>Precio 1</th>
+                                <th>Precio 2</th>
+                                <th>Precio 3</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(row, index) in form.item_unit_types">
+                                <template v-if="row.id">
+                                    <td>{{ row.unit_type_id }}</td>
+                                    <td>{{ row.quantity_unit }}</td>
+                                    <td>{{ row.price1 }}</td>
+                                    <td>{{ row.price2 }}</td>
+                                    <td>{{ row.price3 }}</td>
+                                    <td class="series-table-actions text-right">
+                                       <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickDelete(row.id)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </template>
+                                <template v-else>
+                                    <td>
+                                        <div class="form-group"  >
+                                            <el-select v-model="row.unit_type_id" dusk="item_unit_type.unit_type_id">
+                                                <el-option v-for="option in unit_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                            </el-select>
+                                            <!-- <small class="form-control-feedback" v-if="errors.unit_type_id" v-text="errors.unit_type_id[0]"></small> -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                         <div class="form-group" >
+                                            <el-input v-model="row.quantity_unit"></el-input>
+                                            <!-- <small class="form-control-feedback" v-if="errors.quantity_unit" v-text="errors.quantity_unit[0]"></small> -->
+                                        </div>
+                                    </td>
+                                    <td> 
+                                        <div class="form-group" >
+                                            <el-input v-model="row.price1"></el-input>
+                                            <!-- <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small> -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <el-input v-model="row.price2"></el-input>
+                                            <!-- <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small> -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <el-input v-model="row.price3"></el-input>
+                                            <!-- <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small> -->
+                                        </div>
+                                    </td>
+                                    <td class="series-table-actions text-right">
+                                        <!-- <button type="button" class="btn waves-effect waves-light btn-xs btn-info" @click.prevent="clickSubmit(index)">
+                                            <i class="fa fa-check"></i>
+                                        </button> -->
+                                        <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickCancel(index)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </template>
+                            </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>   
+                    <div class="col-md-12">
                         <h5 class="separator-title">Campos adicionales</h5>
                     </div>
                     <div class="col-md-3">
@@ -153,7 +234,16 @@
                 currency_types: [],
                 system_isc_types: [],
                 affectation_igv_types: [],
-                show_has_igv:true
+                show_has_igv:true,
+                item_unit_type:{
+                        id:null,
+                        unit_type_id:null,
+                        quantity_unit:0,
+                        price1:0,
+                        price2:0,
+                        price3:0,
+
+                }
             }
         },
         created() {
@@ -170,6 +260,39 @@
                 })
         },
         methods: {
+            clickDelete(id) {
+
+                this.$http.delete(`/${this.resource}/item-unit-type/${id}`)
+                        .then(res => {
+                            if(res.data.success) { 
+                                this.loadRecord()
+                                this.$message.success('Se eliminó correctamente el registro')                                 
+                            }
+                        })
+                        .catch(error => {
+                            if (error.response.status === 500) {
+                                this.$message.error('Error al intentar eliminar');
+                            } else {
+                                console.log(error.response.data.message)
+                            }
+                        })
+                
+            },
+            clickAddRow() {
+                this.form.item_unit_types.push({
+                    id:null,
+                    unit_type_id:'NIU',
+                    quantity_unit:0,
+                    price1:0,
+                    price2:0,
+                    price3:0,
+                })
+            },
+            clickCancel(index) {
+                this.form.item_unit_types.splice(index, 1)
+                // this.initDocumentTypes()
+                // this.showAddButton = true
+            },
             initForm() {
                 this.loading_submit = false,
                 this.errors = {}
@@ -193,7 +316,8 @@
                     calculate_quantity: false,
                     stock: 0,
                     stock_min: 1,
-                    has_igv: true
+                    has_igv: true,
+                    item_unit_types:[]
                 }
                 this.show_has_igv = true
             },
@@ -217,6 +341,15 @@
             },
             create() {
                 this.titleDialog = (this.recordId)? 'Editar Producto':'Nuevo Producto'
+                if (this.recordId) {
+                    this.$http.get(`/${this.resource}/record/${this.recordId}`)
+                        .then(response => {
+                            this.form = response.data.data
+                            this.changeAffectationIgvType()
+                        })
+                }
+            },
+            loadRecord(){
                 if (this.recordId) {
                     this.$http.get(`/${this.resource}/record/${this.recordId}`)
                         .then(response => {

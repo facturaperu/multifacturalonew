@@ -16,7 +16,7 @@
         '1' => 'DNI',
         '6' => 'RUC',
     ];
-
+    $affected_document_number = $document_base->affected_document->series.'-'.str_pad($document_base->affected_document->number, 8, '0', STR_PAD_LEFT);
     $path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
 @endphp
 <html>
@@ -62,25 +62,29 @@
 
 <table class="full-width mt-5">
     <tr>
-        <td width="15%">Cliente:</td>
-        <td width="45%">{{ $customer->name }}</td>
-        <td width="25%">Fecha de emisión:</td>
-        <td width="15%">{{ $document->date_of_issue->format('Y-m-d') }}</td>
+        <td width="120px">FECHA DE EMISIÓN</td>
+        <td width="5px">:</td>
+        <td>{{ $document->date_of_issue->format('Y-m-d') }}</td>
     </tr>
     <tr>
-        <td>{{ $customer->identity_document_type->description }}:</td>
+        <td>CLIENTE</td>
+        <td>:</td>
+        <td>{{ $customer->name }}</td>
+    </tr>
+    <tr>
+        <td>{{ $customer->identity_document_type->description }}</td>
+        <td>:</td>
         <td>{{ $customer->number }}</td>
-
-        @isset($document->date_of_due)
-            <td>Fecha de vencimiento:</td>
-            <td>{{ $document->date_of_due->format('Y-m-d') }}</td>
-        @endisset
-
+        {{--@isset($document->date_of_due)--}}
+            {{--<td>Fecha de vencimiento:</td>--}}
+            {{--<td>{{ $document->date_of_due->format('Y-m-d') }}</td>--}}
+        {{--@endisset--}}
     </tr>
     @if ($customer->address !== '')
     <tr>
-        <td class="align-top">Dirección:</td>
-        <td colspan="3">
+        <td class="align-top">DIRECCIÓN</td>
+        <td>:</td>
+        <td>
             {{ $customer->address }}
             {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
             {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
@@ -90,33 +94,39 @@
     @endif
 </table>
 
+@if ($document->guides)
 <table class="full-width mt-3">
-    @if ($document->purchase_order)
-        <tr>
-            <td width="25%">Orden de Compra: </td>
-            <td class="text-left">{{ $document->purchase_order }}</td>
-        </tr>
-    @endif
-    @if ($document->guides)
-        @foreach($document->guides as $guide)
-            <tr>
-                <td>{{ $guide->document_type_id }}</td>
-                <td>{{ $guide->number }}</td>
-            </tr>
-        @endforeach
-    @endif
+@foreach($document->guides as $guide)
+    <tr>
+        <td>{{ $guide->document_type_id }}</td>
+        <td>{{ $guide->number }}</td>
+    </tr>
+@endforeach
 </table>
+@endif
 
 <table class="full-width mt-3">
+    @if ($document->purchase_order)
     <tr>
-        <td width="25%">Documento Afectado:</td>
-        <td width="20%">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
-        <td width="15%">Tipo de nota:</td>
-        <td width="40%">{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
+        <td>ORDEN DE COMPRA</td>
+        <td>:</td>
+        <td>{{ $document->purchase_order }}</td>
+    </tr>
+    @endif
+    <tr>
+        <td width="120px">DOC. AFECTADO</td>
+        <td width="5px">:</td>
+        <td>{{ $affected_document_number }}</td>
     </tr>
     <tr>
-        <td class="align-top">Descripción:</td>
-        <td class="text-left" colspan="3">{{ $document_base->note_description }}</td>
+        <td>TIPO DE NOTA</td>
+        <td>:</td>
+        <td>{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
+    </tr>
+    <tr>
+        <td>DESCRIPCIÓN</td>
+        <td>:</td>
+        <td>{{ $document_base->note_description }}</td>
     </tr>
 </table>
 <table class="full-width mt-10 mb-10">

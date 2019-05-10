@@ -29,7 +29,7 @@
 @endphp
 <html>
 <head>
-    <title>{{ $document_number }}</title>
+    <title>{{ $document_number }}111111111</title>
     <link href="{{ $path_style }}" rel="stylesheet" />
 </head>
 <body>

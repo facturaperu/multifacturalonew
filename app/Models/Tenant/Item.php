@@ -9,7 +9,7 @@ use App\Models\Tenant\Catalogs\UnitType;
 
 class Item extends ModelTenant
 {
-    protected $with = ['item_type', 'unit_type', 'currency_type', 'warehouses'];
+    protected $with = ['item_type', 'unit_type', 'currency_type', 'warehouses','item_unit_types'];
     protected $fillable = [
         'description',
         'item_type_id',
@@ -126,5 +126,11 @@ class Item extends ModelTenant
     public function warehouses()
     {
         return $this->hasMany(ItemWarehouse::class)->with('warehouse');
+    }
+
+
+    public function item_unit_types()
+    {
+        return $this->hasMany(ItemUnitType::class);
     }
 }
