@@ -85,19 +85,17 @@ class QuotationController extends Controller
         return compact('customers');
     }
 
-    public function tables()
-    {
+    public function tables() {
         $customers = $this->table('customers');
-        $establishments = Establishment::where('id', auth()->user()->establishment_id)->get();   
+        $establishments = Establishment::where('id', auth()->user()->establishment_id)->get();
         $currency_types = CurrencyType::whereActive()->get();
-        // $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();        
+        // $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
         $company = Company::active();
         $document_type_03_filter = config('tenant.document_type_03_filter');
-
-        return compact('customers', 'establishments','currency_types', 'discount_types', 'charge_types','company',
-                        'document_type_03_filter');
+        
+        return compact('customers', 'establishments','currency_types', 'discount_types', 'charge_types','company', 'document_type_03_filter');
     }
 
     public function option_tables()
@@ -108,9 +106,8 @@ class QuotationController extends Controller
 
         return compact('series', 'document_types_invoice');
     }
-
-    public function item_tables()
-    {
+    
+    public function item_tables() {
         $items = $this->table('items');
         $categories = []; 
         $affectation_igv_types = AffectationIgvType::whereActive()->get();
@@ -119,9 +116,8 @@ class QuotationController extends Controller
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
         $attribute_types = AttributeType::whereActive()->orderByDescription()->get();
-
-        return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types',
-                        'discount_types', 'charge_types', 'attribute_types');
+        
+        return compact('items', 'categories', 'affectation_igv_types', 'system_isc_types', 'price_types', 'discount_types', 'charge_types', 'attribute_types');
     }
 
     public function record($id)
@@ -131,21 +127,19 @@ class QuotationController extends Controller
         return $record;
     }
 
-    public function store(QuotationRequest $request)
-    {
-
+    public function store(QuotationRequest $request) {
         DB::connection('tenant')->transaction(function () use ($request) {
-
             $data = $this->mergeData($request);
+            
             $this->quotation =  Quotation::create($data);
-            foreach ($data['items'] as $row)
-            {
-                $this->quotation->items()->create($row);
-            }        
+            
+            foreach ($data['items'] as $row) {
+                $this->quotation->items()->create($row)->presentation;
+            }
+            
             $this->setFilename();
-
-        }); 
-
+        });
+        
         return [
             'success' => true,
             'data' => [
@@ -153,7 +147,7 @@ class QuotationController extends Controller
             ],
         ];
     }
-
+    
     public function mergeData($inputs)
     {
 
@@ -228,16 +222,17 @@ class QuotationController extends Controller
                         'item_unit_types' => collect($row->item_unit_types)->transform(function($row) {
                             return [
                                 'id' => $row->id,
+                                'description' => "{$row->description} {$row->unit_type->description}",
                                 'item_id' => $row->item_id,
                                 'unit_type_id' => $row->unit_type_id,
-                                'description' => "{$row->unit_type->id} - {$row->unit_type->description} ({$row->quantity_unit} und)",
+                                'quantity_unit' => $row->quantity_unit,
                                 'price1' => $row->price1,
                                 'price2' => $row->price2,
                                 'price3' => $row->price3,
                                 'price_default' => $row->price_default,
                             ];
                         })
-
+                        
                         // 'warehouses' => collect($row->warehouses)->transform(function($row) {
                         //     return [
                         //         'warehouse_id' => $row->warehouse->id,
@@ -248,16 +243,15 @@ class QuotationController extends Controller
                     ];
                 });
                 return $items;
-
+                
                 break;
             default:
-
                 return [];
-
+                
                 break;
         } 
     }
-
+    
     public function searchCustomerById($id)
     {        
    
@@ -276,51 +270,45 @@ class QuotationController extends Controller
 
         return compact('customers');
     }
-
-
     
     public function download($external_id, $format) {
-
-        $quotation = Quotation::where('external_id', $external_id)->first();        
-        if (!$quotation) throw new Exception("El código {$external_id} es inválido, no se encontro la cotización relacionada");        
-        $this->reloadPDF($quotation, $format, $quotation->filename);        
-        return $this->downloadStorage($quotation->filename, 'quotation');
-
-    }
-
-
-    public function toPrint($external_id, $format) {
- 
-        $quotation = Quotation::where('external_id', $external_id)->first();        
-        if (!$quotation) throw new Exception("El código {$external_id} es inválido, no se encontro la cotización relacionada");        
-        $this->reloadPDF($quotation, $format, $quotation->filename);       
-        $temp = tempnam(sys_get_temp_dir(), 'quotation');
-        file_put_contents($temp, $this->getStorage($quotation->filename, 'quotation'));       
-        return response()->file($temp);
+        $quotation = Quotation::where('external_id', $external_id)->first();
         
+        if (!$quotation) throw new Exception("El código {$external_id} es inválido, no se encontro la cotización relacionada");
+        
+        $this->reloadPDF($quotation, $format, $quotation->filename);
+        
+        return $this->downloadStorage($quotation->filename, 'quotation');
     }
-
-
+    
+    public function toPrint($external_id, $format) {
+        $quotation = Quotation::where('external_id', $external_id)->first();
+        
+        if (!$quotation) throw new Exception("El código {$external_id} es inválido, no se encontro la cotización relacionada");
+        
+        $this->reloadPDF($quotation, $format, $quotation->filename);
+        $temp = tempnam(sys_get_temp_dir(), 'quotation');
+        
+        file_put_contents($temp, $this->getStorage($quotation->filename, 'quotation'));
+        
+        return response()->file($temp);
+    }
+    
     private function reloadPDF($quotation, $format, $filename) {
         $this->createPdf($quotation, $format, $filename);
     }
- 
-
+    
     public function createPdf($quotation = null, $format_pdf = null, $filename = null) {
-        
         $template = new Template();
         $pdf = new Mpdf();
-
-
+        
         $document = ($quotation != null) ? $quotation : $this->quotation;
         $company = ($this->company != null) ? $this->company : Company::active();
         $filename = ($filename != null) ? $filename : $this->quotation->filename;
-
-
+        
         $html = $template->pdf("quotation", $company, $document, $format_pdf);
-
+        
         if ($format_pdf === 'ticket') {
-
             $company_name      = (strlen($company->name) / 20) * 10;
             $company_address   = (strlen($document->establishment->address) / 30) * 10;
             $company_number    = $document->establishment->telephone != '' ? '10' : '0';
@@ -367,24 +355,18 @@ class QuotationController extends Controller
                 'margin_left' => 5
             ]);
         }
-
+        
         $pdf->WriteHTML($html);
-
+        
         if ($format_pdf != 'ticket') {
             $html_footer = $template->pdfFooter();
             $pdf->SetHTMLFooter($html_footer);
         }
+        
         $this->uploadFile($filename, $pdf->output('', 'S'), 'quotation');
     }
-
-
-
-
-    public function uploadFile($filename, $file_content, $file_type)
-    {
+    
+    public function uploadFile($filename, $file_content, $file_type) {
         $this->uploadStorage($filename, $file_content, $file_type);
     }
- 
-
- 
 }

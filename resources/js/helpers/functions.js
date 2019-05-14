@@ -81,7 +81,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         total: 0,
         attributes: row_old.attributes,
         charges: row_old.charges,
-        discounts: row_old.discounts,
+        discounts: row_old.discounts
     };
 
     let percentage_igv = 18
@@ -169,7 +169,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         // row.total_value = 0
         row.total = 0
     }
-
+    
     // console.log(row)
     return row
 }

@@ -105,6 +105,7 @@
                             <thead>
                             <tr>
                                 <th class="text-center">Unidad</th>
+                                <th class="text-center">Descripción</th>
                                 <th class="text-center">C. Unidades</th>
                                 <th class="text-center">Precio 1</th>
                                 <th class="text-center">Precio 2</th>
@@ -116,12 +117,13 @@
                             <tbody>
                             <tr v-for="(row, index) in form.item_unit_types">
                                 <template v-if="row.id">
-                                    <td class="text-center">{{ row.unit_type_id }}</td>
-                                    <td class="text-center">{{ row.quantity_unit }}</td>
-                                    <td class="text-center">{{ row.price1 }}</td>
-                                    <td class="text-center">{{ row.price2 }}</td>
-                                    <td class="text-center">{{ row.price3 }}</td>
-                                    <td class="text-center">Precio {{ row.price_default }}</td>
+                                    <td class="text-center">{{row.unit_type_id}}</td>
+                                    <td class="text-center">{{row.description}}</td>
+                                    <td class="text-center">{{row.quantity_unit}}</td>
+                                    <td class="text-center">{{row.price1}}</td>
+                                    <td class="text-center">{{row.price2}}</td>
+                                    <td class="text-center">{{row.price3}}</td>
+                                    <td class="text-center">Precio {{row.price_default}}</td>
                                     <td class="series-table-actions text-right">
                                        <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickDelete(row.id)">
                                             <i class="fa fa-trash"></i>
@@ -136,6 +138,12 @@
                                             </el-select>
                                             <!-- <small class="form-control-feedback" v-if="errors.unit_type_id" v-text="errors.unit_type_id[0]"></small> -->
                                         </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                           <el-input v-model="row.description"></el-input>
+                                           <!-- <small class="form-control-feedback" v-if="errors.quantity_unit" v-text="errors.quantity_unit[0]"></small> -->
+                                       </div>
                                     </td>
                                     <td>
                                          <div class="form-group" >
@@ -292,13 +300,14 @@
             },
             clickAddRow() {
                 this.form.item_unit_types.push({
-                    id:null,
-                    unit_type_id:'NIU',
-                    quantity_unit:0,
-                    price1:0,
-                    price2:0,
-                    price3:0,
-                    price_default:2,                    
+                    id: null,
+                    description: null,
+                    unit_type_id: 'NIU',
+                    quantity_unit: 0,
+                    price1: 0,
+                    price2: 0,
+                    price3: 0,
+                    price_default: 2
                 })
             },
             clickCancel(index) {
