@@ -229,7 +229,7 @@
                     format_pdf : 'a4'
                 }
                 this.document.quotation_id = this.form.id
-
+console.log(this.document)
             },
             create() {
 

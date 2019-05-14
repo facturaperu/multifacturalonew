@@ -59,6 +59,20 @@
                             <small class="form-control-feedback" v-if="errors.total_item" v-text="errors.total_item[0]"></small>
                         </div>
                     </div>
+                    <div class="col-md-6" v-show="has_list_prices">
+                        <div class="form-group" :class="{'has-danger': errors.item_unit_type_id}">
+                            <label class="control-label">Presentación</label>
+                            <el-select v-model="form.item_unit_type_id" filterable @change="changePresentation">
+                                <el-option v-for="option in item_unit_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                            </el-select>
+                            <el-radio-group v-if="form.item_unit_type_id" v-model="item_unit_type.price_default" @change="changePresentation">
+                                <el-radio :label="1">Precio 1</el-radio>
+                                <el-radio :label="2">Precio 2</el-radio>
+                                <el-radio :label="3">Precio 3</el-radio>
+                            </el-radio-group>
+                            <small class="form-control-feedback" v-if="errors.item_unit_type_id" v-text="errors.item_unit_type_id[0]"></small>
+                        </div>
+                    </div>
                     <div class="col-md-12 mt-2" v-if="form.item.warehouses">
                         <table class="table">
                             <thead>
@@ -318,6 +332,7 @@
                 titleDialog: 'Agregar Producto o Servicio',
                 resource: 'documents',
                 showDialogNewItem: false,
+                has_list_prices: false,
                 errors: {},
                 form: {},
 //                categories: [],
@@ -333,7 +348,9 @@
                 use_price: 1,
                 change_affectation_igv_type_id: false,
                 activePanel: 0,
-                total_item: 0
+                total_item: 0,
+                item_unit_types: [],
+                item_unit_type: {}
             }
         },
         created() {
@@ -360,9 +377,10 @@
                 this.items = this.items.filter(item => item.warehouses.length >0)
             },
             initForm() {
-                this.errors = {}
+                this.errors = {};
+                
                 this.form = {
-//                    category_id: [1],
+                   // category_id: [1],
                     item_id: null,
                     item: {},
                     affectation_igv_type_id: null,
@@ -378,10 +396,12 @@
                     discounts: [],
                     attributes: [],
                     has_igv: null
-                }
-                this.activePanel = 0
-                this.total_item = 0
-
+                };
+                
+                this.activePanel = 0;
+                this.total_item = 0;
+                this.item_unit_type = {};
+                this.has_list_prices = false;
             },
             // initializeFields() {
             //     this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
@@ -450,12 +470,15 @@
                 this.$emit('update:showDialog', false)
             },
             changeItem() {
-                this.form.item = _.find(this.items, {'id': this.form.item_id})
-                this.form.unit_price_value = this.form.item.sale_unit_price
-                this.form.has_igv = this.form.item.has_igv
-                this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id
-                this.form.quantity = 1
-                this.cleanTotalItem()
+                this.form.item = _.find(this.items, {'id': this.form.item_id});
+                this.form.unit_price_value = this.form.item.sale_unit_price;
+                this.form.has_igv = this.form.item.has_igv;
+                this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id;
+                this.form.quantity = 1;
+                this.cleanTotalItem();
+                this.item_unit_types = this.form.item.item_unit_types;
+                
+                (this.item_unit_types.length > 0) ? this.has_list_prices = true : this.has_list_prices = false;
             },
             focusTotalItem(change) {
                 if(!change && this.form.item.calculate_quantity) {
@@ -471,18 +494,20 @@
                 this.total_item = null  
             }, 
             clickAddItem() {
-                if(this.validateTotalItem().total_item)
-                    return
-
-                let unit_price = (this.form.has_igv)?this.form.unit_price_value:this.form.unit_price_value*1.18
-
-                this.form.unit_price = unit_price
-                this.form.item.unit_price = unit_price
-                this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id})
-                this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale)
-                this.initForm()
+                if (this.validateTotalItem().total_item) return;
+                
+                let unit_price = (this.form.has_igv)?this.form.unit_price_value:this.form.unit_price_value*1.18;
+                
+                this.form.unit_price = unit_price;
+                this.form.item.unit_price = unit_price;
+                this.form.item.presentation = this.item_unit_type;
+                this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id});
+                
+                this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale);
+                
+                this.initForm();
                 //this.initializeFields()
-                this.$emit('add', this.row)
+                this.$emit('add', this.row);
             },
             validateTotalItem(){
 
@@ -503,6 +528,23 @@
                     // this.filterItems()
                 })
             },
+            changePresentation() {
+                let price = 0;
+                
+                this.item_unit_type = _.find(this.form.item.item_unit_types, {'id': this.form.item_unit_type_id});
+                
+                switch (this.item_unit_type.price_default) {
+                    case 1: price = this.item_unit_type.price1
+                        break;
+                    case 2: price = this.item_unit_type.price2
+                        break;
+                    case 3: price = this.item_unit_type.price3
+                        break;
+                }
+                
+                this.form.unit_price_value = price;
+                this.form.item.unit_type_id = this.item_unit_type.unit_type_id;
+            }
         }
     }
 
