@@ -8,11 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
+use App\Models\Tenant\Company;
 use Illuminate\Http\Request;
+
 use App\CoreFacturalo\WS\Services\ConsultCdrService;
+// use App\CoreFacturalo\Cpe\ConsultCdrService;
 use App\CoreFacturalo\Facturalo;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
 use App\CoreFacturalo\WS\Client\WsClient;
+use App\CoreFacturalo\WS\Services\SunatEndpoints;
 
 class ServiceController extends Controller
 {
@@ -25,24 +29,27 @@ class ServiceController extends Controller
         $tipo = $request->tipo;
         $serie = $request->serie;
         $numero = $request->numero;
-        // dd($ruc);
-        // $data = $consult_cdr->getStatusCdr($ruc,$tipo,$serie,$numero);
-        // /var/www/html/app/Http/Controllers/Tenant/Api/Resources/wsdl/billConsultService.wsd
-
-        // $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
-        //                     DIRECTORY_SEPARATOR.'wsdl'.
-        //                     DIRECTORY_SEPARATOR.'billConsultService.wsdl';
-
-        // dd($wsdl);
         
+        $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
+                            DIRECTORY_SEPARATOR.'wsdl'.
+                            DIRECTORY_SEPARATOR.'billConsultService.wsdl';
+
+        // $wsdl = "D:\laragon\www\multifacturalonew\app\CoreFacturalo\WS\Client\Resources\wsdl\billConsultService.wsdl";
         $wsdl = "/var/www/html/app/CoreFacturalo/WS/Client/Resources/wsdl/billConsultService.wsdl";
+
+        $company = Company::first();
+        $username = $company->soap_username;
+        $password = $company->soap_password;
+
         $this->wsClient = new WsClient($wsdl);
+        $this->wsClient->setCredentials($username, $password);
+        $this->wsClient->setService("https://e-factura.sunat.gob.pe/ol-it-wsconscpegem/billConsultService?wsdl");
 
         $consultCdrService = new ConsultCdrService();
         $consultCdrService->setClient($this->wsClient);
-        // dd($consultCdrService->setClient($this->wsClient));
         $consultCdrService->setCodeProvider(new XmlErrorCodeProvider());
         $res = $consultCdrService->getStatusCdr($ruc,$tipo,$serie,$numero);
+
         if(!$res->isSuccess()) {
             throw new \Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
         } else {
