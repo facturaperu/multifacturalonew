@@ -27,13 +27,15 @@ class ServiceController extends Controller
         $numero = $request->numero;
         // dd($ruc);
         // $data = $consult_cdr->getStatusCdr($ruc,$tipo,$serie,$numero);
+        // /var/www/html/app/Http/Controllers/Tenant/Api/Resources/wsdl/billConsultService.wsd
 
-        $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
-                            DIRECTORY_SEPARATOR.'wsdl'.
-                            DIRECTORY_SEPARATOR.'billConsultService.wsdl';
+        // $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
+        //                     DIRECTORY_SEPARATOR.'wsdl'.
+        //                     DIRECTORY_SEPARATOR.'billConsultService.wsdl';
 
-        dd($wsdl);
-        $wsdl = "D:\laragon\www\multifacturalonew\app\CoreFacturalo\WS\Client\Resources\wsdl\billConsultService.wsdl";
+        // dd($wsdl);
+        
+        $wsdl = "/var/www/html/app/CoreFacturalo/WS/Client/Resources/wsdl/billConsultService.wsdl";
         $this->wsClient = new WsClient($wsdl);
 
         $consultCdrService = new ConsultCdrService();
