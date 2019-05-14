@@ -8,9 +8,58 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
+use Illuminate\Http\Request;
+use App\CoreFacturalo\WS\Services\ConsultCdrService;
+use App\CoreFacturalo\Facturalo;
+use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
+use App\CoreFacturalo\WS\Client\WsClient;
 
 class ServiceController extends Controller
 {
+    protected $wsClient;
+
+    public function consultCdrStatus(Request $request){
+
+
+        $ruc = $request->ruc;
+        $tipo = $request->tipo;
+        $serie = $request->serie;
+        $numero = $request->numero;
+        // dd($ruc);
+        // $data = $consult_cdr->getStatusCdr($ruc,$tipo,$serie,$numero);
+
+        $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
+                            DIRECTORY_SEPARATOR.'wsdl'.
+                            DIRECTORY_SEPARATOR.'billConsultService.wsdl';
+
+        dd($wsdl);
+        $wsdl = "D:\laragon\www\multifacturalonew\app\CoreFacturalo\WS\Client\Resources\wsdl\billConsultService.wsdl";
+        $this->wsClient = new WsClient($wsdl);
+
+        $consultCdrService = new ConsultCdrService();
+        $consultCdrService->setClient($this->wsClient);
+        // dd($consultCdrService->setClient($this->wsClient));
+        $consultCdrService->setCodeProvider(new XmlErrorCodeProvider());
+        $res = $consultCdrService->getStatusCdr($ruc,$tipo,$serie,$numero);
+        if(!$res->isSuccess()) {
+            throw new \Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
+        } else {
+            $cdrResponse = $res->getCdrResponse();
+            $this->uploadFile($res->getCdrZip(), 'cdr');
+            $this->updateState(self::ACCEPTED);
+            $this->response = [
+                'sent' => true,
+                'code' => $cdrResponse->getCode(),
+                'description' => $cdrResponse->getDescription(),
+                'notes' => $cdrResponse->getNotes()
+            ];
+        }
+
+        dd($res);
+
+    }
+
+
     public function ruc($number)
     {
         $service = new Sunat();
