@@ -32,7 +32,7 @@ class ClientController extends Controller
     {
         $url_base = '.'.config('tenant.app_url_base');
         $plans = Plan::all();
-        $types = [['type' => 'admin', 'description'=>'Administrador'], ['type' => 'integrator', 'description'=>'Integrador']];
+        $types = [['type' => 'admin', 'description'=>'Administrador'], ['type' => 'integrator', 'description'=>'Listar Documentos']];
 
         return compact('url_base','plans','types');
     }
