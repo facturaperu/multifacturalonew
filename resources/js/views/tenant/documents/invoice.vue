@@ -463,8 +463,9 @@
                 this.form.guides.splice(index, 1)
             },
             addRow(row) {
-                this.form.items.push(row)
-                this.calculateTotal()
+                this.form.items.push(JSON.parse(JSON.stringify(row)));
+                
+                this.calculateTotal();
             },
             clickRemoveItem(index) {
                 this.form.items.splice(index, 1)

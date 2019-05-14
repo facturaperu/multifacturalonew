@@ -291,8 +291,8 @@
                 this.establishment = _.find(this.establishments, {'id': this.form.establishment_id})
                 
             }, 
-            cleanCustomer(){                
-                this.form.customer_id = null 
+            cleanCustomer(){
+                this.form.customer_id = null;
             },
             changeDateOfIssue() {
                 this.form.date_of_due = this.form.date_of_issue
@@ -304,8 +304,9 @@
                 this.customers = this.all_customers
             }, 
             addRow(row) {
-                this.form.items.push(row)
-                this.calculateTotal()
+                this.form.items.push(JSON.parse(JSON.stringify(row)));
+                
+                this.calculateTotal();
             },
             clickRemoveItem(index) {
                 this.form.items.splice(index, 1)

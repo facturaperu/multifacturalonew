@@ -20,9 +20,7 @@
 @endpush
 
 @section('content')
-
     <tenant-documents-invoice :is_contingency="{{ json_encode($is_contingency) }}"></tenant-documents-invoice>
-
 @endsection
 
 @push('scripts')
