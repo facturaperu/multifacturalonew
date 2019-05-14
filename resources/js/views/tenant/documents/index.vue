@@ -6,7 +6,7 @@
                 <li class="active"><span>Comprobantes</span> </li>
                 <li><span class="text-muted">Facturas - Notas <small>(crédito y débito)</small> - Boletas - Anulaciones</small></span></li>
             </ol>
-            <div class="right-wrapper pull-right">
+            <div class="right-wrapper pull-right" v-if="typeUser != 'integrator'">
                 <a :href="`/${resource}/create`" class="btn btn-custom btn-sm  mt-2 mr-2"><i class="fa fa-plus-circle"></i> Nuevo</a>
             </div>
         </div>
@@ -43,7 +43,7 @@
                         <th class="text-right">Total</th>
                         <th class="text-center">Descargas</th>
                         <!--<th class="text-center">Anulación</th>-->
-                        <th class="text-right">Acciones</th>
+                        <th class="text-right" v-if="typeUser != 'integrator'">Acciones</th>
                     <tr>
                     <tr slot-scope="{ index, row }" :class="{'text-danger': (row.state_type_id === '11'), 'text-warning': (row.state_type_id === '13'), 'border-light': (row.state_type_id === '01'), 'border-left border-info': (row.state_type_id === '03'), 'border-left border-success': (row.state_type_id === '05'), 'border-left border-secondary': (row.state_type_id === '07'), 'border-left border-dark': (row.state_type_id === '09'), 'border-left border-danger': (row.state_type_id === '11'), 'border-left border-warning': (row.state_type_id === '13')}">
                         <td>{{ index }}</td>
@@ -97,7 +97,7 @@
                                     <!--v-if="row.btn_ticket">Consultar</button>-->
                         <!--</td>-->
 
-                        <td class="text-right">
+                        <td class="text-right" v-if="typeUser != 'integrator'">
                             <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"-->
                                     <!--@click.prevent="clickReStore(row.id)">Volver a generar</button>-->
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger m-1__2"
@@ -138,7 +138,7 @@
     import DataTable from '../../../components/DataTable.vue'
 
     export default {
-        props: ['isClient'],
+        props: ['isClient','typeUser'],
         components: {DocumentsVoided, DocumentOptions, DataTable},
         data() {
             return {

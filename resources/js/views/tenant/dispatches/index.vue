@@ -5,7 +5,7 @@
             <ol class="breadcrumbs">
                 <li class="active"><span>Guias de remisión</span></li>
             </ol>
-            <div class="right-wrapper pull-right">
+            <div class="right-wrapper pull-right" v-if="typeUser != 'integrator'">
                 <a :href="`/${resource}/create`" class="btn btn-custom btn-sm  mt-2 mr-2"><i class="fa fa-plus-circle"></i> Nuevo</a>
             </div>
         </div>
@@ -42,6 +42,8 @@
     import DataTable from '../../../components/DataTable.vue'
     
     export default {
+        props: ['typeUser'],
+
         components: {DataTable},
         data() {
             return {
