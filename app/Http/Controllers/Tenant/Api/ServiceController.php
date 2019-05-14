@@ -9,10 +9,10 @@ use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
 use App\Models\Tenant\Company;
+use App\Models\Tenant\Document;
 use Illuminate\Http\Request;
-
+use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\CoreFacturalo\WS\Services\ConsultCdrService;
-// use App\CoreFacturalo\Cpe\ConsultCdrService;
 use App\CoreFacturalo\Facturalo;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
 use App\CoreFacturalo\WS\Client\WsClient;
@@ -20,7 +20,13 @@ use App\CoreFacturalo\WS\Services\SunatEndpoints;
 
 class ServiceController extends Controller
 {
+
+    //codigo agregado
+
     protected $wsClient;
+    protected $document;
+    use StorageDocument;
+    const ACCEPTED = '05';
 
     public function consultCdrStatus(Request $request){
 
@@ -30,20 +36,23 @@ class ServiceController extends Controller
         $serie = $request->serie;
         $numero = $request->numero;
         
-        $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
-                            DIRECTORY_SEPARATOR.'wsdl'.
-                            DIRECTORY_SEPARATOR.'billConsultService.wsdl';
+        $this->document = Document::where([['soap_type_id','02'],['document_type_id',$tipo],['series',$serie],['number',$numero]])->first();
 
-        // $wsdl = "D:\laragon\www\multifacturalonew\app\CoreFacturalo\WS\Client\Resources\wsdl\billConsultService.wsdl";
-        $wsdl = "/var/www/html/app/CoreFacturalo/WS/Client/Resources/wsdl/billConsultService.wsdl";
+        // $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
+        //                     DIRECTORY_SEPARATOR.'wsdl'.
+        //                     DIRECTORY_SEPARATOR.'billConsultService.wsdl';
 
-        $company = Company::first();
+        //modificar dinamico
+        // $wsdl = "/var/www/html/app/CoreFacturalo/WS/Client/Resources/wsdl/billConsultService.wsdl" //linux;
+        
+        $wsdl = "D:\laragon\www\multifacturalonew\app\CoreFacturalo\WS\Client\Resources\wsdl\billConsultService.wsdl";
+        $company = Company::active();
         $username = $company->soap_username;
         $password = $company->soap_password;
 
         $this->wsClient = new WsClient($wsdl);
         $this->wsClient->setCredentials($username, $password);
-        $this->wsClient->setService("https://e-factura.sunat.gob.pe/ol-it-wsconscpegem/billConsultService?wsdl");
+        $this->wsClient->setService(SunatEndpoints::FE_CONSULTA_CDR.'?wsdl');
 
         $consultCdrService = new ConsultCdrService();
         $consultCdrService->setClient($this->wsClient);
@@ -56,7 +65,7 @@ class ServiceController extends Controller
             $cdrResponse = $res->getCdrResponse();
             $this->uploadFile($res->getCdrZip(), 'cdr');
             $this->updateState(self::ACCEPTED);
-            $this->response = [
+            return [
                 'sent' => true,
                 'code' => $cdrResponse->getCode(),
                 'description' => $cdrResponse->getDescription(),
@@ -64,9 +73,24 @@ class ServiceController extends Controller
             ];
         }
 
-        dd($res);
+        // dd($res);
 
     }
+
+    public function uploadFile($file_content, $file_type)
+    {
+        $this->uploadStorage($this->document->filename, $file_content, $file_type);
+    }
+
+
+    public function updateState($state_type_id)
+    {
+        $this->document->update([
+            'state_type_id' => $state_type_id
+        ]);
+    }
+
+    //fin agregado
 
 
     public function ruc($number)
