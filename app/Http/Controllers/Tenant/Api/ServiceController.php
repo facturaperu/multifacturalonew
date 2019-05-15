@@ -24,7 +24,6 @@ use Exception;
 class ServiceController extends Controller
 {
 
-    //codigo agregado
 
     protected $wsClient;
     protected $document;
@@ -92,7 +91,6 @@ class ServiceController extends Controller
         ]);
     }
 
-    //fin agregado
 
 
     public function ruc($number)
