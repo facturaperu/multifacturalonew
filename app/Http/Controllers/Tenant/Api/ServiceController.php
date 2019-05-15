@@ -17,6 +17,9 @@ use App\CoreFacturalo\Facturalo;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
 use App\CoreFacturalo\WS\Client\WsClient;
 use App\CoreFacturalo\WS\Services\SunatEndpoints;
+use App\Http\Requests\Tenant\ServiceRequest;
+use Exception;
+
 
 class ServiceController extends Controller
 {
@@ -28,27 +31,27 @@ class ServiceController extends Controller
     use StorageDocument;
     const ACCEPTED = '05';
 
-    public function consultCdrStatus(Request $request){
+    public function consultCdrStatus(ServiceRequest $request){
 
-
-        $ruc = $request->ruc;
-        $tipo = $request->tipo;
-        $serie = $request->serie;
-        $numero = $request->numero;
         
-        $this->document = Document::where([['soap_type_id','02'],['document_type_id',$tipo],['series',$serie],['number',$numero]])->first();
+        $document_type_id = $request->codigo_tipo_documento;
+        $series = $request->serie_documento;
+        $number = $request->numero_documento;
 
-        // $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
-        //                     DIRECTORY_SEPARATOR.'wsdl'.
-        //                     DIRECTORY_SEPARATOR.'billConsultService.wsdl';
-
-        //modificar dinamico
-        // $wsdl = "/var/www/html/app/CoreFacturalo/WS/Client/Resources/wsdl/billConsultService.wsdl" //linux;
+        $this->document = Document::where([['soap_type_id','02'],
+                                            ['document_type_id',$document_type_id],
+                                            ['series',$series],
+                                            ['number',$number]
+                                            ])->first();
         
-        $wsdl = "D:\laragon\www\multifacturalonew\app\CoreFacturalo\WS\Client\Resources\wsdl\billConsultService.wsdl";
+        if(!$this->document)  throw new Exception("Documento no encontrado");
+            
+        $wsdl = 'consultCdrStatus';
         $company = Company::active();
         $username = $company->soap_username;
         $password = $company->soap_password;
+
+        $company_number = $company->number;
 
         $this->wsClient = new WsClient($wsdl);
         $this->wsClient->setCredentials($username, $password);
@@ -57,10 +60,10 @@ class ServiceController extends Controller
         $consultCdrService = new ConsultCdrService();
         $consultCdrService->setClient($this->wsClient);
         $consultCdrService->setCodeProvider(new XmlErrorCodeProvider());
-        $res = $consultCdrService->getStatusCdr($ruc,$tipo,$serie,$numero);
+        $res = $consultCdrService->getStatusCdr($company_number,$document_type_id,$series,$number);
 
         if(!$res->isSuccess()) {
-            throw new \Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
+            throw new Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
         } else {
             $cdrResponse = $res->getCdrResponse();
             $this->uploadFile($res->getCdrZip(), 'cdr');
@@ -73,7 +76,6 @@ class ServiceController extends Controller
             ];
         }
 
-        // dd($res);
 
     }
 
