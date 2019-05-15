@@ -66,11 +66,9 @@ class ItemController extends Controller
         return $record;
     }
 
-    public function store(ItemRequest $request)
-    {
+    public function store(ItemRequest $request) {
         // $establishment_id = auth()->user()->establishment->id;
         // $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
-
         // dd($request->item_unit_types);
         
         $id = $request->input('id');
@@ -79,35 +77,33 @@ class ItemController extends Controller
         // $item->warehouse_id = optional($warehouse)->id;
         $item->fill($request->all());
         $item->save();
-
+        
         foreach ($request->item_unit_types as $value) {
-
             $item_unit_type = ItemUnitType::firstOrNew(['id' => $value['id']]);
             $item_unit_type->item_id = $item->id;
+            $item_unit_type->description = $value['description'];
             $item_unit_type->unit_type_id = $value['unit_type_id'];
             $item_unit_type->quantity_unit = $value['quantity_unit'];
             $item_unit_type->price1 = $value['price1'];
             $item_unit_type->price2 = $value['price2'];
             $item_unit_type->price3 = $value['price3'];
+            $item_unit_type->price_default = $value['price_default'];
             $item_unit_type->save();
         
         }
         
-
-
-
-//        $item->warehouses()->create([
-//            'warehouse_id' => $warehouse->id,
-//            'stock' => $item->stock,
-//        ]);
-
+        // $item->warehouses()->create([
+        //     'warehouse_id' => $warehouse->id,
+        //     'stock' => $item->stock,
+        // ]);
+        
         return [
             'success' => true,
             'message' => ($id)?'Producto editado con éxito':'Producto registrado con éxito',
             'id' => $item->id
         ];
     }
-
+    
     public function destroy($id)
     {
         $item = Item::findOrFail($id);
