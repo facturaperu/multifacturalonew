@@ -12,7 +12,6 @@
                             <el-select v-model="form.item_id" @change="changeItem" filterable>
                                 <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.full_description"></el-option>
                             </el-select>
-                            <el-checkbox v-model="required_warranty">Registrar garantía</el-checkbox>
                             <small class="form-control-feedback" v-if="errors.item_id" v-text="errors.item_id[0]"></small>
                         </div>
                     </div>
@@ -63,12 +62,6 @@
                                 <el-radio :label="3">Precio 3</el-radio>
                             </el-radio-group>
                             <small class="form-control-feedback" v-if="errors.item_unit_type_id" v-text="errors.item_unit_type_id[0]"></small>
-                        </div>
-                    </div>
-                    <div v-if="required_warranty" class="col-md-12 mt-3">
-                        <div class="form-group" :class="{'has-danger': errors.warranty}">
-                            <label class="control-label">Garantía</label>
-                            <el-input v-model="form.warranty" type="textarea"></el-input>
                         </div>
                     </div>
                     <div class="col-md-12 mt-3">
@@ -222,9 +215,7 @@
                 total_item: 0,
                 has_list_prices: false,
                 item_unit_types: [],
-                item_unit_type: {},
-                required_warranty: false,
-                warranty: null
+                item_unit_type: {}
             }
         },
         created() {
@@ -266,13 +257,12 @@
                     discounts: [],
                     attributes: [],
                     item_unit_type_id: null,
-                    unit_type_id: null
+                    unit_type_id: null,
                 };
                 
                 this.total_item = 0;
                 this.item_unit_type = {};
                 this.has_list_prices = false;
-                this.required_warranty = false;
             },
             // initializeFields() {
             //     this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
@@ -340,7 +330,6 @@
             },
             changeItem() {
                 this.getItems();
-                this.required_warranty = false;
                 this.form.item = _.find(this.items, {'id': this.form.item_id});
                 this.form.unit_price = this.form.item.sale_unit_price;
                 this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id;

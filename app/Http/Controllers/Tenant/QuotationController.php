@@ -134,7 +134,7 @@ class QuotationController extends Controller
             $this->quotation =  Quotation::create($data);
             
             foreach ($data['items'] as $row) {
-                $this->quotation->items()->create($row);
+                $this->quotation->items()->create($row)->presentation;
             }
             
             $this->setFilename();
