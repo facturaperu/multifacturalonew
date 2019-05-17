@@ -11,24 +11,21 @@ class AddWarehouseIdToItems extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::table('items', function (Blueprint $table) {
+    public function up() {
+        Schema::table('items', function(Blueprint $table) {
             $table->unsignedInteger('warehouse_id')->nullable();
-
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
-    {
-        Schema::table('items', function (Blueprint $table) {
-            $table->dropForeign('warehouse_id');
+    public function down() {
+        Schema::table('items', function(Blueprint $table) {
+            $table->dropForeign(['warehouse_id']);
             $table->dropColumn('warehouse_id');
         });
     }
