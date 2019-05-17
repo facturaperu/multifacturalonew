@@ -47,7 +47,7 @@
                             <small class="form-control-feedback" v-if="errors.password_confirmation" v-text="errors.password_confirmation[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" v-if="typeUser != 'integrator'">
                         <div class="form-group" :class="{'has-danger': errors.type}">
                             <label class="control-label">Perfil</label>
                             <el-select v-model="form.type" :disabled="form.id===1">
@@ -56,7 +56,7 @@
                             <small class="form-control-feedback" v-if="errors.type" v-text="errors.type[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12" v-if="typeUser != 'integrator'">
                         <div class="form-group">
                             <label class="control-label">Módulos</label>
                             <div class="row">
@@ -82,7 +82,7 @@
     import {EventBus} from '../../../helpers/bus'
 
     export default {
-        props: ['showDialog', 'recordId'],
+        props: ['showDialog', 'recordId','typeUser'],
         data() {
             return {
                 loading_submit: false,

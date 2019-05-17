@@ -100,8 +100,10 @@ class DocumentController extends Controller
  
     public function create()
     {
-        $is_contingency = 0;
+        if(auth()->user()->type == 'integrator')
+            return redirect('/documents');
 
+        $is_contingency = 0;
         return view('tenant.documents.form', compact('is_contingency'));
     }
     
@@ -193,7 +195,7 @@ class DocumentController extends Controller
                     'item_unit_types' => collect($row->item_unit_types)->transform(function($row) {
                         return [
                             'id' => $row->id,
-                            'description' => "{$row->description} {$row->unit_type->description}",
+                            'description' => "{$row->description}",
                             'item_id' => $row->item_id,
                             'unit_type_id' => $row->unit_type_id,
                             'quantity_unit' => $row->quantity_unit,

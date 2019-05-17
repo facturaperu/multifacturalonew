@@ -14,7 +14,7 @@
                                 <small class="form-control-feedback" v-if="errors.send_auto" v-text="errors.send_auto[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" v-if="typeUser != 'integrator'">
                             <label class="control-label">Crontab</small></label>
                             <div class="form-group" :class="{'has-danger': errors.cron}">
                                 <el-switch v-model="form.cron" active-text="Si" inactive-text="No" @change="submit"></el-switch>
@@ -30,6 +30,8 @@
 
 <script>
     export default {
+        props:['typeUser'],
+
         data() {
             return {
                 loading_submit: false,

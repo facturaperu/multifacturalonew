@@ -134,7 +134,7 @@ class QuotationController extends Controller
             $this->quotation =  Quotation::create($data);
             
             foreach ($data['items'] as $row) {
-                $this->quotation->items()->create($row)->presentation;
+                $this->quotation->items()->create($row);
             }
             
             $this->setFilename();
@@ -222,7 +222,7 @@ class QuotationController extends Controller
                         'item_unit_types' => collect($row->item_unit_types)->transform(function($row) {
                             return [
                                 'id' => $row->id,
-                                'description' => "{$row->description} {$row->unit_type->description}",
+                                'description' => "{$row->description}",
                                 'item_id' => $row->item_id,
                                 'unit_type_id' => $row->unit_type_id,
                                 'quantity_unit' => $row->quantity_unit,

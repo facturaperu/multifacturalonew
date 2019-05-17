@@ -62,8 +62,18 @@
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.plan_id" v-text="errors.plan_id[0]"></small>
                         </div>
+                    </div>                   
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" :class="{'has-danger': errors.type}">
+                            <label class="control-label">Perfil</label>
+                            <el-select v-model="form.type">
+                                <el-option v-for="option in types" :key="option.type" :value="option.type" :label="option.description"></el-option>
+                            </el-select>
+                            <small class="form-control-feedback" v-if="errors.type" v-text="errors.type[0]"></small>
+                        </div>
                     </div>
-                   
                 </div>
             </div>
             <div class="form-actions text-right pt-2">
@@ -98,7 +108,8 @@
                 error: {},
                 form: {},
                 url_base: null,
-                plans:[]
+                plans:[],
+                types:[],
             }
         },
         created() {
@@ -107,6 +118,7 @@
                 .then(response => {
                     this.url_base = response.data.url_base
                     this.plans = response.data.plans
+                    this.types = response.data.types
                 })
         },
         methods: {
@@ -119,7 +131,8 @@
                     identity_document_type_id: '6',
                     number: '',
                     password:null,
-                    plan_id:null
+                    plan_id:null,
+                    type:null
                 }
             },
             create() {

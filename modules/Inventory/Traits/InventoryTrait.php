@@ -102,8 +102,6 @@ trait InventoryTrait
                 throw new Exception("El producto {$item_warehouse->item->description} no tiene suficiente stock!");
             }
         }
-            
-
         $item_warehouse->save();
     }
     
@@ -111,7 +109,7 @@ trait InventoryTrait
         $inventory = Inventory::where('item_id', $item_id)
             ->where('warehouse_id', $warehouse_id)
             ->first();
-            
+
         return ($inventory)?true:false;
     }
     

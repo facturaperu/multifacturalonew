@@ -15,6 +15,7 @@
                                        @visible-change="focusTotalItem">
                                 <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.full_description"></el-option>
                             </el-select>
+                            <el-checkbox v-model="required_warranty">Registrar garantía</el-checkbox>
                             <small class="form-control-feedback" v-if="errors.item_id" v-text="errors.item_id[0]"></small>
                         </div>
                     </div>
@@ -88,6 +89,12 @@
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div v-if="required_warranty" class="col-md-12 mt-3">
+                        <div class="form-group" :class="{'has-danger': errors.warranty}">
+                            <label class="control-label">Garantía</label>
+                            <el-input v-model="form.warranty" type="textarea"></el-input>
+                        </div>
                     </div>
                     <div class="col-md-12 mt-2">
                         <el-collapse v-model="activePanel">
@@ -350,7 +357,9 @@
                 activePanel: 0,
                 total_item: 0,
                 item_unit_types: [],
-                item_unit_type: {}
+                item_unit_type: {},
+                required_warranty: false,
+                warranty: null
             }
         },
         created() {
@@ -402,6 +411,7 @@
                 this.total_item = 0;
                 this.item_unit_type = {};
                 this.has_list_prices = false;
+                this.required_warranty = false;
             },
             // initializeFields() {
             //     this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
@@ -479,6 +489,8 @@
                 this.item_unit_types = this.form.item.item_unit_types;
                 
                 (this.item_unit_types.length > 0) ? this.has_list_prices = true : this.has_list_prices = false;
+                
+                this.required_warranty = false;
             },
             focusTotalItem(change) {
                 if(!change && this.form.item.calculate_quantity) {

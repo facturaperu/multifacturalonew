@@ -59,8 +59,15 @@
     <tr>
         <td width="120px">FECHA DE EMISIÓN</td>
         <td width="8px">:</td>
-        <td>{{ $document->date_of_issue->format('Y-m-d') }}</td>
+        <td>{{$document->date_of_issue->format('Y-m-d')}}</td>
     </tr>
+    @if($invoice)
+        <tr>
+            <td>FECHA DE VENCIMIENTO</td>
+            <td width="8px">:</td>
+            <td>{{$invoice->date_of_due->format('Y-m-d')}}</td>
+        </tr>
+    @endif
     <tr>
         <td>CLIENTE:</td>
         <td>:</td>
@@ -69,11 +76,7 @@
     <tr>
         <td>{{ $customer->identity_document_type->description }}</td>
         <td>:</td>
-        <td>{{ $customer->number }}</td>
-        {{--@if($invoice)--}}
-        {{--<td>Fecha de vencimiento:</td>--}}
-        {{--<td>{{ $invoice->date_of_due->format('Y-m-d') }}</td>--}}
-        {{--@endif--}}
+        <td>{{$customer->number}}</td>
     </tr>
     @if ($customer->address !== '')
     <tr>

@@ -8,9 +8,91 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant\Catalogs\Department;
 use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Catalogs\Province;
+use App\Models\Tenant\Company;
+use App\Models\Tenant\Document;
+use Illuminate\Http\Request;
+use App\CoreFacturalo\Helpers\Storage\StorageDocument;
+use App\CoreFacturalo\WS\Services\ConsultCdrService;
+use App\CoreFacturalo\Facturalo;
+use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
+use App\CoreFacturalo\WS\Client\WsClient;
+use App\CoreFacturalo\WS\Services\SunatEndpoints;
+use App\Http\Requests\Tenant\ServiceRequest;
+use Exception;
+
 
 class ServiceController extends Controller
 {
+
+
+    protected $wsClient;
+    protected $document;
+    use StorageDocument;
+    const ACCEPTED = '05';
+
+    public function consultCdrStatus(ServiceRequest $request){
+
+        
+        $document_type_id = $request->codigo_tipo_documento;
+        $series = $request->serie_documento;
+        $number = $request->numero_documento;
+
+        $this->document = Document::where([['soap_type_id','02'],
+                                            ['document_type_id',$document_type_id],
+                                            ['series',$series],
+                                            ['number',$number]
+                                            ])->first();
+        
+        if(!$this->document)  throw new Exception("Documento no encontrado");
+            
+        $wsdl = 'consultCdrStatus';
+        $company = Company::active();
+        $username = $company->soap_username;
+        $password = $company->soap_password;
+
+        $company_number = $company->number;
+
+        $this->wsClient = new WsClient($wsdl);
+        $this->wsClient->setCredentials($username, $password);
+        $this->wsClient->setService(SunatEndpoints::FE_CONSULTA_CDR.'?wsdl');
+
+        $consultCdrService = new ConsultCdrService();
+        $consultCdrService->setClient($this->wsClient);
+        $consultCdrService->setCodeProvider(new XmlErrorCodeProvider());
+        $res = $consultCdrService->getStatusCdr($company_number,$document_type_id,$series,$number);
+
+        if(!$res->isSuccess()) {
+            throw new Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
+        } else {
+            $cdrResponse = $res->getCdrResponse();
+            $this->uploadFile($res->getCdrZip(), 'cdr');
+            $this->updateState(self::ACCEPTED);
+            return [
+                'sent' => true,
+                'code' => $cdrResponse->getCode(),
+                'description' => $cdrResponse->getDescription(),
+                'notes' => $cdrResponse->getNotes()
+            ];
+        }
+
+
+    }
+
+    public function uploadFile($file_content, $file_type)
+    {
+        $this->uploadStorage($this->document->filename, $file_content, $file_type);
+    }
+
+
+    public function updateState($state_type_id)
+    {
+        $this->document->update([
+            'state_type_id' => $state_type_id
+        ]);
+    }
+
+
+
     public function ruc($number)
     {
         $service = new Sunat();
