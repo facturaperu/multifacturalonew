@@ -178,20 +178,6 @@
                 this.recordId = recordId
                 this.showDialogVoided = true
             },
-//            clickTicket(voided_id, group_id) {
-//                this.$http.get(`/voided/ticket/${voided_id}/${group_id}`)
-//                    .then(response => {
-//                        if (response.data.success) {
-//                            this.$message.success(response.data.message)
-//                            this.getData()
-//                        } else {
-//                            this.$message.error(response.data.message)
-//                        }
-//                    })
-//                    .catch(error => {
-//                        this.$message.error(error.response.data.message)
-//                    })
-//            },
             clickDownload(download) {
                 window.open(download, '_blank');
             },
