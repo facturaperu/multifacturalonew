@@ -11,18 +11,16 @@ class TenantChangeNullableColumTypeToKardex extends Migration
      *
      * @return void
      */
-    public function up()
-    { 
-        DB::statement("ALTER TABLE kardex CHANGE type type ENUM('sale','purchase') NULL"); 
+    public function up() {
+        DB::statement("ALTER TABLE kardex CHANGE type type ENUM('sale','purchase') NULL");
     }
-
+    
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
-    {
-        DB::statement("ALTER TABLE kardex CHANGE type type ENUM('sale','purchase') NOT NULL"); 
+    public function down() {
+        DB::statement("ALTER TABLE kardex CHANGE type type ENUM('sale','purchase') NULL");
     }
 }

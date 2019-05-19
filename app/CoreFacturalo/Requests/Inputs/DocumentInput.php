@@ -113,8 +113,8 @@ class DocumentInput
                         'internal_id' => $item->internal_id,
                         'item_code' => $item->item_code,
                         'item_code_gs1' => $item->item_code_gs1,
-                        'unit_type_id' => (key_exists('item', $row)) ? $row['item']['unit_type_id'] : $item->unit_type_id,
-                        'presentation' => (key_exists('item', $row)) ? $row['item']['presentation'] : []
+                        'unit_type_id' => (key_exists('item', $row))?$row['item']['unit_type_id']:$item->unit_type_id,
+                        'presentation' => (key_exists('item', $row))?$row['item']['presentation']:[]
                     ],
                     'quantity' => $row['quantity'],
                     'unit_value' => $row['unit_value'],
@@ -139,7 +139,6 @@ class DocumentInput
                     'attributes' => self::attributes($row),
                     'discounts' => self::discounts($row),
                     'charges' => self::charges($row),
-                    'warranty' => (key_exists('warranty', $row)) ? $row['warranty'] : null
                 ];
             }
             return $items;
