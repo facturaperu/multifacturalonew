@@ -77,8 +77,8 @@ class DocumentController extends Controller
     {
 
         //tru de boletas en env esta en true filtra a los con dni   , false a todos
-        $identity_document_type_id = $this->getIdentityDocumentTypeId($request->document_type_id);     
-         
+        $identity_document_type_id = $this->getIdentityDocumentTypeId($request->document_type_id);
+
         $customers = Person::where('number','like', "%{$request->input}%")
                             ->orWhere('name','like', "%{$request->input}%")
                             ->whereType('customers')->orderBy('name')
@@ -92,12 +92,12 @@ class DocumentController extends Controller
                                     'identity_document_type_id' => $row->identity_document_type_id,
                                     'identity_document_type_code' => $row->identity_document_type->code
                                 ];
-                            }); 
+                            });
 
         return compact('customers');
     }
 
- 
+
     public function create()
     {
         if(auth()->user()->type == 'integrator')
@@ -106,7 +106,7 @@ class DocumentController extends Controller
         $is_contingency = 0;
         return view('tenant.documents.form', compact('is_contingency'));
     }
-    
+
 
     public function tables()
     {
@@ -136,7 +136,7 @@ class DocumentController extends Controller
         //                'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
         //                'discount_types', 'charge_types', 'company', 'document_type_03_filter');
 
-                       
+
         return compact( 'customers','establishments', 'series', 'document_types_invoice', 'document_types_note',
                         'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
                         'discount_types', 'charge_types', 'company', 'document_type_03_filter',
@@ -204,7 +204,8 @@ class DocumentController extends Controller
                             'price3' => $row->price3,
                             'price_default' => $row->price_default,
                         ];
-                    })
+                    }),
+                    'series' => $row->series
                     // 'warehouses' => collect($row->warehouses)->transform(function($row) {
                     //     return [
                     //         'warehouse_description' => $row->warehouse->description,
@@ -290,10 +291,10 @@ class DocumentController extends Controller
             'success' => true
         ];
     }
-    
+
     public function send($document_id) {
         $document = Document::find($document_id);
-        
+
         $fact = DB::connection('tenant')->transaction(function () use ($document) {
             $facturalo = new Facturalo();
             $facturalo->setDocument($document);
@@ -301,15 +302,15 @@ class DocumentController extends Controller
             $facturalo->onlySenderXmlSignedBill();
             return $facturalo;
         });
-        
+
         $response = $fact->getResponse();
-        
+
         return [
             'success' => true,
             'message' => $response['description'],
         ];
     }
-    
+
     public function consultCdr($document_id)
     {
         $document = Document::find($document_id);
@@ -327,15 +328,15 @@ class DocumentController extends Controller
             'message' => $response['description'],
         ];
     }
-    
+
     public function sendServer($document_id, $query = false) {
         $document = Document::find($document_id);
         $bearer = config('tenant.token_server');
         $api_url = config('tenant.url_server');
         $client = new Client(['base_uri' => $api_url]);
-        
+
        // $zipFly = new ZipFly();
-       
+
         $data_json = (array) $document->data_json;
         $data_json['external_id'] = $document->external_id;
         $data_json['hash'] = $document->hash;
@@ -343,7 +344,7 @@ class DocumentController extends Controller
         $data_json['query'] = $query;
         $data_json['file_xml_signed'] = base64_encode($this->getStorage($document->filename, 'signed'));
         $data_json['file_pdf'] = base64_encode($this->getStorage($document->filename, 'pdf'));
-        
+
         $res = $client->post('/api/documents_server', [
             'http_errors' => false,
             'headers' => [
@@ -352,51 +353,51 @@ class DocumentController extends Controller
             ],
             'form_params' => $data_json
         ]);
-        
+
         $response = json_decode($res->getBody()->getContents(), true);
-        
+
         if ($response['success']) {
             $document->send_server = true;
             $document->save();
         }
-        
+
         return $response;
     }
-    
+
     public function checkServer($document_id) {
         $document = Document::find($document_id);
         $bearer = config('tenant.token_server');
         $api_url = config('tenant.url_server');
-        
+
         $client = new Client(['base_uri' => $api_url]);
-        
+
         $res = $client->get('/api/document_check_server/'.$document->external_id, [
             'headers' => [
                 'Authorization' => 'Bearer '.$bearer,
                 'Accept' => 'application/json',
             ],
         ]);
-        
+
         $response = json_decode($res->getBody()->getContents(), true);
-        
+
         if ($response['success']) {
             $state_type_id = $response['state_type_id'];
             $document->state_type_id = $state_type_id;
             $document->save();
-            
+
             if ($state_type_id === '05') {
                 $this->uploadStorage($document->filename, base64_decode($response['file_cdr']), 'cdr');
             }
         }
-        
+
         return $response;
     }
 
     public function searchCustomerById($id)
-    {        
-   
+    {
+
         $customers = Person::whereType('customers')
-                    ->where('id',$id) 
+                    ->where('id',$id)
                     ->get()->transform(function($row) {
                         return [
                             'id' => $row->id,
@@ -406,7 +407,7 @@ class DocumentController extends Controller
                             'identity_document_type_id' => $row->identity_document_type_id,
                             'identity_document_type_code' => $row->identity_document_type->code
                         ];
-                    }); 
+                    });
 
         return compact('customers');
     }
@@ -421,7 +422,7 @@ class DocumentController extends Controller
             }else{
                 $identity_document_type_id = [1,4,6,7,0];
             }
-        } 
+        }
 
         return $identity_document_type_id;
     }

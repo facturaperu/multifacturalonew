@@ -92,12 +92,17 @@
                             <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small>
                         </div>
                     </div>
-
+                    <div class="col-md-3 center-el-checkbox">
+                        <div class="form-group" :class="{'has-danger': errors.series}">
+                            <el-checkbox v-model="form.series">Registro de serie para la venta</el-checkbox><br>
+                            <small class="form-control-feedback" v-if="errors.series" v-text="errors.series[0]"></small>
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <h5 class="separator-title ">
                             Listado de precios
                              <a href="#" class="control-label font-weight-bold text-info" @click="clickAddRow"> [ + Nuevo]</a>
-                        </h5> 
+                        </h5>
                     </div>
                     <div class="col-md-12" v-if="form.item_unit_types.length > 0">
                     <div class="table-responsive">
@@ -151,7 +156,7 @@
                                             <!-- <small class="form-control-feedback" v-if="errors.quantity_unit" v-text="errors.quantity_unit[0]"></small> -->
                                         </div>
                                     </td>
-                                    <td> 
+                                    <td>
                                         <div class="form-group" >
                                             <el-input v-model="row.price1"></el-input>
                                             <!-- <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small> -->
@@ -190,9 +195,9 @@
                             </tr>
                             </tbody>
                         </table>
-                        
+
                     </div>
-                </div>   
+                </div>
                     <div class="col-md-12">
                         <h5 class="separator-title">Campos adicionales</h5>
                     </div>
@@ -284,9 +289,9 @@
 
                 this.$http.delete(`/${this.resource}/item-unit-type/${id}`)
                         .then(res => {
-                            if(res.data.success) { 
+                            if(res.data.success) {
                                 this.loadRecord()
-                                this.$message.success('Se eliminó correctamente el registro')                                 
+                                this.$message.success('Se eliminó correctamente el registro')
                             }
                         })
                         .catch(error => {
@@ -296,7 +301,7 @@
                                 console.log(error.response.data.message)
                             }
                         })
-                
+
             },
             clickAddRow() {
                 this.form.item_unit_types.push({
@@ -339,7 +344,8 @@
                     stock: 0,
                     stock_min: 1,
                     has_igv: true,
-                    item_unit_types:[]
+                    item_unit_types:[],
+                    series: false
                 }
                 this.show_has_igv = true
             },

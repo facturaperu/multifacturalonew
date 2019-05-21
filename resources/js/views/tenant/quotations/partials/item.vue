@@ -12,7 +12,6 @@
                             <el-select v-model="form.item_id" @change="changeItem" filterable>
                                 <el-option v-for="option in items" :key="option.id" :value="option.id" :label="option.full_description"></el-option>
                             </el-select>
-                            <el-checkbox v-model="required_warranty">Registrar garantía</el-checkbox>
                             <small class="form-control-feedback" v-if="errors.item_id" v-text="errors.item_id[0]"></small>
                         </div>
                     </div>
@@ -65,11 +64,35 @@
                             <small class="form-control-feedback" v-if="errors.item_unit_type_id" v-text="errors.item_unit_type_id[0]"></small>
                         </div>
                     </div>
-                    <div v-if="required_warranty" class="col-md-12 mt-3">
-                        <div class="form-group" :class="{'has-danger': errors.warranty}">
-                            <label class="control-label">Garantía</label>
-                            <el-input v-model="form.warranty" type="textarea"></el-input>
-                        </div>
+                    <div v-if="records_series" class="col-md-12 mt-3">
+                        <el-collapse >
+                            <el-collapse-item title="Registrar número de series">
+                                <div class="card-body px-0 pt-2">
+                                    <div class="col-md-12 px-0">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Serie</th>
+                                                    <th>Tiempo de garantia</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="row in numberOfSeries">
+                                                    <td>
+                                                        <el-input v-model="row.number"></el-input>
+                                                    </td>
+                                                    <td>
+                                                        <el-select v-model="row.warranty_time">
+                                                            <el-option v-for="(option, index) in warrantyTime" :key="index" :value="option.description" :label="option.description"></el-option>
+                                                        </el-select>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </el-collapse-item>
+                        </el-collapse>
                     </div>
                     <div class="col-md-12 mt-3">
                         <section class="card mb-2 card-transparent card-collapsed" id="card-section">
@@ -190,24 +213,24 @@
                 <el-button type="primary" native-type="submit" v-if="form.item_id">Agregar</el-button>
             </div>
         </form>
-        <item-form :showDialog.sync="showDialogNewItem"
-                   :external="true"></item-form>
+        <item-form :showDialog.sync="showDialogNewItem" :external="true"></item-form>
     </el-dialog>
 </template>
 
 <script>
-
-    import itemForm from '../../items/form.vue'
-    import {calculateRowItem} from '../../../../helpers/functions'
+    import {calculateRowItem} from '../../../../helpers/functions';
+    import itemForm from '../../items/form.vue';
 
     export default {
         props: ['showDialog', 'currencyTypeIdActive', 'exchangeRateSale'],
         components: {itemForm},
         data() {
             return {
+                activeNames: null,
                 titleDialog: 'Agregar Producto o Servicio',
                 resource: 'quotations',
                 showDialogNewItem: false,
+                showDialogSeries: false,
                 errors: {},
                 form: {},
                 items: [],
@@ -223,14 +246,53 @@
                 has_list_prices: false,
                 item_unit_types: [],
                 item_unit_type: {},
-                required_warranty: false,
-                warranty: null
+                warrantyTime: [{
+                    description: '3 Meses'
+                }, {
+                    description: '6 Meses'
+                }, {
+                    description: '1 Año'
+                }, {
+                    description: '2 Año'
+                }, {
+                    description: '3 Año'
+                }]
+            }
+        },
+        computed: {
+            records_series() {
+                if (_.isNull(this.form.item_id)) false;
+
+                try {
+                    return this.items.find(item => item.id == this.form.item_id).series;
+                }
+                catch(e) {
+                    return false;
+                }
+            },
+            numberOfSeries() {
+                let quantity = this.form.quantity;
+                this.form.item.series = [];
+
+                try {
+                    quantity = (this.form.item.item_unit_types.find(row => row.id == this.form.item_unit_type_id).quantity_unit * quantity);
+                }
+                catch(e) {}
+
+                _.range(quantity).forEach((row) => {
+                    this.form.item.series.push({
+                        warranty_time: '1 Año',
+                        number: null
+                    })
+                });
+
+                return this.form.item.series;
             }
         },
         created() {
             this.initForm()
             this.$http.get(`/${this.resource}/item/tables`).then(response => {
-                this.items = response.data.items  
+                this.items = response.data.items
                 this.affectation_igv_types = response.data.affectation_igv_types
                 this.system_isc_types = response.data.system_isc_types
                 this.discount_types = response.data.discount_types
@@ -250,7 +312,7 @@
             },
             initForm() {
                 this.errors = {};
-                
+
                 this.form = {
                     item_id: null,
                     item: {},
@@ -268,11 +330,10 @@
                     item_unit_type_id: null,
                     unit_type_id: null
                 };
-                
+
                 this.total_item = 0;
                 this.item_unit_type = {};
                 this.has_list_prices = false;
-                this.required_warranty = false;
             },
             // initializeFields() {
             //     this.form.affectation_igv_type_id = this.affectation_igv_types[0].id
@@ -340,22 +401,21 @@
             },
             changeItem() {
                 this.getItems();
-                this.required_warranty = false;
                 this.form.item = _.find(this.items, {'id': this.form.item_id});
                 this.form.unit_price = this.form.item.sale_unit_price;
                 this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id;
                 this.form.quantity = 1;
                 this.item_unit_types = this.form.item.item_unit_types;
-                
+
                 (this.item_unit_types.length > 0) ? this.has_list_prices = true : this.has_list_prices = false;
-                
+
                 this.cleanTotalItem();
             },
             changePresentation() {
                 let price = 0;
-                
+
                 this.item_unit_type = _.find(this.form.item.item_unit_types, {'id': this.form.item_unit_type_id});
-                
+
                 switch (this.item_unit_type.price_default) {
                     case 1: price = this.item_unit_type.price1
                         break;
@@ -364,28 +424,28 @@
                     case 3: price = this.item_unit_type.price3
                         break;
                 }
-                
+
                 this.form.unit_price = price;
                 this.form.item.unit_type_id = this.item_unit_type.unit_type_id;
             },
             clickAddItem() {
                 if (this.validateTotalItem().total_item) return;
-                
+
                 this.form.item.unit_price = this.form.unit_price;
                 this.form.item.presentation = this.item_unit_type;
                 this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id});
                 this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale);
-                
+
                 this.initForm();
-                
+
                 // this.initializeFields()
                 this.$emit('add', this.row);
             },
             cleanTotalItem(){
                 this.total_item = null;
-            },  
+            },
             calculateQuantity() {
-                if(this.form.item.calculate_quantity) { 
+                if(this.form.item.calculate_quantity) {
                     this.form.quantity = _.round((this.total_item / this.form.unit_price), 4)
                 }
             },
@@ -396,15 +456,15 @@
             },
             validateTotalItem(){
 
-                this.errors = {} 
+                this.errors = {}
 
                 if(this.form.item.calculate_quantity){
                     if(this.total_item < 0.01)
                         this.$set(this.errors, 'total_item', ['total venta producto debe ser mayor a 0']);
-                } 
+                }
 
-                return this.errors 
-            }, 
+                return this.errors
+            },
             reloadDataItems(item_id) {
                 this.$http.get(`/${this.resource}/table/items`).then((response) => {
                     this.items = response.data

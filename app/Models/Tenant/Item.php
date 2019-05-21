@@ -3,13 +3,16 @@
 namespace App\Models\Tenant;
 
 use App\Models\Tenant\Catalogs\AffectationIgvType;
-use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\SystemIscType;
+use App\Models\Tenant\Catalogs\CurrencyType;
 use App\Models\Tenant\Catalogs\UnitType;
 
 class Item extends ModelTenant
 {
     protected $with = ['item_type', 'unit_type', 'currency_type', 'warehouses','item_unit_types'];
+
+    protected $casts = ['series' => 'boolean'];
+
     protected $fillable = [
         'description',
         'item_type_id',
@@ -24,16 +27,14 @@ class Item extends ModelTenant
         'system_isc_type_id',
         'percentage_isc',
         'suggested_price',
-
         'sale_affectation_igv_type_id',
         'purchase_affectation_igv_type_id',
         'calculate_quantity',
         'has_igv',
-
         'stock',
         'stock_min',
-
         'attributes',
+        'series'
         // 'warehouse_id'
     ];
 
@@ -103,11 +104,11 @@ class Item extends ModelTenant
         }
         return $query;
      }
- 
+
     public function scopeWhereTypeUser($query)
     {
-        $user = auth()->user();         
-        return ($user->type == 'seller') ? $this->scopeWhereWarehouse($query) : null; 
+        $user = auth()->user();
+        return ($user->type == 'seller') ? $this->scopeWhereWarehouse($query) : null;
     }
 
     public function getStockByWarehouse()
@@ -118,8 +119,8 @@ class Item extends ModelTenant
         if ($warehouse) {
             $item_warehouse = $this->warehouses->where('warehouse_id',$warehouse->id)->first();
             return ($item_warehouse) ? $item_warehouse->stock : 0;
-        } 
-        
+        }
+
         return 0;
     }
 
