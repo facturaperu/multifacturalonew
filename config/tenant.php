@@ -12,4 +12,5 @@ return [
     'is_client' => env('IS_CLIENT', false),
     'token_server' => env('TOKEN_SERVER'),
     'url_server' => env('URL_SERVER'),
+    'recreate_document' => env('RECREATE_DOCUMENT', false),
 ];

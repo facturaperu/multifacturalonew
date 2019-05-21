@@ -51,7 +51,10 @@ class DocumentCollection extends ResourceCollection
                     $btn_note = false;
                 }
             }
-            
+
+
+            $btn_recreate_document = config('tenant.recreate_document');
+
             return [
                 'id' => $row->id,
                 'group_id' => $row->group_id,
@@ -83,6 +86,7 @@ class DocumentCollection extends ResourceCollection
 //                'btn_ticket' => $btn_ticket,
                 'btn_resend' => $btn_resend,
                 'btn_consult_cdr' => $btn_consult_cdr,
+                'btn_recreate_document' => $btn_recreate_document,
                 'send_server' => (bool) $row->send_server,
 //                'voided' => $voided,
                 'affected_document' => $affected_document,

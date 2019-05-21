@@ -98,8 +98,9 @@
                         <!--</td>-->
 
                         <td class="text-right" v-if="typeUser != 'integrator'">
-                            <!--<button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"-->
-                                    <!--@click.prevent="clickReStore(row.id)">Volver a generar</button>-->
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
+                                    @click.prevent="clickReStore(row.id)"
+                                    v-if="row.btn_recreate_document">Volver a recrear</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger m-1__2"
                                     @click.prevent="clickVoided(row.id)"
                                     v-if="row.btn_voided"  >Anular</button>
@@ -177,20 +178,6 @@
                 this.recordId = recordId
                 this.showDialogVoided = true
             },
-//            clickTicket(voided_id, group_id) {
-//                this.$http.get(`/voided/ticket/${voided_id}/${group_id}`)
-//                    .then(response => {
-//                        if (response.data.success) {
-//                            this.$message.success(response.data.message)
-//                            this.getData()
-//                        } else {
-//                            this.$message.error(response.data.message)
-//                        }
-//                    })
-//                    .catch(error => {
-//                        this.$message.error(error.response.data.message)
-//                    })
-//            },
             clickDownload(download) {
                 window.open(download, '_blank');
             },
