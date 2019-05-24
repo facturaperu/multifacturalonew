@@ -248,6 +248,7 @@
                            :operation-type-id="form.operation_type_id"
                            :currency-type-id-active="form.currency_type_id"
                            :exchange-rate-sale="form.exchange_rate_sale"
+                           :user="user"
                            @add="addRow"></document-form-item>
 
         <person-form :showDialog.sync="showDialogNewPerson"
@@ -301,7 +302,8 @@
                 currency_type: {},
                 documentNewId: null,
                 activePanel: 0,
-                loading_search:false
+                loading_search:false,
+                user: {}
             }
         },
         async created() {
@@ -318,7 +320,8 @@
                     this.all_customers = response.data.customers
                     this.discount_types = response.data.discount_types
                     this.charges_types = response.data.charges_types
-                    this.company = response.data.company
+                    this.company = response.data.company;
+                    this.user = response.data.user;
                     this.document_type_03_filter = response.data.document_type_03_filter 
                     this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
                     this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
