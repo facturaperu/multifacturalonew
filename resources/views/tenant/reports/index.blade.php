@@ -13,7 +13,7 @@
                     <div>
                         <form action="{{route('tenant.search')}}" class="el-form demo-form-inline el-form--inline" method="POST">
                             {{csrf_field()}}
-                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}" :establishments="{{json_encode($establishments)}}" establishment="{{$establishment ?? null}}" data_d="{{$d ?? ''}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}"></tenant-calendar>
+                            <tenant-calendar :document_types="{{json_encode($documentTypes)}}" :establishments="{{json_encode($establishments)}}" establishment="{{$establishment ?? null}}" data_d="{{$d ?? ''}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}" :filter_seria="true" serie_search="{{$serie ?? null}}"></tenant-calendar>
                         </form>
                     </div>
                     @if(!empty($reports) && $reports->count())
@@ -66,7 +66,7 @@
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$value->document_type->id}}</td>
-                                        <td>{{$value->series}}-{{$value->number}}</td>
+                                        <td onclick="clickDownload('{{$value->download_external_pdf}}');" style="cursor: pointer;">{{$value->series}}-{{$value->number}}</td>
                                         <td>{{$value->date_of_issue->format('Y-m-d')}}</td>
                                         <td>{{$value->person->name}}</td>
                                         <td>{{$value->person->number}}</td>
@@ -108,5 +108,14 @@
 @endsection
 
 @push('scripts')
-    <script></script>
+    <script type="text/javascript">
+        /**
+         * Click download
+         * @param  String download
+         * @return void
+         */
+        function clickDownload(download) {
+            window.open(download, '_blank');
+        }
+    </script>
 @endpush

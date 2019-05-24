@@ -9,6 +9,8 @@ class Document extends ModelTenant
 {
     protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'currency_type', 'group', 'items', 'invoice', 'note'];
     
+    protected $appends = ['download_external_pdf'];
+    
     protected $fillable = [
         'user_id',
         'external_id',

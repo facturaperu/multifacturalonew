@@ -33,25 +33,25 @@ class ReportController extends Controller
         $documentTypes = DocumentType::all();
         $td = $this->getTypeDoc($request->document_type);
         $establishments = Establishment::all();
-
+        $serie = $request->serie;
+        
         $d = null;
         $a = null;
         $establishment = $request->establishment;
         $establishment_id = $this->getEstablishmentId($establishment);
-
-
+        
         if ($request->has('d') && $request->has('a') && ($request->d != null && $request->a != null)) {
             $d = $request->d;
             $a = $request->a;
             
             if (is_null($td)) {
-                $reports = Document::with([ 'state_type', 'person'])
+                $reports = Document::with(['state_type', 'person', 'items'])
                     ->whereBetween('date_of_issue', [$d, $a])
                     ->latest()
                     ->get();
             }
             else {
-                $reports = Document::with([ 'state_type', 'person'])
+                $reports = Document::with(['state_type', 'person', 'items'])
                     ->whereBetween('date_of_issue', [$d, $a])
                     ->latest()
                     ->where('document_type_id', $td)
@@ -60,22 +60,34 @@ class ReportController extends Controller
         }
         else {
             if (is_null($td)) {
-                $reports = Document::with([ 'state_type', 'person'])
+                $reports = Document::with(['state_type', 'person', 'items'])
                     ->latest()
                     ->get();
             } else {
-                $reports = Document::with([ 'state_type', 'person'])
+                $reports = Document::with(['state_type', 'person', 'items'])
                     ->latest()
                     ->where('document_type_id', $td)
                     ->get();
             }
         }
-
-        if(!is_null($establishment_id)){
+        
+        if (!is_null($establishment_id)){
             $reports = $reports->where('establishment_id', $establishment_id);
         }
         
-        return view("tenant.reports.index", compact("reports", "a", "d", "td", "documentTypes","establishment","establishments"));
+        if (!is_null($serie)) {
+            $reports = $reports->filter(function($row) use($serie) {
+                $exist = false;
+                
+                foreach ($row->items as $item) {
+                    if (collect($item->item->series)->where('number', $serie)->count() > 0) $exist = true;
+                }
+                
+                return $exist;
+            });
+        }
+        
+        return view("tenant.reports.index", compact("reports", "a", "d", "td", "documentTypes", "establishment", "establishments", "serie"));
     }
     
     public function pdf(Request $request) {

@@ -25,7 +25,11 @@
                     </el-select>
                 </div>
             </div>
-            
+            <div v-if="filter_seria" class="el-form-item  col-xs-12">
+                <div class="el-form-item__content">
+                    <el-input placeholder="Serial" name="serie" v-model="serie"></el-input>
+                </div>
+            </div>
             <div class="el-form-item  col-xs-12">
                 <div class="el-form-item__content">
                     <button class="btn btn-custom" type="submit"><i class="fa fa-search"></i> Buscar</button>
@@ -60,13 +64,22 @@
                 required: false,
                 default: ''
             },
+            'filter_seria': {
+                required: false,
+                default: false
+            },
+            'serie_search': {
+                required: false,
+                default: ''
+            }
         },
         data() {
             return {
                 document_type: null,
+                establishment2: null,
+                serie: null,
                 d: '',
                 a: '',
-                establishment2:null
             }
         },
         created() {
@@ -74,6 +87,8 @@
             this.establishment2 = (this.establishment != '') ? this.establishment : null;
             this.d = (this.data_d != '') ? moment(this.data_d) : '';
             this.a = (this.data_a != '') ? moment(this.data_a) : '';
+            this.establishment2 = (this.establishment != '') ? this.establishment : null;
+            this.serie = (this.serie_search != '') ? this.serie_search : null;
         }
     }
 </script>
