@@ -363,6 +363,9 @@ class Facturalo
     public function validationCodeResponse($code, $message)
     {
         //Errors
+        if($code === 'ERRORCDR') {
+            return;
+        }
         if($code === 'HTTP') {
             $message = 'La SUNAT no responde a su solicitud, vuelva a intentarlo.';
             throw new Exception("Code: {$code}; Description: {$message}");

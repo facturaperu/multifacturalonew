@@ -3,6 +3,7 @@
 namespace App\CoreFacturalo\WS\Reader;
 
 use App\CoreFacturalo\WS\Response\CdrResponse;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class DomCdrReader.
@@ -24,7 +25,9 @@ class DomCdrReader
 
         $cdr = $this->getResponseByXpath($xpt);
         if (!$cdr) {
-            throw new \Exception('Not found cdr response in xml');
+//            Log::error('Not found cdr response in xml');
+            throw new \Exception('Not found cdr response in xml', 'ERROR_CDR');
+//            return null;
         }
         $cdr->setNotes($this->getNotes($xpt));
 
@@ -55,19 +58,23 @@ class DomCdrReader
      */
     private function getResponseByXpath(\DOMXPath $xpath)
     {
-        $resp = $xpath->query('/x:ApplicationResponse/cac:DocumentResponse/cac:Response');
+        try {
+            $resp = $xpath->query('/x:ApplicationResponse/cac:DocumentResponse/cac:Response');
+            if ($resp->length !== 1) {
+                return null;
+            }
+            $obj = $resp[0];
 
-        if ($resp->length !== 1) {
+            $cdr = new CdrResponse();
+            $cdr->setId($this->getValueByName($obj, 'ReferenceID'))
+                ->setCode($this->getValueByName($obj, 'ResponseCode'))
+                ->setDescription($this->getValueByName($obj, 'Description'));
+
+            return $cdr;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return null;
         }
-        $obj = $resp[0];
-
-        $cdr = new CdrResponse();
-        $cdr->setId($this->getValueByName($obj, 'ReferenceID'))
-            ->setCode($this->getValueByName($obj, 'ResponseCode'))
-            ->setDescription($this->getValueByName($obj, 'Description'));
-
-        return $cdr;
     }
 
     /**
