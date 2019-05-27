@@ -363,7 +363,7 @@ class Facturalo
     public function validationCodeResponse($code, $message)
     {
         //Errors
-        if($code === 'ERRORCDR') {
+        if($code === 'ERROR_CDR') {
             return;
         }
         if($code === 'HTTP') {
