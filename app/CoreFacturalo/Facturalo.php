@@ -24,6 +24,7 @@ use App\Models\Tenant\Retention;
 use App\Models\Tenant\Summary;
 use App\Models\Tenant\Voided;
 use Exception;
+use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
 
 class Facturalo
@@ -243,7 +244,9 @@ class Facturalo
         $format_pdf = ($format != null) ? $format : $format_pdf;
         $this->type = ($type != null) ? $type : $this->type;
 
-        $html = $template->pdf($this->type, $this->company, $this->document, $format_pdf);
+        $base_pdf_template = config('tenant.pdf_template');
+
+        $html = $template->pdf($base_pdf_template, $this->type, $this->company, $this->document, $format_pdf);
 
         if ($format_pdf === 'ticket') {
 
@@ -266,7 +269,7 @@ class Facturalo
                     $discount_global = $discount_global + 1;
                 }
             }
-            $legends           = $this->document->legends != '' ? '10' : '0';
+            $legends = $this->document->legends != '' ? '10' : '0';
 
             $pdf = new Mpdf([
                 'mode' => 'utf-8',
@@ -287,18 +290,30 @@ class Facturalo
                     $total_unaffected +
                     $total_exonerated +
                     $total_taxed],
-                'margin_top' => 2,
-                'margin_right' => 5,
+                'margin_top' => 0,
+                'margin_right' => 1,
                 'margin_bottom' => 0,
-                'margin_left' => 5
+                'margin_left' => 1
             ]);
         }
 
-        $pdf->WriteHTML($html);
+        $path_css = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.
+                                             DIRECTORY_SEPARATOR.'pdf'.
+                                             DIRECTORY_SEPARATOR.$base_pdf_template.
+                                             DIRECTORY_SEPARATOR.'style.css');
+
+        $stylesheet = file_get_contents($path_css);
+
+        $pdf->WriteHTML($stylesheet, HTMLParserMode::HEADER_CSS);
+        $pdf->WriteHTML($html, HTMLParserMode::HTML_BODY);
 
         if ($format_pdf != 'ticket') {
-            $html_footer = $template->pdfFooter();
-            $pdf->SetHTMLFooter($html_footer);
+            if(config('tenant.pdf_template_footer')) {
+                $html_footer = $template->pdfFooter($base_pdf_template);
+                $pdf->SetHTMLFooter($html_footer);
+            }
+//            $html_footer = $template->pdfFooter();
+//            $pdf->SetHTMLFooter($html_footer);
         }
         $this->uploadFile($pdf->output('', 'S'), 'pdf');
     }

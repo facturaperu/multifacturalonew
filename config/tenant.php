@@ -13,4 +13,6 @@ return [
     'token_server' => env('TOKEN_SERVER'),
     'url_server' => env('URL_SERVER'),
     'recreate_document' => env('RECREATE_DOCUMENT', false),
+    'pdf_template' => env('PDF_TEMPLATE', 'default'),
+    'pdf_template_footer' => env('PDF_TEMPLATE_FOOTER', false),
 ];

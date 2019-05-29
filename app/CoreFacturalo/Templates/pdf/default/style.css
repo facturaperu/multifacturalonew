@@ -1,15 +1,11 @@
 body {
-    direction: ltr;
-    font-size: 100%;
-    font-family: 'monospace', sans-serif;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
 }
-
 table {
-    margin: 0;
-    padding: 0;
-    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
 }
-
 .font-md {
     font-size: 12px;
 }
@@ -110,10 +106,6 @@ table {
 
 .logo {
 
-}
-
-.qr_code {
-    width: 150px;
 }
 
 /* Headings */
@@ -609,15 +601,4 @@ p {
 .ml-auto,
 .mx-auto {
   margin-left: auto !important;
-}
-
-table tr td {
-    padding: 3px 0 0;
-    margin: 0;
-    vertical-align: top!important;
-    font-size: 9px;
-}
-
-.width-first-td {
-    width: 55px;
 }
