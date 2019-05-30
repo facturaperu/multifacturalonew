@@ -26,6 +26,8 @@ use App\Models\Tenant\Voided;
 use Exception;
 use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
 
 class Facturalo
 {
@@ -295,6 +297,35 @@ class Facturalo
                 'margin_bottom' => 0,
                 'margin_left' => 1
             ]);
+        } else {
+            
+            $pdf_font_regular = config('tenant.pdf_name_regular');
+            $pdf_font_bold = config('tenant.pdf_name_bold');
+
+            if ($pdf_font_regular != false) {
+                $defaultConfig = (new ConfigVariables())->getDefaults();
+                $fontDirs = $defaultConfig['fontDir'];
+
+                $defaultFontConfig = (new FontVariables())->getDefaults();
+                $fontData = $defaultFontConfig['fontdata'];
+
+                $pdf = new Mpdf([
+                    'fontDir' => array_merge($fontDirs, [
+                        app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.
+                                                 DIRECTORY_SEPARATOR.'pdf'.
+                                                 DIRECTORY_SEPARATOR.$base_pdf_template.
+                                                 DIRECTORY_SEPARATOR.'font')
+                    ]),
+                    'fontdata' => $fontData + [
+                        'custom_bold' => [
+                            'R' => $pdf_font_bold.'.ttf',
+                        ],
+                        'custom_regular' => [
+                            'R' => $pdf_font_regular.'.ttf',
+                        ],
+                    ]
+                ]);
+            }
         }
 
         $path_css = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.

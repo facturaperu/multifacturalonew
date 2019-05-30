@@ -15,4 +15,6 @@ return [
     'recreate_document' => env('RECREATE_DOCUMENT', false),
     'pdf_template' => env('PDF_TEMPLATE', 'default'),
     'pdf_template_footer' => env('PDF_TEMPLATE_FOOTER', false),
+    'pdf_name_regular' => env('PDF_NAME_REGULAR', false),
+    'pdf_name_bold' => env('PDF_NAME_BOLD', false),
 ];
