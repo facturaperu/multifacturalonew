@@ -178,8 +178,10 @@ class SaleNoteController extends Controller
         $template = new Template();
         $pdf = new Mpdf();   
         $document = $this->sale_note;
+
+        $base_template = config('tenant.pdf_template');
         
-        $html = $template->pdf("sale_note", $this->company, $document,"a4");
+        $html = $template->pdf($base_template, "sale_note", $this->company, $document,"a4");
         $pdf->WriteHTML($html); 
        
         $this->uploadFile($pdf->output('', 'S'), 'sale_note');

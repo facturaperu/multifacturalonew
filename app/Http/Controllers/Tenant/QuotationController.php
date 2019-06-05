@@ -305,8 +305,10 @@ class QuotationController extends Controller
         $document = ($quotation != null) ? $quotation : $this->quotation;
         $company = ($this->company != null) ? $this->company : Company::active();
         $filename = ($filename != null) ? $filename : $this->quotation->filename;
+
+        $base_template = config('tenant.pdf_template');
         
-        $html = $template->pdf("quotation", $company, $document, $format_pdf);
+        $html = $template->pdf($base_template, "quotation", $company, $document, $format_pdf);
         
         if ($format_pdf === 'ticket') {
             $company_name      = (strlen($company->name) / 20) * 10;
@@ -359,8 +361,12 @@ class QuotationController extends Controller
         $pdf->WriteHTML($html);
         
         if ($format_pdf != 'ticket') {
-            $html_footer = $template->pdfFooter();
-            $pdf->SetHTMLFooter($html_footer);
+            if(config('tenant.pdf_template_footer')) {
+                $html_footer = $template->pdfFooter($base_template);
+                $pdf->SetHTMLFooter($html_footer);
+            }
+            //$html_footer = $template->pdfFooter();
+            //$pdf->SetHTMLFooter($html_footer);
         }
         
         $this->uploadFile($filename, $pdf->output('', 'S'), 'quotation');
