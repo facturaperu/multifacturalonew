@@ -19,8 +19,8 @@ class WarehouseCollection extends ResourceCollection
                 'id' => $row->id,
                 'description' => $row->description,
                 'establishment_description' => $row->establishment->description,
-                'created_at' => $row->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $row->updated_at->format('Y-m-d H:i:s'),
+                'created_at' => optional($row->created_at)->format('Y-m-d H:i:s'),
+                'updated_at' => optional($row->updated_at)->format('Y-m-d H:i:s'),
             ];
         });
     }
