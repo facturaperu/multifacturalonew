@@ -256,16 +256,25 @@ class DocumentController extends Controller
     {
         $fact = DB::connection('tenant')->transaction(function () use ($document_id) {
             $document = Document::find($document_id);
+
+            $type = 'invoice';
+            if($document->document_type_id === '07') {
+                $type = 'credit';
+            }
+            if($document->document_type_id === '07') {
+                $type = 'debit';
+            }
+
             $facturalo = new Facturalo();
             $facturalo->setDocument($document);
-            $facturalo->setType('invoice');
+            $facturalo->setType($type);
             $facturalo->createXmlUnsigned();
             $facturalo->signXmlUnsigned();
             $facturalo->updateHash();
             $facturalo->updateQr();
             $facturalo->updateSoap('02');
             $facturalo->updateState('01');
-            $facturalo->createPdf($document, 'invoice', 'ticket');
+            $facturalo->createPdf($document, $type, 'ticket');
 //            $facturalo->senderXmlSignedBill();
         });
 
