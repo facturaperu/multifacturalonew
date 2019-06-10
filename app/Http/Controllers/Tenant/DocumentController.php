@@ -261,7 +261,7 @@ class DocumentController extends Controller
             if($document->document_type_id === '07') {
                 $type = 'credit';
             }
-            if($document->document_type_id === '07') {
+            if($document->document_type_id === '08') {
                 $type = 'debit';
             }
 

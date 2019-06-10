@@ -25,8 +25,7 @@
     <cbc:DocumentCurrencyCode>{{ $document->currency_type_id }}</cbc:DocumentCurrencyCode>
     <cac:DiscrepancyResponse>
         <cbc:ReferenceID>{{ $note->affected_document->series.'-'.$note->affected_document->number }}</cbc:ReferenceID>
-        {{--<cbc:ResponseCode>{{ $note->note_credit_type_id }}</cbc:ResponseCode>--}}
-        <cbc:ResponseCode>05</cbc:ResponseCode>
+        <cbc:ResponseCode>{{ $note->note_credit_type_id }}</cbc:ResponseCode>
         <cbc:Description>{{ $note->note_description }}</cbc:Description>
     </cac:DiscrepancyResponse>
     @if($document->purchase_order)
