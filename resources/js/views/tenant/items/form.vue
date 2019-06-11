@@ -31,7 +31,7 @@
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.sale_unit_price}">
                             <label class="control-label">Precio Unitario (Venta) <span class="text-danger">*</span></label>
-                            <el-input v-model="form.sale_unit_price" dusk="sale_unit_price"></el-input>
+                            <el-input v-model="form.sale_unit_price" dusk="sale_unit_price" @input="calculatePercentageOfProfitBySale"></el-input>
                             <small class="form-control-feedback" v-if="errors.sale_unit_price" v-text="errors.sale_unit_price[0]"></small>
                         </div>
                     </div>
@@ -92,7 +92,6 @@
                             <small class="form-control-feedback" v-if="errors.stock_min" v-text="errors.stock_min[0]"></small>
                         </div>
                     </div>
-
                     <div class="col-md-12">
                         <h5 class="separator-title ">
                             Listado de precios
@@ -199,7 +198,7 @@
                     <div class="col-md-3">
                         <div class="form-group" :class="{'has-danger': errors.purchase_unit_price}">
                             <label class="control-label">Precio Unitario (Compra)</label>
-                            <el-input v-model="form.purchase_unit_price" dusk="purchase_unit_price"></el-input>
+                            <el-input v-model="form.purchase_unit_price" dusk="purchase_unit_price" @input="calculatePercentageOfProfitByPurchase"></el-input>
                             <small class="form-control-feedback" v-if="errors.purchase_unit_price" v-text="errors.purchase_unit_price[0]"></small>
                         </div>
                     </div>
@@ -210,6 +209,13 @@
                                 <el-option v-for="option in affectation_igv_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.purchase_affectation_igv_type_id" v-text="errors.purchase_affectation_igv_type_id[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" :class="{'has-danger': errors.percentage_of_profit}">
+                            <label class="control-label">Porcentaje de ganancia (%)</label>
+                            <el-input v-model="form.percentage_of_profit" @input="calculatePercentageOfProfitByPercentage"></el-input>
+                            <small class="form-control-feedback" v-if="errors.percentage_of_profit" v-text="errors.percentage_of_profit[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-12" v-if="form.warehouses">
@@ -339,7 +345,8 @@
                     stock: 0,
                     stock_min: 1,
                     has_igv: true,
-                    item_unit_types:[]
+                    item_unit_types:[],
+                    percentage_of_profit: 0,
                 }
                 this.show_has_igv = true
             },
@@ -379,6 +386,23 @@
                             this.changeAffectationIgvType()
                         })
                 }
+            },
+            calculatePercentageOfProfitBySale() {
+                let difference = parseFloat(this.form.sale_unit_price) - parseFloat(this.form.purchase_unit_price);
+
+                this.form.percentage_of_profit = difference / parseFloat(this.form.purchase_unit_price) * 100;
+            },
+            calculatePercentageOfProfitByPurchase() {
+                if(this.form.percentage_of_profit === '') {
+                    this.form.percentage_of_profit = 0;
+                }
+                this.form.sale_unit_price = (this.form.purchase_unit_price * (100 + parseFloat(this.form.percentage_of_profit))) / 100
+            },
+            calculatePercentageOfProfitByPercentage() {
+                if(this.form.percentage_of_profit === '') {
+                    this.form.percentage_of_profit = 0;
+                }
+                this.form.sale_unit_price = (this.form.purchase_unit_price * (100 + parseFloat(this.form.percentage_of_profit))) / 100
             },
             submit() {
                 this.loading_submit = true
