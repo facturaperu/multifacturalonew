@@ -29,6 +29,9 @@ use App\CoreFacturalo\Requests\Inputs\Common\EstablishmentInput;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\CoreFacturalo\Template;
 use Mpdf\Mpdf;
+use Mpdf\HTMLParserMode;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
 use Exception;
 
 class QuotationController extends Controller
@@ -356,9 +359,46 @@ class QuotationController extends Controller
                 'margin_bottom' => 0,
                 'margin_left' => 5
             ]);
+        } else {
+            
+            $pdf_font_regular = config('tenant.pdf_name_regular');
+            $pdf_font_bold = config('tenant.pdf_name_bold');
+
+            if ($pdf_font_regular != false) {
+                $defaultConfig = (new ConfigVariables())->getDefaults();
+                $fontDirs = $defaultConfig['fontDir'];
+
+                $defaultFontConfig = (new FontVariables())->getDefaults();
+                $fontData = $defaultFontConfig['fontdata'];
+
+                $pdf = new Mpdf([
+                    'fontDir' => array_merge($fontDirs, [
+                        app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.
+                                                 DIRECTORY_SEPARATOR.'pdf'.
+                                                 DIRECTORY_SEPARATOR.$base_template.
+                                                 DIRECTORY_SEPARATOR.'font')
+                    ]),
+                    'fontdata' => $fontData + [
+                        'custom_bold' => [
+                            'R' => $pdf_font_bold.'.ttf',
+                        ],
+                        'custom_regular' => [
+                            'R' => $pdf_font_regular.'.ttf',
+                        ],
+                    ]
+                ]);
+            }
         }
-        
-        $pdf->WriteHTML($html);
+
+        $path_css = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.
+                                             DIRECTORY_SEPARATOR.'pdf'.
+                                             DIRECTORY_SEPARATOR.$base_template.
+                                             DIRECTORY_SEPARATOR.'style.css');
+
+        $stylesheet = file_get_contents($path_css);
+
+        $pdf->WriteHTML($stylesheet, HTMLParserMode::HEADER_CSS);
+        $pdf->WriteHTML($html, HTMLParserMode::HTML_BODY);
         
         if ($format_pdf != 'ticket') {
             if(config('tenant.pdf_template_footer')) {
