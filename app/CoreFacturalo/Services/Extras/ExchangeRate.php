@@ -6,11 +6,10 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use DiDom\Document as DiDom;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class ExchangeRate
 {
-    const URL_CONSULT = 'http://www.sunat.gob.pe/cl-at-ittipcam/tcS01Alias';
-
     protected $client;
 
     public function __construct()
@@ -22,8 +21,10 @@ class ExchangeRate
     {
         $client = new  Client(['base_uri' => 'http://www.sunat.gob.pe/cl-at-ittipcam/']);
         try {
-            $response = $client->request('GET', "tcS01Alias?mes={$month}&anho={$year}");
+            $response = $client->request('GET', "tcS01Alias?mes={$month}&anho={$year}", ['http_errors' => true, 'timeout' => 4]);
         } catch (ClientException $e) {
+            return $e->getResponse();
+        } catch (RequestException $e) {
             return $e->getResponse();
         }
 
