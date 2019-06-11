@@ -22,7 +22,7 @@
         <td width="35%" class="border-box p-box-info text-center">
             <div class="text-left">
                 <h5>{{ 'RUC '.$company->number }}</h5>
-                <h5 class="text-center">COTIZACIÓN</h5>
+                <h5 class="text-center">NOTA DE VENTA</h5>
                 <h3 class="text-center">{{ $tittle }}</h3>
             </div>
         </td>
@@ -45,7 +45,6 @@
         </td>
     </tr>
 </table>
-                
 <table class="full-width mt-5">
     <tr>
         <td><p class="font-bold text-upp">Adquiriente</p></td>
@@ -98,15 +97,35 @@
     </tr>
 </table>
 
-<table class="mt-10 mb-10" style="border-collapse: collapse;border-top: 1px solid #333;">
+{{-- @if ($document->guides) --}}
+{{-- <br/> --}}
+{{--<strong>Guías:</strong>--}}
+{{-- <table> --}}
+    {{-- @foreach($document->guides as $guide)
+        <tr>
+            @if(isset($guide->document_type_description))
+            <td>{{ $guide->document_type_description }}</td>
+            @else
+            <td>{{ $guide->document_type_id }}</td>
+            @endif
+            <td>:</td>
+            <td>{{ $guide->number }}</td>
+        </tr>
+    @endforeach --}}
+{{-- </table> --}}
+{{-- @endif --}}
+
+<table class="full-width mt-10 mb-10">
+    <thead class="">
     <tr class="bg-grey">
-        <th class="text-center py-2" width="8%">CANT.</th>
-        <th class="text-center py-2" width="8%">UNIDAD</th>
-        <th class="text-left py-2">DESCRIPCIÓN</th>
-        <th class="text-right py-2" width="12%">P.UNIT</th>
-        <th class="text-right py-2" width="8%">DTO.</th>
-        <th class="text-right py-2" width="12%">TOTAL</th>
+        <th class="border-top-bottom text-center py-2" width="8%">CANT.</th>
+        <th class="border-top-bottom text-center py-2" width="8%">UNIDAD</th>
+        <th class="border-top-bottom text-left py-2">DESCRIPCIÓN</th>
+        <th class="border-top-bottom text-right py-2" width="12%">P.UNIT</th>
+        <th class="border-top-bottom text-right py-2" width="8%">DTO.</th>
+        <th class="border-top-bottom text-right py-2" width="12%">TOTAL</th>
     </tr>
+    </thead>
     <tbody>
     @foreach($document->items as $row)
         <tr>
@@ -121,10 +140,7 @@
                 <p>{{ $row->item->unit_type_id }}</p>
             </td>
             <td class="text-left">
-                <p>{!!$row->item->description!!}</p>
-                @if (!empty($row->item->presentation))
-                    <p>{!!$row->item->presentation->description!!}</p>
-                @endif
+                <p>{!! $row->item->description !!}</p>
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
                         <br/><span style="font-size: 9px">{!! $attr->description !!} : {{ $attr->value }}</span>
@@ -149,7 +165,7 @@
                     @endphp
                     <p>{{ number_format($total_discount_line, 2) }}</p>
                 @else
-                    <p>0</p>
+                <p>0</p>
                 @endif
             </td>
             <td class="text-right align-top">
