@@ -30,6 +30,7 @@ class ItemResource extends JsonResource
             'suggested_price' => $this->suggested_price,
             'stock' => $this->getStockByWarehouse(),
             'stock_min' => $this->stock_min,
+            'percentage_of_profit' => $this->percentage_of_profit,
             'sale_affectation_igv_type_id' => $this->sale_affectation_igv_type_id,
             'purchase_affectation_igv_type_id' => $this->purchase_affectation_igv_type_id,
             'calculate_quantity' => (bool) $this->calculate_quantity,

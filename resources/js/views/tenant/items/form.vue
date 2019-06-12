@@ -390,7 +390,11 @@
             calculatePercentageOfProfitBySale() {
                 let difference = parseFloat(this.form.sale_unit_price) - parseFloat(this.form.purchase_unit_price);
 
-                this.form.percentage_of_profit = difference / parseFloat(this.form.purchase_unit_price) * 100;
+                if(parseFloat(this.form.purchase_unit_price) === 0) {
+                    this.form.percentage_of_profit = 0;
+                } else {
+                    this.form.percentage_of_profit = difference / parseFloat(this.form.purchase_unit_price) * 100;
+                }
             },
             calculatePercentageOfProfitByPurchase() {
                 if(this.form.percentage_of_profit === '') {
