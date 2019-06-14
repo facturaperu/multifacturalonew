@@ -6,7 +6,7 @@ use App\Models\Tenant\Catalogs\CurrencyType;
 
 class SaleNote extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'currency_type', 'items'];
+    protected $with = ['user', 'soap_type', 'state_type', 'currency_type', 'items', 'payments'];
     
     protected $fillable = [
         'user_id',
@@ -49,7 +49,7 @@ class SaleNote extends ModelTenant
         'detraction',
         'legends', 
         'filename',
-         
+        'total_canceled',
     ];
 
     protected $casts = [
@@ -200,8 +200,12 @@ class SaleNote extends ModelTenant
     {
         return $this->morphMany(InventoryKardex::class, 'inventory_kardexable');
     }
-    
-    
+
+    public function payments()
+    {
+        return $this->hasMany(SaleNotePayment::class);
+    }
+
     public function getNumberToLetterAttribute()
     {
         $legends = $this->legends;

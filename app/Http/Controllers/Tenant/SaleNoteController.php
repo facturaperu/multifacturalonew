@@ -168,6 +168,12 @@ class SaleNoteController extends Controller
         return $inputs->all();
     }
 
+//    public function recreatePdf($sale_note_id)
+//    {
+//        $this->sale_note = SaleNote::find($sale_note_id);
+//        $this->createPdf();
+//    }
+
     private function setFilename(){
         
         $name = [$this->sale_note->prefix,$this->sale_note->id,date('Ymd')];

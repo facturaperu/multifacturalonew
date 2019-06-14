@@ -7,7 +7,7 @@ use App\Models\Tenant\Catalogs\DocumentType;
 
 class Document extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'currency_type', 'group', 'items', 'invoice', 'note'];
+    protected $with = ['user', 'soap_type', 'state_type', 'document_type', 'currency_type', 'group', 'items', 'invoice', 'note', 'payments'];
     
     protected $fillable = [
         'user_id',
@@ -242,7 +242,12 @@ class Document extends ModelTenant
     {
         return $this->hasMany(Kardex::class);
     }
-    
+
+    public function payments()
+    {
+        return $this->hasMany(DocumentPayment::class);
+    }
+
 
     public function inventory_kardex()
     {

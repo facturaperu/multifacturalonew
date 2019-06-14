@@ -41,6 +41,7 @@
                         <th class="text-right">T.Gravado</th>
                         <th class="text-right">T.Igv</th>
                         <th class="text-right">Total</th>
+                        <th class="text-center"></th>
                         <th class="text-center">Descargas</th>
                         <!--<th class="text-center">Anulación</th>-->
                         <th class="text-right" v-if="typeUser != 'integrator'">Acciones</th>
@@ -74,6 +75,10 @@
                         <td class="text-right">{{ row.total_taxed }}</td>
                         <td class="text-right">{{ row.total_igv }}</td>
                         <td class="text-right">{{ row.total }}</td>
+                        <td class="text-center">
+                            <button type="button" style="min-width: 41px" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
+                                    @click.prevent="clickPayment(row.id)">Pagos</button>
+                        </td>
                         <td class="text-center">
                             <button type="button" style="min-width: 41px" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickDownload(row.download_xml)"
@@ -128,6 +133,9 @@
             <document-options :showDialog.sync="showDialogOptions"
                               :recordId="recordId"
                               :showClose="true"></document-options>
+
+            <document-payments :showDialog.sync="showDialogPayments"
+                               :documentId="recordId"></document-payments>
         </div>
     </div>
 </template>
@@ -136,17 +144,19 @@
 
     import DocumentsVoided from './partials/voided.vue'
     import DocumentOptions from './partials/options.vue'
+    import DocumentPayments from './partials/payments.vue'
     import DataTable from '../../../components/DataTable.vue'
 
     export default {
         props: ['isClient','typeUser'],
-        components: {DocumentsVoided, DocumentOptions, DataTable},
+        components: {DocumentsVoided, DocumentOptions, DocumentPayments, DataTable},
         data() {
             return {
                 showDialogVoided: false,
                 resource: 'documents',
                 recordId: null,
                 showDialogOptions: false,
+                showDialogPayments: false,
                 columns: {
                     user_name: {
                         title: 'Usuario',
@@ -254,6 +264,10 @@
                 if ((row.shipping_status) || (row.sunat_shipping_status) || (row.query_status)) return true;
                 
                 return false;
+            },
+            clickPayment(recordId) {
+                this.recordId = recordId;
+                this.showDialogPayments = true;
             }
         }
     }
