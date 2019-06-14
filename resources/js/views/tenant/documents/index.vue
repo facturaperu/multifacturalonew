@@ -104,6 +104,9 @@
 
                         <td class="text-right" v-if="typeUser != 'integrator'">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
+                                    @click.prevent="clickChangeToRegisteredStatus(row.id)"
+                                    v-if="row.btn_change_to_registered_status">Cambiar a estado registrado</button>
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickReStore(row.id)"
                                     v-if="row.btn_recreate_document">Volver a recrear</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-danger m-1__2"
@@ -268,6 +271,20 @@
             clickPayment(recordId) {
                 this.recordId = recordId;
                 this.showDialogPayments = true;
+            },
+            clickChangeToRegisteredStatus(document_id) {
+                this.$http.get(`/${this.resource}/change_to_registered_status/${document_id}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            this.$message.success(response.data.message)
+                            this.$eventHub.$emit('reloadData')
+                        } else {
+                            this.$message.error(response.data.message)
+                        }
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data.message)
+                    })
             }
         }
     }

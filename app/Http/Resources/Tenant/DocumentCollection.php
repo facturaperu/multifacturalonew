@@ -52,8 +52,12 @@ class DocumentCollection extends ResourceCollection
                 }
             }
 
-
             $btn_recreate_document = config('tenant.recreate_document');
+
+            $btn_change_to_registered_status = false;
+            if($row->state_type_id === '01') {
+                $btn_change_to_registered_status = config('tenant.change_to_registered_status');
+            }
 
             return [
                 'id' => $row->id,
@@ -87,6 +91,7 @@ class DocumentCollection extends ResourceCollection
                 'btn_resend' => $btn_resend,
                 'btn_consult_cdr' => $btn_consult_cdr,
                 'btn_recreate_document' => $btn_recreate_document,
+                'btn_change_to_registered_status' => $btn_change_to_registered_status,
                 'send_server' => (bool) $row->send_server,
 //                'voided' => $voided,
                 'affected_document' => $affected_document,

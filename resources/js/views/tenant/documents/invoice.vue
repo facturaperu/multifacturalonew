@@ -10,7 +10,7 @@
                         <div class="col-sm-2 text-center mt-3 mb-0">
                             <logo url="/" :path_logo="(company.logo != null) ? `/storage/uploads/logos/${company.logo}` : ''" ></logo>
                         </div>
-                        <div class="col-sm-10 text-left mt-3 mb-0">
+                        <div class="col-sm-6 text-left mt-3 mb-0">
                             <address class="ib mr-2" >
                                 <span class="font-weight-bold">{{company.name}}</span>
                                 <br>
@@ -18,6 +18,9 @@
                                 <br>
                                 {{establishment.email}} - <span v-if="establishment.telephone != '-'">{{establishment.telephone}}</span>
                             </address>
+                        </div>
+                        <div class="col-sm-4">
+                            <el-checkbox v-model="is_contingency" @change="changeEstablishment">¿Es comprobante de contigencia?</el-checkbox>
                         </div>
                     </div>
                 </header>
@@ -272,7 +275,7 @@
     import Logo from '../companies/logo.vue'
 
     export default {
-        props: ['is_contingency'],
+        // props: ['is_contingency'],
         components: {DocumentFormItem, PersonForm, DocumentOptions, Logo},
         mixins: [functions, exchangeRate],
         data() {
@@ -303,11 +306,12 @@
                 documentNewId: null,
                 activePanel: 0,
                 loading_search:false,
-                user: {}
+                user: {},
+                is_contingency: false,
             }
         },
         async created() {
-            console.log(this.is_contingency )
+            //console.log(this.is_contingency )
             await this.initForm()
             await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
@@ -440,7 +444,7 @@
                 this.form.series_id = null
                 this.series = _.filter(this.all_series, {'establishment_id': this.form.establishment_id,
                                                          'document_type_id': this.form.document_type_id,
-                                                         'contingency': this.is_contingency})
+                                                         'contingency': this.is_contingency});
                 this.form.series_id = (this.series.length > 0)?this.series[0].id:null
             },
             filterCustomers() {
