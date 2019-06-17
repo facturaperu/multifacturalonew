@@ -13,6 +13,8 @@ Para conocer el proceso de instalación del facturador, visite la documentación
 [Manual - Windows - Linux](https://drive.google.com/open?id=1Jf0vgGvx27MbOB4JYsk9Gzgd5QIl32j35pwU1LI_Woo "Clic")
 <br>
 [Manual - Docker - Linux](https://docs.google.com/document/d/1E8jOrnbASjzBqhvgjhlJdhHExUjq4A0DoRKhkFEuFyY/edit?usp=sharing "Clic")
+<br>
+[Manual - Docker - Linux - SSL](https://docs.google.com/document/d/1V54AoYPSNqgi2M9ddck6gh3AgQspZ-eH37_1BU7Gpuo/edit?usp=sharingg "Clic")
 
 ## Manejo del facturador
 
@@ -44,7 +46,9 @@ Contraseña: 123456
 
 ## Actualización Docker-Git
 
-Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/11PI1a9yjCPfH9CCuWmJSrdj1V8IEUffqurqvdkw29co/edit?usp=sharing "Clic")
+Para actualizar el facturador instalado con Docker: [Guía](https://docs.google.com/document/d/11PI1a9yjCPfH9CCuWmJSrdj1V8IEUffqurqvdkw29co/edit?usp=sharing "Clic")
+<br>
+Para actualziar el certificado SSL instalado con el manual de Docker+SSL: [Guía](https://docs.google.com/document/d/1vmYwPwVKH6UEH88MZEAk7P2CoAqpIF5WQyJabiHAjVo/edit?usp=sharing "Clic")
 
 ## Cambio de entornos (Prueba - Producción)
 
@@ -61,6 +65,6 @@ Gracias por considerar contribuir al facturador pro
 
 ## Vulnerabilidades de seguridad
 
-Si descubre una vulnerabilidad de seguridad en la API, envíe un correo electrónico a facturalatamglobal@gmail.com . Las vulnerabilidades de seguridad serán tratadas con prontitud.
+Si descubre una vulnerabilidad de seguridad en la API, envíe un correo electrónico a soporte@facturaloperu.com . Las vulnerabilidades de seguridad serán tratadas con prontitud.
 
 
