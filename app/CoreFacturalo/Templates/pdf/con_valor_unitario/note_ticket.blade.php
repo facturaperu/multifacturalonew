@@ -184,7 +184,7 @@
                 @endif
             </td>
             <td class="text-right desc-9 align-top">{{ number_format($row->unit_value, 2) }}</td>
-            <td class="text-right desc-9 align-top">{{ number_format($row->total, 2) }}</td>
+            <td class="text-right desc-9 align-top">{{ number_format($row->total_value, 2) }}</td>
         </tr>
         <tr>
             <td colspan="5" class="border-bottom"></td>

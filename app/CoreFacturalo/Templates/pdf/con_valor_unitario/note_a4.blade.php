@@ -178,7 +178,7 @@
                 0
                 @endif
             </td>
-            <td class="text-right">{{ number_format($row->total, 2) }}</td>
+            <td class="text-right">{{ number_format($row->total_value, 2) }}</td>
         </tr>
         <tr>
             <td colspan="6" class="border-bottom"></td>
