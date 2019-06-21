@@ -8,6 +8,7 @@ class Department extends ModelCatalog
 {
     use UsesTenantConnection;
 
+    protected $with = ['provinces'];
     public $incrementing = false;
     public $timestamps = false;
 
@@ -18,5 +19,10 @@ class Department extends ModelCatalog
             return $department->id;
         }
         return '15';
+    }
+
+    public function provinces()
+    {
+        return $this->hasMany(Province::class);
     }
 }
