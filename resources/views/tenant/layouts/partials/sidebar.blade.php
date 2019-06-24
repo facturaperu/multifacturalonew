@@ -234,9 +234,9 @@
                                 <a class="nav-link" href="{{route('tenant.consistency-documents.index')}}">Consistencia documentos</a>
                             </li>
 
-                            <li class="">
-                                <a class="nav-link" href="{{route('tenant.accounting.index')}}">Exportar</a>
-                            </li>
+                            {{--<li class="">--}}
+                                {{--<a class="nav-link" href="{{route('tenant.accounting.index')}}">Exportar</a>--}}
+                            {{--</li>--}}
                         </ul>
                     </li>
                     @endif
