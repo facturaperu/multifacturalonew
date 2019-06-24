@@ -351,6 +351,9 @@ if ($hostname) {
            Route::get('sale_note_payments/tables', 'Tenant\SaleNotePaymentController@tables');
            Route::post('sale_note_payments', 'Tenant\SaleNotePaymentController@store');
            Route::delete('sale_note_payments/{sale_note_payment}', 'Tenant\SaleNotePaymentController@destroy');
+
+           Route::get('accounting', 'Tenant\AccountingController@index')->name('tenant.accounting.index');
+           Route::get('accounting/download', 'Tenant\AccountingController@download');
         });
     });
 } else {
