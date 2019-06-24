@@ -103,6 +103,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="form-actions text-right mt-4">
                 <el-button @click.prevent="close()">Cancelar</el-button>
@@ -171,7 +172,8 @@
                     district_id: null,
                     address: null,
                     telephone: null,
-                    email: null
+                    email: null,
+                    more_address: [],
                 }
             },
             create() {
@@ -185,6 +187,7 @@
                         })
                 }
             },
+
             submit() {
                 this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form)

@@ -66,4 +66,9 @@ class Person extends ModelTenant
         }
         return "{$address} {$this->department->description} - {$this->province->description} - {$this->district->description}";
     }
+
+    public function more_address()
+    {
+        return $this->hasMany(PersonAddress::class);
+    }
 }
