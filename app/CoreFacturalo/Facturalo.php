@@ -239,6 +239,7 @@ class Facturalo
     }
 
     public function createPdf($document = null, $type = null, $format = null) {
+        ini_set("pcre.backtrack_limit", "5000000");
         $template = new Template();
         $pdf = new Mpdf();
 
