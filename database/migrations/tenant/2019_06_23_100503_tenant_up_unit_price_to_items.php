@@ -9,13 +9,13 @@ class TenantUpUnitPriceToItems extends Migration
     public function up()
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->decimal('sale_unit_price', 20, 8)->change();
-            $table->decimal('purchase_unit_price', 20, 8)->change();
+            $table->decimal('sale_unit_price', 16, 6)->change();
+            $table->decimal('purchase_unit_price', 16, 6)->change();
         });
 
         Schema::table('document_items', function (Blueprint $table) {
-            $table->decimal('unit_price', 20, 8)->change();
-            $table->decimal('unit_value', 20, 8)->change();
+            $table->decimal('unit_price', 16, 6)->change();
+            $table->decimal('unit_value', 16, 6)->change();
         });
     }
 
