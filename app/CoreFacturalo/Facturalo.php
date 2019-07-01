@@ -189,14 +189,16 @@ class Facturalo
         ]);
     }
 
-    public function updateSoap($soap_type_id)
+    public function updateSoap($soap_type_id, $type)
     {
         $this->document->update([
             'soap_type_id' => $soap_type_id
         ]);
-        $invoice = Invoice::where('document_id', $this->document->id)->first();
-        $invoice->date_of_due = $this->document->date_of_issue;
-        $invoice->save();
+        if($type === 'invoice') {
+            $invoice = Invoice::where('document_id', $this->document->id)->first();
+            $invoice->date_of_due = $this->document->date_of_issue;
+            $invoice->save();
+        }
     }
 
     public function updateStateDocuments($state_type_id)
@@ -237,6 +239,7 @@ class Facturalo
     }
 
     public function createPdf($document = null, $type = null, $format = null) {
+        ini_set("pcre.backtrack_limit", "5000000");
         $template = new Template();
         $pdf = new Mpdf();
 
@@ -250,7 +253,9 @@ class Facturalo
 
         $html = $template->pdf($base_pdf_template, $this->type, $this->company, $this->document, $format_pdf);
 
-        if ($format_pdf === 'ticket') {
+        if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58')) {
+
+            $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
 
             $company_name      = (strlen($this->company->name) / 20) * 10;
             $company_address   = (strlen($this->document->establishment->address) / 30) * 10;
@@ -276,7 +281,7 @@ class Facturalo
             $pdf = new Mpdf([
                 'mode' => 'utf-8',
                 'format' => [
-                    78,
+                    $width,
                     120 +
                     ($quantity_rows * 8) +
                     ($discount_global * 3) +
@@ -338,7 +343,7 @@ class Facturalo
         $pdf->WriteHTML($stylesheet, HTMLParserMode::HEADER_CSS);
         $pdf->WriteHTML($html, HTMLParserMode::HTML_BODY);
 
-        if ($format_pdf != 'ticket') {
+        if (($format_pdf != 'ticket') AND ($format_pdf != 'ticket_58')) {
             if(config('tenant.pdf_template_footer')) {
                 $html_footer = $template->pdfFooter($base_pdf_template);
                 $pdf->SetHTMLFooter($html_footer);

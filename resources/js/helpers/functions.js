@@ -12,14 +12,15 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
     if (currency_type_id_old === 'PEN' && currency_type_id_old !== currency_type_id_new)
     {
-        unit_price = _.round(unit_price / exchange_rate_sale, 2)
+        unit_price = unit_price / exchange_rate_sale;
     }
 
     if (currency_type_id_new === 'PEN' && currency_type_id_old !== currency_type_id_new)
     {
-        unit_price = _.round(unit_price * exchange_rate_sale, 2)
+        unit_price = unit_price * exchange_rate_sale;
     }
 
+    // unit_price = _.round(unit_price, 4);
 
     // $table->increments('id');
     // $table->unsignedInteger('document_id');
@@ -91,7 +92,9 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         unit_value = row.unit_price / (1 + percentage_igv / 100)
     }
 
-    row.unit_value = _.round(unit_value, 2)
+    // row.unit_value = _.round(unit_value, 4)
+
+    row.unit_value = unit_value
 
     let total_value_partial = unit_value * row.quantity
 

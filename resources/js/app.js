@@ -38,8 +38,8 @@ Vue.component('tenant-configurations-form', require('./views/tenant/configuratio
 Vue.component('tenant-bank_accounts-index', require('./views/tenant/bank_accounts/index.vue'));
 Vue.component('tenant-items-index', require('./views/tenant/items/index.vue'));
 Vue.component('tenant-persons-index', require('./views/tenant/persons/index.vue'));
-Vue.component('tenant-customers-index', require('./views/tenant/customers/index.vue'));
-Vue.component('tenant-suppliers-index', require('./views/tenant/suppliers/index.vue'));
+// Vue.component('tenant-customers-index', require('./views/tenant/customers/index.vue'));
+// Vue.component('tenant-suppliers-index', require('./views/tenant/suppliers/index.vue'));
 Vue.component('tenant-users-form', require('./views/tenant/users/form.vue'));
 Vue.component('tenant-documents-index', require('./views/tenant/documents/index.vue'));
 Vue.component('tenant-documents-invoice', require('./views/tenant/documents/invoice.vue'));
@@ -91,6 +91,9 @@ Vue.component('system-users-form', require('./views/system/users/form.vue'));
 
 Vue.component('system-plans-index', require('./views/system/plans/index.vue'));
 Vue.component('system-plans-form', require('./views/system/plans/form.vue'));
+
+
+Vue.component('tenant-accounting-export', require('./views/tenant/accounting/export.vue'));
 
 const app = new Vue({
     el: '#main-wrapper'

@@ -146,7 +146,7 @@
         <th class="text-center py-2" width="8%">UM</th>
         <th class="text-left py-2">DESCRIPCIÓN</th>
         <th class="text-right py-2" width="10%">P.UNIT</th>
-        <th class="text-right py-2" width="10%">DTO.</th>
+        <th class="text-right py-2" width="8%">DTO.</th>
         <th class="text-right py-2" width="10%">TOTAL</th>
     </tr>
     <tbody>

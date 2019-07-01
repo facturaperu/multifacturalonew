@@ -32,6 +32,7 @@ class Item extends ModelTenant
 
         'stock',
         'stock_min',
+        'percentage_of_profit',
 
         'attributes',
         // 'warehouse_id'

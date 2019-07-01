@@ -180,7 +180,7 @@
                                                     <td>
                                                         <el-select v-model="row.attribute_type_id" filterable @change="changeAttributeType(index)">
                                                             <el-option v-for="option in attribute_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                                                        </el-select>
+                             7                           </el-select>
                                                     </td>
                                                     <td>
                                                         <el-input v-model="row.value"></el-input>

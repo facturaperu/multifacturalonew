@@ -64,7 +64,8 @@ class DocumentController extends Controller
 
     public function records(Request $request)
     {
-        $series = Series::select('number')->where('contingency', false)->get();
+//        $series = Series::select('number')->where('contingency', false)->get();
+        $series = Series::select('number')->get();
 
         $records = Document::where($request->column, 'like', "%{$request->value}%")
                             ->whereIn('series',$series)
@@ -113,7 +114,15 @@ class DocumentController extends Controller
     {
         $customers = $this->table('customers');
         $establishments = Establishment::where('id', auth()->user()->establishment_id)->get();// Establishment::all();
-        $series = Series::all();
+        $series = collect(Series::all())->transform(function($row) {
+            return [
+                'id' => $row->id,
+                'contingency' => (bool) $row->contingency,
+                'document_type_id' => $row->document_type_id,
+                'establishment_id' => $row->establishment_id,
+                'number' => $row->number
+            ];
+        });
         $document_types_invoice = DocumentType::whereIn('id', ['01', '03'])->get();
         $document_types_note = DocumentType::whereIn('id', ['07', '08'])->get();
         $note_credit_types = NoteCreditType::whereActive()->orderByDescription()->get();
@@ -256,16 +265,25 @@ class DocumentController extends Controller
     {
         $fact = DB::connection('tenant')->transaction(function () use ($document_id) {
             $document = Document::find($document_id);
+
+            $type = 'invoice';
+            if($document->document_type_id === '07') {
+                $type = 'credit';
+            }
+            if($document->document_type_id === '08') {
+                $type = 'debit';
+            }
+
             $facturalo = new Facturalo();
             $facturalo->setDocument($document);
-            $facturalo->setType('invoice');
+            $facturalo->setType($type);
             $facturalo->createXmlUnsigned();
             $facturalo->signXmlUnsigned();
             $facturalo->updateHash();
             $facturalo->updateQr();
-            $facturalo->updateSoap('02');
+            $facturalo->updateSoap('02', $type);
             $facturalo->updateState('01');
-            $facturalo->createPdf($document, 'invoice', 'ticket');
+            $facturalo->createPdf($document, $type, 'ticket');
 //            $facturalo->senderXmlSignedBill();
         });
 
@@ -424,5 +442,19 @@ class DocumentController extends Controller
         } 
 
         return $identity_document_type_id;
+    }
+
+    public function changeToRegisteredStatus($document_id)
+    {
+        $document = Document::find($document_id);
+        if($document->state_type_id === '01') {
+            $document->state_type_id = '05';
+            $document->save();
+
+            return [
+                'success' => true,
+                'message' => 'El estado del documento fue actualizado.',
+            ];
+        }
     }
 }

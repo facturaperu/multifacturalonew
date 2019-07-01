@@ -17,4 +17,7 @@ return [
     'pdf_template_footer' => env('PDF_TEMPLATE_FOOTER', false),
     'pdf_name_regular' => env('PDF_NAME_REGULAR', false),
     'pdf_name_bold' => env('PDF_NAME_BOLD', false),
+    'change_to_registered_status' => env('CHANGE_TO_REGISTERED_STATUS', false),
+    'customer_multi_address' => env('CUSTOMER_MULTI_ADDRESS', false),
+
 ];

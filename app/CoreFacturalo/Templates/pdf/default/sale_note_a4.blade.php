@@ -64,6 +64,17 @@
         </td>
     </tr>
     @endif
+    @if ($document->total_canceled)
+    <tr>
+        <td class="align-top">Estado:</td>
+        <td colspan="3">CANCELADO</td>
+    </tr>
+    @else
+    <tr>
+        <td class="align-top">Estado:</td>
+        <td colspan="3">PENDIENTE DE PAGO</td>
+    </tr>
+    @endif
 </table>
 
 @if ($document->guides)

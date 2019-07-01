@@ -22,6 +22,7 @@
                         <th class="text-right">T.Gravado</th>
                         <th class="text-right">T.Igv</th>
                         <th class="text-right">Total</th>
+                        <th class="text-center"></th>
                         <th class="text-center">Descargas</th> 
                     <tr>
                     <tr slot-scope="{ index, row }">
@@ -35,6 +36,10 @@
                         <td class="text-right">{{ row.total_taxed }}</td>
                         <td class="text-right">{{ row.total_igv }}</td>
                         <td class="text-right">{{ row.total }}</td>
+                        <td class="text-center">
+                            <button type="button" style="min-width: 41px" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
+                                    @click.prevent="clickPayment(row.id)">Pagos</button>
+                        </td>
                         <td class="text-right">
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
                                     @click.prevent="clickDownload(row.external_id)">PDF</button>
@@ -44,21 +49,25 @@
                     </tr>
                 </data-table>
             </div>
- 
- 
         </div>
+
+        <sale-note-payments :showDialog.sync="showDialogPayments"
+                            :documentId="recordId"></sale-note-payments>
+
     </div>
 </template>
 
 <script>
   
     import DataTable from '../../../components/DataTable.vue'
+    import SaleNotePayments from './partials/payments.vue'
 
     export default { 
-        components: {DataTable},
+        components: {DataTable, SaleNotePayments},
         data() {
             return { 
                 resource: 'sale-notes',
+                showDialogPayments: false,
                 recordId: null,
                 showDialogOptions: false
             }
@@ -73,6 +82,10 @@
                 this.recordId = recordId
                 this.showDialogOptions = true
             },
+            clickPayment(recordId) {
+                this.recordId = recordId;
+                this.showDialogPayments = true;
+            }
         }
     }
 </script>

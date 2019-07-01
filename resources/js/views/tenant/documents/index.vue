@@ -41,6 +41,7 @@
                         <th class="text-right">T.Gravado</th>
                         <th class="text-right">T.Igv</th>
                         <th class="text-right">Total</th>
+                        <th class="text-center"></th>
                         <th class="text-center">Descargas</th>
                         <!--<th class="text-center">Anulación</th>-->
                         <th class="text-right" v-if="typeUser != 'integrator'">Acciones</th>
@@ -76,6 +77,10 @@
                         <td class="text-right">{{ row.total }}</td>
                         <td class="text-center">
                             <button type="button" style="min-width: 41px" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
+                                    @click.prevent="clickPayment(row.id)">Pagos</button>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" style="min-width: 41px" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickDownload(row.download_xml)"
                                     v-if="row.has_xml">XML</button>
                             <button type="button" style="min-width: 41px" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
@@ -98,6 +103,9 @@
                         <!--</td>-->
 
                         <td class="text-right" v-if="typeUser != 'integrator'">
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
+                                    @click.prevent="clickChangeToRegisteredStatus(row.id)"
+                                    v-if="row.btn_change_to_registered_status">Cambiar a estado registrado</button>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info m-1__2"
                                     @click.prevent="clickReStore(row.id)"
                                     v-if="row.btn_recreate_document">Volver a recrear</button>
@@ -128,6 +136,9 @@
             <document-options :showDialog.sync="showDialogOptions"
                               :recordId="recordId"
                               :showClose="true"></document-options>
+
+            <document-payments :showDialog.sync="showDialogPayments"
+                               :documentId="recordId"></document-payments>
         </div>
     </div>
 </template>
@@ -136,17 +147,19 @@
 
     import DocumentsVoided from './partials/voided.vue'
     import DocumentOptions from './partials/options.vue'
+    import DocumentPayments from './partials/payments.vue'
     import DataTable from '../../../components/DataTable.vue'
 
     export default {
         props: ['isClient','typeUser'],
-        components: {DocumentsVoided, DocumentOptions, DataTable},
+        components: {DocumentsVoided, DocumentOptions, DocumentPayments, DataTable},
         data() {
             return {
                 showDialogVoided: false,
                 resource: 'documents',
                 recordId: null,
                 showDialogOptions: false,
+                showDialogPayments: false,
                 columns: {
                     user_name: {
                         title: 'Usuario',
@@ -254,6 +267,24 @@
                 if ((row.shipping_status) || (row.sunat_shipping_status) || (row.query_status)) return true;
                 
                 return false;
+            },
+            clickPayment(recordId) {
+                this.recordId = recordId;
+                this.showDialogPayments = true;
+            },
+            clickChangeToRegisteredStatus(document_id) {
+                this.$http.get(`/${this.resource}/change_to_registered_status/${document_id}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            this.$message.success(response.data.message)
+                            this.$eventHub.$emit('reloadData')
+                        } else {
+                            this.$message.error(response.data.message)
+                        }
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data.message)
+                    })
             }
         }
     }

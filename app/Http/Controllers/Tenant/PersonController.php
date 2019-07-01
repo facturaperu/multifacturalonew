@@ -52,8 +52,9 @@ class PersonController extends Controller
         $provinces = Province::whereActive()->orderByDescription()->get();
         $districts = District::whereActive()->orderByDescription()->get();
         $identity_document_types = IdentityDocumentType::whereActive()->get();
+        $locations = $this->getLocationCascade();
 
-        return compact('countries', 'departments', 'provinces', 'districts', 'identity_document_types');
+        return compact('countries', 'departments', 'provinces', 'districts', 'identity_document_types', 'locations');
     }
 
     public function record($id)
@@ -69,6 +70,11 @@ class PersonController extends Controller
         $person = Person::firstOrNew(['id' => $id]);
         $person->fill($request->all());
         $person->save();
+
+        foreach ($request->input('more_address') as $row)
+        {
+            $person->more_address()->create($row);
+        }
 
         return [
             'success' => true,
@@ -111,5 +117,38 @@ class PersonController extends Controller
             'success' => false,
             'message' =>  __('app.actions.upload.error'),
         ];
+    }
+
+    public function getLocationCascade()
+    {
+        $locations = [];
+        $departments = Department::where('active', true)->get();
+        foreach ($departments as $department)
+        {
+            $children_provinces = [];
+            foreach ($department->provinces as $province)
+            {
+                $children_districts = [];
+                foreach ($province->districts as $district)
+                {
+                    $children_districts[] = [
+                        'value' => $district->id,
+                        'label' => $district->description
+                    ];
+                }
+                $children_provinces[] = [
+                    'value' => $province->id,
+                    'label' => $province->description,
+                    'children' => $children_districts
+                ];
+            }
+            $locations[] = [
+                'value' => $department->id,
+                'label' => $department->description,
+                'children' => $children_provinces
+            ];
+        }
+
+        return $locations;
     }
 }

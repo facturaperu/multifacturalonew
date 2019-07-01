@@ -148,8 +148,17 @@ if ($hostname) {
             Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
             Route::get('documents/re_store/{document}', 'Tenant\DocumentController@reStore');
 
+           Route::get('document_payments/records/{document_id}', 'Tenant\DocumentPaymentController@records');
+           Route::get('document_payments/document/{document_id}', 'Tenant\DocumentPaymentController@document');
+           Route::get('document_payments/tables', 'Tenant\DocumentPaymentController@tables');
+           Route::post('document_payments', 'Tenant\DocumentPaymentController@store');
+           Route::delete('document_payments/{document_payment}', 'Tenant\DocumentPaymentController@destroy');
+
             Route::get('documents/send_server/{document}/{query?}', 'Tenant\DocumentController@sendServer');
             Route::get('documents/check_server/{document}', 'Tenant\DocumentController@checkServer');
+            Route::get('documents/change_to_registered_status/{document}', 'Tenant\DocumentController@changeToRegisteredStatus');
+
+
 
             //Contingencies
             Route::get('contingencies', 'Tenant\ContingencyController@index')->name('tenant.contingencies.index');
@@ -335,6 +344,16 @@ if ($hostname) {
             Route::get('sale-notes/search/customers', 'Tenant\SaleNoteController@searchCustomers');
             Route::get('sale-notes/search/customer/{id}', 'Tenant\SaleNoteController@searchCustomerById');
 
+           Route::get('sale-notes/recreate_pdf/{sale_note}', 'Tenant\SaleNoteController@recreatePdf');
+
+           Route::get('sale_note_payments/records/{sale_note}', 'Tenant\SaleNotePaymentController@records');
+           Route::get('sale_note_payments/document/{sale_note}', 'Tenant\SaleNotePaymentController@document');
+           Route::get('sale_note_payments/tables', 'Tenant\SaleNotePaymentController@tables');
+           Route::post('sale_note_payments', 'Tenant\SaleNotePaymentController@store');
+           Route::delete('sale_note_payments/{sale_note_payment}', 'Tenant\SaleNotePaymentController@destroy');
+
+           Route::get('accounting', 'Tenant\AccountingController@index')->name('tenant.accounting.index');
+           Route::get('accounting/download', 'Tenant\AccountingController@download');
         });
     });
 } else {

@@ -7,6 +7,11 @@
             <form autocomplete="off" @submit.prevent="submit">
                 <div class="form-body">
                     <div class="row">
+                        <div class="col-md-12 text-right">
+                            <el-checkbox v-model="is_contingency" @change="changeDocumentType">¿Es comprobante de contigencia?</el-checkbox>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-2">
                             <div class="form-group" :class="{'has-danger': errors.document_type_id}">
                                 <label class="control-label">Tipo comprobante</label>
@@ -88,14 +93,14 @@
                                 <small class="form-control-feedback" v-if="errors.date_of_issue" v-text="errors.date_of_issue[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-md-2">
                             <div class="form-group" :class="{'has-danger': errors.purchase_order}">
                                 <label class="control-label">Orden Compra</label>
                                 <el-input v-model="form.purchase_order"></el-input>
                                 <small class="form-control-feedback" v-if="errors.purchase_order" v-text="errors.purchase_order[0]"></small>
                             </div>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-md-2">
                             <div class="form-group" :class="{'has-danger': errors.exchange_rate_sale}">
                                 <label class="control-label">Tipo de cambio
                                     <el-tooltip class="item" effect="dark" content="Tipo de cambio del día, extraído de SUNAT" placement="top-end">
@@ -209,6 +214,7 @@
                 note_debit_types: [],
                 user: {},
                 operation_types: [],
+                is_contingency: false,
             }
         },
         created() {
@@ -287,11 +293,18 @@
             changeDocumentType() {
                 this.form.note_credit_or_debit_type_id = null
                 this.form.series_id = null
-                let document_type = _.find(this.document_types, {id: this.form.document_type_id})
-                let firstChar = (this.document.group_id === '01')?'F':'B'
-                this.series = _.filter(this.all_series, (s) =>{
-                    return (s.document_type_id === document_type.id && s.number.substr(0, 1) === firstChar)
-                })
+                if(this.is_contingency) {
+                    this.series = _.filter(this.all_series, {'document_type_id': this.form.document_type_id,
+                                                             'contingency': this.is_contingency});
+                } else {
+                    let document_type = _.find(this.document_types, {id: this.form.document_type_id})
+                    let firstChar = (this.document.group_id === '01')?'F':'B'
+                    this.series = _.filter(this.all_series, (s) =>{
+                        return (s.document_type_id === document_type.id && s.number.substr(0, 1) === firstChar)
+                    });
+                }
+
+
                 this.form.series_id = (this.series.length > 0)?this.series[0].id:null
             },
             changeDateOfIssue() {

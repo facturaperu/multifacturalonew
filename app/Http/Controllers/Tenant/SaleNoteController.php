@@ -29,6 +29,9 @@ use App\CoreFacturalo\Requests\Inputs\Common\EstablishmentInput;
 use App\CoreFacturalo\Helpers\Storage\StorageDocument;
 use App\CoreFacturalo\Template;
 use Mpdf\Mpdf;
+use Mpdf\HTMLParserMode;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
 
 class SaleNoteController extends Controller
 {
@@ -165,6 +168,12 @@ class SaleNoteController extends Controller
         return $inputs->all();
     }
 
+//    public function recreatePdf($sale_note_id)
+//    {
+//        $this->sale_note = SaleNote::find($sale_note_id);
+//        $this->createPdf();
+//    }
+
     private function setFilename(){
         
         $name = [$this->sale_note->prefix,$this->sale_note->id,date('Ymd')];
@@ -178,9 +187,53 @@ class SaleNoteController extends Controller
         $template = new Template();
         $pdf = new Mpdf();   
         $document = $this->sale_note;
+
+        $base_template = config('tenant.pdf_template');
         
-        $html = $template->pdf("sale_note", $this->company, $document,"a4");
-        $pdf->WriteHTML($html); 
+        $html = $template->pdf($base_template, "sale_note", $this->company, $document,"a4");
+
+        $pdf_font_regular = config('tenant.pdf_name_regular');
+        $pdf_font_bold = config('tenant.pdf_name_bold');
+
+        if ($pdf_font_regular != false) {
+            $defaultConfig = (new ConfigVariables())->getDefaults();
+            $fontDirs = $defaultConfig['fontDir'];
+
+            $defaultFontConfig = (new FontVariables())->getDefaults();
+            $fontData = $defaultFontConfig['fontdata'];
+
+            $pdf = new Mpdf([
+                'fontDir' => array_merge($fontDirs, [
+                    app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.
+                                             DIRECTORY_SEPARATOR.'pdf'.
+                                             DIRECTORY_SEPARATOR.$base_template.
+                                             DIRECTORY_SEPARATOR.'font')
+                ]),
+                'fontdata' => $fontData + [
+                    'custom_bold' => [
+                        'R' => $pdf_font_bold.'.ttf',
+                    ],
+                    'custom_regular' => [
+                        'R' => $pdf_font_regular.'.ttf',
+                    ],
+                ]
+            ]);
+        }
+
+        $path_css = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.
+                                             DIRECTORY_SEPARATOR.'pdf'.
+                                             DIRECTORY_SEPARATOR.$base_template.
+                                             DIRECTORY_SEPARATOR.'style.css');
+
+        $stylesheet = file_get_contents($path_css);
+
+        $pdf->WriteHTML($stylesheet, HTMLParserMode::HEADER_CSS);
+        $pdf->WriteHTML($html, HTMLParserMode::HTML_BODY);
+
+        if(config('tenant.pdf_template_footer')) {
+            $html_footer = $template->pdfFooter($base_template);
+            $pdf->SetHTMLFooter($html_footer);
+        } 
        
         $this->uploadFile($pdf->output('', 'S'), 'sale_note');
     }
