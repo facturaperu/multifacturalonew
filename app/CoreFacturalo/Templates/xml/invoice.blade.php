@@ -2,6 +2,7 @@
     $invoice = $document->invoice;
     $establishment = $document->establishment;
     $customer = $document->customer;
+    $customer_address = $document->customer_address;
 @endphp
 {!! '<?xml version="1.0" encoding="utf-8" standalone="no"?>' !!}
 <Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
@@ -125,30 +126,30 @@
             </cac:PartyIdentification>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName><![CDATA[{{ $customer->name }}]]></cbc:RegistrationName>
-                @if($customer->address)
+                @if($customer_address->address)
                 <cac:RegistrationAddress>
-                    @if($customer->district_id)
-                    <cbc:ID>{{ $customer->district_id }}</cbc:ID>
+                    @if($customer_address->location_id)
+                    <cbc:ID>{{ $customer_address->location_id }}</cbc:ID>
                     @endif
                     <cac:AddressLine>
-                        <cbc:Line><![CDATA[{{ $customer->address }}]]></cbc:Line>
+                        <cbc:Line><![CDATA[{{ $customer_address->address }}]]></cbc:Line>
                     </cac:AddressLine>
                     <cac:Country>
-                        <cbc:IdentificationCode>{{ $customer->country_id }}</cbc:IdentificationCode>
+                        <cbc:IdentificationCode>{{ $customer_address->country_id }}</cbc:IdentificationCode>
                     </cac:Country>
                 </cac:RegistrationAddress>
                 @endif
             </cac:PartyLegalEntity>
-            @if($customer->email || $customer->telephone)
-            <cac:Contact>
-                @if($customer->telephone)
-                <cbc:Telephone>{{ $customer->telephone }}</cbc:Telephone>
-                @endif
-                @if($customer->email)
-                <cbc:ElectronicMail>{{ $customer->email }}</cbc:ElectronicMail>
-                @endif
-            </cac:Contact>
-            @endif
+            {{--@if($customer->email || $customer->telephone)--}}
+            {{--<cac:Contact>--}}
+                {{--@if($customer->telephone)--}}
+                {{--<cbc:Telephone>{{ $customer->telephone }}</cbc:Telephone>--}}
+                {{--@endif--}}
+                {{--@if($customer->email)--}}
+                {{--<cbc:ElectronicMail>{{ $customer->email }}</cbc:ElectronicMail>--}}
+                {{--@endif--}}
+            {{--</cac:Contact>--}}
+            {{--@endif--}}
         </cac:Party>
     </cac:AccountingCustomerParty>
     @if($document->detraction)

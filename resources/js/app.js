@@ -28,6 +28,14 @@ Vue.prototype.$http = Axios
 // Vue.component('table-component', TableComponent);
 // Vue.component('table-column', TableColumn);
 
+/*
+ * Components
+ */
+Vue.component('x-input-service', require('./components/form/src/InputService.vue'));
+
+/*
+ * Tenant
+ */
 Vue.component('tenant-companies-form', require('./views/tenant/companies/form.vue'));
 Vue.component('tenant-companies-logo', require('./views/tenant/companies/logo.vue'));
 Vue.component('tenant-certificates-index', require('./views/tenant/certificates/index.vue'));

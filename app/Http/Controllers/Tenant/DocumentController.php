@@ -172,14 +172,15 @@ class DocumentController extends Controller
     public function table($table)
     {
         if ($table === 'customers') {
-            $customers = Person::whereType('customers')->orderBy('name')->take(20)->get()->transform(function($row) {
+            $customers = Person::with('addresses')->whereType('customers')->orderBy('name')->take(20)->get()->transform(function($row) {
                 return [
                     'id' => $row->id,
                     'description' => $row->number.' - '.$row->name,
                     'name' => $row->name,
                     'number' => $row->number,
                     'identity_document_type_id' => $row->identity_document_type_id,
-                    'identity_document_type_code' => $row->identity_document_type->code
+                    'identity_document_type_code' => $row->identity_document_type->code,
+                    'addresses' => $row->addresses
                 ];
             });
             return $customers;
@@ -413,7 +414,7 @@ class DocumentController extends Controller
     public function searchCustomerById($id)
     {        
    
-        $customers = Person::whereType('customers')
+        $customers = Person::with('addresses')->whereType('customers')
                     ->where('id',$id) 
                     ->get()->transform(function($row) {
                         return [
@@ -422,7 +423,8 @@ class DocumentController extends Controller
                             'name' => $row->name,
                             'number' => $row->number,
                             'identity_document_type_id' => $row->identity_document_type_id,
-                            'identity_document_type_code' => $row->identity_document_type->code
+                            'identity_document_type_code' => $row->identity_document_type->code,
+                            'addresses' => $row->addresses,
                         ];
                     }); 
 

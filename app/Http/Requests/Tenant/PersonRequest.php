@@ -34,25 +34,25 @@ class PersonRequest extends FormRequest
             'identity_document_type_id' => [
                 'required',
             ],
-            'country_id' => [
-                'required',
-            ],
-            'department_id' => [
-                'required_if:identity_document_type_id,"066"',
-            ],
-            'province_id' => [
-                'required_if:identity_document_type_id,"066"',
-            ],
-            'district_id' => [
-                'required_if:identity_document_type_id,"066"',
-            ],
-            'address' => [
-                'required_if:identity_document_type_id,"066"',
-            ],
-            'email' => [
-                'nullable',
-                'email',
-            ]
+//            'country_id' => [
+//                'required',
+//            ],
+//            'department_id' => [
+//                'required_if:identity_document_type_id,"066"',
+//            ],
+//            'province_id' => [
+//                'required_if:identity_document_type_id,"066"',
+//            ],
+//            'district_id' => [
+//                'required_if:identity_document_type_id,"066"',
+//            ],
+//            'address' => [
+//                'required_if:identity_document_type_id,"066"',
+//            ],
+//            'email' => [
+//                'nullable',
+//                'email',
+//            ]
         ];
     }
 }

@@ -14,6 +14,7 @@ use App\CoreFacturalo\WS\Services\SummarySender;
 use App\CoreFacturalo\WS\Services\SunatEndpoints;
 use App\CoreFacturalo\WS\Signed\XmlSigned;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
+use App\Models\Tenant\Catalogs\District;
 use App\Models\Tenant\Company;
 use App\Mail\Tenant\DocumentEmail;
 use App\Models\Tenant\Invoice;
@@ -352,6 +353,29 @@ class Facturalo
 //            $pdf->SetHTMLFooter($html_footer);
         }
         $this->uploadFile($pdf->output('', 'S'), 'pdf');
+    }
+
+    public static function getLocationFullName($location_id, $address)
+    {
+        if(is_null($location_id)) {
+            return null;
+        }
+
+        $district = District::with('province')->find($location_id);
+        $department_name = strtoupper($district->province->department->description);
+        $province_name = strtoupper($district->province->description);
+        $district_name = strtoupper($district->description);
+        $location_full_name = $department_name.' - '.$province_name.' - '.$district_name;
+
+        return [
+            'department' => $department_name,
+            'province' => $province_name,
+            'district' => $district_name,
+            'location_id' => $location_id,
+            'location_full' => $location_full_name,
+            'address' => $address,
+            'address_full' => $address.', '.$location_full_name,
+        ];
     }
 
     public function loadXmlSigned()

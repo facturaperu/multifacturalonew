@@ -14,6 +14,7 @@
         $affected_document_number = null;
     }
 
+    $customer_address = $document->customer_address;
 
 @endphp
 <html>
@@ -78,15 +79,15 @@
         <td>:</td>
         <td>{{$customer->number}}</td>
     </tr>
-    @if ($customer->address !== '')
+    @if ($customer_address->address)
+    @php
+        $customer_location = App\CoreFacturalo\Facturalo::getLocationFullName($customer_address->location_id, $customer_address->address);
+    @endphp
     <tr>
         <td class="align-top">DIRECCIÓN:</td>
         <td>:</td>
         <td>
-            {{ $customer->address }}
-            {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
-            {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
-            {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+            {{ $customer_location['address_full'] }}
         </td>
     </tr>
     @endif

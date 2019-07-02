@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant\Person;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Excel;
 
 class PersonController extends Controller
@@ -67,19 +68,38 @@ class PersonController extends Controller
     public function store(PersonRequest $request)
     {
         $id = $request->input('id');
-        $person = Person::firstOrNew(['id' => $id]);
-        $person->fill($request->all());
-        $person->save();
 
-        foreach ($request->input('more_address') as $row)
-        {
-            $person->more_address()->create($row);
-        }
+        $person_id = DB::connection('tenant')->transaction(function () use ($request, $id) {
+            $person = Person::firstOrNew(['id' => $id]);
+            $person->fill($request->all());
+            $person->save();
+
+            $person->addresses()->delete();
+            $addresses = $request->input('addresses');
+            foreach ($addresses as $row)
+            {
+                $person->addresses()->updateOrCreate(
+                    ['id' => $row['id']],
+                    $row);
+            }
+
+            return $person->id;
+        });
+
+//        $id = $request->input('id');
+//        $person = Person::firstOrNew(['id' => $id]);
+//        $person->fill($request->all());
+//        $person->save();
+//
+//        foreach ($request->input('more_address') as $row)
+//        {
+//            $person->more_address()->create($row);
+//        }
 
         return [
             'success' => true,
             'message' => ($id)?'Cliente editado con éxito':'Cliente registrado con éxito',
-            'id' => $person->id
+            'id' => $person_id
         ];
     }
 

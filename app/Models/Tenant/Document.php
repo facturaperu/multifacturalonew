@@ -25,6 +25,7 @@ class Document extends ModelTenant
         'time_of_issue',
         'customer_id',
         'customer',
+        'customer_address',
         'currency_type_id',
         'purchase_order',
         'quotation_id',
@@ -70,6 +71,16 @@ class Document extends ModelTenant
     protected $casts = [
         'date_of_issue' => 'date',
     ];
+
+    public function getCustomerAddressAttribute($value)
+    {
+        return (is_null($value))?null:(object) json_decode($value);
+    }
+
+    public function setCustomerAddressAttribute($value)
+    {
+        $this->attributes['customer_address'] = (is_null($value))?null:json_encode($value);
+    }
 
     public function getEstablishmentAttribute($value)
     {

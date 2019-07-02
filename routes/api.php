@@ -12,8 +12,8 @@ if ($hostname) {
             Route::post('documents/send', 'Tenant\Api\DocumentController@send');
             Route::post('summaries/status', 'Tenant\Api\SummaryController@status');
             Route::post('voided/status', 'Tenant\Api\VoidedController@status');
-            Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
-            Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
+//            Route::get('services/ruc/{number}', 'Tenant\Api\ServiceController@ruc');
+//            Route::get('services/dni/{number}', 'Tenant\Api\ServiceController@dni');
             Route::post('services/consult_cdr_status', 'Tenant\Api\ServiceController@consultCdrStatus');
 
             Route::post('documents_server', 'Tenant\Api\DocumentController@storeServer');

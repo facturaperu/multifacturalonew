@@ -21,13 +21,18 @@ class PersonResource extends JsonResource
             'number' => $this->number,
             'name' => $this->name,
             'trade_name' => $this->trade_name,
-            'country_id' => $this->country_id,
-            'department_id' => $this->department_id,
-            'province_id' => $this->province_id,
-            'district_id' => $this->district_id,
-            'address' => $this->address,
-            'telephone' => $this->telephone,
-            'email' => $this->email,
+            'addresses' => collect($this->addresses)->transform(function ($row) {
+                return [
+                    'id' => $row->id,
+                    'trade_name' => $row->trade_name,
+                    'country_id' => $row->country_id,
+                    'location_id' => !is_null($row->location_id)?$row->location_id:[],
+                    'address' => $row->address,
+                    'phone' => $row->phone,
+                    'email' => $row->email,
+                    'main' => (bool)$row->main,
+                ];
+            }),
         ];
     }
 }

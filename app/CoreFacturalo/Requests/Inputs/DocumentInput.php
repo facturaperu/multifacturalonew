@@ -10,6 +10,7 @@ use App\Models\Tenant\Catalogs\DocumentType;
 use App\Models\Tenant\Company;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Item;
+use App\Models\Tenant\PersonAddress;
 use Illuminate\Support\Str;
 
 class DocumentInput
@@ -43,6 +44,11 @@ class DocumentInput
         $inputs['type'] = $array_partial['type'];
         $inputs['group_id'] = $array_partial['group_id'];
 
+        $customer_address = PersonAddress::find($inputs['customer_address_id']);
+        $country_id = ($customer_address->country_id)?$customer_address->country_id:null;
+        $location_id = ($customer_address->location_id)?$customer_address->district_id:null;
+        $address = ($customer_address->address)?$customer_address->address:null;
+
         return [
             'type' => $inputs['type'],
             'group_id' => $inputs['group_id'],
@@ -61,6 +67,11 @@ class DocumentInput
             'time_of_issue' => $inputs['time_of_issue'],
             'customer_id' => $inputs['customer_id'],
             'customer' => $customer,
+            'customer_address' => [
+                'country_id' => $country_id,
+                'location_id' => $location_id,
+                'address' => $address,
+            ],
             'currency_type_id' => $inputs['currency_type_id'],
             'purchase_order' => $inputs['purchase_order'],
             'quotation_id' => Functions::valueKeyInArray($inputs, 'quotation_id'),

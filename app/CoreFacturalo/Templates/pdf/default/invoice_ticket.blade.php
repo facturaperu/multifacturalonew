@@ -7,6 +7,7 @@
     $accounts = \App\Models\Tenant\BankAccount::all();
     $document_base = ($document->note) ? $document->note : null;
 
+    $customer_address = $document->customer_address;
 @endphp
 <html>
 <head>
@@ -73,15 +74,15 @@
         <td><p class="desc">{{ $customer->identity_document_type->description }}:</p></td>
         <td><p class="desc">{{ $customer->number }}</p></td>
     </tr>
-    @if ($customer->address !== '')
+    @if ($customer_address->address)
+        @php
+            $customer_location = App\CoreFacturalo\Facturalo::getLocationFullName($customer_address->location_id, $customer_address->address);
+        @endphp
         <tr>
             <td class="align-top"><p class="desc">Dirección:</p></td>
             <td>
                 <p class="desc">
-                    {{ $customer->address }}
-                    {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
-                    {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
-                    {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+                    {{ $customer_location['address_full'] }}
                 </p>
             </td>
         </tr>

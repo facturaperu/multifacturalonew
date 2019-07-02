@@ -86,12 +86,19 @@
                                         dusk="customer_id"                                    
                                         placeholder="Escriba el nombre o número de documento del cliente"
                                         :remote-method="searchRemoteCustomers"
-                                        :loading="loading_search">
-
+                                        :loading="loading_search"
+                                        @change="changeCustomer">
                                         <el-option v-for="option in customers" :key="option.id" :value="option.id" :label="option.description"></el-option>
 
                                     </el-select>
                                     <small class="form-control-feedback" v-if="errors.customer_id" v-text="errors.customer_id[0]"></small>
+                                </div>
+                                <div class="form-group" :class="{'has-danger': errors.customer_address_id}" v-if="customer_addresses.length > 0">
+                                    <label class="control-label font-weight-bold text-info">Dirección</label>
+                                    <el-select v-model="form.customer_address_id">
+                                        <el-option v-for="option in customer_addresses" :key="option.id" :value="option.id" :label="option.address"></el-option>
+                                    </el-select>
+                                    <small class="form-control-feedback" v-if="errors.customer_address_id" v-text="errors.customer_address_id[0]"></small>
                                 </div>
                             </div>
                             <div class="col-lg-2">
@@ -308,6 +315,7 @@
                 loading_search:false,
                 user: {},
                 is_contingency: false,
+                customer_addresses: [],
             }
         },
         async created() {
@@ -354,9 +362,11 @@
 
                     this.$http.get(`/${this.resource}/search/customers?${parameters}`)
                             .then(response => { 
-                                this.customers = response.data.customers
-                                this.loading_search = false
-                                if(this.customers.length == 0){this.filterCustomers()}
+                                this.customers = response.data.customers;
+                                this.loading_search = false;
+                                if(this.customers.length === 0){
+                                    this.filterCustomers()
+                                }
                             })  
                 } else {
                     // this.customers = []
@@ -374,6 +384,7 @@
                     date_of_issue: moment().format('YYYY-MM-DD'),
                     time_of_issue: moment().format('HH:mm:ss'),
                     customer_id: null,
+                    customer_address_id: null,
                     currency_type_id: null,
                     purchase_order: null,
                     exchange_rate_sale: 0,
@@ -569,6 +580,15 @@
                     this.form.customer_id = customer_id
                 })                  
             },
+            changeCustomer() {
+                  this.customer_addresses = [];
+                  let customer = _.find(this.customers, {'id': this.form.customer_id});
+                  this.customer_addresses = customer.addresses;
+                  if(this.customer_addresses.length > 0) {
+                      let address = _.find(this.customer_addresses, {'main' : 1});
+                      this.form.customer_address_id = address.id;
+                  }
+            }
         }
     }
 </script>

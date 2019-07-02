@@ -1,6 +1,6 @@
 <template>
     <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create">
-        <form autocomplete="off" @submit.prevent="submit">
+        <form autocomplete="off" @submit.prevent="submit" v-loading="loading">
             <div class="form-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -15,18 +15,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">Número <span class="text-danger">*</span></label>
-                            <el-input v-model="form.number" :maxlength="maxLength" dusk="number">
-                                <template v-if="form.identity_document_type_id === '6' || form.identity_document_type_id === '1'">
-                                    <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchCustomer">
-                                        <template v-if="form.identity_document_type_id === '6'">
-                                            SUNAT
-                                        </template>
-                                        <template v-if="form.identity_document_type_id === '1'">
-                                            RENIEC
-                                        </template>
-                                    </el-button>
-                                </template>
-                            </el-input>
+                            <x-input-service :identity_document_type_id="form.identity_document_type_id" v-model="form.number" @search="searchNumber"></x-input-service>
                             <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
                         </div>
                     </div>
@@ -47,88 +36,57 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row m-t-10" v-for="(row, index) in form.addresses">
+                    <div class="col-md-12">
+                        <label class="control-label" v-if="index === 0">
+                            Dirección principal
+                        </label>
+                        <label class="control-label" v-else>
+                            Dirección secundaria # {{ index }}
+                            <el-button size="mini" icon="el-icon-minus" @click.prevent="clickRemoveAddress(index)" class="btn-default-danger">Eliminar dirección</el-button>
+                        </label>
+                    </div>
                     <div class="col-md-4">
                         <div class="form-group" :class="{'has-danger': errors.country_id}">
                             <label class="control-label">País</label>
-                            <el-select v-model="form.country_id" filterable dusk="country_id">
+                            <el-select v-model="row.country_id" filterable>
                                 <el-option v-for="option in countries" :key="option.id" :value="option.id" :label="option.description"></el-option>
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.country_id" v-text="errors.country_id[0]"></small>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group" :class="{'has-danger': errors.department_id}">
-                            <label class="control-label">Departamento</label>
-                            <el-select v-model="form.department_id" filterable @change="filterProvince" popper-class="el-select-departments" dusk="department_id">
-                                <el-option v-for="option in all_departments" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                            </el-select>
-                            <small class="form-control-feedback" v-if="errors.department_id" v-text="errors.department_id[0]"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group" :class="{'has-danger': errors.province_id}">
-                            <label class="control-label">Provincia</label>
-                            <el-select v-model="form.province_id" filterable @change="filterDistrict" popper-class="el-select-provinces" dusk="province_id">
-                                <el-option v-for="option in provinces" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                            </el-select>
-                            <small class="form-control-feedback" v-if="errors.province_id" v-text="errors.province_id[0]"></small>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group" :class="{'has-danger': errors.province_id}">
-                            <label class="control-label">Distrito</label>
-                            <el-select v-model="form.district_id" filterable popper-class="el-select-districts" dusk="district_id">
-                                <el-option v-for="option in districts" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                            </el-select>
-                            <small class="form-control-feedback" v-if="errors.district_id" v-text="errors.district_id[0]"></small>
-                        </div>
-                    </div>
                     <div class="col-md-8">
+                        <div class="form-group" :class="{'has-danger': errors.location_id}">
+                            <label class="control-label">Ubigeo</label>
+                            <el-cascader :options="locations" v-model="row.location_id" :clearable="true" filterable></el-cascader>
+                            <small class="form-control-feedback" v-if="errors.location_id" v-text="errors.location_id[0]"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
                         <div class="form-group" :class="{'has-danger': errors.address}">
                             <label class="control-label">Dirección</label>
-                            <el-input v-model="form.address" dusk="address"></el-input>
+                            <el-input v-model="row.address"></el-input>
                             <small class="form-control-feedback" v-if="errors.address" v-text="errors.address[0]"></small>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group" :class="{'has-danger': errors.telephone}">
+                        <div class="form-group" :class="{'has-danger': errors.phone}">
                             <label class="control-label">Teléfono</label>
-                            <el-input v-model="form.telephone" dusk="telephone"></el-input>
-                            <small class="form-control-feedback" v-if="errors.telephone" v-text="errors.telephone[0]"></small>
+                            <el-input v-model="row.phone"></el-input>
+                            <small class="form-control-feedback" v-if="errors.phone" v-text="errors.phone[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.email}">
                             <label class="control-label">Correo electrónico</label>
-                            <el-input v-model="form.email" dusk="email"></el-input>
+                            <el-input v-model="row.email"></el-input>
                             <small class="form-control-feedback" v-if="errors.email" v-text="errors.email[0]"></small>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <a href="#" @click.prevent="clickAddAddress">Agregar otra dirección</a>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="row" v-for="row in form.more_address">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label class="control-label">Ubigeo</label>
-                                    <el-cascader :options="locations" v-model="row.location_id" :clearable="true" filterable></el-cascader>
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <label class="control-label">Dirección</label>
-                                    <el-input v-model="row.address"></el-input>
-                                </div>
-                            </div>
-                        </div>
+                <div class="row m-t-10">
+                    <div class="col-md-12 text-center">
+                        <el-button size="mini" icon="el-icon-plus" @click.prevent="clickAddAddress()">Agregar dirección</el-button>
                     </div>
                 </div>
             </div>
@@ -149,105 +107,105 @@
         props: ['showDialog', 'type', 'recordId', 'external', 'document_type_id'],
         data() {
             return {
+                loading: false,
                 loading_submit: false,
                 titleDialog: null,
                 resource: 'persons',
                 errors: {},
                 form: {},
                 countries: [],
-                all_departments: [],
-                all_provinces: [],
-                all_districts: [],
-                provinces: [],
-                districts: [],
                 locations: [],
                 identity_document_types: []
             }
         },
         created() {
-            this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
-                    this.countries = response.data.countries
-                    this.all_departments = response.data.departments;
-                    this.all_provinces = response.data.provinces;
-                    this.all_districts = response.data.districts;
-                    this.identity_document_types = response.data.identity_document_types;
+                    this.countries = response.data.countries;
                     this.locations = response.data.locations;
+                    this.identity_document_types = response.data.identity_document_types;
                 })
         },
         computed: {
             maxLength: function () {
                 if (this.form.identity_document_type_id === '6') {
-                    return 11
+                    return 11;
                 }
                 if (this.form.identity_document_type_id === '1') {
-                    return 8
+                    return 8;
                 }
             }
         },
         methods: {
             initForm() {
-                this.errors = {}
+                this.errors = {};
                 this.form = {
                     id: null,
                     type: this.type,
                     identity_document_type_id: '6',
-                    number: null,
+                    number: '',
                     name: null,
                     trade_name: null,
-                    country_id: 'PE',
-                    department_id: null,
-                    province_id: null,
-                    district_id: null,
-                    address: null,
-                    telephone: null,
-                    email: null,
-                    more_address: []
+                    addresses: [],
                 }
             },
-            create() {
+            async create() {
+                this.loading = true;
+                this.initForm();
                 if(this.external) {
                     if(this.document_type_id === '01') {
-                        this.form.identity_document_type_id = '6'
+                        this.form.identity_document_type_id = '6';
                     }
                     if(this.document_type_id === '03') {
-                        this.form.identity_document_type_id = '1'
+                        this.form.identity_document_type_id = '1';
                     }
                 }
                 if(this.type === 'customers') {
-                    this.titleDialog = (this.recordId)? 'Editar Cliente':'Nuevo Cliente'
+                    this.titleDialog = (this.recordId)? 'Editar Cliente':'Nuevo Cliente';
                 }
                 if(this.type === 'suppliers') {
-                    this.titleDialog = (this.recordId)? 'Editar Proveedor':'Nuevo Proveedor'
+                    this.titleDialog = (this.recordId)? 'Editar Proveedor':'Nuevo Proveedor';
                 }
                 if (this.recordId) {
-                    this.$http.get(`/${this.resource}/record/${this.recordId}`)
+                    await this.$http.get(`/${this.resource}/record/${this.recordId}`)
                         .then(response => {
-                            this.form = response.data.data
-                            this.filterProvinces()
-                            this.filterDistricts()
+                            this.form = response.data.data;
+                            if (this.form.addresses.length === 0) {
+                                this.clickAddAddress();
+                            }
                         })
+                } else {
+                    this.clickAddAddress();
                 }
+                this.loading = false;
             },
             clickAddAddress() {
-                this.form.more_address.push({
-                    location_id: [],
-                    address: null,
-                })
+                let is_main = (this.form.addresses.length === 0);
+                this.form.addresses.push({
+                    'id': null,
+                    'country_id': 'PE',
+                    'location_id': [],
+                    'address': null,
+                    'email': null,
+                    'phone': null,
+                    'main': is_main,
+                });
+            },
+            clickRemoveAddress(index) {
+                this.form.addresses.splice(index, 1);
             },
             submit() {
-                this.loading_submit = true
+                this.loading_submit = true;
                 this.$http.post(`/${this.resource}`, this.form)
                     .then(response => {
                         if (response.data.success) {
-                            this.$message.success(response.data.message)
+                            this.$message.success(response.data.message);
                             if (this.external) {
-                                this.$eventHub.$emit('reloadDataPersons', response.data.id)
+                                this.$eventHub.$emit('reloadDataPersons', response.data.id);
                             } else {
-                                this.$eventHub.$emit('reloadData')
+                                this.$eventHub.$emit('reloadData');
                             }
-                            this.close()
+                            this.close();
                         } else {
                             this.$message.error(response.data.message)
                         }
@@ -267,23 +225,24 @@
                 (this.recordId == null) ? this.setDataDefaultCustomer() : null 
             },
             setDataDefaultCustomer(){
-
-                if(this.form.identity_document_type_id == '0'){
-                    this.form.number = 99999999
-                    this.form.name = "Clientes - Varios"
+                if(this.form.identity_document_type_id === '0'){
+                    this.form.number = 99999999;
+                    this.form.name = "Clientes - Varios";
                 }else{
-                    this.form.number = null
-                    this.form.name = null
+                    this.form.number = null;
+                    this.form.name = null;
                 }
-
             },
             close() {
-                this.$emit('update:showDialog', false)
-                this.initForm()
+                this.$emit('update:showDialog', false);
             },
-            searchCustomer() {
-                this.searchServiceNumberByType()
-            }
+            searchNumber(data) {
+                this.form.name = data.razon_social;
+                this.form.trade_name = data.nombre_comercial;
+                this.form.addresses[0].location_id = data.ubigeo;
+                this.form.addresses[0].address = data.direccion;
+                this.form.addresses[0].telephone = data.telefono;
+            },
         }
     }
 </script>

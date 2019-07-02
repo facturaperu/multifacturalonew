@@ -121,17 +121,17 @@ export const serviceNumber = {
             this.loading_search = true
             let response = await this.$http.get(`/services/${identity_document_type_name}/${this.form.number}`)
             if(response.data.success) {
-                let data = response.data.data
-                this.form.name = data.name
-                this.form.trade_name = data.trade_name
-                this.form.address = data.address
-                this.form.department_id = data.department_id
-                this.form.province_id = data.province_id
-                this.form.district_id = data.district_id
-                this.form.phone = data.phone
+                let data = response.data.data;
+                this.form.name = data.name;
+                this.form.trade_name = data.trade_name;
+                this.form.address = data.address;
+                this.form.department_id = data.department_id;
+                this.form.province_id = data.province_id;
+                this.form.district_id = data.district_id;
+                this.form.phone = data.phone;
 
-                this.filterProvinces()
-                this.filterDistricts()
+                this.filterProvinces();
+                this.filterDistricts();
 
             } else {
                 this.$message.error(response.data.message)
@@ -143,11 +143,11 @@ export const serviceNumber = {
                 this.$message.error('Ingresar el número a buscar')
                 return
             }
-            this.loading_search = true
+            this.loading_search = true;
             let response = await this.$http.get(`/services/ruc/${this.form.number}`)
             if(response.data.success) {
-                let data = response.data.data
-                this.form.name = data.name
+                let data = response.data.data;
+                this.form.name = data.name;
                 this.form.trade_name = data.trade_name
             } else {
                 this.$message.error(response.data.message)
