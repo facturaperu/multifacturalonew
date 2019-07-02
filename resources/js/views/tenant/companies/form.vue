@@ -55,6 +55,15 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
+                            <div class="form-group" :class="{'has-danger': errors.soap_send_id}">
+                                <label class="control-label">SOAP Envio</label>
+                                <el-select v-model="form.soap_send_id">
+                                    <el-option v-for="(option, index) in soap_sends" :key="index" :value="index" :label="option"></el-option>
+                                </el-select>
+                                <small class="form-control-feedback" v-if="errors.soap_send_id" v-text="errors.soap_send_id[0]"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group" :class="{'has-danger': errors.soap_type_id}">
                                 <label class="control-label">SOAP Tipo</label>
                                 <el-select v-model="form.soap_type_id">
@@ -65,7 +74,7 @@
                         </div>
                     </div>
 
-                    <div v-if="form.soap_type_id == '02'">
+                    <template v-if="form.soap_type_id == '02'">
                         <div class="row" >
                             <div class="col-md-12 mt-2">
                                 <h4 class="border-bottom">Usuario Secundario Sunat</h4>
@@ -86,6 +95,15 @@
                                     <el-input v-model="form.soap_password"></el-input>
                                     <small class="form-control-feedback" v-if="errors.soap_password" v-text="errors.soap_password[0]"></small>
                                 </div>
+                            </div>
+                        </div>
+                    </template>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" :class="{'has-danger': errors.soap_url}">
+                                <label class="control-label">SOAP Url</label>
+                                <el-input v-model="form.soap_url"></el-input>
+                                <small class="form-control-feedback" v-if="errors.soap_url" v-text="errors.soap_url[0]"></small>
                             </div>
                         </div>
                     </div>
@@ -133,9 +151,11 @@
                     number: null,
                     name: null,
                     trade_name: null,
+                    soap_send_id: '01',
                     soap_type_id: '01',
                     soap_username: null,
                     soap_password: null,
+                    soap_url: null,
                     certificate: null,
                     logo: null,
                 }
