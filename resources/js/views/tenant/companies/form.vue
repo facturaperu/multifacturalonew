@@ -73,7 +73,6 @@
                             </div>
                         </div>
                     </div>
-
                     <template v-if="form.soap_type_id == '02'">
                         <div class="row" >
                             <div class="col-md-12 mt-2">
@@ -98,7 +97,7 @@
                             </div>
                         </div>
                     </template>
-                    <div class="row">
+                    <div class="row" v-if="form.soap_send_id == '02'">
                         <div class="col-md-12">
                             <div class="form-group" :class="{'has-danger': errors.soap_url}">
                                 <label class="control-label">SOAP Url</label>
@@ -126,6 +125,7 @@
                 resource: 'companies',
                 errors: {},
                 form: {},
+                soap_sends: [],
                 soap_types: []
             }
         },
@@ -133,6 +133,7 @@
             await this.initForm()
             await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
+                    this.soap_sends = response.data.soap_sends
                     this.soap_types = response.data.soap_types
                 })
             await this.$http.get(`/${this.resource}/record`)

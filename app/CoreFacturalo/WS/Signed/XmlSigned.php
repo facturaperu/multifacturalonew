@@ -14,6 +14,7 @@ use UnexpectedValueException;
  */
 class XmlSigned
 {
+    protected $signatureId = '';
     /* Transform */
     const ENVELOPED = 'http://www.w3.org/2000/09/xmldsig#enveloped-signature';
     const EXT_NS = 'urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2';
@@ -66,6 +67,7 @@ class XmlSigned
     public function signXml($content)
     {
         $doc = $this->getDocXml($content);
+        $this->signatureId = $doc->getElementsByTagName('Signature')->item(0)->getElementsByTagName('ID')->item(0)->nodeValue;
         $this->sign($doc);
 
         return $doc->saveXML();
@@ -222,7 +224,9 @@ class XmlSigned
      */
     protected function createXmlSecurityDSig()
     {
-        return new XMLSecurityDSig();
+        $xmlSecurityDSig = new XMLSecurityDSig();
+        $xmlSecurityDSig->sigNode->setAttribute('Id', $this->signatureId);
+        return $xmlSecurityDSig;
     }
 
     /**

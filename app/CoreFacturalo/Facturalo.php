@@ -42,6 +42,7 @@ class Facturalo
 
     protected $company;
     protected $isDemo;
+    protected $isOse;
     protected $signer;
     protected $wsClient;
     protected $document;
@@ -59,6 +60,7 @@ class Facturalo
     {
         $this->company = Company::active();
         $this->isDemo = ($this->company->soap_type_id === '01')?true:false;
+        $this->isOse = ($this->company->soap_send_id === '02')?true:false;
         $this->signer = new XmlSigned();
         $this->wsClient = new WsClient();
         $this->setDataSoapType();
@@ -550,19 +552,25 @@ class Facturalo
 
     private function setSoapCredentials()
     {
-        $this->soapUsername = ($this->isDemo)?'20000000000MODDATOS':$this->company->soap_username;
+        $this->soapUsername = ($this->isDemo)?'20333632650MODDATOS':$this->company->soap_username;
         $this->soapPassword = ($this->isDemo)?'moddatos':$this->company->soap_password;
 
-        switch ($this->type) {
-            case 'retention':
-                $this->endpoint = ($this->isDemo)?SunatEndpoints::RETENCION_BETA:SunatEndpoints::RETENCION_PRODUCCION;
-                break;
-            case 'dispatch':
-                $this->endpoint = ($this->isDemo)?SunatEndpoints::GUIA_BETA:SunatEndpoints::GUIA_PRODUCCION;
-                break;
-            default:
-                $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA:SunatEndpoints::FE_PRODUCCION;
-                break;
+        if($this->isOse) {
+            $this->endpoint = $this->company->soap_url;
+//            dd($this->soapPassword);
+        } else {
+            switch ($this->type) {
+                case 'retention':
+                    $this->endpoint = ($this->isDemo)?SunatEndpoints::RETENCION_BETA:SunatEndpoints::RETENCION_PRODUCCION;
+                    break;
+                case 'dispatch':
+                    $this->endpoint = ($this->isDemo)?SunatEndpoints::GUIA_BETA:SunatEndpoints::GUIA_PRODUCCION;
+                    break;
+                default:
+                    $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA:SunatEndpoints::FE_PRODUCCION;
+                    break;
+            }
         }
+
     }
 }
