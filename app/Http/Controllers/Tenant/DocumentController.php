@@ -81,7 +81,9 @@ class DocumentController extends Controller
         //tru de boletas en env esta en true filtra a los con dni   , false a todos
         $identity_document_type_id = $this->getIdentityDocumentTypeId($request->document_type_id);     
          
-        $customers = Person::where('number','like', "%{$request->input}%")
+        $customers = Person::query()
+                            ->with('addresses')
+                            ->where('number','like', "%{$request->input}%")
                             ->orWhere('name','like', "%{$request->input}%")
                             ->whereType('customers')->orderBy('name')
                             ->whereIn('identity_document_type_id',$identity_document_type_id)
@@ -92,7 +94,8 @@ class DocumentController extends Controller
                                     'name' => $row->name,
                                     'number' => $row->number,
                                     'identity_document_type_id' => $row->identity_document_type_id,
-                                    'identity_document_type_code' => $row->identity_document_type->code
+                                    'identity_document_type_code' => $row->identity_document_type->code,
+                                    'addresses' => $row->addresses
                                 ];
                             }); 
 
