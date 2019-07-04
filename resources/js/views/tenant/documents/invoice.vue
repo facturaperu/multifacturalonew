@@ -350,7 +350,7 @@
                 // if (input!="") {
 
                     this.loading_search = true
-                    let parameters = `input=${input}&document_type_id=${this.form.document_type_id}`
+                    let parameters = `input=${input}&document_type_id=${this.form.document_type_id}&operation_type_id=${this.form.operation_type_id}`
 
                     this.$http.get(`/${this.resource}/search/customers?${parameters}`)
                             .then(response => { 
