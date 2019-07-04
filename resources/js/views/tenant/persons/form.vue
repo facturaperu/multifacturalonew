@@ -110,27 +110,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <a href="#" @click.prevent="clickAddAddress">Agregar otra dirección</a>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="row" v-for="row in form.more_address">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label class="control-label">Ubigeo</label>
-                                    <el-cascader :options="locations" v-model="row.location_id" :clearable="true" filterable></el-cascader>
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <label class="control-label">Dirección</label>
-                                    <el-input v-model="row.address"></el-input>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!--<div class="row">-->
+                    <!--<div class="col-md-12">-->
+                        <!--<a href="#" @click.prevent="clickAddAddress">Agregar otra dirección</a>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-12">-->
+                        <!--<div class="row" v-for="row in form.more_address">-->
+                            <!--<div class="col-md-5">-->
+                                <!--<div class="form-group">-->
+                                    <!--<label class="control-label">Ubigeo</label>-->
+                                    <!--<el-cascader :options="locations" v-model="row.location_id" :clearable="true" filterable></el-cascader>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-7">-->
+                                <!--<div class="form-group">-->
+                                    <!--<label class="control-label">Dirección</label>-->
+                                    <!--<el-input v-model="row.address"></el-input>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
             <div class="form-actions text-right mt-4">
                 <el-button @click.prevent="close()">Cancelar</el-button>
@@ -203,7 +203,7 @@
                     address: null,
                     telephone: null,
                     email: null,
-                    more_address: []
+                    // more_address: []
                 }
             },
             create() {
@@ -230,12 +230,12 @@
                         })
                 }
             },
-            clickAddAddress() {
-                this.form.more_address.push({
-                    location_id: [],
-                    address: null,
-                })
-            },
+            // clickAddAddress() {
+            //     this.form.more_address.push({
+            //         location_id: [],
+            //         address: null,
+            //     })
+            // },
             submit() {
                 this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form)
