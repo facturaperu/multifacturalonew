@@ -315,8 +315,8 @@
             await this.initForm()
             await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
-                    this.document_types = response.data.document_types_invoice
-                    this.document_types_guide = response.data.document_types_guide
+                    this.document_types = response.data.document_types_invoice;
+                    this.document_types_guide = response.data.document_types_guide;
                     this.currency_types = response.data.currency_types
                     this.establishments = response.data.establishments
                     this.operation_types = response.data.operation_types
@@ -326,11 +326,11 @@
                     this.charges_types = response.data.charges_types
                     this.company = response.data.company;
                     this.user = response.data.user;
-                    this.document_type_03_filter = response.data.document_type_03_filter 
-                    this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null
-                    this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null
-                    this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
-                    this.form.operation_type_id = (this.operation_types.length > 0)?this.operation_types[0].id:null
+                    this.document_type_03_filter = response.data.document_type_03_filter;
+                    this.form.currency_type_id = (this.currency_types.length > 0)?this.currency_types[0].id:null;
+                    this.form.establishment_id = (this.establishments.length > 0)?this.establishments[0].id:null;
+                    this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null;
+                    this.form.operation_type_id = (this.operation_types.length > 0)?this.operation_types[0].id:null;
 
                     this.changeEstablishment()
                     this.changeDateOfIssue()
@@ -419,16 +419,16 @@
                 this.changeCurrencyType()
             },
             changeOperationType() {
-
+                this.filterCustomers();
             },
             changeEstablishment() {
                 this.establishment = _.find(this.establishments, {'id': this.form.establishment_id})
                 this.filterSeries()
             },
             changeDocumentType() {
-                this.filterSeries()
-                this.cleanCustomer()
-                this.filterCustomers()
+                this.filterSeries();
+                this.cleanCustomer();
+                this.filterCustomers();
             },
             cleanCustomer(){                
                 this.form.customer_id = null
@@ -448,16 +448,19 @@
                 this.form.series_id = (this.series.length > 0)?this.series[0].id:null
             },
             filterCustomers() {
-                
                 // this.form.customer_id = null
-                if(this.form.document_type_id === '01') {
-                    this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
-                } else {
-                    if(this.document_type_03_filter) {
-                        this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
+                if(this.form.operation_type_id === '0101') {
+                    if(this.form.document_type_id === '01') {
+                        this.customers = _.filter(this.all_customers, {'identity_document_type_id': '6'})
                     } else {
-                        this.customers = this.all_customers
+                        if(this.document_type_03_filter) {
+                            this.customers = _.filter(this.all_customers, (c) => { return c.identity_document_type_id !== '6' })
+                        } else {
+                            this.customers = this.all_customers
+                        }
                     }
+                } else {
+                    this.customers = this.all_customers
                 }
             },
             clickAddGuide() {
