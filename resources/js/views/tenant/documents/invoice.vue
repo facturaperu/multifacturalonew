@@ -12,7 +12,7 @@
                         </div>
                         <div class="col-sm-6 text-left mt-3 mb-0">
                             <address class="ib mr-2" >
-                                <span class="font-weight-bold">{{company.name}}</span>
+                                <span class="font-weight-bold">{{company.name}}Prueba</span>
                                 <br>
                                 <div v-if="establishment.address != '-'">{{ establishment.address }}, </div> {{ establishment.district.description }}, {{ establishment.province.description }}, {{ establishment.department.description }} - {{ establishment.country.description }}
                                 <br>
