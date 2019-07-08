@@ -23,6 +23,7 @@ if ($hostname) {
 
         Route::post('services/validate_cpe', 'Tenant\Api\ServiceController@validateCpe');
         Route::post('services/consult_status', 'Tenant\Api\ServiceController@consultStatus');
+        Route::post('documents/status', 'Tenant\Api\ServiceController@documentStatus');
 
     });
 }

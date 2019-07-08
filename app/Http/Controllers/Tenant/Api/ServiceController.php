@@ -157,4 +157,24 @@ class ServiceController extends Controller
             'sale' => $sale
         ];
     }
+
+    public function documentStatus(Request $request) {
+        if($request->has('external_id')) {
+            $external_id = $request->input('external_id');
+            $document = Document::where('external_id', $external_id)->first();
+            if(!$document) {
+                throw new Exception("El documento con código externo {$external_id}, no se encuentra registrado.");
+            }
+            return [
+                'success' => true,
+                'data' => [
+                    'number' => $document->number_full,
+                    'filename' => $document->filename,
+                    'external_id' => $document->external_id,
+                    'status_id' => $document->state_type_id,
+                    'status' => $document->state_type->description,
+                ]
+            ];
+        }
+    }
 }
