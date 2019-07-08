@@ -272,8 +272,13 @@ class Facturalo
             $total_exonerated  = $this->document->total_exonerated != '' ? '10' : '0';
             $total_taxed       = $this->document->total_taxed != '' ? '10' : '0';
             $quantity_rows     = count($this->document->items);
+
+            $extra_by_item_description = 0;
             $discount_global = 0;
             foreach ($this->document->items as $it) {
+                if(strlen($it->item->description)>100){
+                    $extra_by_item_description +=24;
+                }
                 if ($it->discounts) {
                     $discount_global = $discount_global + 1;
                 }
@@ -285,7 +290,7 @@ class Facturalo
                 'format' => [
                     $width,
                     120 +
-                    ($quantity_rows * 8) +
+                    (($quantity_rows * 8) + $extra_by_item_description) +
                     ($discount_global * 3) +
                     $company_name +
                     $company_address +
