@@ -19,5 +19,6 @@ return [
     'pdf_name_bold' => env('PDF_NAME_BOLD', false),
     'change_to_registered_status' => env('CHANGE_TO_REGISTERED_STATUS', false),
     'customer_multi_address' => env('CUSTOMER_MULTI_ADDRESS', false),
+    'name_certificate_cron' => env('NAME_CERTIFICATE_CRON', 'none'),
 
 ];
