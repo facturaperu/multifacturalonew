@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Services\Extras;
+namespace App\CoreFacturalo\Services\Extras;
 
 use Carbon\Carbon;
 use Exception;
