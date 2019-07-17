@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Services\Helpers\Extras;
+namespace App\Core\Services\Extras;
 
 use Carbon\Carbon;
 use Exception;

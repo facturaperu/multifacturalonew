@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Core\Services\Extras\ValidateCpe2;
 use App\Models\Tenant\Document;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-use Modules\Services\Helpers\Extras\ValidateCpe2;
 
 class ValidateDocumentsCommand extends Command
 {
