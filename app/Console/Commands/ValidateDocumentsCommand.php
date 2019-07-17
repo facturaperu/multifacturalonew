@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\CoreFacturalo\Services\Extras\ValidateCpe2;
+use App\Models\Tenant\Company;
 use App\Models\Tenant\Document;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -66,6 +67,7 @@ class ValidateDocumentsCommand extends Command
 
         $count = 0;
         $this->info('-------------------------------------------------');
+        $this->info(Company::query()->first()->name);
         $this->info('Documentos:' . count($documents));
         foreach ($documents as $document)
         {
@@ -86,7 +88,10 @@ class ValidateDocumentsCommand extends Command
                 $message = $count.': '.$document->number_full.'|Código: '.$response_code.'|Mensaje: '.$response_description;
 
                 $this->info($message);
-                Log::info($message);
+                if($response_code !== '1')
+                {
+                    Log::info($message);
+                }
 
 //                if ($response_code === '0') {
 //                    $state_type_id = '01';
