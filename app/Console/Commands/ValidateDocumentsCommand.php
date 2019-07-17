@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Tenant\Document;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Modules\Services\Helpers\Extras\ValidateCpe2;
 
 class ValidateDocumentsCommand extends Command
@@ -13,7 +14,7 @@ class ValidateDocumentsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'validate:documents';
+    protected $signature = 'validate:documents {establishment_id?} {state_type_id?}';
 
     /**
      * The console command description.
@@ -38,13 +39,30 @@ class ValidateDocumentsCommand extends Command
      */
     public function handle()
     {
-        $documents = Document::query()
-//                                ->whereNull('response_code')
-//                                ->orWhere('response_code', '0')
-//                                ->where('document_type_id', '03')
-                                ->orderBy('series')
-                                ->orderBy('number')
-                                ->get();
+        $establishment_id = $this->argument('establishment_id');
+        $state_type_id = $this->argument('state_type_id');
+
+        if(!$state_type_id) {
+            $state_type_id = '01';
+        }
+
+        if ($establishment_id) {
+            $documents = Document::query()
+                ->where('establishment_id', $establishment_id)
+                ->where('state_type_id', $state_type_id)
+                //->whereNotIn('response_code', ['1', '2', '3', '4'])
+                ->orderBy('series')
+                ->orderBy('number')
+                ->get();
+        } else {
+            $documents = Document::query()
+                ->where('state_type_id', $state_type_id)
+//                ->whereNull('response_code')
+//                ->whereNotIn('response_code', ['1', '2', '3', '4'])
+                ->orderBy('series')
+                ->orderBy('number')
+                ->get();
+        }
 
         $count = 0;
         $this->info('-------------------------------------------------');
@@ -55,17 +73,20 @@ class ValidateDocumentsCommand extends Command
             reValidate:
             $validate_cpe = new ValidateCpe2();
             $response = $validate_cpe->search($document->company->number,
-                                              $document->document_type_id,
-                                              $document->series,
-                                              $document->number,
-                                              $document->date_of_issue,
-                                              $document->total);
+                $document->document_type_id,
+                $document->series,
+                $document->number,
+                $document->date_of_issue,
+                $document->total);
             if ($response['success']) {
                 $state_type_id = null;
                 $response_code = $response['data']['comprobante_estado_codigo'];
                 $response_description = $response['data']['comprobante_estado_descripcion'];
 
-                $this->info($count.': '.$document->number_full.'|'.'Mensaje: '.$response_description);
+                $message = $count.': '.$document->number_full.'|Código: '.$response_code.'|Mensaje: '.$response_description;
+
+                $this->info($message);
+                Log::info($message);
 
 //                if ($response_code === '0') {
 //                    $state_type_id = '01';
