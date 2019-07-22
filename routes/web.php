@@ -158,6 +158,8 @@ if ($hostname) {
             Route::get('documents/check_server/{document}', 'Tenant\DocumentController@checkServer');
             Route::get('documents/change_to_registered_status/{document}', 'Tenant\DocumentController@changeToRegisteredStatus');
 
+            Route::post('documents/import', 'Tenant\DocumentController@import');
+
 
 
             //Contingencies

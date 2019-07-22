@@ -159,11 +159,24 @@ class ServiceController extends Controller
     }
 
     public function documentStatus(Request $request) {
-        if($request->has('external_id')) {
+        if($request->has('external_id') OR $request->has('serie_number')) {
             $external_id = $request->input('external_id');
-            $document = Document::where('external_id', $external_id)->first();
+            $request_serie = $request->input('serie_number');
+            $serie_number = explode('-', $request_serie);
+            $serie = $serie_number[0];
+            $number = $serie_number[1];
+
+            if(!$external_id) {
+                $document = Document::where('number', $number)
+                            ->where('series', $serie)
+                            ->first();
+            } else {
+                $document = Document::where('external_id', $external_id)
+                            ->first();
+            }
+            
             if(!$document) {
-                throw new Exception("El documento con código externo {$external_id}, no se encuentra registrado.");
+                throw new Exception("El documento con código externo {$external_id} o numero {$request_serie}, no se encuentra registrado.");
             }
             return [
                 'success' => true,
