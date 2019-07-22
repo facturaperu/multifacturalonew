@@ -139,9 +139,6 @@ class DocumentsImport implements ToCollection
                                 ]
                             ]
                         ]
-                    ],
-                    "acciones" => [
-                        "enviar_xml_firmado" => false
                     ]
                 );
 
