@@ -1,5 +1,6 @@
 function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
+    // console.log(row_old)
     // console.log(currency_type_id_new, exchange_rate_sale)
 
     let currency_type_id_old = row_old.item.currency_type_id
@@ -101,10 +102,27 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     /* Discounts */
     let discount_base = 0
     let discount_no_base = 0
+    // row.discounts.forEach((discount, index) => {
+    //     discount.percentage = parseFloat(discount.percentage)
+    //     discount.factor = discount.percentage / 100
+    //     discount.base = _.round(total_value_partial, 2)
+    //     discount.amount = _.round(discount.base * discount.factor, 2)
+    //     if (discount.discount_type.base) {
+    //         discount_base += discount.amount
+    //     } else {
+    //         discount_no_base += discount.amount
+    //     }
+    //     row.discounts.splice(index, discount)
+    // })
+
     row.discounts.forEach((discount, index) => {
-        discount.percentage = parseFloat(discount.percentage)
-        discount.factor = discount.percentage / 100
+
         discount.base = _.round(total_value_partial, 2)
+        
+        //amount and percentage are equals in input
+        discount.percentage = (discount.is_amount) ? (100 * (parseFloat(discount.percentage) / parseFloat(discount.base))) :  parseFloat(discount.percentage)
+
+        discount.factor = _.round(discount.percentage / 100, 2)
         discount.amount = _.round(discount.base * discount.factor, 2)
         if (discount.discount_type.base) {
             discount_base += discount.amount
@@ -112,9 +130,12 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
             discount_no_base += discount.amount
         }
         row.discounts.splice(index, discount)
+
     })
+
     // console.log('total base discount:'+discount_base)
     // console.log('total no base discount:'+discount_no_base)
+
 
     /* Charges */
     let charge_base = 0
@@ -131,8 +152,8 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         }
         row.charges.splice(index, charge)
     })
-    console.log('total base charge:'+charge_base)
-    console.log('total no base charge:'+charge_no_base)
+    // console.log('total base charge:'+charge_base)
+    // console.log('total no base charge:'+charge_no_base)
 
     let total_isc = 0
     let total_other_taxes = 0
@@ -173,7 +194,6 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         row.total = 0
     }
     
-    // console.log(row)
     return row
 }
 

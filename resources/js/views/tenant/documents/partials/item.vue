@@ -119,6 +119,7 @@
                                                         <el-input v-model="row.description"></el-input>
                                                     </td>
                                                     <td>
+                                                        <el-checkbox v-model="row.is_amount">Ingresar monto fijo</el-checkbox><br>
                                                         <el-input v-model="row.percentage"></el-input>
                                                     </td>
                                                     <td>
@@ -419,7 +420,8 @@
                     percentage: 0,
                     factor: 0,
                     amount: 0,
-                    base: 0
+                    base: 0,
+                    is_amount: false
                 })
             },
             clickRemoveDiscount(index) {
@@ -471,7 +473,7 @@
             },
             changeItem() {
                 this.form.item = _.find(this.items, {'id': this.form.item_id});
-                this.form.unit_price_value = this.form.item.sale_unit_price;
+                this.form.unit_price_value = _.round(this.form.item.sale_unit_price,2);
                 this.form.has_igv = this.form.item.has_igv;
                 this.form.affectation_igv_type_id = this.form.item.sale_affectation_igv_type_id;
                 this.form.quantity = 1;
@@ -504,7 +506,6 @@
                 this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id});
                 
                 this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale);
-                
                 this.initForm();
                 //this.initializeFields()
                 this.$emit('add', this.row);
