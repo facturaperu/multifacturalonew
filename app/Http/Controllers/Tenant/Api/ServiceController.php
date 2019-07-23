@@ -185,8 +185,13 @@ class ServiceController extends Controller
                     'filename' => $document->filename,
                     'external_id' => $document->external_id,
                     'status_id' => $document->state_type_id,
-                    'status' => $document->state_type->description,
-                ]
+                    'status' => $document->state_type->description
+                ],
+                'links' => [
+                    'xml' => $document->download_external_xml,
+                    'pdf' => $document->download_external_pdf,
+                    'cdr' => ($document->download_external_cdr)?$document->download_external_cdr:'',
+                ],
             ];
         }
     }

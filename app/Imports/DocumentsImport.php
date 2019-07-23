@@ -21,6 +21,8 @@ class DocumentsImport implements ToCollection
             $registered = 0;
             foreach ($rows as $row)
             {
+                // $algo = str_getcsv ($row ,";" ,'"', "\\");
+                // dd($algo);
                 $nrodocumento = $row[3];
                 $ser_num = substr_replace($nrodocumento, '-', 4, 0);
                 $serienumero = explode('-', $ser_num);
@@ -113,7 +115,7 @@ class DocumentsImport implements ToCollection
                     ],
                     "items" => [
                         [
-                            "codigo_interno" => $row[82],
+                            "codigo_interno" => rtrim($row[82]),
                             "descripcion" => rtrim($row[214]),
                             "codigo_producto_sunat" => "",
                             "unidad_de_medida" => $unit_type,

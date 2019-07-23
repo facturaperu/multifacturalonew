@@ -472,7 +472,7 @@ class DocumentController extends Controller
         if ($request->hasFile('file')) {
             try {
                 $import = new DocumentsImport();
-                $import->import($request->file('file'), null, Excel::XLSX);
+                $import->import($request->file('file'), null, Excel::CSV);
                 $data = $import->getData();
                 return [
                     'success' => true,
