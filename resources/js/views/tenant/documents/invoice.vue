@@ -201,7 +201,7 @@
                                                 <td>{{row.item.description}} {{row.item.presentation.hasOwnProperty('description') ? row.item.presentation.description : ''}}<br/><small>{{row.affectation_igv_type.description}}</small></td>
                                                 <td class="text-center">{{row.item.unit_type_id}}</td>
                                                 <td class="text-right">{{row.quantity}}</td>
-                                                <td class="text-right">{{currency_type.symbol}} {{row.unit_price}}</td>
+                                                <td class="text-right">{{currency_type.symbol}} {{ getFormatUnitPriceRow(row.unit_price)}}</td>
                                                 <td class="text-right">{{currency_type.symbol}} {{row.total_value}}</td>
                                                 <!--<td class="text-right">{{ currency_type.symbol }} {{ row.total_charge }}</td>-->
                                                 <td class="text-right">{{currency_type.symbol}} {{row.total}}</td>
@@ -341,10 +341,14 @@
             this.$eventHub.$on('reloadDataPersons', (customer_id) => {
                 this.reloadDataCustomers(customer_id)
             })
-        },
+        }, 
         methods: {
 
-              searchRemoteCustomers(input) {  
+            getFormatUnitPriceRow(unit_price){
+                return _.round(unit_price, 2)
+            },
+            
+            searchRemoteCustomers(input) {  
                   
                 if (input.length > 0) {
                 // if (input!="") {
