@@ -392,7 +392,6 @@ class Facturalo
     public function onlySenderXmlSignedBill()
     {
         $res = $this->senderXmlSigned();
-        dd($res);
         if($res->isSuccess()) {
             $cdrResponse = $res->getCdrResponse();
             $this->uploadFile($res->getCdrZip(), 'cdr');
