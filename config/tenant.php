@@ -21,5 +21,6 @@ return [
     'customer_multi_address' => env('CUSTOMER_MULTI_ADDRESS', false),
     'name_certificate_cron' => env('NAME_CERTIFICATE_CRON', 'none'),
     'import_documents' => env('IMPORT_DOCUMENTS', false),
+    'enabled_template_ticket_80' => env('ENABLED_TEMPLATE_TICKET_80', false),
 
 ];

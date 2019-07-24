@@ -258,7 +258,8 @@ class Facturalo
         if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58')) {
 
             $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
-
+            if(config('tenant.enabled_template_ticket_80')) $width = 80;
+            
             $company_name      = (strlen($this->company->name) / 20) * 10;
             $company_address   = (strlen($this->document->establishment->address) / 30) * 10;
             $company_number    = $this->document->establishment->telephone != '' ? '10' : '0';
