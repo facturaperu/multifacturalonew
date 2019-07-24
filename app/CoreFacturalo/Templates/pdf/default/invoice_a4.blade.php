@@ -204,7 +204,8 @@
                 @endif
                 @if($row->discounts)
                     @foreach($row->discounts as $dtos)
-                        <br/><span style="font-size: 9px">{{ $dtos->factor * 100 }}% {{$dtos->description }}</span>
+                        <!-- <br/><span style="font-size: 9px">{{ $dtos->factor * 100 }}% {{$dtos->description }}</span> -->
+                        <br/><span style="font-size: 9px">{{$dtos->description }}</span>
                     @endforeach
                 @endif
             </td>

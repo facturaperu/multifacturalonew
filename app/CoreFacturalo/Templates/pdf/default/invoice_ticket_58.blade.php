@@ -164,7 +164,8 @@
                 @endif
                 @if($row->discounts)
                     @foreach($row->discounts as $dtos)
-                        <br/><small>{{ $dtos->factor * 100 }}% {{$dtos->description }}</small>
+                        <!-- <br/><small>{{ $dtos->factor * 100 }}% {{$dtos->description }}</small> -->
+                        <br/><small>{{$dtos->description }}</small>
                     @endforeach
                 @endif
             </td>
