@@ -269,7 +269,7 @@
 <script>
     import DocumentFormItem from './partials/item.vue'
     import PersonForm from '../persons/form.vue'
-    import DocumentOptions from '../documents/partials/options.vue'
+    import DocumentOptions from '../documents/partials/options_custom.vue'
     import {functions, exchangeRate} from '../../../mixins/functions'
     import {calculateRowItem} from '../../../helpers/functions'
     import Logo from '../companies/logo.vue'

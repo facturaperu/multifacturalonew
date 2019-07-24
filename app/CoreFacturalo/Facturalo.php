@@ -240,6 +240,7 @@ class Facturalo
         return $qr;
     }
 
+
     public function createPdf($document = null, $type = null, $format = null) {
         ini_set("pcre.backtrack_limit", "5000000");
         $template = new Template();
@@ -255,9 +256,10 @@ class Facturalo
 
         $html = $template->pdf($base_pdf_template, $this->type, $this->company, $this->document, $format_pdf);
 
-        if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58')) {
+        if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58') OR ($format_pdf === 'ticket_80')) {
 
-            $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
+            // $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
+            $width = $this->getWidthTicket($format_pdf);
 
             $company_name      = (strlen($this->company->name) / 20) * 10;
             $company_address   = (strlen($this->document->establishment->address) / 30) * 10;
@@ -359,6 +361,19 @@ class Facturalo
 //            $pdf->SetHTMLFooter($html_footer);
         }
         $this->uploadFile($pdf->output('', 'S'), 'pdf');
+    }
+    
+    public function getWidthTicket($format){
+
+        switch ($format) {
+            case 'ticket_58': 
+                return 56;
+            case 'ticket_80':
+                return 80;            
+            default:
+                return 78;
+        }
+
     }
 
     public function loadXmlSigned()
