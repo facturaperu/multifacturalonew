@@ -23,6 +23,9 @@ class DocumentPaymentRequest extends FormRequest
             'payment_method_type_id' => [
                 'required',
             ],
+            'currency_type_id' => [
+                'required',
+            ],
             'payment' => [
                 'required',
             ],

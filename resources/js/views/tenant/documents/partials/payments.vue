@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="title" :visible="showDialog" @close="close" @open="getData">
+    <el-dialog :title="title" :visible="showDialog" @close="close" @open="getData" width="60%">
         <div class="form-body">
             <div class="row">
                 <div class="col-md-12" v-if="records.length > 0">
@@ -9,6 +9,7 @@
                             <tr>
                                 <th>Fecha de pago</th>
                                 <th>Método de pago</th>
+                                <th>Moneda</th>
                                 <th>Referencia</th>
                                 <th class="text-right">Monto</th>
                                 <th></th>
@@ -43,6 +44,14 @@
                                                 <el-option v-for="option in payment_method_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                             </el-select>
                                             <small class="form-control-feedback" v-if="row.errors.payment_method_type_id" v-text="row.errors.payment_method_type_id[0]"></small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group mb-0" :class="{'has-danger': row.errors.currency_type_id}">
+                                            <el-select v-model="row.currency_type_id">
+                                                <el-option v-for="option in currency_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                            </el-select>
+                                            <small class="form-control-feedback" v-if="row.errors.currency_type_id" v-text="row.errors.currency_type_id[0]"></small>
                                         </div>
                                     </td>
                                     <td>
@@ -110,6 +119,7 @@
                 resource: 'document_payments',
                 records: [],
                 payment_method_types: [],
+                currency_types: [],
                 showAddButton: true,
                 document: {}
             }
@@ -119,6 +129,7 @@
             await this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
                     this.payment_method_types = response.data.payment_method_types;
+                    this.currency_types = response.data.currency_types;
                     //this.initDocumentTypes()
                 })
         },
@@ -144,6 +155,7 @@
                     id: null,
                     date_of_payment: moment().format('YYYY-MM-DD'),
                     payment_method_type_id: null,
+                    currency_type_id: 'PEN',
                     reference: null,
                     payment: 0,
                     errors: {},
@@ -164,6 +176,7 @@
                     id: this.records[index].id,
                     document_id: this.documentId,
                     date_of_payment: this.records[index].date_of_payment,
+                    currency_type_id: this.records[index].currency_type_id,
                     payment_method_type_id: this.records[index].payment_method_type_id,
                     reference: this.records[index].reference,
                     payment: this.records[index].payment,

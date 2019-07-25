@@ -8,6 +8,7 @@ use App\Http\Resources\Tenant\DocumentPaymentCollection;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\DocumentPayment;
 use App\Models\Tenant\PaymentMethodType;
+use App\Models\Tenant\Catalogs\CurrencyType;
 
 class DocumentPaymentController extends Controller
 {
@@ -21,7 +22,9 @@ class DocumentPaymentController extends Controller
     public function tables()
     {
         return [
-            'payment_method_types' => PaymentMethodType::all()
+            'payment_method_types' => PaymentMethodType::all(),
+            'currency_types' => CurrencyType::all(),
+
         ];
     }
 

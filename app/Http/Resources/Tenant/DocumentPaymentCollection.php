@@ -19,6 +19,7 @@ class DocumentPaymentCollection extends ResourceCollection
                 'id' => $row->id,
                 'date_of_payment' => $row->date_of_payment->format('d/m/Y'),
                 'payment_method_type_description' => $row->payment_method_type->description,
+                'currency_type_description' => $row->currency_type->description,
                 'reference' => $row->reference,
                 'payment' => $row->payment,
             ];
