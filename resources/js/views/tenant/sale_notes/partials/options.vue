@@ -1,21 +1,31 @@
 <template>
     <div>
-        <el-dialog :title="titleDialog" :visible="showDialog" @open="create" width="30%"
+        <el-dialog :title="titleDialog" :visible="showDialog" @open="create"  
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
                 :show-close="false"> 
 
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 text-center font-weight-bold">
-                    <p>Descargar PDF</p>
-                    <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickDownload()">
-                        <i class="fa fa-file-alt"></i>
-                    </button>
+                    <el-tabs v-model="activeName"  >
+                        <el-tab-pane label="Imprimir A4" name="first">                                    
+                            <embed :src="form.print_a4" type="application/pdf" width="100%" height="400px"/>
+                        </el-tab-pane>  
+                        <el-tab-pane label="Imprimir Ticket" name="second">
+                            <embed :src="form.print_ticket" type="application/pdf" width="100%" height="400px"/>                                    
+                        </el-tab-pane> 
+                                              
+                    </el-tabs>
                 </div> 
-            </div> 
-            <span slot="footer" class="dialog-footer"> 
+            </div>  
+            <span slot="footer" class="dialog-footer">
+                <template v-if="showClose">
+                    <el-button @click="clickClose">Cerrar</el-button>
+                </template>
+                <template v-else>
                     <el-button @click="clickFinalize">Ir al listado</el-button>
                     <el-button type="primary" @click="clickNewSaleNote">Nueva nota de venta</el-button>
+                </template>
             </span>
         </el-dialog>
  
@@ -33,7 +43,6 @@
                 titleDialog: null,
                 loading: false,
                 resource: 'sale-notes',
-                resource_documents: 'documents',
                 errors: {},
                 form: {},
                 document:{},
@@ -43,6 +52,7 @@
                 loading_submit:false,
                 showDialogOptions: false,
                 documentNewId: null,
+                activeName: 'first',
                 
             }
         },
@@ -56,6 +66,8 @@
                     id: null,
                     external_id: null, 
                     identifier: null,
+                    print_ticket: null,
+                    print_a4: null,
                     date_of_issue:null
                 }
             },      
