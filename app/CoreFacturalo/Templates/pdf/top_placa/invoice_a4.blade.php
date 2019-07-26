@@ -127,13 +127,13 @@
 @endif
 
 <table class="full-width mt-3">
-    @if ($document->purchase_order)
+    {{-- @if ($document->purchase_order)
         <tr>
             <td width="120px">ORDEN DE COMPRA</td>
             <td width="8px">:</td>
             <td>{{ $document->purchase_order }}</td>
         </tr>
-    @endif
+    @endif --}}
     <tr>
         <td>PLACAS</td>
         <td>:</td>
