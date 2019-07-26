@@ -32,7 +32,27 @@ class DocumentPaymentController extends Controller
     {
         $document = Document::find($document_id);
 
-        $total_paid = collect($document->payments)->sum('payment');
+         
+        $acum_payments_usd = 0;
+        $acum_payments_pen = 0;
+        
+        $payment_usd = collect($document->payments)->where('currency_type_id','USD')->sum('payment');
+        $payment_pen = collect($document->payments)->where('currency_type_id','PEN')->sum('payment');
+
+        if($document->currency_type_id == 'PEN'){
+
+            $acum_payments_usd = $payment_usd * $document->exchange_rate_sale;
+            $acum_payments_pen = $payment_pen;
+            
+        }else{
+
+            $acum_payments_usd = $payment_usd;
+            $acum_payments_pen = $payment_pen / $document->exchange_rate_sale;
+
+        }
+
+        // $total_paid = collect($document->payments)->sum('payment');
+        $total_paid = round($acum_payments_usd + $acum_payments_pen, 2);
         $total = $document->total;
         $total_difference = round($total - $total_paid, 2);
 
