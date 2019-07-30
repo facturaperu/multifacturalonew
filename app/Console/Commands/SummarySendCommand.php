@@ -68,32 +68,61 @@ class SummarySendCommand extends Command
             
             foreach ($documents as $document) {
 
-                if(file_exists(base_path(config('tenant.name_certificate_cron')))){
-                    $constructor_params = [
-                        'base_uri' => config('tenant.force_https') ? "https://{$hostname->fqdn}" : "http://{$hostname->fqdn}",
-                        'verify' => base_path(config('tenant.name_certificate_cron'))
-                    ];
-                }else{
-                    $constructor_params = [
-                        'base_uri' => config('tenant.force_https') ? "https://{$hostname->fqdn}" : "http://{$hostname->fqdn}"
-                    ];
-                }
+                // if(file_exists(base_path(config('tenant.name_certificate_cron')))){
+                //     $constructor_params = [
+                //         'base_uri' => config('tenant.force_https') ? "https://{$hostname->fqdn}" : "http://{$hostname->fqdn}",
+                //         'verify' => base_path(config('tenant.name_certificate_cron'))
+                //     ];
+                // }else{
+                //     $constructor_params = [
+                //         'base_uri' => config('tenant.force_https') ? "https://{$hostname->fqdn}" : "http://{$hostname->fqdn}"
+                //     ];
+                // }
 
-                $clientGuzzleHttp = new ClientGuzzleHttp($constructor_params);
+                // $clientGuzzleHttp = new ClientGuzzleHttp($constructor_params);
                 
-                $response = $clientGuzzleHttp->post('/api/summaries', [
-                    'http_errors' => false,
-                    'headers' => [
-                        'Authorization' => 'Bearer '.auth()->user()->api_token,
-                        'Accept' => 'application/json',
-                    ],
-                    'form_params' => [
-                        'fecha_de_emision_de_documentos' => Carbon::parse($document->date_of_issue)->format('Y-m-d'),
-                        'codigo_tipo_proceso' => 1
-                    ]
+                // $response = $clientGuzzleHttp->post('/api/summaries', [
+                //     'http_errors' => false,
+                //     'headers' => [
+                //         'Authorization' => 'Bearer '.auth()->user()->api_token,
+                //         'Accept' => 'application/json',
+                //     ],
+                //     'form_params' => [
+                //         'fecha_de_emision_de_documentos' => Carbon::parse($document->date_of_issue)->format('Y-m-d'),
+                //         'codigo_tipo_proceso' => 1
+                //     ]
+                // ]);
+ 
+                $base_uri = config('tenant.force_https') ? "https://{$hostname->fqdn}" : "http://{$hostname->fqdn}";
+
+                $form_params = json_encode([
+                    'fecha_de_emision_de_documentos' => Carbon::parse($document->date_of_issue)->format('Y-m-d'),
+                    'codigo_tipo_proceso' => 1
                 ]);
-                
-                $res = json_decode($response->getBody()->getContents(), true);
+
+                $curl = curl_init();
+            
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => $base_uri,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $form_params,
+                    CURLOPT_HTTPHEADER => array(
+                        "Authorization: Bearer ".auth()->user()->api_token,
+                        "Content-Type: application/json",
+                        "cache-control: no-cache"
+                    )
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl); 
+
+                // $res = json_decode($response->getBody()->getContents(), true);
+                $res = json_decode($response, true);
                 
                 if (!$res['success']) $this->info("{$document->date_of_issue} - {$res['message']}");
             }
