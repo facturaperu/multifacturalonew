@@ -82,6 +82,7 @@ class DocumentsImport implements ToCollection
                 }
                 
 
+                $total_primer_producto = $row[26] + $row[27];
 
                 //genero json y envio a api para no hacer insert 
                 
@@ -130,12 +131,12 @@ class DocumentsImport implements ToCollection
                             "codigo_tipo_precio" => "01",
                             "precio_unitario" => $row[25],
                             "codigo_tipo_afectacion_igv" => "10",
-                            "total_base_igv" => $row[26],
+                            "total_base_igv" => $row[26] != null ? $row[26] : $mtosubtotal,
                             "porcentaje_igv" => "18",
-                            "total_igv" => $row[27],
-                            "total_impuestos" => $row[27],
-                            "total_valor_item" => $row[26],
-                            "total_item" => $row[26] + $row[27],
+                            "total_igv" => $row[27] != null ? $row[27] : $mtoimpuesto,
+                            "total_impuestos" => $row[27] != null ? $row[27] : $mtoimpuesto,
+                            "total_valor_item" => $row[26] != null ? $row[26] : $mtosubtotal,
+                            "total_item" => $total_primer_producto > 0 ? $total_primer_producto : $mtototal,
                             "datos_adicionales" => [
                                 [
                                     "codigo" => "5010",
