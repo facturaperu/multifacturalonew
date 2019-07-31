@@ -22,7 +22,7 @@ class DocumentsImport implements ToCollection
             unset($rows[0]);
             foreach ($rows as $row)
             {
-                // dd($row[2]);
+                // dd($row);
                 $nrodocumento = $row[3];
                 $serienumero = explode('-', $nrodocumento);
                 $serie = $serienumero[0];
@@ -121,8 +121,8 @@ class DocumentsImport implements ToCollection
                     ],
                     "items" => [
                         [
-                            "codigo_interno" => substr($row[21],0,10),
-                            "descripcion" => rtrim($row[21]),
+                            "codigo_interno" => substr($row[22],0,10),
+                            "descripcion" => rtrim($row[22]),
                             "codigo_producto_sunat" => "",
                             "unidad_de_medida" => $unit_type,
                             "cantidad" => $row[24],
@@ -130,12 +130,12 @@ class DocumentsImport implements ToCollection
                             "codigo_tipo_precio" => "01",
                             "precio_unitario" => $row[25],
                             "codigo_tipo_afectacion_igv" => "10",
-                            "total_base_igv" => $row[14],
+                            "total_base_igv" => $row[26],
                             "porcentaje_igv" => "18",
-                            "total_igv" => $mtoimpuesto,
-                            "total_impuestos" => $mtoimpuesto,
-                            "total_valor_item" => $mtosubtotal,
-                            "total_item" => $mtototal,
+                            "total_igv" => $row[27],
+                            "total_impuestos" => $row[27],
+                            "total_valor_item" => $row[26],
+                            "total_item" => $row[26] + $row[27],
                             "datos_adicionales" => [
                                 [
                                     "codigo" => "5010",
@@ -149,6 +149,27 @@ class DocumentsImport implements ToCollection
                         ]
                     ]
                 );
+
+                if ($row[28] != null) {
+                    $new_item = [
+                            "codigo_interno" => substr($row[28],0,10),
+                            "descripcion" => rtrim($row[28]),
+                            "codigo_producto_sunat" => "",
+                            "unidad_de_medida" => $unit_type,
+                            "cantidad" => $row[29],
+                            "valor_unitario" => $row[30],
+                            "codigo_tipo_precio" => "01",
+                            "precio_unitario" => $row[30],
+                            "codigo_tipo_afectacion_igv" => "10",
+                            "total_base_igv" => $row[31],
+                            "porcentaje_igv" => "18",
+                            "total_igv" => $row[32],
+                            "total_impuestos" => $row[32],
+                            "total_valor_item" => $row[31],
+                            "total_item" => $row[31] + $row[32]
+                        ];
+                    array_push($json["items"], $new_item);
+                }
 
                 $url = url('/api/documents');
                 $token = \Auth::user()->api_token;
