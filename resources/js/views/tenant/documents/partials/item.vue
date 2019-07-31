@@ -119,6 +119,8 @@
                                                         <el-input v-model="row.description"></el-input>
                                                     </td>
                                                     <td>
+                                                        <el-checkbox v-model="row.is_amount">Ingresar monto fijo</el-checkbox><br>
+
                                                         <el-input v-model="row.percentage"></el-input>
                                                     </td>
                                                     <td>
@@ -180,7 +182,7 @@
                                                     <td>
                                                         <el-select v-model="row.attribute_type_id" filterable @change="changeAttributeType(index)">
                                                             <el-option v-for="option in attribute_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
-                             7                           </el-select>
+                                                         </el-select>
                                                     </td>
                                                     <td>
                                                         <el-input v-model="row.value"></el-input>
@@ -419,7 +421,9 @@
                     percentage: 0,
                     factor: 0,
                     amount: 0,
-                    base: 0
+                    base: 0,
+                    is_amount: false
+
                 })
             },
             clickRemoveDiscount(index) {
