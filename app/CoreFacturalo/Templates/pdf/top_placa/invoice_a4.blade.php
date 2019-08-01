@@ -135,7 +135,7 @@
         </tr>
     @endif --}}
     <tr>
-        <td>PLACAS</td>
+        <td width="120px">PLACAS</td>
         <td>:</td>
         <td>
             @foreach($document->items as $row)
