@@ -95,7 +95,7 @@
         <!-- start: header -->
         @include('tenant.layouts.partials.header')
         <!-- end: header -->
-        <div class="inner-wrapper">
+        <div class="inner-wrapper" >
             <!-- start: sidebar -->
             @include('tenant.layouts.partials.sidebar')
             <!-- end: sidebar -->
@@ -149,8 +149,9 @@
     {{--<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>--}}
     {{--<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>--}}
 
-    @stack('scripts')
+    <script src="https://checkout.culqi.com/v2"></script>
 
+    @stack('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
     <!-- Theme Base, Components and Settings -->
     <script src="{{asset('porto-light/js/theme.js')}}"></script>

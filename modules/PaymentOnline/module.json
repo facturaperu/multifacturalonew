@@ -1,0 +1,14 @@
+{
+    "name": "PaymentOnline",
+    "alias": "paymentonline",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\PaymentOnline\\Providers\\PaymentOnlineServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

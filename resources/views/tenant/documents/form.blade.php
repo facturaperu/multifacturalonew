@@ -20,10 +20,50 @@
 @endpush
 
 @section('content')
-    <tenant-documents-invoice :is_contingency="{{ json_encode($is_contingency) }}"></tenant-documents-invoice>
+      
+    <tenant-documents-invoice ref="foo" :is_contingency="{{ json_encode($is_contingency) }}"></tenant-documents-invoice>
 @endsection
 
 @push('scripts')
+<!-- Incluyendo .js de Culqi Checkout-->
+ 
+ <script>
+ 
+    function culqi() {
+        if (Culqi.token) {  
+
+            let token = Culqi.token.id;
+            let email= Culqi.token.email; 
+
+            console.log(Culqi.token) 
+            console.log(Culqi.getSettings)
+
+            let form = {
+                    token:token,
+                    description:Culqi.getSettings.description,
+                    amount:Culqi.getSettings.amount,
+                    email:email,
+                    programacion_id:1
+                }
+
+            // this.$message('This is a message.');
+            
+            axios.post(`/paymentonline`, form).then(response => {
+                        console.log(response) 
+                        alert(response) 
+                      
+                    }).catch(error => {
+                            console.log(error) 
+
+                    }).then(() => {
+                    }); 
+
+        } else {  
+            console.log(Culqi.error);
+        }
+    };
+</script>
+
 <script type="text/javascript">
 	var count = 0;
 	$(document).on("click", "#card-click", function(event){

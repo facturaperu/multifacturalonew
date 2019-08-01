@@ -240,6 +240,7 @@
 
                     
                     <div class="form-actions text-right mt-4">
+                        <el-button type="danger" @click.prevent="payment_online()">Pago online</el-button>
                         <el-button @click.prevent="close()">Cancelar</el-button>
                         <el-button class="submit" type="primary" native-type="submit" :loading="loading_submit" v-if="form.items.length > 0">Generar</el-button>
                     </div>
@@ -343,6 +344,76 @@
             })
         }, 
         methods: {
+            payment_online(){
+
+                Culqi.publicKey = 'pk_test_5dXhnzyCIJmok9Dw';
+
+                // let amount=1150 //igual a 11.50
+                let amount=11+"00"
+                let desc='descripcion prod';
+                let email='brem@gmail.com';
+                let programacion_id='1'; 
+
+                programacion_id=1;
+                amount = amount;             
+                desc = desc;
+    
+                Culqi.settings({
+                    title: 'Facturalo Peru',
+                    currency: 'PEN',  
+                    description: desc,  
+                    amount: amount // Monto de la compra (sin punto decimal, en este caso 35.00 soles)
+                });
+        
+                Culqi.open();                
+ 
+            },
+            culqi(){
+                // console.log("din")
+                // // if(process.browser) { 
+                // //         window.culqi = function () { 
+                // //             window.__culqi_token = window.Culqi 
+                // //             // console.log(window.Culqi)
+                // //         }; 
+                // //     }  
+                // // console.log(Culqi)
+                // let checkToken = setInterval(() => {
+                //     if(process.browser) { 
+                //         window.culqi = function () { 
+                //             window.__culqi_token = window.Culqi 
+                //         }; 
+                //     }  
+                // }, 1000) 
+
+                // if (Culqi.token) { // Token creado exitosamente!
+
+                //                     // Obtener el token ID
+                //     let token = Culqi.token.id;              
+                //     let email= Culqi.token.email;   
+                //     let form={
+                //         token:token,
+                //         description:desc,
+                //         amount:amount,
+                //         email:email,
+                //         programacion_id:programacion_id
+                //     }
+
+                //     this.$http.post(`/paymentonline`, form).then(response => {
+                //         console.log(response) 
+                      
+                //     }).catch(error => {
+                //             console.log(error) 
+
+                //     }).then(() => {
+                //     });                             
+                                
+                // } else { 
+                //     // Hubo algun problema!
+                //     // Mostramos JSON de objeto error en consola
+                //     console.log("errp"+Culqi.error); 
+                //     //alert(Culqi.error.mensaje);
+                // }
+            },
 
             getFormatUnitPriceRow(unit_price){
                 return _.round(unit_price, 2)

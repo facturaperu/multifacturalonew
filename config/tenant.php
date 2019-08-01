@@ -23,4 +23,7 @@ return [
     'import_documents' => env('IMPORT_DOCUMENTS', false),
     'enabled_template_ticket_80' => env('ENABLED_TEMPLATE_TICKET_80', false),
 
+    'culqi_private_key' => env('CULQI_PRIVATE_KEY', null),
+    'culqi_public_key' => env('CULQI_PUBLIC_KEY', null), 
+
 ];

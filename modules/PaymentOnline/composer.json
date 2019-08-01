@@ -1,0 +1,25 @@
+{
+    "name": "nwidart/paymentonline",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\PaymentOnline\\Providers\\PaymentOnlineServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\PaymentOnline\\": ""
+        }
+    }
+}
