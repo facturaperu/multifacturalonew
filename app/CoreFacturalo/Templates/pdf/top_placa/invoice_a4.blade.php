@@ -78,18 +78,13 @@
         <td>:</td>
         <td>{{$customer->number}}</td>
     </tr>
-    @if ($customer->address !== '')
     <tr>
         <td class="align-top">DIRECCIÓN</td>
         <td>:</td>
         <td>
             {{ $customer->address }}
-            {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
-            {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
-            {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
         </td>
     </tr>
-    @endif
 </table>
 
 {{--<table class="full-width mt-3">--}}
@@ -135,7 +130,7 @@
         </tr>
     @endif --}}
     <tr>
-        <td>PLACAS</td>
+        <td width="120px">PLACAS</td>
         <td>:</td>
         <td>
             @foreach($document->items as $row)

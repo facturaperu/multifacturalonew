@@ -8,6 +8,8 @@ use App\Models\Tenant\Warehouse;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class DocumentsImport implements ToCollection
 {
@@ -44,9 +46,8 @@ class DocumentsImport implements ToCollection
 
                 // dd("row2:".$row[2]."document_type:".$document_type);
 
-                $date_create = date("Y-m-d", strtotime($row[5]));
-                // $time_create = date("H:i:s", strtotime($row[4]));
-                $date_due = date("Y-m-d", strtotime($row[5])); //verificar
+                $create_date = Carbon::instance(Date::excelToDateTimeObject($row[5]));
+                $date_create = Carbon::parse($create_date)->format('Y-m-d');
 
                 $currency = ($row[11] == 'S') ? 'PEN' : 'Registre nueva moneda' ;
 
@@ -74,9 +75,13 @@ class DocumentsImport implements ToCollection
                 $mtosubtotal = $row[12];
 
                 //unidad de medida
-                $cdunimed = $row[22];
+                $cdunimed = $row[23];
                 if (rtrim($cdunimed) == 'GLNS') {
                     $unit_type = 'GLL';
+                } elseif (rtrim($cdunimed) == 'GLN'){
+                    $unit_type = 'GLL';
+                } elseif (rtrim($cdunimed) == 'LT'){
+                    $unit_type = 'LTR';
                 } else {
                     $unit_type = 'NIU';
                 }
@@ -94,7 +99,7 @@ class DocumentsImport implements ToCollection
                     "codigo_tipo_operacion" => $document_type_operation,
                     "codigo_tipo_documento" => $document_type,
                     "codigo_tipo_moneda" => $currency,
-                    "fecha_de_vencimiento" => $date_due,
+                    "fecha_de_vencimiento" => $date_create,
                     "numero_orden_de_compra" => "-",
                     "totales" => [
                         "total_exportacion" => 0.00,
@@ -141,7 +146,7 @@ class DocumentsImport implements ToCollection
                                 [
                                     "codigo" => "5010",
                                     "descripcion" => "Número de Placa",
-                                    "valor" => rtrim($row[23]),
+                                    "valor" => $row[21] != null ? $row[21] : 0,
                                     "fecha_inicio" => "",
                                     "fecha_fin" => "",
                                     "duracion" => ""
