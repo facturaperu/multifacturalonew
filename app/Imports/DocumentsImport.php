@@ -78,6 +78,10 @@ class DocumentsImport implements ToCollection
                 $cdunimed = $row[23];
                 if (rtrim($cdunimed) == 'GLNS') {
                     $unit_type = 'GLL';
+                } elseif (rtrim($cdunimed) == 'GLN'){
+                    $unit_type = 'GLL';
+                } elseif (rtrim($cdunimed) == 'LT'){
+                    $unit_type = 'LTR';
                 } else {
                     $unit_type = 'NIU';
                 }
