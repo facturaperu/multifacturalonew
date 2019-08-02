@@ -66,7 +66,14 @@ class DocumentsImport implements ToCollection
                     $client_document_type = '0';
                     $company_number = '00000000'; 
                 }
-                $company_name = $row[10];
+
+                if ($row[10] == null) {
+                    if ($client_document_type == '0') {
+                        $company_name = 'SIN NOMBRE';
+                    }
+                } else {
+                    $company_name = $row[10];
+                }
                 $company_address = $row[20];
 
                 //totales
