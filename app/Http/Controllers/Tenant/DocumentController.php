@@ -25,6 +25,7 @@ use App\Models\Tenant\Company;
 use App\Models\Tenant\Configuration;
 use App\Models\Tenant\Document;
 use App\Models\Tenant\Establishment;
+use App\Models\Tenant\PaymentMethodType;
 use App\Models\Tenant\Item;
 use App\Models\Tenant\Person;
 use App\Models\Tenant\Series;
@@ -140,6 +141,8 @@ class DocumentController extends Controller
         $document_type_03_filter = config('tenant.document_type_03_filter');
         $document_types_guide = DocumentType::whereIn('id', ['09', '31'])->get();
         $user = \auth()->user();
+        $payment_method_types = PaymentMethodType::all();
+        $enabled_discount_global = config('tenant.enabled_discount_global');
 
 //        return compact('customers', 'establishments', 'series', 'document_types_invoice', 'document_types_note',
 //                       'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
@@ -154,7 +157,7 @@ class DocumentController extends Controller
         return compact( 'customers','establishments', 'series', 'document_types_invoice', 'document_types_note',
                         'note_credit_types', 'note_debit_types', 'currency_types', 'operation_types',
                         'discount_types', 'charge_types', 'company', 'document_type_03_filter',
-                        'document_types_guide', 'user');
+                        'document_types_guide', 'user','payment_method_types','enabled_discount_global');
 
     }
 
