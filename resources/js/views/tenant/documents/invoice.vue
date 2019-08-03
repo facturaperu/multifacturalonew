@@ -692,9 +692,11 @@
                 // console.log(this.form.discounts)
             }, 
             submit() {
-                if(this.form_payment.payment > parseFloat(this.form.total)) {
-                    return this.$message.error('El monto ingresado supera al monto a pagar, verifique.');
+                
+                if(this.form_payment.payment > parseFloat(this.form.total) || this.form_payment.payment < 0) {
+                    return this.$message.error('El monto ingresado supera al monto a pagar o es incorrecto.');
                 }
+                
                 this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form).then(response => {
                     if (response.data.success) {
