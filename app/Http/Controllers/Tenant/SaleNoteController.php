@@ -32,6 +32,7 @@ use Mpdf\Mpdf;
 use Mpdf\HTMLParserMode;
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
+use App\Models\Tenant\PaymentMethodType;
 
 class SaleNoteController extends Controller
 {
@@ -95,8 +96,10 @@ class SaleNoteController extends Controller
         $discount_types = ChargeDiscountType::whereType('discount')->whereLevel('item')->get();
         $charge_types = ChargeDiscountType::whereType('charge')->whereLevel('item')->get();
         $company = Company::active(); 
+        $payment_method_types = PaymentMethodType::all();
 
-        return compact('customers', 'establishments','currency_types', 'discount_types', 'charge_types','company');
+        return compact('customers', 'establishments','currency_types', 'discount_types',
+                         'charge_types','company','payment_method_types');
     }
  
     
@@ -215,7 +218,7 @@ class SaleNoteController extends Controller
         if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58') OR ($format_pdf === 'ticket_80')) {
 
             $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
-            if(config('tenant.enabled_template_ticket_80')) $width = 80;
+            if(config('tenant.enabled_template_ticket_80')) $width = 76;
             
             $company_name      = (strlen($this->company->name) / 20) * 10;
             $company_address   = (strlen($this->document->establishment->address) / 30) * 10;
@@ -263,9 +266,9 @@ class SaleNoteController extends Controller
                     $total_exonerated +
                     $total_taxed],
                 'margin_top' => 0,
-                'margin_right' => 1,
+                'margin_right' => 2,
                 'margin_bottom' => 0,
-                'margin_left' => 1
+                'margin_left' => 2
             ]);
         } else {
 
