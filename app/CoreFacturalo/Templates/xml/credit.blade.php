@@ -200,9 +200,9 @@
             </cac:TaxCategory>
         </cac:TaxSubtotal>
         @endif
-        @if($note->total_free > 0)
+        @if($document->total_free > 0)
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="{{ $document->currency_type_id }}">{{ $note->total_free }}</cbc:TaxableAmount>
+            <cbc:TaxableAmount currencyID="{{ $document->currency_type_id }}">{{ $document->total_free }}</cbc:TaxableAmount>
             <cbc:TaxAmount currencyID="{{ $document->currency_type_id }}">{{ $document->total_igv }}</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cac:TaxScheme>
