@@ -544,22 +544,46 @@ class Facturalo
 
     private function setPathCertificate()
     {
-        if($this->isDemo) {
-            $this->pathCertificate = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.
-                'WS'.DIRECTORY_SEPARATOR.
-                'Signed'.DIRECTORY_SEPARATOR.
-                'Resources'.DIRECTORY_SEPARATOR.
-                'certificate.pem');
-        } else {
+        if($this->isOse) {
             $this->pathCertificate = storage_path('app'.DIRECTORY_SEPARATOR.
                 'certificates'.DIRECTORY_SEPARATOR.$this->company->certificate);
+        } else {
+            if($this->isDemo) {
+                $this->pathCertificate = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.
+                    'WS'.DIRECTORY_SEPARATOR.
+                    'Signed'.DIRECTORY_SEPARATOR.
+                    'Resources'.DIRECTORY_SEPARATOR.
+                    'certificate.pem');
+            } else {
+                $this->pathCertificate = storage_path('app'.DIRECTORY_SEPARATOR.
+                    'certificates'.DIRECTORY_SEPARATOR.$this->company->certificate);
+            }
         }
+
+//        if($this->isDemo) {
+//            $this->pathCertificate = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.
+//                'WS'.DIRECTORY_SEPARATOR.
+//                'Signed'.DIRECTORY_SEPARATOR.
+//                'Resources'.DIRECTORY_SEPARATOR.
+//                'certificate.pem');
+//        } else {
+//            $this->pathCertificate = storage_path('app'.DIRECTORY_SEPARATOR.
+//                'certificates'.DIRECTORY_SEPARATOR.$this->company->certificate);
+//        }
     }
 
     private function setSoapCredentials()
     {
-        $this->soapUsername = ($this->isDemo)?$this->company->number.'MODDATOS':$this->company->soap_username;
-        $this->soapPassword = ($this->isDemo)?'moddatos':$this->company->soap_password;
+        if($this->isDemo) {
+            $this->soapUsername = $this->company->number.'MODDATOS';
+            $this->soapPassword = 'moddatos';
+        } else {
+            $this->soapUsername = $this->company->soap_username;
+            $this->soapPassword = $this->company->soap_password;
+        }
+
+//        $this->soapUsername = ($this->isDemo)?$this->company->number.'MODDATOS':$this->company->soap_username;
+//        $this->soapPassword = ($this->isDemo)?'moddatos':$this->company->soap_password;
 
         if($this->isOse) {
             $this->endpoint = $this->company->soap_url;
