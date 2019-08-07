@@ -17,7 +17,7 @@
                             <label class="control-label">Número <span class="text-danger">*</span></label>
                             <el-input v-model="form.number" :maxlength="maxLength" dusk="number">
                                 <template v-if="form.identity_document_type_id === '6' || form.identity_document_type_id === '1'">
-                                    <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchCustomer">
+                                    <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchNumber">
                                         <template v-if="form.identity_document_type_id === '6'">
                                             SUNAT
                                         </template>
@@ -27,6 +27,8 @@
                                     </el-button>
                                 </template>
                             </el-input>
+                            <!-- <x-input-service :identity_document_type_id="form.identity_document_type_id" v-model="form.number" @search="searchNumber"></x-input-service> -->
+
                             <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
                         </div>
                     </div>
@@ -262,7 +264,14 @@
             },
             searchCustomer() {
                 this.searchServiceNumberByType()
-            }
+            },
+            searchNumber(data) {
+               this.form.name = (this.form.identity_document_type_id === '1')?data.nombre_completo:data.nombre_o_razon_social;
+//                this.form.trade_name = data.nombre_comercial;
+               this.form.location_id = data.ubigeo;
+               this.form.address = data.direccion;
+//                this.form.addresses[0].telephone = data.telefono;
+           },
         }
     }
 </script>
