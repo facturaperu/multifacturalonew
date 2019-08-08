@@ -7,7 +7,7 @@
                 <li><span class="text-muted">Facturas - Notas <small>(crédito y débito)</small> - Boletas - Anulaciones</small></span></li>
             </ol>
             <div class="right-wrapper pull-right" v-if="typeUser != 'integrator'">
-                <span v-if="!importDocuments">
+                <span v-if="import_documents == true">
                     <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickImport()"><i class="fa fa-upload"></i> Importar</button>
                 </span>
                 <a :href="`/${resource}/create`" class="btn btn-custom btn-sm  mt-2 mr-2"><i class="fa fa-plus-circle"></i> Nuevo</a>
@@ -157,7 +157,7 @@
     import ItemsImport from './import.vue'
 
     export default {
-        props: ['isClient','typeUser','importDocuments'],
+        props: ['isClient','typeUser','import_documents'],
         components: {DocumentsVoided, ItemsImport, DocumentOptions, DocumentPayments, DataTable},
         data() {
             return {

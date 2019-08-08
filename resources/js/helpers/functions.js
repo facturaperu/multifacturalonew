@@ -123,7 +123,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
             //amount and percentage are equals in input
             discount.amount = _.round(discount.percentage, 2)
             
-            discount.percentage =  _.round(100 * (parseFloat(discount.amount) / parseFloat(discount.base)))
+            discount.percentage =  _.round(100 * (parseFloat(discount.amount) / parseFloat(discount.base)),2)
 
             discount.factor = _.round(discount.percentage / 100, 2)
 
@@ -149,7 +149,6 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         
         row.discounts.splice(index, discount)
     })
-    
 
     // console.log('total base discount:'+discount_base)
     // console.log('total no base discount:'+discount_no_base)

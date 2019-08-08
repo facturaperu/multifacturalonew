@@ -8,6 +8,8 @@ use App\Models\Tenant\Warehouse;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class DocumentsImport implements ToCollection
 {
@@ -19,61 +21,80 @@ class DocumentsImport implements ToCollection
     {
             $total = count($rows);
             $registered = 0;
+            unset($rows[0]);
             foreach ($rows as $row)
             {
+                // dd($row);
                 $nrodocumento = $row[3];
-                $ser_num = substr_replace($nrodocumento, '-', 4, 0);
-                $serienumero = explode('-', $ser_num);
+                $serienumero = explode('-', $nrodocumento);
                 $serie = $serienumero[0];
                 $number = $serienumero[1];
                 $correlativo = (int)$number;
-                $serie_split = str_split($serie);
 
-                if($serie_split[0] === 'B'){
+                if($row[2] == '03'){
                     $document_type = '03';
                     $document_type_operation = '0101';
-                } elseif($serie_split[0] === 'F'){
+                } elseif($row[2] == '0001'){
                     $document_type = '01';
-                    $document_type_operation = '0101';                    
-                } else {
+                    $document_type_operation = '0101';  
+                } elseif ($row[2] == '01') {
+                    $document_type = '01';
+                    $document_type_operation = '0101';
+                }else {
                     return 'la serie: '.$serie.' no es valida para documentos electrónicos';
                 }
 
-                $date_create = date("Y-m-d", strtotime($row[4]));
-                $time_create = date("H:i:s", strtotime($row[4]));
-                $date_due = date("Y-m-d", strtotime($row[64])); //verificar
+                // dd("row2:".$row[2]."document_type:".$document_type);
 
-                $currency = ($row[16] == 'S') ? 'PEN' : 'Registre nueva moneda' ;
+                $create_date = Carbon::instance(Date::excelToDateTimeObject($row[5]));
+                $date_create = Carbon::parse($create_date)->format('Y-m-d');
+
+                $currency = ($row[11] == 'S') ? 'PEN' : 'Registre nueva moneda' ;
 
                 //cliente
-                $co_number = rtrim($row[12]);
-                if (strlen($co_number) == 11) {
-                    $client_document_type = '6';
-                    $company_number = $co_number;
-                } elseif (strlen($co_number) == 8) {
-                    $client_document_type = '1';
-                    $company_number = $co_number;
-                } else {
+                $co_number = rtrim($row[9]);
+                if ($co_number > 0) {
+                    if (strlen($co_number) == 11) {
+                        $client_document_type = '6';
+                        $company_number = $co_number;
+                    } elseif (strlen($co_number) == 8) {
+                        $client_document_type = '1';
+                        $company_number = $co_number;
+                    }
+                }
+                 else {
                     $client_document_type = '0';
                     $company_number = '00000000'; 
                 }
-                $company_name = $row[13];
-                $company_address = $row[120];
+
+                if ($row[10] == null) {
+                    if ($client_document_type == '0') {
+                        $company_name = 'SIN NOMBRE';
+                    }
+                } else {
+                    $company_name = $row[10];
+                }
+                $company_address = $row[20];
 
                 //totales
-                $mtototal = $row[28];
-                $mtoimpuesto = $row[27];
-                $mtosubtotal = $row[25];
+                $mtototal = $row[15];
+                $mtoimpuesto = $row[13];
+                $mtosubtotal = $row[12];
 
                 //unidad de medida
-                $cdunimed = $row[215];
+                $cdunimed = $row[23];
                 if (rtrim($cdunimed) == 'GLNS') {
                     $unit_type = 'GLL';
+                } elseif (rtrim($cdunimed) == 'GLN'){
+                    $unit_type = 'GLL';
+                } elseif (rtrim($cdunimed) == 'LT'){
+                    $unit_type = 'LTR';
                 } else {
                     $unit_type = 'NIU';
                 }
                 
 
+                $total_primer_producto = $row[26] + $row[27];
 
                 //genero json y envio a api para no hacer insert 
                 
@@ -81,12 +102,12 @@ class DocumentsImport implements ToCollection
                     "serie_documento" => $serie,
                     "numero_documento" => $correlativo,
                     "fecha_de_emision" => $date_create,
-                    "hora_de_emision" => $time_create,
+                    "hora_de_emision" => "11:00:00",
                     "codigo_tipo_operacion" => $document_type_operation,
                     "codigo_tipo_documento" => $document_type,
                     "codigo_tipo_moneda" => $currency,
-                    "fecha_de_vencimiento" => $date_due,
-                    "numero_orden_de_compra" => $row[64],
+                    "fecha_de_vencimiento" => $date_create,
+                    "numero_orden_de_compra" => "-",
                     "totales" => [
                         "total_exportacion" => 0.00,
                         "total_operaciones_gravadas" => $mtosubtotal,
@@ -113,26 +134,26 @@ class DocumentsImport implements ToCollection
                     ],
                     "items" => [
                         [
-                            "codigo_interno" => $row[82],
-                            "descripcion" => rtrim($row[214]),
+                            "codigo_interno" => substr($row[22],0,10),
+                            "descripcion" => rtrim($row[22]),
                             "codigo_producto_sunat" => "",
                             "unidad_de_medida" => $unit_type,
-                            "cantidad" => $row[91],
-                            "valor_unitario" => $row[93],
+                            "cantidad" => $row[24],
+                            "valor_unitario" => $row[25],
                             "codigo_tipo_precio" => "01",
-                            "precio_unitario" => $row[93],
+                            "precio_unitario" => $row[25],
                             "codigo_tipo_afectacion_igv" => "10",
-                            "total_base_igv" => $row[98],
-                            "porcentaje_igv" => $row[86],
-                            "total_igv" => $row[100],
-                            "total_impuestos" => $row[100],
-                            "total_valor_item" => $row[98],
-                            "total_item" => $row[101],
+                            "total_base_igv" => $row[26] != null ? $row[26] : $mtosubtotal,
+                            "porcentaje_igv" => "18",
+                            "total_igv" => $row[27] != null ? $row[27] : $mtoimpuesto,
+                            "total_impuestos" => $row[27] != null ? $row[27] : $mtoimpuesto,
+                            "total_valor_item" => $row[26] != null ? $row[26] : $mtosubtotal,
+                            "total_item" => $total_primer_producto > 0 ? $total_primer_producto : $mtototal,
                             "datos_adicionales" => [
                                 [
                                     "codigo" => "5010",
                                     "descripcion" => "Número de Placa",
-                                    "valor" => rtrim($row[31]),
+                                    "valor" => $row[21] != null ? $row[21] : 0,
                                     "fecha_inicio" => "",
                                     "fecha_fin" => "",
                                     "duracion" => ""
@@ -142,10 +163,31 @@ class DocumentsImport implements ToCollection
                     ]
                 );
 
+                if ($row[28] != null) {
+                    $new_item = [
+                            "codigo_interno" => substr($row[28],0,10),
+                            "descripcion" => rtrim($row[28]),
+                            "codigo_producto_sunat" => "",
+                            "unidad_de_medida" => $unit_type,
+                            "cantidad" => $row[29],
+                            "valor_unitario" => $row[30],
+                            "codigo_tipo_precio" => "01",
+                            "precio_unitario" => $row[30],
+                            "codigo_tipo_afectacion_igv" => "10",
+                            "total_base_igv" => $row[31],
+                            "porcentaje_igv" => "18",
+                            "total_igv" => $row[32],
+                            "total_impuestos" => $row[32],
+                            "total_valor_item" => $row[31],
+                            "total_item" => $row[31] + $row[32]
+                        ];
+                    array_push($json["items"], $new_item);
+                }
+
                 $url = url('/api/documents');
                 $token = \Auth::user()->api_token;
 
-                // dd(json_encode($json));
+                // dd($json);
 
                 try {
 
@@ -162,50 +204,6 @@ class DocumentsImport implements ToCollection
                     dd($e);
                 }
 
-
-                // $description = $row[0];
-                // $item_type_id = '01';
-                // $internal_id = ($row[1])?:null;
-                // $item_code = ($row[2])?:null;
-                // $unit_type_id = $row[3];
-                // $currency_type_id = $row[4];
-                // $sale_unit_price = $row[5];
-                // $sale_affectation_igv_type_id = $row[6];
-                // $has_igv = (strtoupper($row[7]) === 'SI')?true:false;
-                // $purchase_unit_price = ($row[8])?:0;
-                // $purchase_affectation_igv_type_id = ($row[9])?:null;
-                // $stock = $row[10];
-                // $stock_min = $row[11];
-
-                // if($internal_id) {
-                //     $item = Item::where('internal_id', $internal_id)
-                //                     ->first();
-                // } else {
-                //     $item = null;
-                // }
-
-                // $establishment_id = auth()->user()->establishment->id;
-                // $warehouse = Warehouse::where('establishment_id', $establishment_id)->first();
-
-                // if(!$item) {
-                //     Item::create([
-                //         'description' => $description,
-                //         'item_type_id' => $item_type_id,
-                //         'internal_id' => $internal_id,
-                //         'item_code' => $item_code,
-                //         'unit_type_id' => $unit_type_id,
-                //         'currency_type_id' => $currency_type_id,
-                //         'sale_unit_price' => $sale_unit_price,
-                //         'sale_affectation_igv_type_id' => $sale_affectation_igv_type_id,
-                //         'has_igv' => $has_igv,
-                //         'purchase_unit_price' => $purchase_unit_price,
-                //         'purchase_affectation_igv_type_id' => $purchase_affectation_igv_type_id,
-                //         'stock' => $stock,
-                //         'stock_min' => $stock_min,
-                //         // 'warehouse_id' => $warehouse->id
-                //     ]);
-                //     $registered += 1;
-                // }
                 $registered += 1;
             }
             $this->data = compact('total', 'registered');

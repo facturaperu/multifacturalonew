@@ -59,7 +59,7 @@
                 }
             },
             create() {
-                this.titleDialog = 'Importar Productos'
+                this.titleDialog = 'Importar Documentos'
             },
             async submit() {
                 this.loading_submit = true

@@ -172,6 +172,8 @@ class ServiceController extends Controller
                             ->first();
             } else {
                 $document = Document::where('external_id', $external_id)
+                            ->where('number', $number)
+                            ->where('series', $serie)
                             ->first();
             }
             
@@ -186,7 +188,14 @@ class ServiceController extends Controller
                     'external_id' => $document->external_id,
                     'status_id' => $document->state_type_id,
                     'status' => $document->state_type->description,
-                ]
+                    'qr' => $document->qr,
+                    'number_to_letter' => $document->number_to_letter,
+                ],
+                'links' => [
+                    'xml' => $document->download_external_xml,
+                    'pdf' => $document->download_external_pdf,
+                    'cdr' => ($document->download_external_cdr)?$document->download_external_cdr:'',
+                ],
             ];
         }
     }
