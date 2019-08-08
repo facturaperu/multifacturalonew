@@ -124,7 +124,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-lg-2">
                                 <div class="form-group" :class="{'has-danger': errors.payment_method_type_id}">
                                     <label class="control-label">Metodo de pago</label>
@@ -148,7 +148,7 @@
                                     <small class="form-control-feedback" v-if="errors.payment" v-text="errors.payment[0]"></small>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row mt-2">
                             <div class="col-md-12">
@@ -693,15 +693,15 @@
             }, 
             submit() {
                 
-                if(this.form_payment.payment > parseFloat(this.form.total) || this.form_payment.payment < 0) {
-                    return this.$message.error('El monto ingresado supera al monto a pagar o es incorrecto.');
-                }
+                // if(this.form_payment.payment > parseFloat(this.form.total) || this.form_payment.payment < 0) {
+                //     return this.$message.error('El monto ingresado supera al monto a pagar o es incorrecto.');
+                // }
                 
                 this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form).then(response => {
                     if (response.data.success) {
-                        this.form_payment.document_id = response.data.data.id;
-                        this.document_payment()
+                        // this.form_payment.document_id = response.data.data.id;
+                        // this.document_payment()
                         this.resetForm();
                         this.documentNewId = response.data.data.id;
                         this.showDialogOptions = true;
