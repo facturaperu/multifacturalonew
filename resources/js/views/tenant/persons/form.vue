@@ -180,7 +180,7 @@
                     id: null,
                     type: this.type,
                     identity_document_type_id: '6',
-                    number: null,
+                    number: '',
                     name: null,
                     trade_name: null,
                     country_id: 'PE',
