@@ -47,34 +47,32 @@ class ReportController extends Controller
             if (is_null($td)) {
                 $reports = Document::with([ 'state_type', 'person'])
                     ->whereBetween('date_of_issue', [$d, $a])
-                    ->latest()
-                    ->get();
+                    ->latest();
             }
             else {
                 $reports = Document::with([ 'state_type', 'person'])
                     ->whereBetween('date_of_issue', [$d, $a])
                     ->latest()
-                    ->where('document_type_id', $td)
-                    ->get();
+                    ->where('document_type_id', $td);
             }
         }
         else {
             if (is_null($td)) {
                 $reports = Document::with([ 'state_type', 'person'])
-                    ->latest()
-                    ->get();
+                    ->latest();
             } else {
                 $reports = Document::with([ 'state_type', 'person'])
                     ->latest()
-                    ->where('document_type_id', $td)
-                    ->get();
+                    ->where('document_type_id', $td);
             }
         }
 
         if(!is_null($establishment_id)){
             $reports = $reports->where('establishment_id', $establishment_id);
         }
-        
+
+        $reports = $reports->paginate(config('tenant.items_per_page'));
+        // dd($reports->total());
         return view("tenant.reports.index", compact("reports", "a", "d", "td", "documentTypes","establishment","establishments"));
     }
     
