@@ -7,6 +7,9 @@
                 <li><span class="text-muted">Facturas - Notas <small>(crédito y débito)</small> - Boletas - Anulaciones</small></span></li>
             </ol>
             <div class="right-wrapper pull-right" v-if="typeUser != 'integrator'">
+                <span v-if="import_documents == true">
+                    <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickImport()"><i class="fa fa-upload"></i> Importar</button>
+                </span>
                 <a :href="`/${resource}/create`" class="btn btn-custom btn-sm  mt-2 mr-2"><i class="fa fa-plus-circle"></i> Nuevo</a>
             </div>
         </div>
@@ -133,6 +136,8 @@
             <documents-voided :showDialog.sync="showDialogVoided"
                             :recordId="recordId"></documents-voided>
 
+            <items-import :showDialog.sync="showImportDialog"></items-import>
+
             <document-options :showDialog.sync="showDialogOptions"
                               :recordId="recordId"
                               :showClose="true"></document-options>
@@ -149,13 +154,15 @@
     import DocumentOptions from './partials/options.vue'
     import DocumentPayments from './partials/payments.vue'
     import DataTable from '../../../components/DataTable.vue'
+    import ItemsImport from './import.vue'
 
     export default {
-        props: ['isClient','typeUser'],
-        components: {DocumentsVoided, DocumentOptions, DocumentPayments, DataTable},
+        props: ['isClient','typeUser','import_documents'],
+        components: {DocumentsVoided, ItemsImport, DocumentOptions, DocumentPayments, DataTable},
         data() {
             return {
                 showDialogVoided: false,
+                showImportDialog: false,
                 resource: 'documents',
                 recordId: null,
                 showDialogOptions: false,
@@ -285,6 +292,9 @@
                     .catch(error => {
                         this.$message.error(error.response.data.message)
                     })
+            },
+            clickImport() {
+                this.showImportDialog = true
             }
         }
     }

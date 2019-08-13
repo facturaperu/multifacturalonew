@@ -2,6 +2,6 @@
 
 @section('content')
 
-    <tenant-persons-index :type="{{ json_encode($type) }}"></tenant-persons-index>
+    <tenant-persons-index :type="{{ json_encode($type) }}" :api_service_token="{{ json_encode($api_service_token) }}"></tenant-persons-index>
 
 @endsection

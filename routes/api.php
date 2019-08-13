@@ -23,6 +23,15 @@ if ($hostname) {
 
         Route::post('services/validate_cpe', 'Tenant\Api\ServiceController@validateCpe');
         Route::post('services/consult_status', 'Tenant\Api\ServiceController@consultStatus');
+        Route::post('documents/status', 'Tenant\Api\ServiceController@documentStatus');
 
     });
+}else{
+    Route::domain(env('APP_URL_BASE'))->group(function() {
+
+        //reseller
+        Route::post('reseller/detail', 'System\Api\ResellerController@resellerDetail');
+        
+    });
+    
 }

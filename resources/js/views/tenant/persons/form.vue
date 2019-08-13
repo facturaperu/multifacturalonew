@@ -15,7 +15,26 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">Número <span class="text-danger">*</span></label>
-                            <x-input-service :identity_document_type_id="form.identity_document_type_id" v-model="form.number" @search="searchNumber"></x-input-service>
+                            
+                            <div v-if="api_service_token != false">
+                                <x-input-service :identity_document_type_id="form.identity_document_type_id" v-model="form.number" @search="searchNumber"></x-input-service>
+                            </div>
+                            <div v-else>
+                                <el-input v-model="form.number" :maxlength="maxLength" dusk="number">
+                                    <template v-if="form.identity_document_type_id === '6' || form.identity_document_type_id === '1'">
+                                        <el-button type="primary" slot="append" :loading="loading_search" icon="el-icon-search" @click.prevent="searchCustomer">
+                                            <template v-if="form.identity_document_type_id === '6'">
+                                                SUNAT
+                                            </template>
+                                            <template v-if="form.identity_document_type_id === '1'">
+                                                RENIEC
+                                            </template>
+                                        </el-button>
+                                    </template>
+                                </el-input>
+                            </div>
+                            
+
                             <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
                         </div>
                     </div>
@@ -104,7 +123,7 @@
 
     export default {
         mixins: [serviceNumber],
-        props: ['showDialog', 'type', 'recordId', 'external', 'document_type_id'],
+        props: ['showDialog', 'type', 'recordId', 'external', 'document_type_id', 'api_service_token'],
         data() {
             return {
                 loading: false,
@@ -147,6 +166,14 @@
                     name: null,
                     trade_name: null,
                     addresses: [],
+                    country_id: 'PE',
+                    department_id: null,
+                    province_id: null,
+                    district_id: null,
+                    address: null,
+                    telephone: null,
+                    email: null,
+                    // more_address: []
                 }
             },
             async create() {
@@ -194,6 +221,12 @@
             clickRemoveAddress(index) {
                 this.form.addresses.splice(index, 1);
             },
+            // clickAddAddress() {
+            //     this.form.more_address.push({
+            //         location_id: [],
+            //         address: null,
+            //     })
+            // },
             submit() {
                 this.loading_submit = true;
                 this.$http.post(`/${this.resource}`, this.form)
@@ -243,6 +276,22 @@
                 this.form.addresses[0].address = data.direccion;
                 this.form.addresses[0].telephone = data.telefono;
             },
+            searchCustomer() {
+                this.searchServiceNumberByType()
+            },
+            searchNumber(data) {
+                this.form.name = (this.form.identity_document_type_id === '1')?data.nombre_completo:data.nombre_o_razon_social;
+                this.form.trade_name = (this.form.identity_document_type_id === '6')?data.nombre_o_razon_social:'';
+                this.form.location_id = data.ubigeo;
+                this.form.address = data.direccion;
+                this.form.department_id = data.ubigeo[0];
+                this.form.province_id = data.ubigeo[1];
+                this.form.district_id = data.ubigeo[2];
+
+                this.filterProvinces()
+                this.filterDistricts()
+//                this.form.addresses[0].telephone = data.telefono;
+           },
         }
     }
 </script>

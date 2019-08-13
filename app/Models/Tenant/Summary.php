@@ -6,7 +6,8 @@ use App\Models\Tenant\Catalogs\SummaryStatusType;
 
 class Summary extends ModelTenant
 {
-    protected $with = ['user', 'soap_type', 'state_type', 'summary_status_type', 'documents'];
+    // protected $with = ['user', 'soap_type', 'state_type', 'summary_status_type', 'documents'];
+    // protected $with = ['soap_type', 'state_type', 'summary_status_type'];
 
     protected $fillable = [
         'user_id',

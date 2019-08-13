@@ -103,6 +103,8 @@ Vue.component('system-plans-form', require('./views/system/plans/form.vue'));
 
 Vue.component('tenant-accounting-export', require('./views/tenant/accounting/export.vue'));
 
+Vue.component('x-input-service', require('./components/InputService.vue'));
+
 const app = new Vue({
     el: '#main-wrapper'
 });

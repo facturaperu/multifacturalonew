@@ -11,8 +11,7 @@
                 </div>
                 <div class="card-body">
                     <div>
-                        <form action="{{route('tenant.search')}}" class="el-form demo-form-inline el-form--inline" method="POST">
-                            {{csrf_field()}}
+                        <form action="{{route('tenant.search')}}" class="el-form demo-form-inline el-form--inline" method="GET">
                             <tenant-calendar :document_types="{{json_encode($documentTypes)}}" :establishments="{{json_encode($establishments)}}" establishment="{{$establishment ?? null}}" data_d="{{$d ?? ''}}" data_a="{{$a ?? ''}}" td="{{$td ?? null}}"></tenant-calendar>
                         </form>
                     </div>
@@ -45,6 +44,10 @@
                                 $acum_total_taxed=0;
                                 $acum_total_igv=0;
                                 $acum_total=0;
+
+                                $acum_total_taxed_usd=0;
+                                $acum_total_igv_usd=0;
+                                $acum_total_usd=0;
                             @endphp
                             <table width="100%" class="table table-striped table-responsive-xl table-bordered table-hover">
                                 <thead class="">
@@ -56,6 +59,7 @@
                                         <th class="">Cliente</th>
                                         <th class="">RUC</th>
                                         <th class="">Estado</th>
+                                        <th class="">Moneda</th>
                                         <th class="">Total Gravado</th>
                                         <th class="">Total IGV</th>
                                         <th class="">Total</th>
@@ -71,29 +75,45 @@
                                         <td>{{$value->person->name}}</td>
                                         <td>{{$value->person->number}}</td>
                                         <td>{{$value->state_type->description}}</td>
+                                        <td>{{$value->currency_type_id}}</td>
                                         <td>{{$value->total_taxed}}</td>
                                         <td>{{$value->total_igv}}</td>
                                         <td>{{$value->total}}</td>
                                     </tr>
                                     @php
-                                        $acum_total_taxed += $value->total_taxed;
-                                        $acum_total_igv += $value->total_igv;
-                                        $acum_total += $value->total;
+                                        if($value->currency_type_id == 'PEN'){
+                                            $acum_total_taxed += $value->total_taxed;
+                                            $acum_total_igv += $value->total_igv;
+                                            $acum_total += $value->total;
+                                        }else if($value->currency_type_id == 'USD'){
+                                            $acum_total_taxed_usd += $value->total_taxed;
+                                            $acum_total_igv_usd += $value->total_igv;
+                                            $acum_total_usd += $value->total;
+                                        }
+
                                     @endphp
                                     @endforeach
                                     <tr>
-                                        <td colspan="6"></td>
-                                        <td >Totales</td>
+                                        <td colspan="7"></td>
+                                        <td >Totales PEN</td>
                                         <td>{{$acum_total_taxed}}</td>
                                         <td>{{$acum_total_igv}}</td>
                                         <td>{{$acum_total}}</td>
                                     </tr>
+                                    <tr>
+                                        <td colspan="7"></td>
+                                        <td >Totales USD</td>
+                                        <td>{{$acum_total_taxed_usd}}</td>
+                                        <td>{{$acum_total_igv_usd}}</td>
+                                        <td>{{$acum_total_usd}}</td>
+                                    </tr>
                                 </tbody>
                             </table>
-                            <div class="pagination-wrapper">
+                            Total {{$reports->total()}}
+                            <label class="pagination-wrapper ml-2">
                                 {{-- {{ $reports->appends(['search' => Session::get('form_document_list')])->render()  }} --}}
-                                {{-- {{$reports->links()}} --}}
-                            </div>
+                                {{$reports->appends($_GET)->render()}} 
+                            </label>
                         </div>
                     </div>
                     @else
@@ -105,6 +125,7 @@
             </div>
         </div>
     </div>
+    
 @endsection
 
 @push('scripts')
