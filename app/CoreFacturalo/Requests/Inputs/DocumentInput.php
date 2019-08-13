@@ -50,7 +50,7 @@ class DocumentInput
             $note = $array_partial['note'];
             $invoice = null;
 
-            $customer_address = $inputs['customer_address'];
+            $customer_address = isset($inputs['customer_address']) ? $inputs['customer_address']:null;
             $country_id = isset($customer_address['country_id'])?$customer_address['country_id']:null;
             $location_id = isset($customer_address['location_id'])?$customer_address['location_id']:null;
             $address = isset($customer_address['address'])?$customer_address['address']:null;

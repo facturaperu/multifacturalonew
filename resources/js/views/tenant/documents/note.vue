@@ -218,7 +218,7 @@
             }
         },
         created() {
-            console.log(this.document)
+            // console.log(this.document)
             this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
