@@ -119,7 +119,7 @@ class ReportController extends Controller
             $reports = $reports->where('establishment_id', $establishment_id);
         }
 
-        set_time_limit(1200); 
+        set_time_limit(0); 
 
         $pdf = PDF::loadView('tenant.reports.report_pdf', compact("reports", "company", "establishment"));
         $filename = 'Reporte_Documentos'.date('YmdHis');
