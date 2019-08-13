@@ -34,22 +34,32 @@ class DocumentInput
         $customer = PersonInput::set($inputs['customer_id']);
 
         if(in_array($document_type_id, ['01', '03'])) {
+
             $array_partial = self::invoice($inputs);
             $invoice = $array_partial['invoice'];
             $note = null;
+
+            $customer_address = PersonAddress::find($inputs['customer_address_id']);
+            $country_id = ($customer_address->country_id)?$customer_address->country_id:null;
+            $location_id = ($customer_address->location_id)?$customer_address->district_id:null;
+            $address = ($customer_address->address)?$customer_address->address:null;
+
         } else {
+
             $array_partial = self::note($inputs);
             $note = $array_partial['note'];
             $invoice = null;
+
+            $customer_address = $inputs['customer_address'];
+            $country_id = isset($customer_address['country_id'])?$customer_address['country_id']:null;
+            $location_id = isset($customer_address['location_id'])?$customer_address['location_id']:null;
+            $address = isset($customer_address['address'])?$customer_address['address']:null;
+
         }
 
         $inputs['type'] = $array_partial['type'];
         $inputs['group_id'] = $array_partial['group_id'];
-
-        $customer_address = PersonAddress::find($inputs['customer_address_id']);
-        $country_id = ($customer_address->country_id)?$customer_address->country_id:null;
-        $location_id = ($customer_address->location_id)?$customer_address->district_id:null;
-        $address = ($customer_address->address)?$customer_address->address:null;
+        
 
         return [
             'type' => $inputs['type'],

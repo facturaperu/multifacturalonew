@@ -9,7 +9,7 @@ class NoteController extends Controller
     public function create($document_id)
     {
         $document = Document::find($document_id);
-
+        // dd($document);
         return view('tenant.documents.note', compact('document'));
     }
 }

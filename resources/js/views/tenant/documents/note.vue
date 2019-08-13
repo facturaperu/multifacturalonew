@@ -218,6 +218,7 @@
             }
         },
         created() {
+            console.log(this.document)
             this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
@@ -254,6 +255,7 @@
                     date_of_issue: moment().format('YYYY-MM-DD'),
                     time_of_issue: moment().format('HH:mm:ss'),
                     customer_id: this.document.customer_id,
+                    customer_address: this.document.customer_address,
                     currency_type_id: this.document.currency_type_id,
                     purchase_order: null,
                     exchange_rate_sale: 0,
