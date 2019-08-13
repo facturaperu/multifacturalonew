@@ -69,7 +69,8 @@ class DocumentController extends Controller
 
     public function records(Request $request)
     {
-//        $series = Series::select('number')->where('contingency', false)->get();
+
+        //$series = Series::select('number')->where('contingency', false)->get();
         $series = Series::select('number')->get();
 
         $records = Document::where($request->column, 'like', "%{$request->value}%")
@@ -78,7 +79,19 @@ class DocumentController extends Controller
                             ->latest();
 
         return new DocumentCollection($records->paginate(config('tenant.items_per_page')));
+
     }
+
+    public function data_table()
+    {
+        
+        $customers = $this->table('customers'); 
+        $document_types = DocumentType::whereIn('id', ['01', '03','07', '08'])->get();
+                       
+        return compact( 'customers', 'document_types');
+
+    }
+
 
     public function searchCustomers(Request $request)
     {
