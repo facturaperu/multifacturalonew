@@ -3,45 +3,22 @@
         <div class="row ">
 
             <div class="col-md-12 col-lg-12 col-xl-12 ">
+                 
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-12 pb-2">
-                        <div class="d-flex">
-                            <div style="width:100px">
-                                Filtrar por:
-                            </div>
-                            <el-select v-model="search.column"  placeholder="Select" @change="changeClearInput">
-                                <el-option v-for="(label, key) in columns" :key="key" :value="key" :label="label"></el-option>
-                            </el-select>
+                    <div class="col-lg-8 col-md-8 mb-2">
+                        <div class="form-group"> 
+                            <label class="control-label font-custom"><strong>Filtros de busqueda</strong></label> 
+                            <template v-if="!see_more">
+                                <a class="control-label font-weight-bold text-info font-custom" href="#" @click="clickSeeMore"><strong> [+ Ver más]</strong></a> 
+                            </template>
+                            <template v-else>
+                                <a class="control-label font-weight-bold text-info font-custom" href="#" @click="clickSeeMore"><strong> [- Ver menos]</strong></a> 
+                            </template>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12 pb-2">
-                        <template v-if="search.column=='date_of_issue'">
-                            <el-date-picker
-                                v-model="search.value"
-                                type="date"
-                                style="width: 100%;"
-                                placeholder="Buscar"
-                                value-format="yyyy-MM-dd"
-                                 >
-                            </el-date-picker>
-                        </template>
-                        <template v-else>
-                            <el-input placeholder="Buscar"
-                                v-model="search.value"
-                                style="width: 100%;"
-                                prefix-icon="el-icon-search"
-                                >
-                            </el-input>
-                        </template>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12 pb-2"> 
-                        <el-button class="submit" type="primary" @click.prevent="getRecords" :loading="loading_submit" icon="el-icon-search" >Filtrar</el-button>
-                    </div>
-                    
-                    
+                    </div> 
                 </div>
-                <div class="row">
-                    <div class="col-lg-3 pb-2">
+                <div class="row mt-2" v-if="see_more"> 
+                    <div class="col-lg-4 col-md-4 ">
                         <div class="form-group"> 
                             <label class="control-label">Tipo comprobante</label>
                             <el-select v-model="search.document_type_id" @change="changeDocumentType" popper-class="el-select-document_type" filterable clearable>
@@ -49,7 +26,75 @@
                             </el-select>
                         </div>
                     </div>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group"  >
+                            <label class="control-label">Serie</label>
+                            <el-select v-model="search.series" filterable clearable>
+                                <el-option v-for="option in series" :key="option.number" :value="option.number" :label="option.number"></el-option>
+                            </el-select> 
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group"  >
+                            <label class="control-label">Número</label> 
+                            <el-input placeholder="Ingresar"
+                                v-model="search.number">
+                            </el-input>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 pb-2">
+                        <div class="form-group"> 
+                            <label class="control-label">Fecha inicio </label>
+
+                            <el-date-picker
+                                v-model="search.d_start"
+                                type="date"
+                                style="width: 100%;"
+                                placeholder="Buscar"
+                                value-format="yyyy-MM-dd"
+                                @change="changeDisabledDates"
+                                 >
+                            </el-date-picker>
+                        </div>
+                    </div> 
+                    <div class="col-lg-2 col-md-2 pb-2">
+                        <div class="form-group"> 
+                            <label class="control-label">Fecha término</label>
+
+                            <el-date-picker
+                                v-model="search.d_end"
+                                type="date"
+                                style="width: 100%;"
+                                placeholder="Buscar"
+                                value-format="yyyy-MM-dd"
+                                :picker-options="pickerOptionsDates"
+                                @change="changeEndDate"
+                                 >
+                            </el-date-picker>
+                        </div>
+                    </div>        
+
+                    <div class="col-lg-2 col-md-2 col-sm-12 pb-2"> 
+                        <label class="control-label">Fecha de emisión</label>
+                        <el-date-picker
+                            v-model="search.date_of_issue"
+                            type="date"
+                            style="width: 100%;"
+                            placeholder="Buscar"
+                            value-format="yyyy-MM-dd"
+                            @change="changeDateOfIssue"    >
+                        </el-date-picker> 
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-md-4 col-sm-12" style="margin-top:29px"> 
+                        <el-button class="submit" type="primary" @click.prevent="getRecordsByFilter" :loading="loading_submit" icon="el-icon-search" >Buscar</el-button>
+                        <el-button class="submit" type="info" @click.prevent="cleanInputs"  icon="el-icon-delete" >Limpiar </el-button>
+
+                    </div>             
+                    
                 </div>
+                <div class="row mt-1 mb-3">
+                    
+                </div> 
             </div>
 
 
@@ -78,65 +123,105 @@
 
     </div>
 </template>
-
-
+<style>
+.font-custom{
+    font-size:15px !important
+}
+</style>
 <script>
 
     import moment from 'moment'
     import queryString from 'query-string'
 
-    export default {
+    export default { 
         props: {
             resource: String,
         },
         data () {
             return {
                 loading_submit:false,
-                search: {
-                    column: null,
-                    value: null,
-                    document_type_id:null,
-                },
                 columns: [],
                 records: [],
                 customers: [],
                 document_types: [],
                 pagination: {}, 
+                search: {}, 
+                all_series: [],
+                establishment: null,
+                establishments: [],
+                series: [],                
+                activePanel:0,
+                see_more:false,
+                pickerOptionsDates: {
+                    disabledDate: (time) => {
+                        time = moment(time).format('YYYY-MM-DD')
+                        return this.search.d_start > time
+                    }
+                },
             }
         },
         computed: {
         },
         created() {
+            this.initForm()
             this.$eventHub.$on('reloadData', () => {
                 this.getRecords()
             })
         },
-        async mounted () {
-            let column_resource = _.split(this.resource, '/')
-            await this.$http.get(`/${_.head(column_resource)}/columns`).then((response) => {
-                this.columns = response.data
-                this.search.column = _.head(Object.keys(this.columns))
-            });
-            await this.$http.get(`/${_.head(column_resource)}/data_table`).then((response) => {
+        async mounted () { 
+
+            await this.$http.get(`/${this.resource}/data_table`).then((response) => {
                 this.document_types = response.data.document_types
+                this.all_series = response.data.series
+                this.establishments = response.data.establishments
+
             });
+
+
             await this.getRecords()
 
         },
         methods: {
-            changeDocumentType(){
-                
-                // this.getRecords()
+            clickSeeMore(){
+                this.see_more = (this.see_more) ? false : true
+            },
+            initForm(){
+
+                this.search = { 
+                    date_of_issue: null,
+                    document_type_id:null,
+                    series:null, 
+                    number:null, 
+                    d_start:null, 
+                    d_end:null, 
+                }
+            },
+            changeDocumentType(){                
+                this.filterSeries();
+            },
+            filterSeries() {
+                this.search.series = null
+                this.series = _.filter(this.all_series, {'document_type_id': this.search.document_type_id});
+                this.search.series = (this.series.length > 0)?this.series[0].number:null
             },
             customIndex(index) {
                 return (this.pagination.per_page * (this.pagination.current_page - 1)) + index + 1
+            },
+            async getRecordsByFilter(){
+
+                this.loading_submit = await true
+                await this.getRecords()
+                this.loading_submit = await false
+
             },
             getRecords() {
                 return this.$http.get(`/${this.resource}/records?${this.getQueryParameters()}`).then((response) => {
                     this.records = response.data.data
                     this.pagination = response.data.meta
                     this.pagination.per_page = parseInt(response.data.meta.per_page)
+                    this.loading_submit = false
                 });
+
             },
             getQueryParameters() {
                 return queryString.stringify({
@@ -148,6 +233,22 @@
             changeClearInput(){
                 this.search.value = ''
                 // this.getRecords()
+            },
+            changeDisabledDates() {
+                this.search.date_of_issue = null
+                if (this.search.d_end < this.search.d_start) {
+                    this.search.d_end = this.search.d_start
+                }
+            },
+            changeDateOfIssue(){
+                this.search.d_start = null
+                this.search.d_end = null
+            },
+            changeEndDate(){
+                this.search.date_of_issue = null
+            },
+            cleanInputs(){
+                this.initForm()
             }
         }
     }
