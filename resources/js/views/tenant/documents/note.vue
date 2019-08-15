@@ -218,6 +218,7 @@
             }
         },
         created() {
+            // console.log(this.document)
             this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
@@ -270,6 +271,7 @@
                     total_isc: this.document.total_isc,
                     total_base_other_taxes: this.document.total_base_other_taxes,
                     total_other_taxes: this.document.total_other_taxes,
+                    total_plastic_bag_taxes: this.document.total_plastic_bag_taxes,
                     total_taxes: this.document.total_taxes,
                     total_value: this.document.total_value,
                     total: this.document.total,
@@ -282,6 +284,7 @@
                     },
                     operation_type_id: null,
                 }
+                // console.log(this.form.items)
             },
             resetForm() {
                 this.initForm()
@@ -331,6 +334,7 @@
                 let total_igv = 0
                 let total_value = 0
                 let total = 0
+                let total_plastic_bag_taxes = 0
                 this.form.items.forEach((row) => {
                     total_discount += parseFloat(row.total_discount)
                     total_charge += parseFloat(row.total_charge)
@@ -353,6 +357,8 @@
                     total_value += parseFloat(row.total_value)
                     total_igv += parseFloat(row.total_igv)
                     total += parseFloat(row.total)
+                    total_plastic_bag_taxes += parseFloat(row.total_plastic_bag_taxes)
+
                 });
 
                 this.form.total_exportation = _.round(total_exportation, 2)
@@ -363,7 +369,10 @@
                 this.form.total_igv = _.round(total_igv, 2)
                 this.form.total_value = _.round(total_value, 2)
                 this.form.total_taxes = _.round(total_igv, 2)
-                this.form.total = _.round(total, 2)
+                this.form.total_plastic_bag_taxes = _.round(total_plastic_bag_taxes, 2)
+                // this.form.total = _.round(total, 2)
+                this.form.total = _.round(total, 2) + this.form.total_plastic_bag_taxes
+
             },
             submit() {
                 this.loading_submit = true

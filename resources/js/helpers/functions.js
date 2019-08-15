@@ -8,7 +8,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     //     unit_price = parseFloat(row_old.item.unit_price) * 1.18
     // }
 
-
+    // console.log(row_old)
 
     if (currency_type_id_old === 'PEN' && currency_type_id_old !== currency_type_id_new)
     {
@@ -73,6 +73,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         total_base_other_taxes: 0,
         percentage_other_taxes: 0,
         total_other_taxes: 0,
+        total_plastic_bag_taxes: 0,
         total_taxes: 0,
         price_type_id: '01',
         unit_price: unit_price,
@@ -210,6 +211,11 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         row.unit_value = 0
         // row.total_value = 0
         row.total = 0
+    }
+
+    //impuesto bolsa
+    if(row_old.has_plastic_bag_taxes){
+        row.total_plastic_bag_taxes = _.round(row.quantity * row.item.amount_plastic_bag_taxes, 1)
     }
     
     // console.log(row)
