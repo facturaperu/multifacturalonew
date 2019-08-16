@@ -244,7 +244,7 @@
             <cbc:TaxAmount currencyID="{{ $document->currency_type_id }}">{{ $document->total_plastic_bag_taxes }}</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cac:TaxScheme>
-                    <cbc:ID schemeAgencyName="PE:SUNAT" schemeName="Codigo de tributos" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05">7152</cbc:ID>
+                    <cbc:ID>7152</cbc:ID>
                     <cbc:Name>ICBPER</cbc:Name>
                     <cbc:TaxTypeCode>OTH</cbc:TaxTypeCode>
                 </cac:TaxScheme>
@@ -319,12 +319,12 @@
             @endif
             @if($row->total_plastic_bag_taxes > 0)
             <cac:TaxSubtotal>
-                <cbc:TaxAmount currencyID="{{ $document->currency_type_id }}">1.00</cbc:TaxAmount>
+                <cbc:TaxAmount currencyID="{{ $document->currency_type_id }}">{{ $row->total_plastic_bag_taxes }}</cbc:TaxAmount>
                 <cbc:BaseUnitMeasure unitCode="NIU">{{ round($row->quantity,0) }}</cbc:BaseUnitMeasure>
                 <cac:TaxCategory>
                     <cbc:PerUnitAmount currencyID="{{ $document->currency_type_id }}">{{$row->item->amount_plastic_bag_taxes}}</cbc:PerUnitAmount>
                     <cac:TaxScheme>
-                        <cbc:ID schemeAgencyName="PE:SUNAT" schemeName="Codigo de tributos" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05">7152</cbc:ID>
+                        <cbc:ID>7152</cbc:ID>
                         <cbc:Name>ICBPER</cbc:Name>
                         <cbc:TaxTypeCode>OTH</cbc:TaxTypeCode>
                     </cac:TaxScheme>

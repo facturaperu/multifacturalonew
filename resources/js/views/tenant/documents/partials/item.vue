@@ -518,7 +518,7 @@
                 this.initForm();
                 //this.initializeFields()
                 this.$emit('add', this.row);
-                console.log(this.row)
+                // console.log(this.row)
             },
             validateTotalItem(){
 

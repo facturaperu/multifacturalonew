@@ -194,7 +194,7 @@
     export default {
         components: {DocumentFormItem, DocumentOptions},
         mixins: [functions, exchangeRate],
-        props: ['document'],
+        props: ['document_affected'],
         data() {
             return {
                 showDialogAddItem: false,
@@ -213,12 +213,14 @@
                 note_credit_types: [],
                 note_debit_types: [],
                 user: {},
+                document: {},
                 operation_types: [],
                 is_contingency: false,
             }
         },
         created() {
             // console.log(this.document)
+            this.document = this.document_affected
             this.initForm()
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
@@ -286,12 +288,20 @@
                 }
                 // console.log(this.form.items)
             },
-            resetForm() {
-                this.initForm()
+            async resetForm() {
+                await this.getNote()
+                await this.initForm()
                 this.form.operation_type_id = (this.operation_types.length > 0)?this.operation_types[0].id:null
                 this.form.document_type_id = (this.document_types.length > 0)?this.document_types[0].id:null
                 this.changeDocumentType()
                 this.changeDateOfIssue()
+            },
+            getNote(){
+                this.$http.get(`/${this.resource}/note/record/${this.form.affected_document_id}`)
+                    .then(response => { 
+                        // console.log(response)
+                        this.document = response.data
+                    })
             },
             changeDocumentType() {
                 this.form.note_credit_or_debit_type_id = null
