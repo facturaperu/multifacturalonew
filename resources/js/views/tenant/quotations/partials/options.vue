@@ -211,6 +211,9 @@
                         this.loading_submit = false;
                     });
             },
+            changeDateOfIssue() {
+                this.document.date_of_due = this.document.date_of_issue 
+            },
             assignDocument(){ 
 
                 let q = this.form.quotation 
