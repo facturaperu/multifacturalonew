@@ -206,6 +206,7 @@ class DocumentController extends Controller
                     'purchase_affectation_igv_type_id' => $row->purchase_affectation_igv_type_id,
                     'calculate_quantity' => (bool) $row->calculate_quantity,
                     'has_igv' => (bool) $row->has_igv,
+                    'amount_plastic_bag_taxes' => $row->amount_plastic_bag_taxes,
                     'item_unit_types' => collect($row->item_unit_types)->transform(function($row) {
                         return [
                             'id' => $row->id,

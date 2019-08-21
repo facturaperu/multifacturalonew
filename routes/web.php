@@ -144,6 +144,7 @@ if ($hostname) {
             Route::get('documents/consult_cdr/{document}', 'Tenant\DocumentController@consultCdr');
             Route::post('documents/email', 'Tenant\DocumentController@email');
             Route::get('documents/note/{document}', 'Tenant\NoteController@create');
+            Route::get('documents/note/record/{document}', 'Tenant\NoteController@record');
             Route::get('documents/item/tables', 'Tenant\DocumentController@item_tables');
             Route::get('documents/table/{table}', 'Tenant\DocumentController@table');
             Route::get('documents/re_store/{document}', 'Tenant\DocumentController@reStore');
