@@ -315,10 +315,7 @@ class QuotationController extends Controller
         
         if ($format_pdf === 'ticket' OR $format_pdf === 'ticket_80') {
 
-            $width = 78;
-
-            if(config('tenant.enabled_template_ticket_80')) $width = 76;
-
+            $width = 78; 
             $company_name      = (strlen($company->name) / 20) * 10;
             $company_address   = (strlen($document->establishment->address) / 30) * 10;
             $company_number    = $document->establishment->telephone != '' ? '10' : '0';
@@ -340,6 +337,10 @@ class QuotationController extends Controller
             }
             $legends           = $document->legends != '' ? '10' : '0';
 
+            
+            $margin_right = config('tenant.enabled_template_ticket_80') ? 6 : 2;
+            $margin_left = config('tenant.enabled_template_ticket_80') ? 6 : 2;
+
             $pdf = new Mpdf([
                 'mode' => 'utf-8',
                 'format' => [
@@ -360,9 +361,9 @@ class QuotationController extends Controller
                     $total_exonerated +
                     $total_taxed],
                 'margin_top' => 2,
-                'margin_right' => 5,
+                'margin_right' => $margin_right,
                 'margin_bottom' => 0,
-                'margin_left' => 5
+                'margin_left' => $margin_left
             ]);
         } else {
             

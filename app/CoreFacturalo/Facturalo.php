@@ -261,7 +261,7 @@ class Facturalo
         if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58')) {
 
             $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
-            if(config('tenant.enabled_template_ticket_80')) $width = 76;
+            // if(config('tenant.enabled_template_ticket_80')) $width = 78;
             
             $company_name      = (strlen($this->company->name) / 20) * 10;
             $company_address   = (strlen($this->document->establishment->address) / 30) * 10;
@@ -289,6 +289,9 @@ class Facturalo
             }
             $legends = $this->document->legends != '' ? '10' : '0';
 
+            $margin_right = config('tenant.enabled_template_ticket_80') ? 6 : 2;
+            $margin_left = config('tenant.enabled_template_ticket_80') ? 6 : 2;
+
             $pdf = new Mpdf([
                 'mode' => 'utf-8',
                 'format' => [
@@ -309,9 +312,9 @@ class Facturalo
                     $total_exonerated +
                     $total_taxed],
                 'margin_top' => 0,
-                'margin_right' => 1,
+                'margin_right' => $margin_right,
                 'margin_bottom' => 0,
-                'margin_left' => 1
+                'margin_left' => $margin_left
             ]);
         } else {
             

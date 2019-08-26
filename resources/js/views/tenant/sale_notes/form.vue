@@ -73,7 +73,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-lg-2">
                                 <div class="form-group" :class="{'has-danger': errors.payment_method_type_id}">
                                     <label class="control-label">Metodo de pago</label>
@@ -97,7 +97,50 @@
                                     <small class="form-control-feedback" v-if="errors.payment" v-text="errors.payment[0]"></small>
                                 </div>
                             </div>
+                        </div> -->
+
+                        <div class="row col-lg-8">
+
+                            <table>
+                                <thead>
+                                    <tr width="100%">
+                                        <th v-if="form.payments.length>0">Método de pago</th>
+                                        <th v-if="form.payments.length>0">Referencia</th>
+                                        <th v-if="form.payments.length>0">Monto</th>
+                                        <th width="15%"><a href="#" @click.prevent="clickAddPayment" class="text-center font-weight-bold text-info">[+ Agregar]</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(row, index) in form.payments" :key="index"> 
+                                        <td>
+                                            <div class="form-group mb-2 mr-2">
+                                                <el-select v-model="row.payment_method_type_id">
+                                                    <el-option v-for="option in payment_method_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                                </el-select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group mb-2 mr-2"  >
+                                                <el-input v-model="row.reference"></el-input>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group mb-2 mr-2" >
+                                                <el-input v-model="row.payment"></el-input>
+                                            </div>
+                                        </td>
+                                        <td class="series-table-actions text-center"> 
+                                            <button  type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickCancel(index)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td> 
+                                        <br>
+                                    </tr>
+                                </tbody> 
+                            </table> 
+                            
                         </div>
+
                         
                         <div class="row mt-4">
                             <div class="col-md-12">
@@ -215,7 +258,6 @@
                 establishment: null, 
                 currency_type: {},
                 saleNotesNewId: null,
-                form_payment: {},
                 payment_method_types: [],
                 activePanel: 0,
                 loading_search:false
@@ -247,8 +289,23 @@
         },
         methods: {
 
-              searchRemoteCustomers(input) {  
-                  
+            clickAddPayment() {
+                this.form.payments.push({
+                    id: null,
+                    document_id: null,
+                    date_of_payment:  moment().format('YYYY-MM-DD'),
+                    payment_method_type_id: '01',
+                    reference: null,
+                    payment: 0,
+                });
+            },            
+            clickCancel(index) {
+                this.form.payments.splice(index, 1);
+            },
+
+
+            searchRemoteCustomers(input) {  
+                
                 if (input.length > 0) { 
                     this.loading_search = true
                     let parameters = `input=${input}`
@@ -297,20 +354,15 @@
                     discounts: [],
                     attributes: [],
                     guides: [],
+                    payments: [],
                     additional_information:null,
                     actions: {
                         format_pdf:'a4',
                     }
                 }
 
-                this.form_payment = {
-                    id: null,
-                    sale_note_id: null,
-                    date_of_payment:  moment().format('YYYY-MM-DD'),
-                    payment_method_type_id: '01',
-                    reference: null,
-                    payment: null,
-                }
+                this.clickAddPayment()
+
             },
             resetForm() {
                 this.activePanel = 0
@@ -330,12 +382,17 @@
                 this.form.customer_id = null 
             },
             changeDateOfIssue() {
-                this.form_payment.date_of_payment = this.form.date_of_issue
-
+                // this.form_payment.date_of_payment = this.form.date_of_issue
+                this.assignmentDateOfPayment()
                 this.searchExchangeRateByDate(this.form.date_of_issue).then(response => {
                     this.form.exchange_rate_sale = response
                 })
-            }, 
+            },             
+            assignmentDateOfPayment(){
+                this.form.payments.forEach((payment)=>{
+                    payment.date_of_payment = this.form.date_of_issue
+                })
+            },
             allCustomers() {
                 this.customers = this.all_customers
             }, 
@@ -402,21 +459,23 @@
                 this.form.total_value = _.round(total_value, 2)
                 this.form.total_taxes = _.round(total_igv, 2)
                 this.form.total = _.round(total, 2)
-                this.form_payment.payment = this.form.total
+                // this.form_payment.payment = this.form.total
 
              },
             submit() {
 
-                if(this.form_payment.payment > parseFloat(this.form.total) || this.form_payment.payment < 0) {
-                    return this.$message.error('El monto ingresado supera al monto a pagar o es incorrecto.');
+                let validate = this.validate_payments()
+                if(validate.acum_total > parseFloat(this.form.total) || validate.error_by_item > 0) {
+                    return this.$message.error('Los montos ingresados superan al monto a pagar o son incorrectos');
                 }
+
 
                 this.loading_submit = true
                 this.$http.post(`/${this.resource}`, this.form).then(response => {
                     if (response.data.success) {
 
-                        this.form_payment.sale_note_id = response.data.data.id;
-                        this.sale_note_payment()
+                        // this.form_payment.sale_note_id = response.data.data.id;
+                        // this.sale_note_payment()
                         this.resetForm();
                         this.saleNotesNewId = response.data.data.id;
                         this.showDialogOptions = true;
@@ -435,25 +494,23 @@
                 }).then(() => {
                     this.loading_submit = false;
                 });
-            },
-            sale_note_payment(){
+            },           
+            validate_payments(){
 
-                this.$http.post(`/sale_note_payments`, this.form_payment)
-                    .then(response => {
-                        if (response.data.success) { 
-                        } else {
-                            this.$message.error(response.data.message);
-                        }
-                    })
-                    .catch(error => {
-                        if (error.response.status === 422) {
-                            this.records[index].errors = error.response.data;
-                        } else {
-                            console.log(error);
-                        }
-                    })
+                let error_by_item = 0
+                let acum_total = 0
 
-            },
+                this.form.payments.forEach((item)=>{
+                    acum_total += parseFloat(item.payment)
+                    if(item.payment <= 0 || item.payment == null) error_by_item++;
+                })
+
+                return  {
+                    error_by_item : error_by_item,
+                    acum_total : acum_total
+                }
+
+            }, 
             close() {
                 location.href = '/sale-notes'
             },
