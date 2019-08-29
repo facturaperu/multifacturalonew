@@ -136,7 +136,11 @@ class SaleNoteController extends Controller
             foreach ($data['items'] as $row)
             {
                 $this->sale_note->items()->create($row);
-            }     
+            }
+            //pagos
+            foreach ($data['payments'] as $row) {
+                $this->sale_note->payments()->create($row);
+            } 
 
             $this->setFilename();
             $this->createPdf($this->sale_note, 'a4', $this->sale_note->filename);
@@ -215,10 +219,9 @@ class SaleNoteController extends Controller
         
         $html = $template->pdf($base_template, "sale_note", $this->company, $this->document, $format_pdf);
 
-        if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58') OR ($format_pdf === 'ticket_80')) {
+        if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58')) {
 
             $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
-            if(config('tenant.enabled_template_ticket_80')) $width = 76;
             
             $company_name      = (strlen($this->company->name) / 20) * 10;
             $company_address   = (strlen($this->document->establishment->address) / 30) * 10;
@@ -246,6 +249,9 @@ class SaleNoteController extends Controller
             }
             $legends = $this->document->legends != '' ? '10' : '0';
 
+            $margin_right = config('tenant.enabled_template_ticket_80') ? 6 : 2;
+            $margin_left = config('tenant.enabled_template_ticket_80') ? 6 : 2;
+
             $pdf = new Mpdf([
                 'mode' => 'utf-8',
                 'format' => [
@@ -266,9 +272,9 @@ class SaleNoteController extends Controller
                     $total_exonerated +
                     $total_taxed],
                 'margin_top' => 0,
-                'margin_right' => 2,
+                'margin_right' => $margin_right,
                 'margin_bottom' => 0,
-                'margin_left' => 2
+                'margin_left' => $margin_left
             ]);
         } else {
 
