@@ -53,6 +53,10 @@ Para actualziar el certificado SSL instalado con el manual de Docker+SSL: [Guía
 ## Cambio de entornos (Prueba - Producción)
 
 Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/1iHUrlqzjwoQm967PRYirX5SN4L2ONAH8yvwTcePZ1PU/edit?usp=sharing "Clic")
+
+## Manual de Tareas Programadas
+
+Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/1Cu3Kpgv9HvMAV4fwVNbR-CFc0uTu_-qEVLT-MIuxBTQ/edit?usp=sharing "Clic")
  
 ## Patrocinadores FACTURADOR PRO V 2.0
 
