@@ -291,6 +291,10 @@ class Document extends ModelTenant
         return route('tenant.download.external_id', ['model' => 'document', 'type' => 'cdr', 'external_id' => $this->external_id]);
     }
 
+    public function scopeWhereNotSent($query)
+    {
+        return  $query->whereIn('state_type_id', ['01','03'])->where('date_of_issue','<=',date('Y-m-d')); 
+    }
 
     public function scopeWhereTypeUser($query)
     {
