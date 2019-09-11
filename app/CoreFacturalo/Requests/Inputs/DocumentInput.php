@@ -101,6 +101,7 @@ class DocumentInput
             'total_isc' => Functions::valueKeyInArray($inputs, 'total_isc', 0),
             'total_base_other_taxes' => Functions::valueKeyInArray($inputs, 'total_base_other_taxes', 0),
             'total_other_taxes' => Functions::valueKeyInArray($inputs, 'total_other_taxes', 0),
+            'total_plastic_bag_taxes' => Functions::valueKeyInArray($inputs, 'total_plastic_bag_taxes', 0),
             'total_taxes' => $inputs['total_taxes'],
             'total_value' => $inputs['total_value'],
             'total' => $inputs['total'],
@@ -118,6 +119,7 @@ class DocumentInput
             'legends' => LegendInput::set($inputs),
             'actions' => ActionInput::set($inputs),
             'data_json' => Functions::valueKeyInArray($inputs, 'data_json'),
+            'payments' => Functions::valueKeyInArray($inputs, 'payments', []),
             'send_server' => false,
         ];
     }
@@ -137,7 +139,8 @@ class DocumentInput
                         'item_code' => $item->item_code,
                         'item_code_gs1' => $item->item_code_gs1,
                         'unit_type_id' => (key_exists('item', $row))?$row['item']['unit_type_id']:$item->unit_type_id,
-                        'presentation' => (key_exists('item', $row)) ? (isset($row['item']['presentation']) ? $row['item']['presentation']:[]):[]
+                        'presentation' => (key_exists('item', $row)) ? (isset($row['item']['presentation']) ? $row['item']['presentation']:[]):[],
+                        'amount_plastic_bag_taxes' => $item->amount_plastic_bag_taxes,
                     ],
                     'quantity' => $row['quantity'],
                     'unit_value' => $row['unit_value'],
@@ -154,6 +157,7 @@ class DocumentInput
                     'total_base_other_taxes' => Functions::valueKeyInArray($row, 'total_base_other_taxes', 0),
                     'percentage_other_taxes' => Functions::valueKeyInArray($row, 'percentage_other_taxes', 0),
                     'total_other_taxes' => Functions::valueKeyInArray($row, 'total_other_taxes', 0),
+                    'total_plastic_bag_taxes' => Functions::valueKeyInArray($row, 'total_plastic_bag_taxes', 0),
                     'total_taxes' => $row['total_taxes'],
                     'total_value' => $row['total_value'],
                     'total_charge' => Functions::valueKeyInArray($row, 'total_charge', 0),

@@ -24,7 +24,7 @@ Visite el [Manual de usuario](https://drive.google.com/open?id=13t2-eqf57QRbAFR8
 
 Para conocer acerca de nuestra API, visite la [documentación](https://docs.google.com/document/d/1FtuEGAq7scoQFGQKBuT8Zd6dLVU7h9abeGXbE41J-qA/edit# "Clic")<br>
 
-Además puede realizar sus pruebas usando [Postman Collection](https://drive.google.com/open?id=1wilZDBDaH2_8eRFFcH56w_U1Naba2TZ6 "Clic") 
+Además puede realizar sus pruebas usando [Postman Collection](https://drive.google.com/open?id=1RQVd-vGyIbAP1jNUGuauTBALNOy_CFzl "Clic") 
 
 ## Pruebas
 
@@ -52,7 +52,11 @@ Para actualziar el certificado SSL instalado con el manual de Docker+SSL: [Guía
 
 ## Cambio de entornos (Prueba - Producción)
 
-Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/1iHUrlqzjwoQm967PRYirX5SN4L2ONAH8yvwTcePZ1PU/edit?usp=sharing "Clic")
+Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/1IBXczY4b1YvSnGdFlIklpb8HGlQcP1lN44rpXbtYyUc/edit#heading=h.cqyhenf1o1j3 "Clic")
+
+## Manual de Tareas Programadas
+
+Visite el siguiente enlace: [Guía](https://docs.google.com/document/d/1Cu3Kpgv9HvMAV4fwVNbR-CFc0uTu_-qEVLT-MIuxBTQ/edit?usp=sharing "Clic")
  
 ## Patrocinadores FACTURADOR PRO V 2.0
 
