@@ -259,10 +259,10 @@
             },
             setDataDefaultCustomer(){
                 if(this.form.identity_document_type_id === '0'){
-                    this.form.number = 99999999;
+                    this.form.number = '99999999';
                     this.form.name = "Clientes - Varios";
                 }else{
-                    this.form.number = null;
+                    this.form.number = '';
                     this.form.name = null;
                 }
             },
@@ -270,28 +270,30 @@
                 this.$emit('update:showDialog', false);
             },
             searchNumber(data) {
-                this.form.name = data.razon_social;
-                this.form.trade_name = data.nombre_comercial;
+                this.form.name = (this.form.identity_document_type_id === '1')?data.nombre_completo:data.nombre_o_razon_social;
+                this.form.trade_name = (this.form.identity_document_type_id === '6')?data.nombre_o_razon_social:'';
                 this.form.addresses[0].location_id = data.ubigeo;
                 this.form.addresses[0].address = data.direccion;
                 this.form.addresses[0].telephone = data.telefono;
+                
             },
             searchCustomer() {
                 this.searchServiceNumberByType()
             },
-            searchNumber(data) {
-                this.form.name = (this.form.identity_document_type_id === '1')?data.nombre_completo:data.nombre_o_razon_social;
-                this.form.trade_name = (this.form.identity_document_type_id === '6')?data.nombre_o_razon_social:'';
-                this.form.location_id = data.ubigeo;
-                this.form.address = data.direccion;
-                this.form.department_id = data.ubigeo[0];
-                this.form.province_id = data.ubigeo[1];
-                this.form.district_id = data.ubigeo[2];
+//             searchNumber(data) {
+//                 console.log(data)
+//                 this.form.name = (this.form.identity_document_type_id === '1')?data.nombre_completo:data.nombre_o_razon_social;
+//                 this.form.trade_name = (this.form.identity_document_type_id === '6')?data.nombre_o_razon_social:'';
+//                 this.form.location_id = data.ubigeo;
+//                 this.form.address = data.direccion;
+//                 this.form.department_id = data.ubigeo[0];
+//                 this.form.province_id = data.ubigeo[1];
+//                 this.form.district_id = data.ubigeo[2];
 
-                this.filterProvinces()
-                this.filterDistricts()
-//                this.form.addresses[0].telephone = data.telefono;
-           },
+//                 this.filterProvinces()
+//                 this.filterDistricts()
+// //                this.form.addresses[0].telephone = data.telefono;
+//            },
         }
     }
 </script>
