@@ -30,7 +30,13 @@
                             <small v-if="row.affected_document" v-text="row.affected_document"></small>                            
                         </td> 
                         <td class="text-center"> 
-                            {{row.expiration_days}}
+                            <template v-if="row.is_expiration">
+                                <span class="badge bg-danger text-white mt-1 mb-1" >{{row.expiration_days}}</span>
+                            </template> 
+                            <template v-else>
+                                {{row.expiration_days}}                                
+                            </template>
+
                         </td>
 
                         <td class="text-center">  
