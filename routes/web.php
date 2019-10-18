@@ -333,6 +333,8 @@ if ($hostname) {
             Route::get('quotations/search/customer/{id}', 'Tenant\QuotationController@searchCustomerById');
             Route::get('quotations/download/{external_id}/{format?}', 'Tenant\QuotationController@download');
             Route::get('quotations/print/{external_id}/{format?}', 'Tenant\QuotationController@toPrint');
+            Route::get('quotations/edit/{id}', 'Tenant\QuotationController@edit');
+            Route::post('quotations/update', 'Tenant\QuotationController@update');
 
             
             //sale-notes

@@ -56,7 +56,8 @@
                                     @click.prevent="clickOptionsPdf(row.id)">PDF</button>
                         </td>
                         
-                        <td class="text-right"> 
+                        <td class="text-right">
+                              <a v-if="row.documents.length == 0 && row.state_type_id != '11'" :href="`/${resource}/edit/${row.id}`" type="button" class="btn waves-effect waves-light btn-xs btn-info">Editar</a>
                             <button type="button" class="btn waves-effect waves-light btn-xs btn-info" 
                                     @click.prevent="clickOptions(row.id)">Generar comprobante</button>
                         </td>

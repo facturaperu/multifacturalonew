@@ -75,7 +75,9 @@ Vue.component('tenant-contingencies-index', require('./views/tenant/contingencie
 
 
 Vue.component('tenant-quotations-index', require('./views/tenant/quotations/index.vue'));
-Vue.component('tenant-quotations-form', require('./views/tenant/quotations/form.vue')); 
+Vue.component('tenant-quotations-form', require('./views/tenant/quotations/form.vue'));
+Vue.component('tenant-quotations-edit', require('./views/tenant/quotations/form_edit.vue'));
+
 
 Vue.component('tenant-sale-notes-index', require('./views/tenant/sale_notes/index.vue'));
 Vue.component('tenant-sale-notes-form', require('./views/tenant/sale_notes/form.vue'));
