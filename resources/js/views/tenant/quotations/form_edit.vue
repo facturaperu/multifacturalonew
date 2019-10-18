@@ -222,7 +222,7 @@
               native-type="submit"
               :loading="loading_submit"
               v-if="form.items.length > 0"
-            >Generar</el-button>
+            >Generar Cambios</el-button>
           </div>
         </form>
       </div>
