@@ -39,6 +39,7 @@ use Illuminate\Http\Request;
 use Nexmo\Account\Price;
 use Illuminate\Support\Facades\Cache;
 use App\Imports\DocumentsImport;
+use App\Imports\DocumentsImportTwoFormat;
 use Maatwebsite\Excel\Excel;
 
 
@@ -55,8 +56,9 @@ class DocumentController extends Controller
     {
         $is_client = config('tenant.is_client');
         $import_documents = config('tenant.import_documents');
+        $import_documents_second = config('tenant.import_documents_second_format');
 
-        return view('tenant.documents.index', compact('is_client','import_documents'));
+        return view('tenant.documents.index', compact('is_client','import_documents','import_documents_second'));
     }
 
     public function columns()
@@ -473,6 +475,31 @@ class DocumentController extends Controller
         if ($request->hasFile('file')) {
             try {
                 $import = new DocumentsImport();
+                $import->import($request->file('file'), null, Excel::XLSX);
+                $data = $import->getData();
+                return [
+                    'success' => true,
+                    'message' =>  __('app.actions.upload.success'),
+                    'data' => $data
+                ];
+            } catch (Exception $e) {
+                return [
+                    'success' => false,
+                    'message' =>  $e->getMessage()
+                ];
+            }
+        }
+        return [
+            'success' => false,
+            'message' =>  __('app.actions.upload.error'),
+        ];
+    }
+
+    public function importTwoFormat(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            try {
+                $import = new DocumentsImportTwoFormat();
                 $import->import($request->file('file'), null, Excel::XLSX);
                 $data = $import->getData();
                 return [
