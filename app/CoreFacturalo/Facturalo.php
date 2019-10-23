@@ -15,6 +15,7 @@ use App\CoreFacturalo\WS\Services\SunatEndpoints;
 use App\CoreFacturalo\WS\Signed\XmlSigned;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
 use App\Models\Tenant\Company;
+use App\Models\Tenant\Configuration;
 use App\Mail\Tenant\DocumentEmail;
 use App\Models\Tenant\Invoice;
 use Illuminate\Support\Facades\Mail;
@@ -40,6 +41,7 @@ class Facturalo
     const CANCELING = '13';
     const VOIDED = '11';
 
+    protected $configuration;
     protected $company;
     protected $isDemo;
     protected $isOse;
@@ -58,6 +60,7 @@ class Facturalo
 
     public function __construct()
     {
+        $this->configuration = Configuration::first();
         $this->company = Company::active();
         $this->isDemo = ($this->company->soap_type_id === '01')?true:false;
         $this->isOse = ($this->company->soap_send_id === '02')?true:false;
@@ -603,7 +606,8 @@ class Facturalo
                     $this->endpoint = ($this->isDemo)?SunatEndpoints::GUIA_BETA:SunatEndpoints::GUIA_PRODUCCION;
                     break;
                 default:
-                    $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA : (config('configuration.sunat_alternate_server') ? SunatEndpoints::FE_PRODUCCION_ALTERNATE : SunatEndpoints::FE_PRODUCCION);
+                    // $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA : (config('configuration.sunat_alternate_server') ? SunatEndpoints::FE_PRODUCCION_ALTERNATE : SunatEndpoints::FE_PRODUCCION);
+                    $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA : ($this->configuration->sunat_alternate_server ? SunatEndpoints::FE_PRODUCCION_ALTERNATE : SunatEndpoints::FE_PRODUCCION);
                     break;
             }
         }
