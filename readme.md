@@ -48,7 +48,7 @@ Contraseña: 123456
 
 Para actualizar el facturador instalado con Docker: [Guía](https://docs.google.com/document/d/11PI1a9yjCPfH9CCuWmJSrdj1V8IEUffqurqvdkw29co/edit?usp=sharing "Clic")
 <br>
-Para actualziar el certificado SSL instalado con el manual de Docker+SSL: [Guía](https://docs.google.com/document/d/1vmYwPwVKH6UEH88MZEAk7P2CoAqpIF5WQyJabiHAjVo/edit?usp=sharing "Clic")
+Para actualizar el certificado SSL instalado con el manual de Docker+SSL: [Guía](https://docs.google.com/document/d/1kcgtIDrOWnGKQbWO3sW2KEkUoNdadIB5YHBgaSb87uA/edit# "Clic")
 
 ## Cambio de entornos (Prueba - Producción)
 
@@ -72,6 +72,7 @@ Guía incrementar espacio disco: [Guía](https://docs.google.com/document/d/1hpE
 Documentación del archivo .ENV: [Guía](https://docs.google.com/document/d/1XpNPg32CrihM1wYWjttwON-2R6nln7-70vBLZnD1UjE/edit?usp=sharing "Clic")<br>
 Guía acceso SSH - Putty: [Guía](https://docs.google.com/document/d/1PmQejvNd_dkXVm8DPUYlQTag0wvES46tMpxX3MPhkNY/edit# "Clic")<br>
 Iniciar servicios docker: [Guía](https://docs.google.com/document/d/1MMuyeYE53RjDaOR2OLPsCtpxicDzqowlvoMTWpkBaSM/edit# "Clic")<br>
+Configuración servidor alterno SUNAT: [Guía](https://docs.google.com/document/d/1pr-9ewFYY7JFtYg-0V5MY4R16OGv-02VH5MqXjeUCh0/edit#heading=h.nezjsyganf1w "Clic")<br>
 
 ## Patrocinadores FACTURADOR PRO V 2.0
 
