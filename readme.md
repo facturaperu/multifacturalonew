@@ -48,7 +48,7 @@ Contraseña: 123456
 
 Para actualizar el facturador instalado con Docker: [Guía](https://docs.google.com/document/d/11PI1a9yjCPfH9CCuWmJSrdj1V8IEUffqurqvdkw29co/edit?usp=sharing "Clic")
 <br>
-Para actualziar el certificado SSL instalado con el manual de Docker+SSL: [Guía](https://docs.google.com/document/d/1vmYwPwVKH6UEH88MZEAk7P2CoAqpIF5WQyJabiHAjVo/edit?usp=sharing "Clic")
+Para actualizar el certificado SSL instalado con el manual de Docker+SSL: [Guía](https://docs.google.com/document/d/1kcgtIDrOWnGKQbWO3sW2KEkUoNdadIB5YHBgaSb87uA/edit# "Clic")
 
 ## Cambio de entornos (Prueba - Producción)
 
