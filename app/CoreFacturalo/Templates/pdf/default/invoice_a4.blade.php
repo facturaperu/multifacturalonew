@@ -127,6 +127,15 @@
 @endif
 
 <table class="full-width mt-3">
+    @if ($document->prepayments) 
+        @foreach($document->prepayments as $p)
+        <tr>
+            <td width="120px">ANTICIPO N° {{$loop->iteration}}</td>
+            <td width="8px">:</td>
+            <td>{{$p->number}} - {{ $document->currency_type->symbol }} {{$p->amount}}</td> 
+        </tr>
+        @endforeach
+    @endif
     @if ($document->purchase_order)
         <tr>
             <td>ORDEN DE COMPRA</td>
