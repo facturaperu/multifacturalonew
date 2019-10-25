@@ -283,7 +283,7 @@ class Facturalo
             $total_unaffected  = $this->document->total_unaffected != '' ? '10' : '0';
             $total_exonerated  = $this->document->total_exonerated != '' ? '10' : '0';
             $total_taxed       = $this->document->total_taxed != '' ? '10' : '0';
-            $quantity_rows     = count($this->document->items);
+            $quantity_rows     = count($this->document->items) + $was_deducted_prepayment;
 
             $extra_by_item_description = 0;
             $discount_global = 0;

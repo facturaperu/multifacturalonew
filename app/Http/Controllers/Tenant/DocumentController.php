@@ -201,7 +201,7 @@ class DocumentController extends Controller
                     'series' => $row->series,
                     'number' => $row->number,
                     'document_type_id' => ($row->document_type_id == '01') ? '02':'03',
-                    'amount' => $row->total
+                    'amount' => $row->total_value
                 ];
             });
             return $prepayment_documents;
