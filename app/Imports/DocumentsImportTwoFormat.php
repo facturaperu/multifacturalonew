@@ -44,9 +44,13 @@ class DocumentsImportTwoFormat implements ToCollection
                 }
 
                 //fecha de documento
-                $create_date = $row[2];
-                $date_create = Carbon::createFromFormat('d/m/Y', $create_date);
-                $date_document = $date_create->format('Y-m-d');
+                // $create_date = $row[2];
+
+                $create_date = Carbon::instance(Date::excelToDateTimeObject($row[2]));
+                $date_document = Carbon::parse($create_date)->format('Y-m-d');
+
+                // $date_create = Carbon::createFromFormat('d/m/Y', $create_date);
+                // $date_document = $date_create->format('Y-m-d');
 
                 //moneda
                 $currency = ($row[5] == 'S') ? 'PEN' : 'Registre con los administradores nueva moneda' ;
