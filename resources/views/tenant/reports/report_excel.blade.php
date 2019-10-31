@@ -79,19 +79,43 @@
                                 <td class="celda">{{$value->customer->number}}</td>
                                 <td class="celda">{{$value->state_type->description}}</td>
                                 <td class="celda">{{$value->currency_type_id}}</td>
-                                <td class="celda">{{$value->total_taxed}}</td>
-                                <td class="celda">{{$value->total_igv}}</td>
-                                <td class="celda">{{$value->total}}</td>
+                                <td>{{(in_array($value->document_type_id,['01','03']) && in_array($value->state_type_id,['09','11'])) ? number_format(0,2) : number_format($value->total_taxed,2)}}</td>
+                                <td>{{(in_array($value->document_type_id,['01','03']) && in_array($value->state_type_id,['09','11'])) ? number_format(0,2) : number_format($value->total_igv,2)}}</td>
+                                <td>{{(in_array($value->document_type_id,['01','03']) && in_array($value->state_type_id,['09','11'])) ? number_format(0,2) : number_format($value->total,2)}}</td>
+                                    
                             </tr>
                             @php
                                 if($value->currency_type_id == 'PEN'){
-                                    $acum_total_taxed += $value->total_taxed;
-                                    $acum_total_igv += $value->total_igv;
-                                    $acum_total += $value->total;
+                                            
+                                    if((in_array($value->document_type_id,['01','03']) && in_array($value->state_type_id,['09','11']))){
+
+                                        $acum_total_taxed += 0;
+                                        $acum_total_igv += 0;
+                                        $acum_total += 0;
+
+                                    }else{
+
+                                        $acum_total_taxed += $value->total_taxed;
+                                        $acum_total_igv += $value->total_igv;
+                                        $acum_total += $value->total;
+
+                                    }
+
                                 }else if($value->currency_type_id == 'USD'){
-                                    $acum_total_taxed_usd += $value->total_taxed;
-                                    $acum_total_igv_usd += $value->total_igv;
-                                    $acum_total_usd += $value->total;
+
+                                    if((in_array($value->document_type_id,['01','03']) && in_array($value->state_type_id,['09','11']))){
+
+                                        $acum_total_taxed_usd += 0;
+                                        $acum_total_igv_usd += 0;
+                                        $acum_total_usd += 0;
+
+                                    }else{
+
+                                        $acum_total_taxed_usd += $value->total_taxed;
+                                        $acum_total_igv_usd += $value->total_igv;
+                                        $acum_total_usd += $value->total;
+
+                                    }
                                 }
                             @endphp
                             @endforeach
