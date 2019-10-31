@@ -4,7 +4,7 @@
     $invoice = $document->invoice;
     //$path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
     $tittle = $document->prefix.'-'.str_pad($document->id, 8, '0', STR_PAD_LEFT);
-
+    $customer_address = $document->customer_address;
 
 @endphp
 <html>
@@ -66,19 +66,20 @@
         <td><p class="desc">{{ $customer->identity_document_type->description }}:</p></td>
         <td><p class="desc">{{ $customer->number }}</p></td>
     </tr>
-    @if ($customer->address !== '')
+    
+    @if ($customer_address->address)
+        @php
+            $customer_location = App\CoreFacturalo\Facturalo::getLocationFullName($customer_address->district_id, $customer_address->address);
+        @endphp
         <tr>
             <td class="align-top"><p class="desc">Dirección:</p></td>
             <td>
                 <p class="desc">
-                    {{ $customer->address }}
-                    {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
-                    {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
-                    {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+                    {{ $customer_location['address_full'] }}
                 </p>
             </td>
         </tr>
-    @endif
+    @endif 
     @if ($document->purchase_order)
         <tr>
             <td><p class="desc">Orden de Compra:</p></td>

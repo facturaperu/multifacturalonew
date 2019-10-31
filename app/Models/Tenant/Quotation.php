@@ -21,6 +21,7 @@ class Quotation extends ModelTenant
         'date_of_issue',
         'time_of_issue',
         'customer_id',
+        'customer_address_id',
         'customer',
         'currency_type_id', 
         'exchange_rate_sale',
@@ -204,5 +205,8 @@ class Quotation extends ModelTenant
         $legend = collect($legends)->where('code', '1000')->first();
         return $legend->value;
     }
- 
+
+    public function customer_address() {
+        return $this->belongsTo(PersonAddress::class, 'customer_address_id');
+    }
 }

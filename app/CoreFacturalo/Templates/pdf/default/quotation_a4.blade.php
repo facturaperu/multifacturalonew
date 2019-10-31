@@ -3,6 +3,9 @@
     $customer = $document->customer;
     //$path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
     $tittle = $document->prefix.'-'.str_pad($document->id, 8, '0', STR_PAD_LEFT);
+    $customer_address = $document->customer_address;
+
+
 @endphp
 <html>
 <head>
@@ -43,7 +46,7 @@
         </td>
     </tr>
 </table>
-<table class="full-width mt-5">
+{{--<table class="full-width mt-5">
     <tr>
         <td width="15%">Cliente:</td>
         <td width="45%">{{ $customer->name }}</td>
@@ -65,7 +68,52 @@
         </td>
     </tr>
     @endif
+    
+    @if ($customer_address->address)
+    @php
+        $customer_location = App\CoreFacturalo\Facturalo::getLocationFullName($customer_address->district_id, $customer_address->address);
+    @endphp
+    <tr>
+        <td class="align-top">DIRECCIÓN:</td>
+        <td>:</td>
+        <td>
+            {{ $customer_location['address_full'] }}
+        </td>
+    </tr>
+    @endif
+</table> --}}
+
+
+<table class="full-width mt-5">
+    <tr>
+        <td width="120px">FECHA DE EMISIÓN</td>
+        <td width="8px">:</td>
+        <td>{{$document->date_of_issue->format('Y-m-d')}}</td>
+    </tr> 
+    <tr>
+        <td>CLIENTE:</td>
+        <td>:</td>
+        <td>{{ $customer->name }}</td>
+    </tr>
+    <tr>
+        <td>{{ $customer->identity_document_type->description }}</td>
+        <td>:</td>
+        <td>{{$customer->number}}</td>
+    </tr>
+    @if ($customer_address->address)
+    @php
+        $customer_location = App\CoreFacturalo\Facturalo::getLocationFullName($customer_address->district_id, $customer_address->address);
+    @endphp
+    <tr>
+        <td class="align-top">DIRECCIÓN:</td>
+        <td>:</td>
+        <td>
+            {{ $customer_location['address_full'] }}
+        </td>
+    </tr>
+    @endif
 </table>
+
 
 {{-- <table class="full-width mt-3">
     @if ($document->purchase_order)

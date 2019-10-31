@@ -218,6 +218,7 @@
                 // this.document.date_of_issue = q.date_of_issue
                 this.document.time_of_issue = moment().format('HH:mm:ss')
                 this.document.customer_id = q.customer_id
+                this.document.customer_address_id = q.customer_address_id
                 this.document.currency_type_id = q.currency_type_id
                 this.document.purchase_order = null
                 this.document.exchange_rate_sale = q.exchange_rate_sale
@@ -249,7 +250,7 @@
                     format_pdf : 'a4'
                 }
                 this.document.quotation_id = this.form.id
-// console.log(this.document)
+                // console.log(this.document)
             },
             create() {
 

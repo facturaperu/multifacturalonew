@@ -71,7 +71,9 @@ class QuotationController extends Controller
     public function searchCustomers(Request $request)
     {    
          
-        $customers = Person::where('number','like', "%{$request->input}%")
+        $customers = Person::query()
+                            ->with('addresses')
+                            ->where('number','like', "%{$request->input}%")
                             ->orWhere('name','like', "%{$request->input}%")
                             ->whereType('customers')->orderBy('name') 
                             ->get()->transform(function($row) {
@@ -81,7 +83,8 @@ class QuotationController extends Controller
                                     'name' => $row->name,
                                     'number' => $row->number,
                                     'identity_document_type_id' => $row->identity_document_type_id,
-                                    'identity_document_type_code' => $row->identity_document_type->code
+                                    'identity_document_type_code' => $row->identity_document_type->code,
+                                    'addresses' => $row->addresses
                                 ];
                             }); 
 
@@ -193,7 +196,9 @@ class QuotationController extends Controller
                         'name' => $row->name,
                         'number' => $row->number,
                         'identity_document_type_id' => $row->identity_document_type_id,
-                        'identity_document_type_code' => $row->identity_document_type->code
+                        'identity_document_type_code' => $row->identity_document_type->code,
+                        'addresses' => $row->addresses
+
                     ];
                 });
                 return $customers;
@@ -258,7 +263,7 @@ class QuotationController extends Controller
     public function searchCustomerById($id)
     {        
    
-        $customers = Person::whereType('customers')
+        $customers = Person::with('addresses')->whereType('customers')
                     ->where('id',$id) 
                     ->get()->transform(function($row) {
                         return [
@@ -267,7 +272,8 @@ class QuotationController extends Controller
                             'name' => $row->name,
                             'number' => $row->number,
                             'identity_document_type_id' => $row->identity_document_type_id,
-                            'identity_document_type_code' => $row->identity_document_type->code
+                            'identity_document_type_code' => $row->identity_document_type->code,
+                            'addresses' => $row->addresses,
                         ];
                     }); 
 
