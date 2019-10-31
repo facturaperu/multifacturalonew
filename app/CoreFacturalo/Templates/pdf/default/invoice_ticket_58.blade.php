@@ -6,6 +6,12 @@
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
     $accounts = \App\Models\Tenant\BankAccount::all();
     $document_base = ($document->note) ? $document->note : null;
+    if($document_base) {
+        $affected_document_number = ($document_base->affected_document) ? $document_base->affected_document->series.'-'.str_pad($document_base->affected_document->number, 8, '0', STR_PAD_LEFT) : $document_base->data_affected_document->series.'-'.str_pad($document_base->data_affected_document->number, 8, '0', STR_PAD_LEFT);
+
+    } else {
+        $affected_document_number = null;
+    }
 
 @endphp
 <html>
@@ -85,6 +91,14 @@
                 </p>
             </td>
         </tr>
+    @endif    
+    @if ($document->prepayments) 
+        @foreach($document->prepayments as $p)
+        <tr>
+            <td><p class="desc">Anticipo :</p></td>
+            <td><p class="desc">{{$p->number}}</p></td> 
+        </tr>
+        @endforeach
     @endif
     @if ($document->purchase_order)
         <tr>
@@ -121,7 +135,7 @@
 <table>
     <tr>
         <td class="desc">Documento Afectado:</td>
-        <td class="desc">{{ $document_base->affected_document->series }}-{{ $document_base->affected_document->number }}</td>
+        <td class="desc">{{ $affected_document_number }}</td>
     </tr>
     <tr>
         <td class="desc">Tipo de nota:</td>
@@ -176,6 +190,26 @@
             <td colspan="5" class="border-bottom"></td>
         </tr>
     @endforeach
+    
+    @if ($document->prepayments) 
+        @foreach($document->prepayments as $p)
+        <tr>
+            <td class="text-center desc-9 align-top">
+                1
+            </td>
+            <td class="text-center desc-9 align-top">NIU</td>
+            <td class="text-left desc-9 align-top">
+                ANTICIPO: {{($p->document_type_id == '02')? 'FACTURA':'BOLETA'}} NRO. {{$p->number}}
+            </td>
+            <td class="text-right  desc-9 align-top">-{{ number_format($p->total, 2) }}</td> 
+            <td class="text-right  desc-9 align-top">-{{ number_format($p->total, 2) }}</td>
+        </tr>
+        <tr>
+            <td colspan="5" class="border-bottom"></td>
+        </tr> 
+        @endforeach
+    @endif
+
         @if($document->total_exportation > 0)
             <tr>
                 <td colspan="4" class="text-right font-bold desc">OP. EXPORTACIÓN: {{ $document->currency_type->symbol }}</td>

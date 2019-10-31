@@ -83,7 +83,9 @@ class DocumentInput
             'total_plastic_bag_taxes' => Functions::valueKeyInArray($inputs, 'total_plastic_bag_taxes', 0),
             'total_taxes' => $inputs['total_taxes'],
             'total_value' => $inputs['total_value'],
-            'total' => $inputs['total'],
+            'total' => $inputs['total'],            
+            'has_prepayment' => Functions::valueKeyInArray($inputs, 'has_prepayment', 0),
+            'was_deducted_prepayment' => Functions::valueKeyInArray($inputs, 'was_deducted_prepayment', 0),
             'items' => self::items($inputs),
             'charges' => self::charges($inputs),
             'discounts' => self::discounts($inputs),
@@ -242,11 +244,13 @@ class DocumentInput
                     $number = $row['number'];
                     $document_type_id = $row['document_type_id'];
                     $amount = $row['amount'];
+                    $total = $row['total'];
 
                     $prepayments[] = [
                         'number' => $number,
                         'document_type_id' => $document_type_id,
-                        'amount' => $amount
+                        'amount' => $amount,
+                        'total' => $total,
                     ];
                 }
                 return $prepayments;
@@ -363,19 +367,34 @@ class DocumentInput
         $note_description = $inputs['note_description'];
         $affected_document_id = $inputs['affected_document_id'];
 
-        $affected_document = Document::find($affected_document_id);
+        $data_affected_document = Functions::valueKeyInArray($inputs, 'data_affected_document');
 
         $type = ($document_type_id === '07')?'credit':'debit';
 
+        if(!$data_affected_document){
+
+            $affected_document = Document::find($affected_document_id);
+            $group_id = $affected_document->group_id;
+            $$affected_document_id = $affected_document->id;
+
+        }else{
+
+            $affected_document_id = null;
+            $group_id = ($data_affected_document['document_type_id'] == '01') ? '01' : '02';
+
+        }
+
         return [
             'type' => $type,
-            'group_id' => $affected_document->group_id,
+            // 'group_id' => $affected_document->group_id,
+            'group_id' => $group_id,
             'note' => [
                 'note_type' => $type,
                 'note_credit_type_id' => ($type === 'credit')?$note_credit_or_debit_type_id:null,
                 'note_debit_type_id' => ($type === 'debit')?$note_credit_or_debit_type_id:null,
-                'note_description' => $note_description,
-                'affected_document_id' => $affected_document->id
+                'note_description' => $note_description,                
+                'affected_document_id' => $affected_document_id,
+                'data_affected_document' => $data_affected_document
             ]
         ];
     }

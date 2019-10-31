@@ -15,6 +15,7 @@ use App\CoreFacturalo\WS\Services\SunatEndpoints;
 use App\CoreFacturalo\WS\Signed\XmlSigned;
 use App\CoreFacturalo\WS\Validator\XmlErrorCodeProvider;
 use App\Models\Tenant\Company;
+use App\Models\Tenant\Configuration;
 use App\Mail\Tenant\DocumentEmail;
 use App\Models\Tenant\Invoice;
 use Illuminate\Support\Facades\Mail;
@@ -40,6 +41,7 @@ class Facturalo
     const CANCELING = '13';
     const VOIDED = '11';
 
+    protected $configuration;
     protected $company;
     protected $isDemo;
     protected $isOse;
@@ -58,6 +60,7 @@ class Facturalo
 
     public function __construct()
     {
+        $this->configuration = Configuration::first();
         $this->company = Company::active();
         $this->isDemo = ($this->company->soap_type_id === '01')?true:false;
         $this->isOse = ($this->company->soap_send_id === '02')?true:false;
@@ -109,6 +112,7 @@ class Facturalo
                 foreach ($inputs['items'] as $row) {
                     $document->items()->create($row);
                 }
+                $this->updatePrepaymentDocuments($inputs);
                 $document->invoice()->create($inputs['invoice']);
                 $this->document = Document::find($document->id);
                 break;
@@ -270,12 +274,16 @@ class Facturalo
             $customer_address  = (strlen($this->document->customer->address) / 200) * 10;
             $p_order           = $this->document->purchase_order != '' ? '10' : '0';
 
+            $total_prepayment = $this->document->total_prepayment != '' ? '10' : '0';
+            $total_discount = $this->document->total_discount != '' ? '10' : '0';
+            $was_deducted_prepayment = $this->document->was_deducted_prepayment ? '10' : '0';
+
             $total_exportation = $this->document->total_exportation != '' ? '10' : '0';
             $total_free        = $this->document->total_free != '' ? '10' : '0';
             $total_unaffected  = $this->document->total_unaffected != '' ? '10' : '0';
             $total_exonerated  = $this->document->total_exonerated != '' ? '10' : '0';
             $total_taxed       = $this->document->total_taxed != '' ? '10' : '0';
-            $quantity_rows     = count($this->document->items);
+            $quantity_rows     = count($this->document->items) + $was_deducted_prepayment;
 
             $extra_by_item_description = 0;
             $discount_global = 0;
@@ -310,6 +318,9 @@ class Facturalo
                     $total_free +
                     $total_unaffected +
                     $total_exonerated +
+                    $total_prepayment +
+                    $total_discount +
+                    $was_deducted_prepayment +
                     $total_taxed],
                 'margin_top' => 0,
                 'margin_right' => $margin_right,
@@ -603,10 +614,32 @@ class Facturalo
                     $this->endpoint = ($this->isDemo)?SunatEndpoints::GUIA_BETA:SunatEndpoints::GUIA_PRODUCCION;
                     break;
                 default:
-                    $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA:SunatEndpoints::FE_PRODUCCION;
+                    // $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA : (config('configuration.sunat_alternate_server') ? SunatEndpoints::FE_PRODUCCION_ALTERNATE : SunatEndpoints::FE_PRODUCCION);
+                    $this->endpoint = ($this->isDemo)?SunatEndpoints::FE_BETA : ($this->configuration->sunat_alternate_server ? SunatEndpoints::FE_PRODUCCION_ALTERNATE : SunatEndpoints::FE_PRODUCCION);
                     break;
             }
         }
 
     }
+
+
+    private function updatePrepaymentDocuments($inputs){
+
+        if(isset($inputs['prepayments'])) {
+
+            foreach ($inputs['prepayments'] as $row) {
+
+                $fullnumber = explode('-', $row['number']);
+                $series = $fullnumber[0];
+                $number = $fullnumber[1];
+
+                $doc = Document::where([['series',$series],['number',$number]])->first();
+                if($doc){
+                    $doc->was_deducted_prepayment = true;
+                    $doc->save();
+                }
+            }
+        }
+    }
+
 }

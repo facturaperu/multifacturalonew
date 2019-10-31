@@ -53,9 +53,10 @@ class PersonController extends Controller
         $provinces = Province::whereActive()->orderByDescription()->get();
         $districts = District::whereActive()->orderByDescription()->get();
         $identity_document_types = IdentityDocumentType::whereActive()->get();
-        $locations = $this->getLocationCascade();
+        $locations = $this->getLocationCascade();        
+        $api_service_token = config('configuration.api_service_token');
 
-        return compact('countries', 'departments', 'provinces', 'districts', 'identity_document_types', 'locations');
+        return compact('countries', 'departments', 'provinces', 'districts', 'identity_document_types', 'locations','api_service_token');
     }
 
     public function record($id)

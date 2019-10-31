@@ -9,6 +9,7 @@
                         <small class="form-control-feedback" v-if="errors.password" v-text="errors.password[0]"></small>
                     </div>
                 </div>
+
                 <div class="col-md-5">
                     <div class="form-group" :class="{'has-danger': errors.certificate}">
                         <label class="control-label">Certificado pfx</label>
@@ -28,6 +29,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="row mt-4">
                 <div class="col-md-12 text-right">
                     <el-button @click.prevent="close()">Cancelar</el-button>
