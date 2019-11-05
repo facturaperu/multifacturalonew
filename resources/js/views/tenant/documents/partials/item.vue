@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @open="create" @close="close" top="7vh">
+    <el-dialog :title="titleDialog" :visible="showDialog" @open="create" @close="close" top="7vh" :close-on-click-modal="false">
         <form autocomplete="off" @submit.prevent="clickAddItem">
             <div class="form-body">
                 <div class="row">
@@ -54,7 +54,7 @@
                         <div class="form-group" :class="{'has-danger': errors.has_igv}">
                             <el-checkbox v-model="form.has_plastic_bag_taxes">Impuesto a la Bolsa Plástica</el-checkbox><br>
                         </div>
-                    </div> 
+                    </div>
                     <div class="col-md-3 col-sm-6" v-show="form.item.calculate_quantity">
                         <div class="form-group"  :class="{'has-danger': errors.total_item}">
                             <label class="control-label">Total venta producto</label>
@@ -364,7 +364,7 @@
             this.initForm()
             this.$http.get(`/${this.resource}/item/tables`).then(response => {
 //                this.categories = response.categories
-                this.items = response.data.items 
+                this.items = response.data.items
                 this.operation_types = response.data.operation_types
                 this.all_affectation_igv_types = response.data.affectation_igv_types
                 this.system_isc_types = response.data.system_isc_types
@@ -385,7 +385,7 @@
             },
             initForm() {
                 this.errors = {};
-                
+
                 this.form = {
                    // category_id: [1],
                     item_id: null,
@@ -405,7 +405,7 @@
                     has_igv: null,
                     has_plastic_bag_taxes:false
                 };
-                
+
                 this.activePanel = 0;
                 this.total_item = 0;
                 this.item_unit_type = {};
@@ -487,7 +487,7 @@
                 this.form.quantity = 1;
                 this.cleanTotalItem();
                 this.item_unit_types = this.form.item.item_unit_types;
-                
+
                 (this.item_unit_types.length > 0) ? this.has_list_prices = true : this.has_list_prices = false;
             },
             focusTotalItem(change) {
@@ -501,20 +501,20 @@
                 }
             },
             cleanTotalItem(){
-                this.total_item = null  
-            }, 
+                this.total_item = null
+            },
             clickAddItem() {
                 if (this.validateTotalItem().total_item) return;
-                
+
                 let unit_price = (this.form.has_igv)?this.form.unit_price_value:this.form.unit_price_value*1.18;
-                
+
                 this.form.unit_price = unit_price;
                 this.form.item.unit_price = unit_price;
                 this.form.item.presentation = this.item_unit_type;
                 this.form.affectation_igv_type = _.find(this.affectation_igv_types, {'id': this.form.affectation_igv_type_id});
-                
+
                 this.row = calculateRowItem(this.form, this.currencyTypeIdActive, this.exchangeRateSale);
-                
+
                 this.initForm();
                 //this.initializeFields()
                 this.$emit('add', this.row);
@@ -522,15 +522,15 @@
             },
             validateTotalItem(){
 
-                this.errors = {} 
+                this.errors = {}
 
                 if(this.form.item.calculate_quantity){
                     if(this.total_item < 0.01)
                         this.$set(this.errors, 'total_item', ['total venta item debe ser mayor a 0.01']);
-                } 
+                }
 
-                return this.errors 
-            }, 
+                return this.errors
+            },
             reloadDataItems(item_id) {
                 this.$http.get(`/${this.resource}/table/items`).then((response) => {
                     this.items = response.data
@@ -541,9 +541,9 @@
             },
             changePresentation() {
                 let price = 0;
-                
+
                 this.item_unit_type = _.find(this.form.item.item_unit_types, {'id': this.form.item_unit_type_id});
-                
+
                 switch (this.item_unit_type.price_default) {
                     case 1: price = this.item_unit_type.price1
                         break;
@@ -552,7 +552,7 @@
                     case 3: price = this.item_unit_type.price3
                         break;
                 }
-                
+
                 this.form.unit_price_value = price;
                 this.form.item.unit_type_id = this.item_unit_type.unit_type_id;
             }

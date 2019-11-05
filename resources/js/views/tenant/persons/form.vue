@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create">
+    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create" :close-on-click-modal="false">
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
@@ -15,7 +15,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">Número <span class="text-danger">*</span></label>
-                            
+
                             <div v-if="api_service_token != false">
                                 <x-input-service :identity_document_type_id="form.identity_document_type_id" v-model="form.number" @search="searchNumber"></x-input-service>
                             </div>
@@ -33,7 +33,7 @@
                                     </template>
                                 </el-input>
                             </div>
-                            
+
 
                             <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
                         </div>
@@ -144,7 +144,7 @@
                 countries: [],
                 all_departments: [],
                 all_provinces: [],
-                all_districts: [],                
+                all_districts: [],
                 api_service_token:false,
                 provinces: [],
                 districts: [],
@@ -254,7 +254,7 @@
                     })
             },
             changeIdentityDocType(){
-                (this.recordId == null) ? this.setDataDefaultCustomer() : null 
+                (this.recordId == null) ? this.setDataDefaultCustomer() : null
             },
             setDataDefaultCustomer(){
 
