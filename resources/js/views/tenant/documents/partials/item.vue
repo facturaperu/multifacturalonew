@@ -493,6 +493,7 @@
             focusTotalItem(change) {
                 if(!change && this.form.item.calculate_quantity) {
                     this.$refs.total_item.$el.getElementsByTagName('input')[0].focus()
+                    this.total_item = this.form.unit_price_value
                 }
             },
             calculateQuantity() {
