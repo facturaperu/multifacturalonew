@@ -247,7 +247,7 @@
                     </li>
                     @endif
                     @if(in_array('configuration', $vc_modules))
-                    <li class="nav-parent {{in_array($path[0], ['companies', 'catalogs', 'advanced', 'tasks', 'inventories']) ? 'nav-active nav-expanded' : ''}}">
+                    <li class="nav-parent {{in_array($path[0], ['companies', 'catalogs', 'advanced', 'tasks', 'inventories','series-configurations']) ? 'nav-active nav-expanded' : ''}}">
                         <a class="nav-link" href="#">
                             <i class="fas fa-cogs" aria-hidden="true"></i>
                             <span>Configuración</span>
@@ -270,7 +270,12 @@
                                 <a class="nav-link" href="{{route('tenant.advanced.index')}}">
                                     Avanzado
                                 </a>
+                            </li>                            <li class="{{($path[0] === 'series-configurations') ? 'nav-active' : ''}}">
+                                <a class="nav-link" href="{{route('tenant.series_configurations.index')}}">
+                                    Series 
+                                </a>
                             </li>
+
                             @if(auth()->user()->type != 'integrator')
                             <li class="{{($path[0] === 'tasks') ? 'nav-active': ''}}">
                                 <a class="nav-link" href="{{route('tenant.tasks.index')}}">Tareas programadas</a>
