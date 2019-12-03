@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create">
+    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create" :close-on-click-modal="false">
         <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
@@ -51,7 +51,7 @@
                         <div class="form-group" :class="{'has-danger': (errors.password)}">
                             <label class="control-label">Contraseña</label>
                             <el-input type="password" v-model="form.password" dusk="password"></el-input>
-                            <small class="form-control-feedback" v-if="errors.password" v-text="errors.password[0]"></small> 
+                            <small class="form-control-feedback" v-if="errors.password" v-text="errors.password[0]"></small>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -62,7 +62,7 @@
                             </el-select>
                             <small class="form-control-feedback" v-if="errors.plan_id" v-text="errors.plan_id[0]"></small>
                         </div>
-                    </div>                   
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">

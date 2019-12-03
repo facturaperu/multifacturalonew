@@ -77,6 +77,12 @@ Iniciar servicios docker: [Guía](https://docs.google.com/document/d/1MMuyeYE53R
 Configuración servidor alterno SUNAT: [Guía](https://docs.google.com/document/d/1pr-9ewFYY7JFtYg-0V5MY4R16OGv-02VH5MqXjeUCh0/edit#heading=h.nezjsyganf1w "Clic")<br>
 Conexión servidor Winscp: [Guía](https://docs.google.com/document/d/1Xpri2102N4b5C-dG-FVPXW5ZWjEz5S4iDjpvl7Zwq2E/edit# "Clic")<br>
 Procedimiento para solucionar error 1033 SUNAT: [Guía](https://docs.google.com/document/d/1V9xyhH4JRJqFf-8zFBG9lOlmy07ts9dZCcJlQFEcFf8/edit# "Clic")<br>
+Manual - limpiar inodes: [Guía](https://drive.google.com/open?id=1foPKDI3V3Z9uKTjRc2SPSoztVSOBevPAluT2BqFbfxA "Clic")<br>
+Manual - habilitar debug: [Guía](https://drive.google.com/open?id=1OdU-rDjr_cxM7t3fujBxPnEQn7qMoxIO6KZNjiKzyvU "Clic")<br>
+Manual - validador documentos: [Guía](https://docs.google.com/document/d/1v6XpJrEwCx3suRzRsa4-3-kcAghRvS9DHS5esb89SuI/edit "Clic")<br>
+Manual - Cambio de dominio: [Guía](https://docs.google.com/document/d/14rbElqQ6Ru6hh3UCZm4wTKIUCm_hPbMNYz9EH8fcPRo/edit?usp=sharing "Clic")<br>
+Manual - Restauración de Mysql|Docker: [Guía](https://docs.google.com/document/d/1Aze-O_a0aseyjaDXsD1iHflPr6ptZ8Cq6BWRrs6GhsM/edit?usp=sharing "Clic")<br>
+Linux - Eliminar temporales: [Guía](https://docs.google.com/document/d/17-9F9xrQepGfSkZIiCcty-B0GAjeJnN5KO8p0rOBYxY/edit?usp=sharing "Clic")<br>
 
 ## Patrocinadores FACTURADOR PRO V 2.0
 
