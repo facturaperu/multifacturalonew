@@ -1,6 +1,6 @@
 <template>
-    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create">
-        <form autocomplete="off" @submit.prevent="submit" v-loading="loading">
+    <el-dialog :title="titleDialog" :visible="showDialog" @close="close" @open="create" :close-on-click-modal="false">
+        <form autocomplete="off" @submit.prevent="submit">
             <div class="form-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -15,7 +15,7 @@
                     <div class="col-md-6">
                         <div class="form-group" :class="{'has-danger': errors.number}">
                             <label class="control-label">Número <span class="text-danger">*</span></label>
-                            
+
                             <div v-if="api_service_token != false">
                                 <x-input-service :identity_document_type_id="form.identity_document_type_id" v-model="form.number" @search="searchNumber"></x-input-service>
                             </div>
@@ -33,7 +33,7 @@
                                     </template>
                                 </el-input>
                             </div>
-                            
+
 
                             <small class="form-control-feedback" v-if="errors.number" v-text="errors.number[0]"></small>
                         </div>
@@ -123,7 +123,7 @@
 
     export default {
         mixins: [serviceNumber],
-        props: ['showDialog', 'type', 'recordId', 'external', 'document_type_id', 'api_service_token'],
+        props: ['showDialog', 'type', 'recordId', 'external', 'document_type_id'],
         data() {
             return {
                 loading: false,
@@ -133,6 +133,15 @@
                 errors: {},
                 form: {},
                 countries: [],
+<<<<<<< HEAD
+=======
+                all_departments: [],
+                all_provinces: [],
+                all_districts: [],
+                api_service_token:false,
+                provinces: [],
+                districts: [],
+>>>>>>> master
                 locations: [],
                 identity_document_types: []
             }
@@ -140,7 +149,17 @@
         created() {
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
+<<<<<<< HEAD
                     this.countries = response.data.countries;
+=======
+                    this.api_service_token = response.data.api_service_token
+                    console.log(this.api_service_token)
+                    this.countries = response.data.countries
+                    this.all_departments = response.data.departments;
+                    this.all_provinces = response.data.provinces;
+                    this.all_districts = response.data.districts;
+                    this.identity_document_types = response.data.identity_document_types;
+>>>>>>> master
                     this.locations = response.data.locations;
                     this.identity_document_types = response.data.identity_document_types;
                 })
@@ -255,7 +274,7 @@
                     })
             },
             changeIdentityDocType(){
-                (this.recordId == null) ? this.setDataDefaultCustomer() : null 
+                (this.recordId == null) ? this.setDataDefaultCustomer() : null
             },
             setDataDefaultCustomer(){
                 if(this.form.identity_document_type_id === '0'){
@@ -275,7 +294,7 @@
                 this.form.addresses[0].location_id = data.ubigeo;
                 this.form.addresses[0].address = data.direccion;
                 this.form.addresses[0].telephone = data.telefono;
-                
+
             },
             searchCustomer() {
                 this.searchServiceNumberByType()

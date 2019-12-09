@@ -21,6 +21,8 @@
                         </div>
                         <div class="col-sm-4">
                             <el-checkbox v-model="is_contingency" @change="changeEstablishment">¿Es comprobante de contigencia?</el-checkbox>
+                            <el-checkbox v-model="form.has_prepayment" :disabled="prepayment_deduction">¿Es un pago anticipado?</el-checkbox>
+                            <el-checkbox v-model="prepayment_deduction" @change="changePrepaymentDeduction" :disabled="form.has_prepayment">Deducción de los pagos anticipados</el-checkbox>
                         </div>
                     </div>
                 </header>
@@ -178,23 +180,13 @@
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <el-collapse v-model="activePanel">
-                                    <el-collapse-item title="Información Adicional">
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <label class="control-label">Observaciones</label>
-                                                    <el-input
-                                                            type="textarea"
-                                                            autosize
-                                                            v-model="form.additional_information">
-                                                    </el-input>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-5">
+                                    <el-collapse-item name="1" title="Información Adicional">
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">
                                                         Guias
-                                                        <a href="#" @click.prevent="clickAddGuide">[+ Agregar]</a>
+                                                        <a href="#" @click.prevent="clickAddGuide" class="text-center font-weight-bold text-info">[+ Agregar]</a>
                                                     </label>
                                                     <table style="width: 100%">
                                                         <tr v-for="guide in form.guides">
@@ -207,7 +199,10 @@
                                                                 <el-input v-model="guide.number"></el-input>
                                                             </td>
                                                             <td align="right">
-                                                                <a href="#" @click.prevent="clickRemoveGuide" style="color:red">Remover</a>
+                                                                <button  type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickRemoveGuide">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                                <!-- <a href="#" @click.prevent="clickRemoveGuide" style="color:red">Remover</a> -->
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -216,6 +211,46 @@
                                                             <!--autosize-->
                                                             <!--v-model="form.additional_information">-->
                                                     <!--</el-input>-->
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6" v-if="prepayment_deduction">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Comprobantes anticipados
+                                                        <a href="#" @click.prevent="clickAddPrepayment" class="text-center font-weight-bold text-info">[+ Agregar]</a>
+                                                    </label>
+                                                    <table style="width: 100%">
+                                                        <tr v-for="(row,index) in form.prepayments" :key="index">
+                                                            <td>
+                                                                <el-select v-model="row.document_id" filterable @change="changeDocumentPrepayment(index)">
+                                                                    <el-option v-for="option in prepayment_documents" :key="option.id" :value="option.id" :label="option.description"></el-option>
+                                                                </el-select>
+                                                            </td>
+                                                            <td>
+                                                                <el-input v-model="row.amount" readonly></el-input>
+                                                            </td>
+                                                            <td align="right">
+                                                                
+                                                                <button  type="button" class="btn waves-effect waves-light btn-xs btn-danger" @click.prevent="clickRemovePrepayment(index)">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                                <!-- <a href="#" @click.prevent="clickRemovePrepayment" style="color:red">Remover</a> -->
+                                                            </td>
+                                                        </tr>
+                                                    </table> 
+                                                </div>
+                                            </div>
+ 
+                                            
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Observaciones</label>
+                                                    <el-input
+                                                            type="textarea"
+                                                            autosize
+                                                            v-model="form.additional_information">
+                                                    </el-input>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -328,6 +363,12 @@
                                     <td>:</td>
                                     <td class="text-right">{{ currency_type.symbol }} {{ form.total_taxed }}</td>
                                 </tr>
+                                <tr v-if="form.total_prepayment > 0">
+                                    <td>ANTICIPOS</td>
+                                    <td>:</td>
+                                    <td class="text-right">{{ currency_type.symbol }} {{ form.total_prepayment }}</td>
+                                </tr>
+
                                 <tr v-if="form.total_igv > 0">
                                     <td>IGV</td>
                                     <td>:</td>
@@ -402,6 +443,8 @@
                 form: {},
                 // form_payment: {},
                 document_types: [],
+                prepayment_documents: [],
+                prepayment_deduction:false,
                 currency_types: [],
                 discount_types: [],
                 charges_types: [],
@@ -437,6 +480,7 @@
                     this.document_types = response.data.document_types_invoice;
                     this.document_types_guide = response.data.document_types_guide;
                     this.currency_types = response.data.currency_types
+                    this.prepayment_documents = response.data.prepayment_documents;
                     this.establishments = response.data.establishments
                     this.operation_types = response.data.operation_types
                     this.all_series = response.data.series
@@ -464,6 +508,125 @@
             })
         }, 
         methods: {
+            discountGlobalPrepayment(){
+                
+                let global_discount = 0
+                this.form.prepayments.forEach((item)=>{
+                    global_discount += parseFloat(item.amount)
+                })
+
+                let base = parseFloat(this.form.total_taxed)
+                let amount = parseFloat(global_discount)
+                let factor = _.round(amount/base,2)
+
+                this.form.total_prepayment = global_discount
+                
+                let discount = _.find(this.form.discounts,{'discount_type_id':'04'})
+
+                if(global_discount>0 && !discount){
+                    // console.log("gl 0")
+
+                    this.form.total_discount =  _.round(amount,2)
+                    this.form.total_value =  _.round(base - amount,2)
+                    this.form.total_igv =  _.round(this.form.total_value * 0.18,2)
+                    this.form.total_taxes =  _.round(this.form.total_igv,2)
+                    this.form.total =  _.round(this.form.total_value + this.form.total_taxes,2)  
+
+                    this.form.discounts.push({
+                            discount_type_id: "04",
+                            description: "Descuentos globales por anticipos gravados que afectan la base imponible del IGV/IVAP",
+                            factor: factor,
+                            amount: amount,
+                            base: base
+                        })
+
+                }else{ 
+
+                    let pos = this.form.discounts.indexOf(discount);
+
+                    if(pos > -1){
+                        
+                        this.form.total_discount =  _.round(amount,2)
+                        this.form.total_value =  _.round(base - amount,2)
+                        this.form.total_igv =  _.round(this.form.total_value * 0.18,2)
+                        this.form.total_taxes =  _.round(this.form.total_igv,2)
+                        this.form.total =  _.round(this.form.total_value + this.form.total_taxes,2)
+                        this.form.discounts[pos].base = base
+                        this.form.discounts[pos].amount = amount
+                        this.form.discounts[pos].factor = factor
+
+                    }
+                    
+                }
+
+            }, 
+            async changeDocumentPrepayment(index){
+
+                let prepayment = await _.find(this.prepayment_documents, {id: this.form.prepayments[index].document_id})
+ 
+                this.form.prepayments[index].number = prepayment.description 
+                this.form.prepayments[index].document_type_id = prepayment.document_type_id 
+                this.form.prepayments[index].amount = prepayment.amount
+                this.form.prepayments[index].total = prepayment.total
+                 
+                await this.changeTotalPrepayment()
+ 
+
+            }, 
+            clickAddPrepayment(){
+                this.form.prepayments.push({
+                    document_id:null,
+                    number: null,
+                    document_type_id:  null,
+                    amount: 0, 
+                    total: 0, 
+                });
+
+                this.changeTotalPrepayment()
+            },
+            clickRemovePrepayment(index) {
+
+                this.form.prepayments.splice(index, 1)
+                this.changeTotalPrepayment()
+                if(this.form.prepayments.length == 0) 
+                    this.deletePrepaymentDiscount()
+
+            },
+            async changePrepaymentDeduction(){
+                // console.log(this.prepayment_deduction)
+                
+                this.activePanel = (this.prepayment_deduction) ? '1':0
+                if(this.prepayment_deduction){
+                    await this.changeTotalPrepayment()
+                    await this.getDocumentsPrepayment()
+                }
+                else{
+                    this.form.prepayments = []
+                    this.form.total_prepayment = 0
+                    await this.deletePrepaymentDiscount()
+                }
+                
+            },
+            deletePrepaymentDiscount(){
+
+                let discount = _.find(this.form.discounts, {'discount_type_id':'04'})
+                let pos = this.form.discounts.indexOf(discount)
+                if (pos > -1) {
+                    // console.log(' ya existe en la colección de verduras.');
+                    this.form.discounts.splice(pos, 1)
+                    this.changeTotalPrepayment()
+                }
+
+            },
+            getDocumentsPrepayment(){
+                this.$http.get(`/${this.resource}/table/prepayment_documents`).then((response) => {
+                    this.prepayment_documents = response.data
+                }) 
+            },
+            changeTotalPrepayment(){
+                this.calculateTotal()
+            },
+
             clickAddPayment() {
                 this.form.payments.push({
                     id: null,
@@ -547,6 +710,8 @@
                         format_pdf:'a4',
                     },
                     payments: [],
+                    prepayments: [],
+                    has_prepayment:false,
                 }
 
                 // this.form_payment = {
@@ -562,6 +727,7 @@
 
                 this.total_global_discount = 0
                 this.is_amount = true
+                this.prepayment_deduction = false
 
             },
             resetForm() {
@@ -708,6 +874,9 @@
                 
                 if(this.enabled_discount_global) this.discountGlobal()
                 // this.form_payment.payment = this.form.total
+
+                if(this.prepayment_deduction)
+                    this.discountGlobalPrepayment()
             },
             changeTypeDiscount(){
                 this.calculateTotal()

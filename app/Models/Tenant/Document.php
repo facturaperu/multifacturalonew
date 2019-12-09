@@ -67,6 +67,8 @@ class Document extends ModelTenant
         'sunat_shipping_status',
         'query_status',
         'total_plastic_bag_taxes',
+        'has_prepayment',
+        'was_deducted_prepayment',
     ];
 
     protected $casts = [
@@ -312,4 +314,10 @@ class Document extends ModelTenant
         $user = auth()->user();         
         return ($user->type == 'seller') ? $query->where('user_id', $user->id) : null; 
     }
+    
+    public function scopeWhereHasPrepayment($query)
+    {
+        return $query->where([['has_prepayment', true],['was_deducted_prepayment', false],['state_type_id','05']]);
+    }
+
 }
