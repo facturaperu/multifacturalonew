@@ -133,15 +133,12 @@
                 errors: {},
                 form: {},
                 countries: [],
-<<<<<<< HEAD
-=======
                 all_departments: [],
                 all_provinces: [],
                 all_districts: [],
                 api_service_token:false,
                 provinces: [],
                 districts: [],
->>>>>>> master
                 locations: [],
                 identity_document_types: []
             }
@@ -149,9 +146,7 @@
         created() {
             this.$http.get(`/${this.resource}/tables`)
                 .then(response => {
-<<<<<<< HEAD
                     this.countries = response.data.countries;
-=======
                     this.api_service_token = response.data.api_service_token
                     console.log(this.api_service_token)
                     this.countries = response.data.countries
@@ -159,7 +154,6 @@
                     this.all_provinces = response.data.provinces;
                     this.all_districts = response.data.districts;
                     this.identity_document_types = response.data.identity_document_types;
->>>>>>> master
                     this.locations = response.data.locations;
                     this.identity_document_types = response.data.identity_document_types;
                 })
