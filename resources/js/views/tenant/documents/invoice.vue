@@ -848,19 +848,29 @@
                     total_value += parseFloat(row.total_value)
                     total_plastic_bag_taxes += parseFloat(row.total_plastic_bag_taxes)
                     
-                    //ajuste
+                    // if (row.affectation_igv_type_id === '15') {
+                    //     let unit_value = row.unit_price / (1 + row.percentage_igv / 100)
+                    //     let total_value_partial = unit_value * row.quantity
+                    //     row.total_taxes = (row.unit_price * row.quantity) - total_value_partial
+                    //     row.total_igv = (row.unit_price * row.quantity) - total_value_partial
+                    //     row.total_base_igv = total_value_partial
+                    //     total_value = 0
+                        
+                    // }
+
                     if (row.affectation_igv_type_id === '15') {
-                        let unit_value = row.unit_price / (1 + row.percentage_igv / 100)
+
+                        // let unit_value = row.unit_price / (1 + row.percentage_igv / 100)
+                        let unit_value = (row.total_value/row.quantity) / (1 + row.percentage_igv / 100)
                         let total_value_partial = unit_value * row.quantity
-                        // row.total_value = total_value_partial
-                        row.total_taxes = (row.unit_price * row.quantity) - total_value_partial
-                        row.total_igv = (row.unit_price * row.quantity) - total_value_partial
+                        row.total_taxes = row.total_value - total_value_partial
+                        row.total_igv = row.total_value - total_value_partial
                         row.total_base_igv = total_value_partial
-                        total_value = 0
+                        total_value -= row.total_value
                         
                     }
-                    //ajuste
-                    console.log(row)
+
+                    // console.log(row)
                 });
 
                 this.form.total_exportation = _.round(total_exportation, 2)
@@ -874,6 +884,7 @@
                 this.form.total_plastic_bag_taxes = _.round(total_plastic_bag_taxes, 2)
                 // this.form.total = _.round(total, 2)
                 this.form.total = _.round(total + this.form.total_plastic_bag_taxes, 2)
+                // console.log(this.form)
                 
                 if(this.enabled_discount_global) this.discountGlobal()
                 // this.form_payment.payment = this.form.total
