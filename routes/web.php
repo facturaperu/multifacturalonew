@@ -162,6 +162,7 @@ if ($hostname) {
             Route::post('documents/import', 'Tenant\DocumentController@import');
             Route::post('documents/import_second_format', 'Tenant\DocumentController@importTwoFormat');
             Route::get('documents/data_table', 'Tenant\DocumentController@data_table');
+            Route::post('documents/import-xml', 'Tenant\DocumentController@importXML');
 
 
 
