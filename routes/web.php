@@ -401,6 +401,10 @@ if ($hostname) {
             Route::get('users/record', 'System\UserController@record');
             Route::post('users', 'System\UserController@store');
 
+            //backups
+            Route::get('backups', 'System\BackupController@index')->name('system.backups.index');
+            Route::get('backups/db-backup/{name}', 'System\BackupController@download')->name('system.backups.download');
+
             Route::get('services/ruc/{number}', 'System\ServiceController@ruc');
         });
     });

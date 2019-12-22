@@ -36,6 +36,16 @@
                 </ul>
             </nav>
 
+            <nav id="menu" class="nav-main" role="navigation">
+                <ul class="nav nav-main">
+                    <li class="{{ ($path[0] === 'backups')?'nav-active':'' }}">
+                        <a class="nav-link" href="{{route('system.backups.index')}}">
+                            <i class="fas fa-download"></i><span>Backups</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
         <script>
             // Maintain Scroll Position
             if (typeof localStorage !== 'undefined') {
