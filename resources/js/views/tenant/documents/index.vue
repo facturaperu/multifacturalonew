@@ -13,6 +13,9 @@
                 <span v-if="import_documents_second == true">
                     <button type="button" class="btn btn-custom btn-sm  mt-2 mr-2" @click.prevent="clickImportSecond()"><i class="fa fa-upload"></i> Importar Formato 2</button>
                 </span>
+
+                <button  v-if="import_documents_xml == true"  @click.prevent="clickImportXML()" type="button" class="btn btn-custom btn-sm  mt-2 mr-2" ><i class="fa fa-upload"></i> Importar</button>
+
                 <a :href="`/${resource}/create`" class="btn btn-custom btn-sm  mt-2 mr-2"><i class="fa fa-plus-circle"></i> Nuevo</a>
             </div>
         </div>
@@ -143,6 +146,8 @@
 
             <document-import-second :showDialog.sync="showImportSecondDialog"></document-import-second>
 
+            <document-import-xml :showDialog.sync="showImportXmlDialog"></document-import-xml>
+
             <document-options :showDialog.sync="showDialogOptions"
                               :recordId="recordId"
                               :showClose="true"></document-options>
@@ -161,15 +166,17 @@
     import DocumentImportSecond from './partials/import_second.vue'
     import DataTable from '../../../components/DataTableDocuments.vue'
     import ItemsImport from './import.vue'
+    import DocumentImportXml from './import_xml.vue'
 
     export default {
-        props: ['isClient','typeUser','import_documents','import_documents_second'],
-        components: {DocumentsVoided, ItemsImport, DocumentImportSecond, DocumentOptions, DocumentPayments, DataTable},
+        props: ['isClient','typeUser','import_documents','import_documents_second', 'import_documents_xml'],
+        components: {DocumentsVoided, ItemsImport, DocumentImportSecond, DocumentOptions, DocumentPayments, DataTable, DocumentImportXml},
         data() {
             return {
                 showDialogVoided: false,
                 showImportDialog: false,
                 showImportSecondDialog: false,
+                showImportXmlDialog: false,
                 resource: 'documents',
                 recordId: null,
                 showDialogOptions: false,
@@ -305,6 +312,9 @@
             },
             clickImportSecond() {
                 this.showImportSecondDialog = true
+            },
+            clickImportXML() {
+                this.showImportXmlDialog = true
             }
         }
     }
