@@ -46,6 +46,16 @@
                 </ul>
             </nav>
 
+            <nav id="menu" class="nav-main" role="navigation">
+                <ul class="nav nav-main">
+                    <li class="{{ ($path[0] === 'access')?'nav-active':'' }}">
+                        <a class="nav-link" href="{{route('system.access.index')}}">
+                            <i class="fas fa-keyboard"></i><span>Access IP</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
         <script>
             // Maintain Scroll Position
             if (typeof localStorage !== 'undefined') {

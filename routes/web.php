@@ -405,6 +405,9 @@ if ($hostname) {
             Route::get('backups', 'System\BackupController@index')->name('system.backups.index');
             Route::get('backups/db-backup/{name}', 'System\BackupController@download')->name('system.backups.download');
 
+            //Registro de acceso
+            Route::get('access', 'System\AccessController@index')->name('system.access.index');
+
             Route::get('services/ruc/{number}', 'System\ServiceController@ruc');
         });
     });

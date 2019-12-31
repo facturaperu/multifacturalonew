@@ -24,7 +24,8 @@
         "robrichards/xmlseclibs": "3.0.*",
         "spatie/db-dumper": "^2.15",
         "spatie/laravel-backup": "^6.7",
-        "thiagoalessio/tesseract_ocr": "^2.7"
+        "thiagoalessio/tesseract_ocr": "^2.7",
+        "yadahan/laravel-authentication-log": "^1.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
