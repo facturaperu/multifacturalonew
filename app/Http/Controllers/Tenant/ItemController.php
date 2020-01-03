@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\ItemRequest;
 use App\Http\Resources\Tenant\ItemCollection;
 use App\Http\Resources\Tenant\ItemResource;
+use App\Models\Tenant\Configuration;
 use App\Models\Tenant\User;
 use App\Models\Tenant\Warehouse;
 use App\Models\Tenant\ItemUnitType;
@@ -75,6 +76,7 @@ class ItemController extends Controller
         $item = Item::firstOrNew(['id' => $id]);
         $item->item_type_id = '01';
         // $item->warehouse_id = optional($warehouse)->id;
+        $item->amount_plastic_bag_taxes = Configuration::firstOrFail()->amount_plastic_bag_taxes;
         $item->fill($request->all());
         $item->save();
         

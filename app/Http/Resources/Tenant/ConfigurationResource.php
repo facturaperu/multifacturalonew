@@ -18,7 +18,8 @@ class ConfigurationResource extends JsonResource
             'send_auto' => (bool) $this->send_auto,
             'stock' => (bool) $this->stock,
             'sunat_alternate_server' => (bool) $this->sunat_alternate_server,
-            'cron' => (bool) $this->cron
+            'cron' => (bool) $this->cron,
+            'amount_plastic_bag_taxes' => $this->amount_plastic_bag_taxes,
         ];
     }
 }

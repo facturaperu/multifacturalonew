@@ -8,6 +8,7 @@ class Configuration extends ModelTenant
         'send_auto', 
         'cron', 
         'stock',
+        'amount_plastic_bag_taxes',
         'sunat_alternate_server'
     ];
 }
