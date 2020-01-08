@@ -6,10 +6,11 @@ use Hyn\Tenancy\Traits\UsesTenantConnection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Yadahan\AuthenticationLog\AuthenticationLogable;
 
 class User extends Authenticatable
 {
-    use Notifiable, UsesTenantConnection;
+    use Notifiable, UsesTenantConnection, AuthenticationLogable;
 
     protected $with = ['establishment'];
     /**
