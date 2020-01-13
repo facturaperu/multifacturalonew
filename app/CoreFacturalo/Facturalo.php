@@ -266,7 +266,7 @@ class Facturalo
 
             $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
             // if(config('tenant.enabled_template_ticket_80')) $width = 78;
-            
+
             $company_name      = (strlen($this->company->name) / 20) * 10;
             $company_address   = (strlen($this->document->establishment->address) / 30) * 10;
             $company_number    = $this->document->establishment->telephone != '' ? '10' : '0';
@@ -328,7 +328,7 @@ class Facturalo
                 'margin_left' => $margin_left
             ]);
         } else {
-            
+
             $pdf_font_regular = config('tenant.pdf_name_regular');
             $pdf_font_bold = config('tenant.pdf_name_bold');
 
@@ -370,7 +370,7 @@ class Facturalo
 
         if (($format_pdf != 'ticket') AND ($format_pdf != 'ticket_58')) {
             if(config('tenant.pdf_template_footer')) {
-                $html_footer = $template->pdfFooter($base_pdf_template);
+                $html_footer = $template->pdfFooter($base_pdf_template,$this->company, $this->document);
                 $pdf->SetHTMLFooter($html_footer);
             }
 //            $html_footer = $template->pdfFooter();

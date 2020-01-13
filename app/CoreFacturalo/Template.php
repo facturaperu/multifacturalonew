@@ -27,11 +27,11 @@ class Template
         return view($view, compact('company', 'document'))->render();
     }
 
-    public function pdfFooter($base_template)
+    public function pdfFooter($base_template, $company, $document)
     {
         view()->addLocation(__DIR__.'/Templates');
 
-        return view('pdf.'.$base_template.'.partials.footer')->render();
+        return view('pdf.'.$base_template.'.partials.footer', compact('company', 'document'))->render();
     }
 
     public function validate_template($base_template, $template, $format_pdf)
