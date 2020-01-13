@@ -22,7 +22,7 @@
 
                         <div class="row px-4 mt-2 pb-3">
                             <div class="col-2 font-weight-bold text-primary">
-                                2019
+                                {{year}}
                             </div>
                             <div class="col-10 font-weight-semibold text-right">
                                 Comprobantes generados por mes
@@ -184,7 +184,7 @@
                 recordId: null,
                 records: [],
                 loaded: false,
-                year: 2019,
+                year: moment().format('YYYY'),
                 total_documents: 0,
                 dataChartLine : {
                     labels: null,
