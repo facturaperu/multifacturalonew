@@ -74,7 +74,7 @@
     </tr>
     <tr>
         <td><span class="font-bold">PROVINCIA:</span> {{ $customer->province->description }}</td>
-        <td><span class="font-bold">COND. DE VENTA:</span> </td>
+        <td><span class="font-bold">COND. DE VENTA:</span> {{$invoice->date_of_due->diffInDays($invoice->date_of_issue)}} </td>
     </tr>
     <tr>
         <td><span class="font-bold">DISTRITO:</span> {{ $customer->district->description }}</td>
