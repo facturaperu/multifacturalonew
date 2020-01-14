@@ -74,7 +74,11 @@
     </tr>
     <tr>
         <td><span class="font-bold">PROVINCIA:</span> {{ $customer->province->description }}</td>
-        <td><span class="font-bold">COND. DE VENTA:</span> {{$invoice->date_of_due->diffInDays($invoice->date_of_issue)}} </td>
+        @php
+            $fecha_venc = $invoice->date_of_due->format('Y-m-d');
+            $fecha_emis = $document->date_of_issue->format('Y-m-d');
+        @endphp
+        <td><span class="font-bold">COND. DE VENTA:</span> {{$invoice->date_of_due->diffInDays($fecha_emis)}} </td>
     </tr>
     <tr>
         <td><span class="font-bold">DISTRITO:</span> {{ $customer->district->description }}</td>
