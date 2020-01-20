@@ -41,6 +41,7 @@ if ($hostname) {
             Route::get('configurations/create', 'Tenant\ConfigurationController@create')->name('tenant.configurations.create');
             Route::get('configurations/record', 'Tenant\ConfigurationController@record');
             Route::post('configurations', 'Tenant\ConfigurationController@store');
+            Route::post('configurations/icbper', 'Tenant\ConfigurationController@icbper');
 
             //Certificates
             Route::get('certificates/record', 'Tenant\CertificateController@record');
@@ -162,6 +163,7 @@ if ($hostname) {
             Route::post('documents/import', 'Tenant\DocumentController@import');
             Route::post('documents/import_second_format', 'Tenant\DocumentController@importTwoFormat');
             Route::get('documents/data_table', 'Tenant\DocumentController@data_table');
+            Route::post('documents/import-xml', 'Tenant\DocumentController@importXML');
 
 
 
@@ -399,6 +401,10 @@ if ($hostname) {
             Route::get('users/create', 'System\UserController@create')->name('system.users.create');
             Route::get('users/record', 'System\UserController@record');
             Route::post('users', 'System\UserController@store');
+
+            //backups
+            Route::get('backups', 'System\BackupController@index')->name('system.backups.index');
+            Route::get('backups/db-backup/{name}', 'System\BackupController@download')->name('system.backups.download');
 
             Route::get('services/ruc/{number}', 'System\ServiceController@ruc');
         });

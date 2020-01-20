@@ -24,5 +24,6 @@ return [
     'import_documents_second_format' => env('IMPORT_DOCUMENTS_SECOND_FORMAT', false),
     'enabled_template_ticket_80' => env('ENABLED_TEMPLATE_TICKET_80', false),
     'enabled_discount_global' => env('ENABLED_DISCOUNT_GLOBAL', false),
+    'import_documents_xml' => env('IMPORT_DOCUMENTS_XML', false),
 
 ];

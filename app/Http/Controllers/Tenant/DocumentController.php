@@ -40,7 +40,9 @@ use Nexmo\Account\Price;
 use Illuminate\Support\Facades\Cache;
 use App\Imports\DocumentsImport;
 use App\Imports\DocumentsImportTwoFormat;
+use App\Imports\DocumentXmlImport;
 use Maatwebsite\Excel\Excel;
+use Illuminate\Support\Str;
 
 
 class DocumentController extends Controller
@@ -57,8 +59,9 @@ class DocumentController extends Controller
         $is_client = config('tenant.is_client');
         $import_documents = config('tenant.import_documents');
         $import_documents_second = config('tenant.import_documents_second_format');
+        $import_documents_xml = config('tenant.import_documents_xml');
 
-        return view('tenant.documents.index', compact('is_client','import_documents','import_documents_second'));
+        return view('tenant.documents.index', compact('is_client','import_documents','import_documents_second', 'import_documents_xml'));
     }
 
     public function columns()
@@ -591,5 +594,64 @@ class DocumentController extends Controller
         return compact( 'customers', 'document_types','series','establishments');
 
     }
+
+
+    //importar xml
+    
+    public function importXML(Request $request)
+    {
+
+        $full_number = explode('-',$request->xml['Invoice']['cbc:ID']['_text']);
+        $series = $full_number[0];
+        $number = $full_number[1];
+
+        $search_doc = Document::where([['series', $series], ['number', $number]])->first();
+        
+        if($search_doc){
+            return [
+                'success' => false,
+                'message' => 'El comprobante ya fué registrado', 
+            ];
+        }
+        
+        try{ 
+            
+            $fact = DB::connection('tenant')->transaction(function () use($request) {
+
+                $inputs = DocumentXmlImport::input_transform($request->all());
+                $facturalo = new Facturalo();
+                $facturalo->save($inputs); 
+                $facturalo->updateQr();
+                $facturalo->createPdf(); 
+
+                return $facturalo;
+
+            });
+
+            $document = $fact->getDocument();
+
+            return [
+                'success' => true,
+                'message' => "Comprobante {$document->number_full} cargado correctamente.",
+                'data' => [
+                    'id' => $document->id,
+                    'number_full' => $document->number_full,
+                ],
+            ];
+
+
+
+        }
+        catch(Exception $e){
+            return [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTrace(),
+            ];
+        }
+
+    }
+
 
 }

@@ -22,11 +22,18 @@
                                 <small class="form-control-feedback" v-if="errors.cron" v-text="errors.cron[0]"></small>
                             </div>
                         </div>
-                        <div class="col-md-12 mt-4" v-if="typeUser != 'integrator'">
+                        <div class="col-md-6 mt-4" v-if="typeUser != 'integrator'">
                             <label class="control-label">Envío de comprobantes a servidor alterno de SUNAT</label>
                             <div class="form-group" :class="{'has-danger': errors.sunat_alternate_server}">
                                 <el-switch v-model="form.sunat_alternate_server" active-text="Si" inactive-text="No" @change="submit"></el-switch>
                                 <small class="form-control-feedback" v-if="errors.sunat_alternate_server" v-text="errors.sunat_alternate_server[0]"></small>
+                            </div>
+                        </div>
+                         <div class="col-md-4 mt-4" v-if="typeUser != 'integrator'">
+                            <label class="control-label">Impuesto bolsa plástica</label>
+                            <div class="form-group" :class="{'has-danger': errors.amount_plastic_bag_taxes}">
+                                <el-input-number v-model="form.amount_plastic_bag_taxes" @change="changeAmountPlasticBagTaxes" :precision="2" :step="0.1" :max="0.5" :min="0.1"></el-input-number>
+                                <small class="form-control-feedback" v-if="errors.amount_plastic_bag_taxes" v-text="errors.amount_plastic_bag_taxes[0]"></small>
                             </div>
                         </div>
                     </div>
@@ -63,6 +70,7 @@
                     send_auto: true,
                     stock: true,
                     cron: true,
+                    amount_plastic_bag_taxes: 0.1,
                     sunat_alternate_server: false,
                     id: null
                 };
@@ -87,7 +95,28 @@
                 }).then(() => {
                     this.loading_submit = false;
                 });
-            }
+            },
+            changeAmountPlasticBagTaxes() {
+                this.loading_submit = true;
+
+                this.$http.post(`/${this.resource}/icbper`, this.form).then(response => {
+                    if (response.data.success) {
+                        this.$message.success(response.data.message);
+                    }
+                    else {
+                        this.$message.error(response.data.message);
+                    }
+                }).catch(error => {
+                    if (error.response.status === 422) {
+                        this.errors = error.response.data.errors;
+                    }
+                    else {
+                        console.log(error);
+                    }
+                }).then(() => {
+                    this.loading_submit = false;
+                });
+            },
         }
     }
 </script>
