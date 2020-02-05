@@ -2,7 +2,6 @@
     $establishment = $document->establishment;
     $customer = $document->customer;
     //$path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
-    $accounts = \App\Models\Tenant\BankAccount::all();
     $tittle = $document->prefix.'-'.str_pad($document->id, 8, '0', STR_PAD_LEFT);
 @endphp
 <html>
@@ -34,20 +33,8 @@
                     {{ ($establishment->province_id !== '-')? ', '.$establishment->province->description : '' }}
                     {{ ($establishment->department_id !== '-')? '- '.$establishment->department->description : '' }}
                 </h6>
-                @isset($establishment->trade_address)
-                    <h6>{{ ($establishment->trade_address !== '-')? 'D. Comercial: '.$establishment->trade_address : '' }}</h6>
-                @endisset
-                <h6>{{ ($establishment->telephone !== '-')? 'Central telefónica: '.$establishment->telephone : '' }}</h6>
-
-                <h6>{{ ($establishment->email !== '-')? 'Email: '.$establishment->email : '' }}</h6>
-
-                @isset($establishment->web_address)
-                    <h6>{{ ($establishment->web_address !== '-')? 'Web: '.$establishment->web_address : '' }}</h6>
-                @endisset
-
-                @isset($establishment->aditional_information)
-                    <h6>{{ ($establishment->aditional_information !== '-')? $establishment->aditional_information : '' }}</h6>
-                @endisset
+                <h6>{{ ($establishment->email !== '-')? $establishment->email : '' }}</h6>
+                <h6>{{ ($establishment->telephone !== '-')? $establishment->telephone : '' }}</h6>
             </div>
         </td>
         <td width="30%" class="border-box py-4 px-2 text-center">
@@ -66,11 +53,6 @@
     <tr>
         <td>{{ $customer->identity_document_type->description }}:</td>
         <td>{{ $customer->number }}</td>
-        
-        @if($document->date_of_due)
-            <td width="25%">Fecha de vencimiento:</td>
-            <td width="15%">{{ $document->date_of_due->format('Y-m-d') }}</td>
-        @endif
     </tr>
     @if ($customer->address !== '')
     <tr>
@@ -83,48 +65,7 @@
         </td>
     </tr>
     @endif
-    
-    @if ($document->shipping_address)
-    <tr>
-        <td class="align-top">Dir. Envío:</td>
-        <td colspan="3">
-            {{ $document->shipping_address }} 
-        </td>
-    </tr>
-    @endif
-    @if ($customer->telephone)
-    <tr>
-        <td class="align-top">Teléfono:</td>
-        <td colspan="3">
-            {{ $customer->telephone }} 
-        </td>
-    </tr>
-    @endif
-    
-    @if ($document->payment_method_type)
-    <tr>
-        <td class="align-top">T. Pago:</td>
-        <td colspan="3">
-            {{ $document->payment_method_type->description }} 
-        </td>
-    </tr>
-    @endif
-    <tr>
-        <td class="align-top">Vendedor:</td>
-        <td colspan="3">
-            {{ $document->user->name }} 
-        </td>
-    </tr>
 </table>
-
-<table class="full-width mt-3">
-    @if ($document->description)
-        <tr>
-            <td width="15%" class="align-top">Descripción: </td>
-            <td width="85%">{{ $document->description }}</td>
-        </tr>
-    @endif
-</table> 
 
 {{-- <table class="full-width mt-3">
     @if ($document->purchase_order)
@@ -256,20 +197,6 @@
     </tbody>
 </table>
 <table class="full-width">
-    <tr>
-        <td width="65%" style="text-align: top; vertical-align: top;"> 
-            <br>
-            @foreach($accounts as $account)
-                <p>
-                <span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} 
-                <span class="font-bold">N°:</span> {{$account->number}} 
-                @if($account->cci)
-                - <span class="font-bold">CCI:</span> {{$account->cci}}
-                @endif
-                </p>
-            @endforeach
-        </td> 
-    </tr>
     <tr>
         {{-- <td width="65%">
             @foreach($document->legends as $row)
