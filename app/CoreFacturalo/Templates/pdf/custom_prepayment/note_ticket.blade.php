@@ -157,7 +157,7 @@
         <th class="border-top-bottom desc-9 text-left">CANT.</th>
         <th class="border-top-bottom desc-9 text-left">UNIDAD</th>
         <th class="border-top-bottom desc-9 text-left">DESCRIPCIÓN</th>
-        <th class="border-top-bottom desc-9 text-left">P.UNIT</th>
+        <th class="border-top-bottom desc-9 text-left">V.UNIT</th>
         <th class="border-top-bottom desc-9 text-left">TOTAL</th>
     </tr>
     </thead>
@@ -185,7 +185,7 @@
                     @endforeach
                 @endif
             </td>
-            <td class="text-right desc-9 align-top">{{ number_format($row->unit_price, 2) }}</td>
+            <td class="text-right desc-9 align-top">{{ number_format($row->unit_value, 2) }}</td>
             <td class="text-right desc-9 align-top">{{ number_format($row->total, 2) }}</td>
         </tr>
         <tr>

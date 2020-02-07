@@ -154,7 +154,7 @@
         <th class="border-top-bottom desc-9 text-left">CANT.</th>
         <th class="border-top-bottom desc-9 text-left">UdM</th>
         <th class="border-top-bottom desc-9 text-left">DESCRIPCIÓN</th>
-        <th class="border-top-bottom desc-9 text-left">P.UNIT</th>
+        <th class="border-top-bottom desc-9 text-left">V.UNIT</th>
         <th class="border-top-bottom desc-9 text-left">TOTAL</th>
     </tr>
     </thead>
@@ -182,7 +182,7 @@
                     @endforeach
                 @endif
             </td>
-            <td class="text-right desc-9 align-top">{{ number_format($row->unit_price, 2) }}</td>
+            <td class="text-right desc-9 align-top">{{ number_format($row->unit_value, 2) }}</td>
             <td class="text-right desc-9 align-top">{{ number_format($row->total, 2) }}</td>
         </tr>
         <tr>
@@ -200,7 +200,7 @@
             <td class="text-left desc-9 align-top">
                 ANTICIPO: {{($p->document_type_id == '02')? 'FACTURA':'BOLETA'}} NRO. {{$p->number}}
             </td>
-            <td class="text-right  desc-9 align-top">-{{ number_format($p->total, 2) }}</td> 
+            <td class="text-right  desc-9 align-top">-{{ number_format($p->amount, 2) }}</td> 
             <td class="text-right  desc-9 align-top">-{{ number_format($p->total, 2) }}</td>
         </tr>
         <tr>
