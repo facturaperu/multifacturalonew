@@ -68,6 +68,7 @@ class Document extends ModelTenant
         'total_plastic_bag_taxes',
         'has_prepayment',
         'was_deducted_prepayment',
+        'pending_amount_prepayment',
     ];
 
     protected $casts = [

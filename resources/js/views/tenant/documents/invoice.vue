@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-sm-4">
                             <el-checkbox v-model="is_contingency" @change="changeEstablishment">¿Es comprobante de contigencia?</el-checkbox>
-                            <el-checkbox v-model="form.has_prepayment" :disabled="prepayment_deduction">¿Es un pago anticipado?</el-checkbox>
+                            <el-checkbox v-model="form.has_prepayment" :disabled="prepayment_deduction" @change="changeHasPrepayment">¿Es un pago anticipado?</el-checkbox>
                             <el-checkbox v-model="prepayment_deduction" @change="changePrepaymentDeduction" :disabled="form.has_prepayment">Deducción de los pagos anticipados</el-checkbox>
                         </div>
                     </div>
@@ -221,7 +221,7 @@
                                                                 </el-select>
                                                             </td>
                                                             <td>
-                                                                <el-input v-model="row.amount" readonly></el-input>
+                                                                <el-input v-model="row.amount" @input="inputAmountPrepayment(index)"></el-input>
                                                             </td>
                                                             <td align="right">
                                                                 
@@ -500,6 +500,11 @@
             })
         }, 
         methods: {
+            changeHasPrepayment(){
+                
+                this.form.pending_amount_prepayment = this.form.has_prepayment ? this.form.total:0
+
+            },
             discountGlobalPrepayment(){
                 
                 let global_discount = 0
@@ -508,10 +513,10 @@
                 })
 
                 let base = parseFloat(this.form.total_taxed)
-                let amount = parseFloat(global_discount)
-                let factor = _.round(amount/base,2)
+                let amount = _.round(parseFloat(global_discount), 2)
+                let factor = _.round(amount/base, 4)
 
-                this.form.total_prepayment = global_discount
+                this.form.total_prepayment = _.round(global_discount, 2)
                 
                 let discount = _.find(this.form.discounts,{'discount_type_id':'04'})
 
@@ -519,6 +524,7 @@
                     // console.log("gl 0")
 
                     this.form.total_discount =  _.round(amount,2)
+                    this.form.total_taxed =  _.round(base - amount,2)
                     this.form.total_value =  _.round(base - amount,2)
                     this.form.total_igv =  _.round(this.form.total_value * 0.18,2)
                     this.form.total_taxes =  _.round(this.form.total_igv,2)
@@ -539,6 +545,7 @@
                     if(pos > -1){
                         
                         this.form.total_discount =  _.round(amount,2)
+                        this.form.total_taxed =  _.round(base - amount,2)
                         this.form.total_value =  _.round(base - amount,2)
                         this.form.total_igv =  _.round(this.form.total_value * 0.18,2)
                         this.form.total_taxes =  _.round(this.form.total_igv,2)
@@ -552,6 +559,26 @@
                 }
 
             }, 
+            getPrepayment(index){
+                return _.find(this.prepayment_documents, {id: this.form.prepayments[index].document_id})
+            },
+            inputAmountPrepayment(index){
+                
+                let prepayment = this.getPrepayment(index)
+                // console.log(prepayment)
+
+                if(parseFloat(this.form.prepayments[index].amount) > parseFloat(prepayment.amount)){
+
+                    this.form.prepayments[index].amount = prepayment.amount
+                    this.$message.error('El monto debe ser menor o igual al del anticipo');
+                
+                }
+
+                this.form.prepayments[index].total = _.round(this.form.prepayments[index].amount * 1.18, 2)
+
+                this.changeTotalPrepayment()
+
+            },
             async changeDocumentPrepayment(index){
 
                 let prepayment = await _.find(this.prepayment_documents, {id: this.form.prepayments[index].document_id})
@@ -701,6 +728,7 @@
                     payments: [],
                     prepayments: [],
                     has_prepayment:false,
+                    pending_amount_prepayment:0
                 }
 
                 // this.form_payment = {
@@ -866,6 +894,8 @@
 
                 if(this.prepayment_deduction)
                     this.discountGlobalPrepayment()
+
+                this.changeHasPrepayment()
             },
             changeTypeDiscount(){
                 this.calculateTotal()

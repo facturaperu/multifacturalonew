@@ -198,16 +198,25 @@ class DocumentController extends Controller
 
         if ($table === 'prepayment_documents') {
             $prepayment_documents = Document::whereHasPrepayment()->get()->transform(function($row) {
+
+                
+                $total = round($row->pending_amount_prepayment, 2);
+                $amount = round($total/1.18, 2);
+
                 return [
                     'id' => $row->id,
                     'description' => $row->series.'-'.$row->number,
                     'series' => $row->series,
                     'number' => $row->number,
                     'document_type_id' => ($row->document_type_id == '01') ? '02':'03',
-                    'amount' => $row->total_value,
-                    'total' => $row->total,
+                    // 'amount' => $row->total_value,
+                    // 'total' => $row->total,
+                    'amount' => $amount,
+                    'total' => $total,
                 ];
+
             });
+            
             return $prepayment_documents;
         }
 
