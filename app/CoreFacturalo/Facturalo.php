@@ -304,9 +304,9 @@ class Facturalo
                 'mode' => 'utf-8',
                 'format' => [
                     $width,
-                    120 +
+                    125 +
                     (($quantity_rows * 8) + $extra_by_item_description) +
-                    ($discount_global * 3) +
+                    ($discount_global * 10) +
                     $company_name +
                     $company_address +
                     $company_number +
