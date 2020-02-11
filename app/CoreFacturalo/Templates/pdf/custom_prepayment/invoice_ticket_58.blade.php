@@ -295,9 +295,11 @@
                     <span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} {{$account->number}}
                 @endforeach
             @endif
+            @if($company->additional_information_pdf)
             <br>
             <br>
-            <span class="font-bold text-justify">Incorporado al Régimen de Agentes de Retención de IGV (R.S.096-2012) a partir del 01/06/2012.</span>
+            <span class="font-bold text-justify">{{$company->additional_information_pdf}}</span>
+            @endif
         </td>
     </tr>
     <tr>

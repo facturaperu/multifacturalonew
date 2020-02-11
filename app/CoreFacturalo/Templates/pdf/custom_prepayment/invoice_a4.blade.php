@@ -342,8 +342,10 @@
                     <p><span class="font-bold">{{$account->bank->description}}</span> {{$account->currency_type->description}} {{$account->number}}</p>
                 @endforeach
             @endif
-            <br>
-            <p class="text-justify"><span class="font-bold">Incorporado al Régimen de Agentes de Retención de IGV (R.S.096-2012) a partir del 01/06/2012.</span> </p>
+            @if($company->additional_information_pdf)
+                <br>
+                <p class="text-justify"><span class="font-bold">{{$company->additional_information_pdf}}</span> </p>
+            @endif
         </td>
         <td width="35%" class="text-right">
             <img src="data:image/png;base64, {{ $document->qr }}" style="margin-right: -10px;" />
