@@ -1,17 +1,26 @@
 <template>
     <el-dialog :title="titleDialog" :visible="showDialog" @open="create" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
         <div class="row mt-4">
-            <div class="col-lg-6 col-md-6 col-sm-12 text-center font-weight-bold">
-                <p>Imprimir A4</p>
+            <div class="col-lg-5 col-md-5 col-sm-12 text-center font-weight-bold">
+               
                 <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickPrint('a4')">
                     <i class="fa fa-file-alt"></i>
                 </button>
+                 <p>Imprimir A4</p>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 text-center font-weight-bold">
-                <p>Imprimir Ticket</p>
+            <div class="col-lg-5 col-md-5 col-sm-12 text-center font-weight-bold">
+                
                 <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickPrint('ticket')">
                     <i class="fa fa-receipt"></i>
                 </button>
+                <p>Imprimir Ticket</p>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12 text-center font-weight-bold">
+               
+                <button type="button" class="btn btn-lg btn-info waves-effect waves-light" @click="clickPrint('ticket_50')">
+                    <i class="fa fa-receipt"></i>
+                </button>
+                 <p>Imprimir Ticket 50mm</p>
             </div>
         </div>
         <!-- <div class="row mt-4">
