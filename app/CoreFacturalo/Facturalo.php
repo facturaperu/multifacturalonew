@@ -262,11 +262,14 @@ class Facturalo
 
         $html = $template->pdf($base_pdf_template, $this->type, $this->company, $this->document, $format_pdf);
 
-        if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58')) {
+        if (($format_pdf === 'ticket') OR 
+            ($format_pdf === 'ticket_58') OR
+            ($format_pdf === 'ticket_50')
+        ) {
 
             $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
-            // if(config('tenant.enabled_template_ticket_80')) $width = 78;
-            
+             if(config('tenant.enabled_template_ticket_80')) $width = 76;
+             if($format_pdf === 'ticket_50') $width = 45;
             $company_name      = (strlen($this->company->name) / 20) * 10;
             $company_address   = (strlen($this->document->establishment->address) / 30) * 10;
             $company_number    = $this->document->establishment->telephone != '' ? '10' : '0';
