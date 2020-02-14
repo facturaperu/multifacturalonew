@@ -127,12 +127,12 @@
 @endif
 
 <table class="full-width mt-3">
-    @if ($document->prepayments) 
+    @if ($document->prepayments)
         @foreach($document->prepayments as $p)
         <tr>
             <td width="120px">ANTICIPO</td>
             <td width="8px">:</td>
-            <td>{{$p->number}}</td> 
+            <td>{{$p->number}}</td>
         </tr>
         @endforeach
     @endif
@@ -238,8 +238,12 @@
         </tr>
     @endforeach
 
-    
-    @if ($document->prepayments) 
+    @php
+        $total_amount_prepayment = 0;
+    @endphp
+
+    @if ($document->prepayments)
+
         @foreach($document->prepayments as $p)
         <tr>
             <td class="text-center align-top">
@@ -250,14 +254,17 @@
                 ANTICIPO: {{($p->document_type_id == '02')? 'FACTURA':'BOLETA'}} NRO. {{$p->number}}
             </td>
             <td class="text-right align-top">-{{ number_format($p->amount, 2) }}</td>
-            <td class="text-right align-top"> 
-                0 
+            <td class="text-right align-top">
+                0
             </td>
             <td class="text-right align-top">-{{ number_format($p->total, 2) }}</td>
         </tr>
         <tr>
             <td colspan="6" class="border-bottom"></td>
-        </tr> 
+        </tr>
+        @php
+            $total_amount_prepayment = $total_amount_prepayment + $p->amount
+        @endphp
         @endforeach
     @endif
 
@@ -288,7 +295,7 @@
         @if($document->total_taxed > 0)
             <tr>
                 <td colspan="5" class="text-right font-bold">OP. GRAVADAS: {{ $document->currency_type->symbol }}</td>
-                <td class="text-right font-bold">{{ number_format($document->total_taxed, 2) }}</td>
+                <td class="text-right font-bold">{{ number_format($document->total_taxed, 2) + number_format($total_amount_prepayment, 2) }}</td>
             </tr>
         @endif
         @if($document->total_discount > 0)
@@ -318,14 +325,14 @@
         <td width="65%" style="text-align: top; vertical-align: top;">
             @foreach(array_reverse( (array) $document->legends) as $row)
                 @if ($row->code == "1000")
-                    <p>Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></p>                      
+                    <p>Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></p>
                     @if (count((array) $document->legends)>1)
                         <p><span class="font-bold">Leyendas</span></p>
-                    @endif                  
+                    @endif
                 @else
-                    <p> {{$row->code}}: {{ $row->value }} </p>                                    
+                    <p> {{$row->code}}: {{ $row->value }} </p>
                 @endif
-            
+
             @endforeach
             <br/>
             @foreach($document->additional_information as $information)
