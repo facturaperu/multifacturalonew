@@ -58,8 +58,8 @@ class ClientController extends Controller
             $tenancy->tenant($row->hostname->website);
             for($i = 1; $i <= 12; $i++)
             {
-                $date_initial = Carbon::parse('2019-'.$i.'-1');
-                $date_final = Carbon::parse('2019-'.$i.'-'.cal_days_in_month(CAL_GREGORIAN, $i, 2018));
+                $date_initial = Carbon::parse('2020-'.$i.'-1');
+                $date_final = Carbon::parse('2020-'.$i.'-'.cal_days_in_month(CAL_GREGORIAN, $i, 2019));
                 $count_documents[] = [
                     'client' => $row->number,
                     'month' => $i,
@@ -193,22 +193,22 @@ class ClientController extends Controller
                 ['module_id' => 2, 'user_id' => $user_id],
                 ['module_id' => 3, 'user_id' => $user_id],
                 ['module_id' => 4, 'user_id' => $user_id],
-                ['module_id' => 5, 'user_id' => $user_id], 
+                ['module_id' => 5, 'user_id' => $user_id],
             ]);
-            
+
         }else{
 
             DB::connection('tenant')->table('module_user')->insert([
                 ['module_id' => 1, 'user_id' => $user_id],
                 ['module_id' => 3, 'user_id' => $user_id],
-                ['module_id' => 5, 'user_id' => $user_id], 
+                ['module_id' => 5, 'user_id' => $user_id],
             ]);
 
         }
 
-        
 
-        
+
+
 
         return [
             'success' => true,
@@ -221,7 +221,7 @@ class ClientController extends Controller
         $exists = $website::where('uuid', $uuid)->first();
 
         if($exists){
-            throw new Exception("El subdominio ya se encuentra registrado");            
+            throw new Exception("El subdominio ya se encuentra registrado");
         }
 
     }

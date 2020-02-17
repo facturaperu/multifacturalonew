@@ -69,11 +69,17 @@
                                 <el-select v-model="form.soap_type_id">
                                     <el-option v-for="option in soap_types" :key="option.id" :value="option.id" :label="option.description"></el-option>
                                 </el-select>
+                                <!--Input CheckBox agregado-->
+                                <el-checkbox
+                                       v-if="form.soap_send_id == '02' && form.soap_type_id == '01'"
+                                       v-model="toggle"
+                                       label="Ingresar Usuario">
+                                </el-checkbox>
                                 <small class="form-control-feedback" v-if="errors.soap_type_id" v-text="errors.soap_type_id[0]"></small>
                             </div>
                         </div>
                     </div>
-                    <template v-if="form.soap_type_id == '02'">
+                    <template v-if="form.soap_type_id == '02' || toggle == true ">
                         <div class="row" >
                             <div class="col-md-12 mt-2">
                                 <h4 class="border-bottom">Usuario Secundario Sunat</h4>
@@ -126,7 +132,8 @@
                 errors: {},
                 form: {},
                 soap_sends: [],
-                soap_types: []
+                soap_types: [],
+                toggle: false, //Creando el objeto a retornar con v-model
             }
         },
         async created() {
@@ -159,6 +166,7 @@
                     soap_url: null,
                     certificate: null,
                     logo: null,
+                    toggle: false,
                 }
             },
             submit() {

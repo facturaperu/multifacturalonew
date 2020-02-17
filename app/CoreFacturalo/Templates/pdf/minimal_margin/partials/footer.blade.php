@@ -30,6 +30,9 @@
                         @if($account->bank->description == 'BANCO DE CREDITO DEL PERU')
                             <p>{{$account->currency_type->description}}</p>
                             <p>{{$account->number}}</p>
+                            @if($account->cci)
+                                <p>CCI: #: {{$account->cci}}</p>
+                            @endif
                         @endif
                     @endforeach
                 </div>
@@ -40,6 +43,9 @@
                     @if($account->bank->description == 'BBVA CONTINENTAL')
                         <p>{{$account->currency_type->description}}</p>
                         <p>{{$account->number}}</p>
+                        @if($account->cci)
+                            <p>CCI: #: {{$account->cci}}</p>
+                        @endif
                     @endif
                 @endforeach
             </td>
