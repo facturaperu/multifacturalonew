@@ -295,7 +295,7 @@
         @if($document->total_taxed > 0)
             <tr>
                 <td colspan="5" class="text-right font-bold">OP. GRAVADAS: {{ $document->currency_type->symbol }}</td>
-                <td class="text-right font-bold">{{ number_format($document->total_taxed, 2) + number_format($total_amount_prepayment, 2) }}</td>
+                <td class="text-right font-bold">{{ number_format($document->total_taxed + $total_amount_prepayment, 2) }}</td>
             </tr>
         @endif
         @if($document->total_discount > 0)
